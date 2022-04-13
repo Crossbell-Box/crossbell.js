@@ -1,0 +1,34 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    if: "!contains(github.event.head_commit.message, 'ci skip')"
+
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        node-version: [14.x]
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Install deps
+        run: npm i
+
+      - name: Build and Test
+        run: npm run test
+        env:
+          VITE_MOCK_USER_ADDRESS: ${{ secrets.VITE_MOCK_USER_ADDRESS }}
+          VITE_MOCK_USER_PRIVATE_KEY: ${{ secrets.VITE_MOCK_USER_PRIVATE_KEY }}
