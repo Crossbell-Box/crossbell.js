@@ -1,13 +1,14 @@
 /**
  * The result of a call to a transaction / get function.
  */
-type Result<T> = {
+export type Result<T> = {
   data: T
   /* only available for transactions */
   transactionHash?: string
 }
 
-type Profile = {
+export type Profile = {
+  profileId: string
   handle: string
   metadataUri: string
   socialToken: string

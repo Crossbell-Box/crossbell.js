@@ -151,6 +151,61 @@
   },
   {
     "inputs": [
+      { "internalType": "address", "name": "account", "type": "address" }
+    ],
+    "name": "getLinkModule4Address",
+    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "tokenAddress", "type": "address" },
+      { "internalType": "uint256", "name": "tokenId", "type": "uint256" }
+    ],
+    "name": "getLinkModule4ERC721",
+    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "linkListId",
+            "type": "uint256"
+          },
+          { "internalType": "bytes32", "name": "linkType", "type": "bytes32" },
+          {
+            "internalType": "uint256",
+            "name": "linkTargetType",
+            "type": "uint256"
+          },
+          { "internalType": "bytes", "name": "content", "type": "bytes" }
+        ],
+        "internalType": "struct DataTypes.LinkData",
+        "name": "linkData",
+        "type": "tuple"
+      }
+    ],
+    "name": "getLinkModule4Link",
+    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint256", "name": "tokenId", "type": "uint256" }
+    ],
+    "name": "getLinkModule4Linklist",
+    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
       { "internalType": "uint256", "name": "profileId", "type": "uint256" }
     ],
     "name": "getLinkModule4Profile",
@@ -163,10 +218,54 @@
       { "internalType": "uint256", "name": "fromProfileId", "type": "uint256" },
       { "internalType": "bytes32", "name": "linkType", "type": "bytes32" }
     ],
-    "name": "getLinking2ProfileIds",
+    "name": "getLinkingProfileIds",
     "outputs": [
       { "internalType": "uint256[]", "name": "", "type": "uint256[]" }
     ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getLinklistContract",
+    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "linkListId",
+            "type": "uint256"
+          },
+          { "internalType": "bytes32", "name": "linkType", "type": "bytes32" },
+          {
+            "internalType": "uint256",
+            "name": "linkTargetType",
+            "type": "uint256"
+          },
+          { "internalType": "bytes", "name": "content", "type": "bytes" }
+        ],
+        "internalType": "struct DataTypes.LinkData",
+        "name": "linkData",
+        "type": "tuple"
+      }
+    ],
+    "name": "getMintModule4Link",
+    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint256", "name": "profileId", "type": "uint256" },
+      { "internalType": "uint256", "name": "toNoteId", "type": "uint256" }
+    ],
+    "name": "getMintModule4Note",
+    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
     "stateMutability": "view",
     "type": "function"
   },
@@ -175,7 +274,7 @@
       { "internalType": "uint256", "name": "profileId", "type": "uint256" },
       { "internalType": "uint256", "name": "noteId", "type": "uint256" }
     ],
-    "name": "getNoteURI",
+    "name": "getNoteUri",
     "outputs": [{ "internalType": "string", "name": "", "type": "string" }],
     "stateMutability": "view",
     "type": "function"
@@ -197,6 +296,7 @@
     "outputs": [
       {
         "components": [
+          { "internalType": "uint256", "name": "profileId", "type": "uint256" },
           { "internalType": "string", "name": "handle", "type": "string" },
           { "internalType": "string", "name": "metadataUri", "type": "string" },
           { "internalType": "uint256", "name": "noteCount", "type": "uint256" },
@@ -223,6 +323,7 @@
     "outputs": [
       {
         "components": [
+          { "internalType": "uint256", "name": "profileId", "type": "uint256" },
           { "internalType": "string", "name": "handle", "type": "string" },
           { "internalType": "string", "name": "metadataUri", "type": "string" },
           { "internalType": "uint256", "name": "noteCount", "type": "uint256" },
@@ -358,13 +459,6 @@
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "linkList",
-    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
     "inputs": [
       { "internalType": "uint256", "name": "fromProfileId", "type": "uint256" },
       { "internalType": "uint256", "name": "toProfileId", "type": "uint256" },
@@ -408,7 +502,7 @@
         "name": "linkData",
         "type": "tuple"
       },
-      { "internalType": "address", "name": "receiver", "type": "address" }
+      { "internalType": "address", "name": "to", "type": "address" }
     ],
     "name": "mintLink",
     "outputs": [],
@@ -447,7 +541,7 @@
       {
         "components": [
           { "internalType": "uint256", "name": "profileId", "type": "uint256" },
-          { "internalType": "string", "name": "contentURI", "type": "string" },
+          { "internalType": "string", "name": "contentUri", "type": "string" },
           {
             "internalType": "address",
             "name": "linkModule",
@@ -484,7 +578,7 @@
       {
         "components": [
           { "internalType": "uint256", "name": "profileId", "type": "uint256" },
-          { "internalType": "string", "name": "contentURI", "type": "string" },
+          { "internalType": "string", "name": "contentUri", "type": "string" },
           {
             "internalType": "address",
             "name": "linkModule",
@@ -580,17 +674,6 @@
   },
   {
     "inputs": [
-      { "internalType": "uint256", "name": "profileId", "type": "uint256" },
-      { "internalType": "bytes32", "name": "linkType", "type": "bytes32" },
-      { "internalType": "string", "name": "uri", "type": "string" }
-    ],
-    "name": "setLinkListUri",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
       { "internalType": "address", "name": "account", "type": "address" },
       { "internalType": "address", "name": "linkModule", "type": "address" },
       { "internalType": "bytes", "name": "linkModuleInitData", "type": "bytes" }
@@ -678,7 +761,7 @@
   {
     "inputs": [
       { "internalType": "uint256", "name": "linkListId", "type": "uint256" },
-      { "internalType": "string", "name": "linklistUri", "type": "string" }
+      { "internalType": "string", "name": "uri", "type": "string" }
     ],
     "name": "setLinklistUri",
     "outputs": [],
@@ -709,7 +792,7 @@
       { "internalType": "address", "name": "mintModule", "type": "address" },
       { "internalType": "bytes", "name": "mintModuleInitData", "type": "bytes" }
     ],
-    "name": "setMintModuleForLink",
+    "name": "setMintModule4Link",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -721,7 +804,7 @@
       { "internalType": "address", "name": "mintModule", "type": "address" },
       { "internalType": "bytes", "name": "mintModuleInitData", "type": "bytes" }
     ],
-    "name": "setMintModuleForNote",
+    "name": "setMintModule4Note",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -731,7 +814,7 @@
       { "internalType": "uint256", "name": "linkListId", "type": "uint256" },
       { "internalType": "uint256", "name": "profileId", "type": "uint256" }
     ],
-    "name": "setPrimaryLinkList",
+    "name": "setPrimaryLinklist",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

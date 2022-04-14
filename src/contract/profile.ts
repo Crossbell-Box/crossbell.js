@@ -1,27 +1,27 @@
 import { NIL_ADDRESS } from './utils'
-import type { ContractContext } from './abi/abi'
+import type { Result, Profile } from './types'
+import type { Abi } from './abi/types'
 
 export class ProfileContract {
-  protected readonly contract!: ContractContext
-
-  /** profile */
+  protected readonly contract!: Abi
 
   /**
    * This creates a new profile for an address, and returns the ID of the newly created profile.
+   * When the profile is the first profile created for an address, the address will be set as the primary profile.
    * @param {string} owner - The Ethereum address of the profile owner.
    * @param {string} handle - The handle of the profile you want to create.
-   * @param {string} metadataURI - The URI of the metadata file.
+   * @param {string} uri - The URI of the file.
    * @returns The transaction hash and the profile ID.
    */
   async createProfile(
     owner: string,
     handle: string,
-    metadataURI: string,
+    uri: string,
   ): Promise<Result<string>> | never {
     const tx = await this.contract.createProfile({
       to: owner,
       handle: handle,
-      metadataUri: metadataURI,
+      uri: uri,
       linkModule: NIL_ADDRESS,
       linkModuleInitData: NIL_ADDRESS, // TODO: ?
     })
@@ -51,16 +51,16 @@ export class ProfileContract {
   }
 
   /**
-   * This changes a profile's metadata URI.
-   * @param profileId - The profile ID of the user you want to set the metadata URI for.
-   * @param metadataUri - The metadata URI you want to set.
+   * This changes a profile's  URI.
+   * @param profileId - The profile ID of the user you want to set the  URI for.
+   * @param uri - The  URI you want to set.
    * @returns The transaction hash of the transaction that was sent to the blockchain.
    */
-  async setProfileMetadataUri(
+  async setProfileUri(
     profileId: string,
-    metadataUri: string,
+    uri: string,
   ): Promise<Result<undefined>> | never {
-    const tx = await this.contract.setProfileMetadataUri(profileId, metadataUri)
+    const tx = await this.contract.setProfileUri(profileId, uri)
     const receipt = await tx.wait()
     return {
       data: undefined,
@@ -137,8 +137,9 @@ export class ProfileContract {
     const profile = await this.contract.getProfileByHandle(handle)
     return {
       data: {
+        profileId: profile.profileId.toNumber().toString(),
         handle: profile.handle,
-        metadataUri: profile.metadataUri,
+        uri: profile.uri,
         socialToken: profile.socialToken,
         noteCount: profile.noteCount.toNumber(),
       },
@@ -146,16 +147,17 @@ export class ProfileContract {
   }
 
   /**
-   * This returns the handle and metadataUri of the profile from the given profileId.
+   * This returns the handle and Uri of the profile from the given profileId.
    * @param {string} profileId - The profile ID of the profile you want to get.
-   * @returns The handle and metadataUri of the profile.
+   * @returns The handle and Uri of the profile.
    */
   async getProfile(profileId: string): Promise<Result<Profile>> | never {
     const profile = await this.contract.getProfile(profileId)
     return {
       data: {
+        profileId: profile.profileId.toNumber().toString(),
         handle: profile.handle,
-        metadataUri: profile.metadataUri,
+        uri: profile.uri,
         socialToken: profile.socialToken,
         noteCount: profile.noteCount.toNumber(),
       },
@@ -175,16 +177,14 @@ export class ProfileContract {
   }
 
   /**
-   * This returns the metadata URI of a profile.
-   * @param {string} profileId - The profile ID of the profile you want to get the metadata URI for.
-   * @returns The metadata URI of the profile.
+   * This returns the URI of a profile.
+   * @param {string} profileId - The profile ID of the profile you want to get the URI for.
+   * @returns The URI of the profile.
    */
-  async getProfileMetadataUri(
-    profileId: string,
-  ): Promise<Result<string>> | never {
-    const metadataUri = await this.contract.getProfileMetadataUri(profileId)
+  async getProfileUri(profileId: string): Promise<Result<string>> | never {
+    const uri = await this.contract.getProfileUri(profileId)
     return {
-      data: metadataUri,
+      data: uri,
     }
   }
 }

@@ -28,7 +28,7 @@
   "scripts": {
     "build": "npm run build-fast -- --dts-resolve",
     "build-fast": "tsup",
-    "gen-abi-types": "abi-types-generator ./src/contract/abi/abi.json --output=./src/contract/abi/ --provider=ethers_v5",
+    "gen-abi-types": "typechain --target ethers-v5 --out-dir ./src/contract/abi/types ./src/contract/abi/abi.json",
     "prepublishOnly": "npm run build",
     "test": "vitest run",
     "watch": "npm run build-fast -- --watch"
@@ -38,9 +38,10 @@
     "ts-mixer": "^6.0.1"
   },
   "devDependencies": {
-    "ethereum-abi-types-generator": "^1.3.2",
+    "@typechain/ethers-v5": "^10.0.0",
     "prettier": "^2.6.0",
     "tsup": "^5.12.1",
+    "typechain": "^8.0.0",
     "typescript": "^4.6.3",
     "vitest": "^0.9.3"
   },

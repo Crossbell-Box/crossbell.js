@@ -1,7 +1,7 @@
-import type { ContractContext } from './abi/abi'
+import type { Abi } from './abi/types'
 
 export class ModuleContract {
-  protected readonly contract!: ContractContext
+  protected readonly contract!: Abi
 
   // setMintModuleForLink
   // setMintModuleForNote
