@@ -13,8 +13,8 @@ npm install crossbell
 ```typescript
 import { Contract } from 'crossbell'
 
-const api = new Contract.Web3Entry(provider)
-const profileId = await api.createProfile(
+const contract = new Contract(provider)
+const profileId = await contract.createProfile(
   '0x1234567890123456789012345678901234567890',
   'Jason',
   'ipfs://xxxx/metadata.json',

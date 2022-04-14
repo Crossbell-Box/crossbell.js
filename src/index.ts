@@ -1,14 +1,5 @@
 import { network } from './network'
+import { Contract } from './contract'
 
-import { Web3Entry } from './contracts'
-
-const contract = {
-  Web3Entry,
-}
-
-export default {
-  network,
-  contract,
-}
-
-export { network, contract }
+export default { network, Contract }
+export { network, Contract }

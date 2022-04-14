@@ -1,24 +1,74 @@
-import { test, expect } from 'vitest'
-import { contract } from '../src'
-import { MOCK_USER } from './mock'
+import { expect, describe, test } from 'vitest'
+import { Contract } from '../src'
+import {
+  mockUser,
+  randomHandle,
+  randomHandle2,
+  metadataUri,
+  metadataUri2,
+} from './mock'
 
-const api = new contract.Web3Entry(MOCK_USER.privateKey)
+const contract = new Contract(mockUser.privateKey)
 
-test('createProfile', async () => {
-  const profileId = await api.createProfile(
-    MOCK_USER.address,
-    genRandomHandle(),
-    'ipfs://QmTMD6sLA7M4iegKDhbdMPBZ4HLi5fjW27w2J16gqc5Cb7/1.json',
-  )
+let profileId: string | null = null
 
-  expect(profileId).toBeDefined()
+describe('create a profile and check', () => {
+  test('createProfile', async () => {
+    profileId = await contract
+      .createProfile(mockUser.address, randomHandle, metadataUri)
+      .then(({ data }) => data)
+    expect(profileId).not.toBeNull()
+  })
+
+  test.concurrent('getProfile', async () => {
+    const { data } = await contract.getProfile(profileId!)
+    expect(data.handle).toBe(randomHandle)
+    expect(data.metadataUri).toBe(metadataUri)
+  })
+
+  test.concurrent('getProfile', async () => {
+    const { data } = await contract.getProfileByHandle(randomHandle)
+    // expect(data.profileId).toBe(profileId)
+    expect(data.handle).toBe(randomHandle)
+    expect(data.metadataUri).toBe(metadataUri)
+  })
+
+  test.concurrent('getHandle', async () => {
+    const { data } = await contract.getHandle(profileId!)
+    expect(data).toBe(randomHandle)
+  })
+
+  test.concurrent('getProfileMetadataUri', async () => {
+    const { data } = await contract.getProfileMetadataUri(profileId!)
+    expect(data).toBe(metadataUri)
+  })
 })
 
-function genRandomHandle(): string {
-  const chars = 'abcdefghijklmnopqrstuvwxyz0123456789'
-  let handle = ''
-  for (let i = 0; i < 10; i++) {
-    handle += chars.charAt(Math.floor(Math.random() * chars.length))
-  }
-  return 'a-random-handle-' + handle
-}
+describe('change a profile and check', () => {
+  test('setPrimaryProfile', async () => {
+    await contract.setPrimaryProfileId(profileId!)
+  })
+
+  test('getPrimaryProfile', async () => {
+    const { data } = await contract.getPrimaryProfileId(mockUser.address)
+    expect(data).toBe(profileId)
+  })
+
+  test('setHandle', async () => {
+    await contract.setHandle(profileId!, randomHandle2)
+  })
+
+  test('getHandle - after changed', async () => {
+    const { data } = await contract.getHandle(profileId!)
+    expect(data).toBe(randomHandle2)
+  })
+
+  test('setMetadataUri', async () => {
+    await contract.setProfileMetadataUri(profileId!, metadataUri2)
+  })
+
+  test('getMetadataUri', async () => {
+    const { data } = await contract.getProfileMetadataUri(profileId!)
+    expect(data).toBe(metadataUri2)
+  })
+})

@@ -61,44 +61,54 @@ export interface AbiEventsContext {
   Transfer(...parameters: any): EventFilter
 }
 export type AbiMethodNames =
-  | 'new'
   | 'approve'
   | 'balanceOf'
   | 'createProfile'
   | 'getApproved'
   | 'getHandle'
-  | 'getLinkListByProfile'
-  | 'getLinkListURI'
-  | 'getLinkModuleByProfile'
-  | 'getPrimaryProfile'
+  | 'getLinkListUri'
+  | 'getLinkModule4Profile'
+  | 'getLinking2ProfileIds'
+  | 'getNoteURI'
+  | 'getPrimaryProfileId'
   | 'getProfile'
-  | 'getProfile2ProfileLinkItem'
-  | 'getProfile2ProfileLinkItems'
-  | 'getProfileIdByHandle'
-  | 'getProfileMetadataURI'
+  | 'getProfileByHandle'
+  | 'getProfileMetadataUri'
+  | 'initialize'
   | 'isApprovedForAll'
+  | 'isPrimaryProfile'
   | 'linkAddress'
   | 'linkAny'
   | 'linkERC721'
+  | 'linkLink'
   | 'linkLinklist'
   | 'linkList'
+  | 'linkNote'
   | 'linkProfile'
-  | 'linkSingleLinkItem'
-  | 'mintSingleLinkItem'
+  | 'mintLink'
+  | 'mintNote'
   | 'name'
   | 'ownerOf'
+  | 'postNote'
+  | 'postNoteWithLink'
   | 'safeTransferFrom'
   | 'safeTransferFrom'
   | 'setApprovalForAll'
   | 'setHandle'
-  | 'setLinkListURI'
+  | 'setLinkListUri'
+  | 'setLinkModule4Address'
+  | 'setLinkModule4ERC721'
+  | 'setLinkModule4Link'
+  | 'setLinkModule4Linklist'
   | 'setLinkModule4Note'
   | 'setLinkModule4Profile'
-  | 'setLinklistURI'
-  | 'setMintModule4Note'
-  | 'setMintModule4SingleLinkItem'
-  | 'setPrimaryProfile'
-  | 'setProfileMetadataURI'
+  | 'setLinklistUri'
+  | 'setMintModuleForLink'
+  | 'setMintModuleForNote'
+  | 'setPrimaryLinkList'
+  | 'setPrimaryProfileId'
+  | 'setProfileMetadataUri'
+  | 'setSocialToken'
   | 'supportsInterface'
   | 'symbol'
   | 'tokenByIndex'
@@ -122,44 +132,66 @@ export interface TransferEventEmittedResponse {
   to: string
   tokenId: BigNumberish
 }
+export interface CreateProfileRequest {
+  to: string
+  handle: string
+  metadataUri: string
+  linkModule: string
+  linkModuleInitData: Arrayish
+}
 export interface ProfileResponse {
   handle: string
   0: string
-  metadataURI: string
+  metadataUri: string
   1: string
-}
-export interface Profile2profilelinkResponse {
-  fromProfileId: BigNumber
-  0: BigNumber
-  toProfileId: BigNumber
-  1: BigNumber
-  linkId: BigNumber
+  noteCount: BigNumber
   2: BigNumber
+  socialToken: string
+  3: string
+  linkModule: string
+  4: string
 }
-export interface ResultsResponse {
-  fromProfileId: BigNumber
-  0: BigNumber
-  toProfileId: BigNumber
-  1: BigNumber
-  linkId: BigNumber
-  2: BigNumber
+export interface LinkLinkRequest {
+  linkListId: BigNumberish
+  linkType: Arrayish
+  linkTargetType: BigNumberish
+  content: Arrayish
+}
+export interface MintLinkRequest {
+  linkListId: BigNumberish
+  linkType: Arrayish
+  linkTargetType: BigNumberish
+  content: Arrayish
+}
+export interface PostNoteRequest {
+  profileId: BigNumberish
+  contentURI: string
+  linkModule: string
+  linkModuleInitData: Arrayish
+  mintModule: string
+  mintModuleInitData: Arrayish
+}
+export interface PostNoteWithLinkRequest {
+  profileId: BigNumberish
+  contentURI: string
+  linkModule: string
+  linkModuleInitData: Arrayish
+  mintModule: string
+  mintModuleInitData: Arrayish
+}
+export interface SetLinkModule4LinkRequest {
+  linkListId: BigNumberish
+  linkType: Arrayish
+  linkTargetType: BigNumberish
+  content: Arrayish
+}
+export interface SetMintModuleForLinkRequest {
+  linkListId: BigNumberish
+  linkType: Arrayish
+  linkTargetType: BigNumberish
+  content: Arrayish
 }
 export interface Abi {
-  /**
-   * Payable: false
-   * Constant: false
-   * StateMutability: nonpayable
-   * Type: constructor
-   * @param _name Type: string, Indexed: false
-   * @param _symbol Type: string, Indexed: false
-   * @param _linkListContract Type: address, Indexed: false
-   */
-  'new'(
-    _name: string,
-    _symbol: string,
-    _linkListContract: string,
-    overrides?: ContractTransactionOverrides,
-  ): Promise<ContractTransaction>
   /**
    * Payable: false
    * Constant: false
@@ -189,14 +221,10 @@ export interface Abi {
    * Constant: false
    * StateMutability: nonpayable
    * Type: function
-   * @param to Type: address, Indexed: false
-   * @param handle Type: string, Indexed: false
-   * @param metadataURI Type: string, Indexed: false
+   * @param vars Type: tuple, Indexed: false
    */
   createProfile(
-    to: string,
-    handle: string,
-    metadataURI: string,
+    vars: CreateProfileRequest,
     overrides?: ContractTransactionOverrides,
   ): Promise<ContractTransaction>
   /**
@@ -229,8 +257,32 @@ export interface Abi {
    * @param profileId Type: uint256, Indexed: false
    * @param linkType Type: bytes32, Indexed: false
    */
-  getLinkListByProfile(
+  getLinkListUri(
     profileId: BigNumberish,
+    linkType: Arrayish,
+    overrides?: ContractCallOverrides,
+  ): Promise<string>
+  /**
+   * Payable: false
+   * Constant: true
+   * StateMutability: view
+   * Type: function
+   * @param profileId Type: uint256, Indexed: false
+   */
+  getLinkModule4Profile(
+    profileId: BigNumberish,
+    overrides?: ContractCallOverrides,
+  ): Promise<string>
+  /**
+   * Payable: false
+   * Constant: true
+   * StateMutability: view
+   * Type: function
+   * @param fromProfileId Type: uint256, Indexed: false
+   * @param linkType Type: bytes32, Indexed: false
+   */
+  getLinking2ProfileIds(
+    fromProfileId: BigNumberish,
     linkType: Arrayish,
     overrides?: ContractCallOverrides,
   ): Promise<BigNumber[]>
@@ -240,22 +292,11 @@ export interface Abi {
    * StateMutability: view
    * Type: function
    * @param profileId Type: uint256, Indexed: false
-   * @param linkType Type: bytes32, Indexed: false
+   * @param noteId Type: uint256, Indexed: false
    */
-  getLinkListURI(
+  getNoteURI(
     profileId: BigNumberish,
-    linkType: Arrayish,
-    overrides?: ContractCallOverrides,
-  ): Promise<string>
-  /**
-   * Payable: false
-   * Constant: true
-   * StateMutability: view
-   * Type: function
-   * @param profileId Type: uint256, Indexed: false
-   */
-  getLinkModuleByProfile(
-    profileId: BigNumberish,
+    noteId: BigNumberish,
     overrides?: ContractCallOverrides,
   ): Promise<string>
   /**
@@ -265,7 +306,7 @@ export interface Abi {
    * Type: function
    * @param account Type: address, Indexed: false
    */
-  getPrimaryProfile(
+  getPrimaryProfileId(
     account: string,
     overrides?: ContractCallOverrides,
   ): Promise<BigNumber>
@@ -285,38 +326,12 @@ export interface Abi {
    * Constant: true
    * StateMutability: view
    * Type: function
-   * @param linkType Type: bytes32, Indexed: false
-   * @param linkId Type: uint256, Indexed: false
-   */
-  getProfile2ProfileLinkItem(
-    linkType: Arrayish,
-    linkId: BigNumberish,
-    overrides?: ContractCallOverrides,
-  ): Promise<Profile2profilelinkResponse>
-  /**
-   * Payable: false
-   * Constant: true
-   * StateMutability: view
-   * Type: function
-   * @param fromProfileId Type: uint256, Indexed: false
-   * @param linkType Type: bytes32, Indexed: false
-   */
-  getProfile2ProfileLinkItems(
-    fromProfileId: BigNumberish,
-    linkType: Arrayish,
-    overrides?: ContractCallOverrides,
-  ): Promise<ResultsResponse[]>
-  /**
-   * Payable: false
-   * Constant: true
-   * StateMutability: view
-   * Type: function
    * @param handle Type: string, Indexed: false
    */
-  getProfileIdByHandle(
+  getProfileByHandle(
     handle: string,
     overrides?: ContractCallOverrides,
-  ): Promise<BigNumber>
+  ): Promise<ProfileResponse>
   /**
    * Payable: false
    * Constant: true
@@ -324,10 +339,25 @@ export interface Abi {
    * Type: function
    * @param profileId Type: uint256, Indexed: false
    */
-  getProfileMetadataURI(
+  getProfileMetadataUri(
     profileId: BigNumberish,
     overrides?: ContractCallOverrides,
   ): Promise<string>
+  /**
+   * Payable: false
+   * Constant: false
+   * StateMutability: nonpayable
+   * Type: function
+   * @param _name Type: string, Indexed: false
+   * @param _symbol Type: string, Indexed: false
+   * @param _linkListContract Type: address, Indexed: false
+   */
+  initialize(
+    _name: string,
+    _symbol: string,
+    _linkListContract: string,
+    overrides?: ContractTransactionOverrides,
+  ): Promise<ContractTransaction>
   /**
    * Payable: false
    * Constant: true
@@ -339,6 +369,17 @@ export interface Abi {
   isApprovedForAll(
     owner: string,
     operator: string,
+    overrides?: ContractCallOverrides,
+  ): Promise<boolean>
+  /**
+   * Payable: false
+   * Constant: true
+   * StateMutability: view
+   * Type: function
+   * @param profileId Type: uint256, Indexed: false
+   */
+  isPrimaryProfile(
+    profileId: BigNumberish,
     overrides?: ContractCallOverrides,
   ): Promise<boolean>
   /**
@@ -362,12 +403,12 @@ export interface Abi {
    * StateMutability: nonpayable
    * Type: function
    * @param fromProfileId Type: uint256, Indexed: false
-   * @param toURI Type: string, Indexed: false
+   * @param toUri Type: string, Indexed: false
    * @param linkType Type: bytes32, Indexed: false
    */
   linkAny(
     fromProfileId: BigNumberish,
-    toURI: string,
+    toUri: string,
     linkType: Arrayish,
     overrides?: ContractTransactionOverrides,
   ): Promise<ContractTransaction>
@@ -394,12 +435,25 @@ export interface Abi {
    * StateMutability: nonpayable
    * Type: function
    * @param fromProfileId Type: uint256, Indexed: false
-   * @param linkListNFTId Type: uint256, Indexed: false
+   * @param linkData Type: tuple, Indexed: false
+   */
+  linkLink(
+    fromProfileId: BigNumberish,
+    linkData: LinkLinkRequest,
+    overrides?: ContractTransactionOverrides,
+  ): Promise<ContractTransaction>
+  /**
+   * Payable: false
+   * Constant: false
+   * StateMutability: nonpayable
+   * Type: function
+   * @param fromProfileId Type: uint256, Indexed: false
+   * @param linkListId Type: uint256, Indexed: false
    * @param linkType Type: bytes32, Indexed: false
    */
   linkLinklist(
     fromProfileId: BigNumberish,
-    linkListNFTId: BigNumberish,
+    linkListId: BigNumberish,
     linkType: Arrayish,
     overrides?: ContractTransactionOverrides,
   ): Promise<ContractTransaction>
@@ -410,6 +464,23 @@ export interface Abi {
    * Type: function
    */
   linkList(overrides?: ContractCallOverrides): Promise<string>
+  /**
+   * Payable: false
+   * Constant: false
+   * StateMutability: nonpayable
+   * Type: function
+   * @param fromProfileId Type: uint256, Indexed: false
+   * @param toProfileId Type: uint256, Indexed: false
+   * @param toNoteId Type: uint256, Indexed: false
+   * @param linkType Type: bytes32, Indexed: false
+   */
+  linkNote(
+    fromProfileId: BigNumberish,
+    toProfileId: BigNumberish,
+    toNoteId: BigNumberish,
+    linkType: Arrayish,
+    overrides?: ContractTransactionOverrides,
+  ): Promise<ContractTransaction>
   /**
    * Payable: false
    * Constant: false
@@ -430,16 +501,12 @@ export interface Abi {
    * Constant: false
    * StateMutability: nonpayable
    * Type: function
-   * @param fromProfileId Type: uint256, Indexed: false
-   * @param linkListNFTId Type: uint256, Indexed: false
-   * @param linkId Type: uint256, Indexed: false
-   * @param linkType Type: bytes32, Indexed: false
+   * @param linkData Type: tuple, Indexed: false
+   * @param receiver Type: address, Indexed: false
    */
-  linkSingleLinkItem(
-    fromProfileId: BigNumberish,
-    linkListNFTId: BigNumberish,
-    linkId: BigNumberish,
-    linkType: Arrayish,
+  mintLink(
+    linkData: MintLinkRequest,
+    receiver: string,
     overrides?: ContractTransactionOverrides,
   ): Promise<ContractTransaction>
   /**
@@ -447,14 +514,14 @@ export interface Abi {
    * Constant: false
    * StateMutability: nonpayable
    * Type: function
-   * @param linkListNFTId Type: uint256, Indexed: false
-   * @param linkId Type: uint256, Indexed: false
-   * @param receiver Type: address, Indexed: false
+   * @param profileId Type: uint256, Indexed: false
+   * @param noteId Type: uint256, Indexed: false
+   * @param to Type: address, Indexed: false
    */
-  mintSingleLinkItem(
-    linkListNFTId: BigNumberish,
-    linkId: BigNumberish,
-    receiver: string,
+  mintNote(
+    profileId: BigNumberish,
+    noteId: BigNumberish,
+    to: string,
     overrides?: ContractTransactionOverrides,
   ): Promise<ContractTransaction>
   /**
@@ -475,6 +542,30 @@ export interface Abi {
     tokenId: BigNumberish,
     overrides?: ContractCallOverrides,
   ): Promise<string>
+  /**
+   * Payable: false
+   * Constant: false
+   * StateMutability: nonpayable
+   * Type: function
+   * @param noteData Type: tuple, Indexed: false
+   */
+  postNote(
+    noteData: PostNoteRequest,
+    overrides?: ContractTransactionOverrides,
+  ): Promise<ContractTransaction>
+  /**
+   * Payable: false
+   * Constant: false
+   * StateMutability: nonpayable
+   * Type: function
+   * @param noteData Type: tuple, Indexed: false
+   * @param linkData Type: tuple, Indexed: false
+   */
+  postNoteWithLink(
+    noteData: PostNoteWithLinkRequest,
+    linkData: PostNoteWithLinkRequest,
+    overrides?: ContractTransactionOverrides,
+  ): Promise<ContractTransaction>
   /**
    * Payable: false
    * Constant: false
@@ -540,12 +631,74 @@ export interface Abi {
    * Type: function
    * @param profileId Type: uint256, Indexed: false
    * @param linkType Type: bytes32, Indexed: false
-   * @param URI Type: string, Indexed: false
+   * @param uri Type: string, Indexed: false
    */
-  setLinkListURI(
+  setLinkListUri(
     profileId: BigNumberish,
     linkType: Arrayish,
-    URI: string,
+    uri: string,
+    overrides?: ContractTransactionOverrides,
+  ): Promise<ContractTransaction>
+  /**
+   * Payable: false
+   * Constant: false
+   * StateMutability: nonpayable
+   * Type: function
+   * @param account Type: address, Indexed: false
+   * @param linkModule Type: address, Indexed: false
+   * @param linkModuleInitData Type: bytes, Indexed: false
+   */
+  setLinkModule4Address(
+    account: string,
+    linkModule: string,
+    linkModuleInitData: Arrayish,
+    overrides?: ContractTransactionOverrides,
+  ): Promise<ContractTransaction>
+  /**
+   * Payable: false
+   * Constant: false
+   * StateMutability: nonpayable
+   * Type: function
+   * @param tokenAddress Type: address, Indexed: false
+   * @param tokenId Type: uint256, Indexed: false
+   * @param linkModule Type: address, Indexed: false
+   * @param linkModuleInitData Type: bytes, Indexed: false
+   */
+  setLinkModule4ERC721(
+    tokenAddress: string,
+    tokenId: BigNumberish,
+    linkModule: string,
+    linkModuleInitData: Arrayish,
+    overrides?: ContractTransactionOverrides,
+  ): Promise<ContractTransaction>
+  /**
+   * Payable: false
+   * Constant: false
+   * StateMutability: nonpayable
+   * Type: function
+   * @param linkData Type: tuple, Indexed: false
+   * @param linkModule Type: address, Indexed: false
+   * @param linkModuleInitData Type: bytes, Indexed: false
+   */
+  setLinkModule4Link(
+    linkData: SetLinkModule4LinkRequest,
+    linkModule: string,
+    linkModuleInitData: Arrayish,
+    overrides?: ContractTransactionOverrides,
+  ): Promise<ContractTransaction>
+  /**
+   * Payable: false
+   * Constant: false
+   * StateMutability: nonpayable
+   * Type: function
+   * @param tokenId Type: uint256, Indexed: false
+   * @param linkModule Type: address, Indexed: false
+   * @param linkModuleInitData Type: bytes, Indexed: false
+   */
+  setLinkModule4Linklist(
+    tokenId: BigNumberish,
+    linkModule: string,
+    linkModuleInitData: Arrayish,
     overrides?: ContractTransactionOverrides,
   ): Promise<ContractTransaction>
   /**
@@ -554,13 +707,15 @@ export interface Abi {
    * StateMutability: nonpayable
    * Type: function
    * @param profileId Type: uint256, Indexed: false
-   * @param toNoteId Type: uint256, Indexed: false
-   * @param moduleAddress Type: address, Indexed: false
+   * @param noteId Type: uint256, Indexed: false
+   * @param linkModule Type: address, Indexed: false
+   * @param linkModuleInitData Type: bytes, Indexed: false
    */
   setLinkModule4Note(
     profileId: BigNumberish,
-    toNoteId: BigNumberish,
-    moduleAddress: string,
+    noteId: BigNumberish,
+    linkModule: string,
+    linkModuleInitData: Arrayish,
     overrides?: ContractTransactionOverrides,
   ): Promise<ContractTransaction>
   /**
@@ -569,11 +724,13 @@ export interface Abi {
    * StateMutability: nonpayable
    * Type: function
    * @param profileId Type: uint256, Indexed: false
-   * @param moduleAddress Type: address, Indexed: false
+   * @param linkModule Type: address, Indexed: false
+   * @param linkModuleInitData Type: bytes, Indexed: false
    */
   setLinkModule4Profile(
     profileId: BigNumberish,
-    moduleAddress: string,
+    linkModule: string,
+    linkModuleInitData: Arrayish,
     overrides?: ContractTransactionOverrides,
   ): Promise<ContractTransaction>
   /**
@@ -581,14 +738,27 @@ export interface Abi {
    * Constant: false
    * StateMutability: nonpayable
    * Type: function
-   * @param profileId Type: uint256, Indexed: false
-   * @param linkType Type: bytes32, Indexed: false
-   * @param linklistURI Type: string, Indexed: false
+   * @param linkListId Type: uint256, Indexed: false
+   * @param linklistUri Type: string, Indexed: false
    */
-  setLinklistURI(
-    profileId: BigNumberish,
-    linkType: Arrayish,
-    linklistURI: string,
+  setLinklistUri(
+    linkListId: BigNumberish,
+    linklistUri: string,
+    overrides?: ContractTransactionOverrides,
+  ): Promise<ContractTransaction>
+  /**
+   * Payable: false
+   * Constant: false
+   * StateMutability: nonpayable
+   * Type: function
+   * @param linkData Type: tuple, Indexed: false
+   * @param mintModule Type: address, Indexed: false
+   * @param mintModuleInitData Type: bytes, Indexed: false
+   */
+  setMintModuleForLink(
+    linkData: SetMintModuleForLinkRequest,
+    mintModule: string,
+    mintModuleInitData: Arrayish,
     overrides?: ContractTransactionOverrides,
   ): Promise<ContractTransaction>
   /**
@@ -598,12 +768,14 @@ export interface Abi {
    * Type: function
    * @param profileId Type: uint256, Indexed: false
    * @param toNoteId Type: uint256, Indexed: false
-   * @param moduleAddress Type: address, Indexed: false
+   * @param mintModule Type: address, Indexed: false
+   * @param mintModuleInitData Type: bytes, Indexed: false
    */
-  setMintModule4Note(
+  setMintModuleForNote(
     profileId: BigNumberish,
     toNoteId: BigNumberish,
-    moduleAddress: string,
+    mintModule: string,
+    mintModuleInitData: Arrayish,
     overrides?: ContractTransactionOverrides,
   ): Promise<ContractTransaction>
   /**
@@ -611,24 +783,11 @@ export interface Abi {
    * Constant: false
    * StateMutability: nonpayable
    * Type: function
-   * @param linkListNFTId Type: uint256, Indexed: false
-   * @param linkId Type: uint256, Indexed: false
-   * @param moduleAddress Type: address, Indexed: false
-   */
-  setMintModule4SingleLinkItem(
-    linkListNFTId: BigNumberish,
-    linkId: BigNumberish,
-    moduleAddress: string,
-    overrides?: ContractTransactionOverrides,
-  ): Promise<ContractTransaction>
-  /**
-   * Payable: false
-   * Constant: false
-   * StateMutability: nonpayable
-   * Type: function
+   * @param linkListId Type: uint256, Indexed: false
    * @param profileId Type: uint256, Indexed: false
    */
-  setPrimaryProfile(
+  setPrimaryLinkList(
+    linkListId: BigNumberish,
     profileId: BigNumberish,
     overrides?: ContractTransactionOverrides,
   ): Promise<ContractTransaction>
@@ -638,11 +797,35 @@ export interface Abi {
    * StateMutability: nonpayable
    * Type: function
    * @param profileId Type: uint256, Indexed: false
-   * @param newMetadataURI Type: string, Indexed: false
    */
-  setProfileMetadataURI(
+  setPrimaryProfileId(
     profileId: BigNumberish,
-    newMetadataURI: string,
+    overrides?: ContractTransactionOverrides,
+  ): Promise<ContractTransaction>
+  /**
+   * Payable: false
+   * Constant: false
+   * StateMutability: nonpayable
+   * Type: function
+   * @param profileId Type: uint256, Indexed: false
+   * @param newMetadataUri Type: string, Indexed: false
+   */
+  setProfileMetadataUri(
+    profileId: BigNumberish,
+    newMetadataUri: string,
+    overrides?: ContractTransactionOverrides,
+  ): Promise<ContractTransaction>
+  /**
+   * Payable: false
+   * Constant: false
+   * StateMutability: nonpayable
+   * Type: function
+   * @param profileId Type: uint256, Indexed: false
+   * @param tokenAddress Type: address, Indexed: false
+   */
+  setSocialToken(
+    profileId: BigNumberish,
+    tokenAddress: string,
     overrides?: ContractTransactionOverrides,
   ): Promise<ContractTransaction>
   /**
@@ -726,13 +909,13 @@ export interface Abi {
    * StateMutability: nonpayable
    * Type: function
    * @param fromProfileId Type: uint256, Indexed: false
+   * @param toProfileId Type: uint256, Indexed: false
    * @param linkType Type: bytes32, Indexed: false
-   * @param linkId Type: uint256, Indexed: false
    */
   unlinkProfile(
     fromProfileId: BigNumberish,
+    toProfileId: BigNumberish,
     linkType: Arrayish,
-    linkId: BigNumberish,
     overrides?: ContractTransactionOverrides,
   ): Promise<ContractTransaction>
 }
