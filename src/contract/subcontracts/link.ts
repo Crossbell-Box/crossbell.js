@@ -1,7 +1,7 @@
 import { ethers } from 'ethers'
 import { BaseContract } from './base'
-import type { LinkProfileEvent, ProfileCreatedEvent } from './abi/types/Abi'
-import type { Result } from './types'
+import type { LinkProfileEvent, ProfileCreatedEvent } from '../abi/types/Abi'
+import type { Result } from '../types'
 
 export class LinkContract extends BaseContract {
   /**

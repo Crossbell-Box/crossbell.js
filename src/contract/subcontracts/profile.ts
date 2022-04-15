@@ -1,7 +1,7 @@
-import { NIL_ADDRESS } from './utils'
+import { NIL_ADDRESS } from '../utils'
 import { BaseContract } from './base'
-import type { ProfileCreatedEvent } from './abi/types/Abi'
-import type { Result, Profile } from './types'
+import type { ProfileCreatedEvent } from '../abi/types/Abi'
+import type { Result, Profile } from '../types'
 
 export class ProfileContract extends BaseContract {
   /**

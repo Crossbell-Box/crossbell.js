@@ -1,6 +1,6 @@
 import { Mixin } from 'ts-mixer'
-import { LinkContract } from './link'
-import { ProfileContract } from './profile'
+import { LinkContract } from './subcontracts/link'
+import { ProfileContract } from './subcontracts/profile'
 
 const Contracts = Mixin(ProfileContract, LinkContract)
 

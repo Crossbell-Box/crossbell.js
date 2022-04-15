@@ -1,0 +1,85 @@
+<html>
+  <body>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/web3/1.7.3/web3.min.js"></script> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.6.2/ethers.umd.min.js"></script>
+    <script src="./../../dist/index.global.js"></script>
+
+    <p id="hint"></p>
+
+    <h3>Connect</h3>
+
+    <button onclick="connect()">connect</button>
+
+    <h3>Create Profile</h3>
+
+    <input
+      type="text"
+      id="create-profile-address"
+      placeholder="handler"
+      value=""
+    />
+    <input
+      type="text"
+      id="create-profile-handle"
+      placeholder="handler"
+      value="my profile handle"
+    />
+    <input
+      type="text"
+      id="create-profile-uri"
+      placeholder="profile uri"
+      value="https://example.com"
+    />
+
+    <button onclick="createProfile()">createProfile</button>
+
+    <script>
+      const { Contract } = window.Crossbell
+      const metamask = window.ethereum
+      const contract = new Contract(metamask)
+
+      updateHint('click "connect" btn to connect metamask')
+
+      async function connect() {
+        console.log('connecting...')
+        updateHint('connecting')
+        try {
+          await contract.connect()
+          const address = ethereum.selectedAddress
+          updateHint(`your address is ${address}`)
+          document.getElementById('create-profile-address').value = address
+        } catch (e) {
+          console.error(e)
+          updateHint('connect failed')
+          return
+        }
+      }
+
+      async function createProfile() {
+        console.log('creating profile...')
+        updateHint('creating profile...')
+        try {
+          const address = document.getElementById(
+            'create-profile-address',
+          ).value
+          const handle = document.getElementById('create-profile-handle').value
+          const uri = document.getElementById('create-profile-uri').value
+          const data = await contract.createProfile(
+            ethereum.selectedAddress,
+            handle,
+            uri,
+          )
+          console.log({ data })
+          updateHint(`profile created.  ${JSON.stringify(data, null, 2)}`)
+        } catch (e) {
+          console.error(e)
+          updateHint(e.error.message)
+        }
+      }
+
+      function updateHint(text) {
+        document.getElementById('hint').innerText = text
+      }
+    </script>
+  </body>
+</html>

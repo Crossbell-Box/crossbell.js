@@ -1,6 +1,6 @@
 import { ethers } from 'ethers'
-import { Network } from '../network'
-import { type Abi, Abi__factory } from './abi/types'
+import { Network } from '../../network'
+import { type Abi, Abi__factory } from '../abi/types'
 
 const logTopics = {
   linkProfile:
@@ -10,7 +10,13 @@ const logTopics = {
 } as const
 
 export class BaseContract {
-  protected readonly contract!: Abi
+  private providerOrPrivateKey:
+    | ethers.providers.ExternalProvider
+    | ethers.providers.JsonRpcFetchFunc
+    | string
+  private signer!: ethers.Signer
+
+  protected contract!: Abi
 
   constructor(
     providerOrPrivateKey:
@@ -18,17 +24,26 @@ export class BaseContract {
       | ethers.providers.JsonRpcFetchFunc
       | string,
   ) {
-    const web3Provider =
-      typeof providerOrPrivateKey === 'string'
-        ? new ethers.Wallet(
-            providerOrPrivateKey,
-            new ethers.providers.JsonRpcProvider(Network.getJsonRpcAddress()),
-          )
-        : new ethers.providers.Web3Provider(providerOrPrivateKey)
+    this.providerOrPrivateKey = providerOrPrivateKey
+  }
+
+  async connect() {
+    if (typeof this.providerOrPrivateKey === 'string') {
+      this.signer = new ethers.Wallet(
+        this.providerOrPrivateKey,
+        new ethers.providers.JsonRpcProvider(Network.getJsonRpcAddress()),
+      )
+    } else {
+      const provider = new ethers.providers.Web3Provider(
+        this.providerOrPrivateKey,
+      )
+      await provider.send('eth_requestAccounts', [])
+      this.signer = provider.getSigner()
+    }
 
     this.contract = Abi__factory.connect(
       Network.getContractAddress(),
-      web3Provider,
+      this.signer,
     )
   }
 
