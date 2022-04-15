@@ -21,8 +21,4 @@ const profileId = await contract.createProfile(
 )
 ```
 
-## APIs
-
-### Create a Profile
-
-TODO
+For more usage, see [contract.ts](contract.ts).

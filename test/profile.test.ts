@@ -23,14 +23,14 @@ describe('create a profile and check', () => {
   test.concurrent('getProfile', async () => {
     const { data } = await contract.getProfile(profileId!)
     expect(data.handle).toBe(randomHandle)
-    expect(data.metadataUri).toBe(metadataUri)
+    expect(data.uri).toBe(metadataUri)
   })
 
-  test.concurrent('getProfile', async () => {
+  test.concurrent('getProfileByHandle', async () => {
     const { data } = await contract.getProfileByHandle(randomHandle)
     // expect(data.profileId).toBe(profileId)
     expect(data.handle).toBe(randomHandle)
-    expect(data.metadataUri).toBe(metadataUri)
+    expect(data.uri).toBe(metadataUri)
   })
 
   test.concurrent('getHandle', async () => {
@@ -39,7 +39,7 @@ describe('create a profile and check', () => {
   })
 
   test.concurrent('getProfileMetadataUri', async () => {
-    const { data } = await contract.getProfileMetadataUri(profileId!)
+    const { data } = await contract.getProfileUri(profileId!)
     expect(data).toBe(metadataUri)
   })
 })
@@ -54,6 +54,11 @@ describe('change a profile and check', () => {
     expect(data).toBe(profileId)
   })
 
+  test('isPrimaryProfileId', async () => {
+    const { data } = await contract.isPrimaryProfileId(profileId!)
+    expect(data).toBe(true)
+  })
+
   test('setHandle', async () => {
     await contract.setHandle(profileId!, randomHandle2)
   })
@@ -64,11 +69,11 @@ describe('change a profile and check', () => {
   })
 
   test('setMetadataUri', async () => {
-    await contract.setProfileMetadataUri(profileId!, metadataUri2)
+    await contract.setProfileUri(profileId!, metadataUri2)
   })
 
   test('getMetadataUri', async () => {
-    const { data } = await contract.getProfileMetadataUri(profileId!)
+    const { data } = await contract.getProfileUri(profileId!)
     expect(data).toBe(metadataUri2)
   })
 })

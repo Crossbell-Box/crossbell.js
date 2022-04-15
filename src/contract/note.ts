@@ -1,10 +1,8 @@
-import type { Abi } from './abi/types'
+import { BaseContract } from './base'
 import { Result } from './types'
 import { NIL_ADDRESS } from './utils'
 
-export class NoteContract {
-  protected readonly contract!: Abi
-
+export class NoteContract extends BaseContract {
   /**
    * This returns the URI of a note.
    * @param {string} profileId - The profile ID of the user who owns the note.

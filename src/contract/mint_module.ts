@@ -1,8 +1,6 @@
-import type { Abi } from './abi/types'
+import { BaseContract } from './base'
 
-export class ModuleContract {
-  protected readonly contract!: Abi
-
+export class ModuleContract extends BaseContract {
   // setMintModuleForLink
   // setMintModuleForNote
 }

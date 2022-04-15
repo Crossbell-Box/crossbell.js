@@ -10,7 +10,7 @@ export const metadataUri =
 export const metadataUri2 =
   'ipfs://QmTMD6sLA7M4iegKDhbdMPBZ4HLi5fjW27w2J16gqc5Cb7/2.json'
 
-function genRandomHandle(): string {
+export function genRandomHandle(): string {
   const chars = 'abcdefghijklmnopqrstuvwxyz0123456789'
   let handle = ''
   for (let i = 0; i < 10; i++) {

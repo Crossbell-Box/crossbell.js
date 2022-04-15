@@ -1,10 +1,9 @@
 import { NIL_ADDRESS } from './utils'
+import { BaseContract } from './base'
+import type { ProfileCreatedEvent } from './abi/types/Abi'
 import type { Result, Profile } from './types'
-import type { Abi } from './abi/types'
 
-export class ProfileContract {
-  protected readonly contract!: Abi
-
+export class ProfileContract extends BaseContract {
   /**
    * This creates a new profile for an address, and returns the ID of the newly created profile.
    * When the profile is the first profile created for an address, the address will be set as the primary profile.
@@ -25,9 +24,15 @@ export class ProfileContract {
       linkModule: NIL_ADDRESS,
       linkModuleInitData: NIL_ADDRESS, // TODO: ?
     })
+
     const receipt = await tx.wait()
+
+    const parser = this.parseLog<ProfileCreatedEvent>(
+      receipt.logs,
+      'createProfile',
+    )
     return {
-      data: parseInt(receipt.logs[1].topics[1] as string, 16).toString(), // TODO: a better way to parse logs? https://github.com/ethers-io/ethers.js/issues/487#issuecomment-919616975
+      data: parser.args.profileId.toString(),
       transactionHash: receipt.transactionHash,
     }
   }

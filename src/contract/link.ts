@@ -1,31 +1,33 @@
-import type { Abi } from './abi/types'
+import { ethers } from 'ethers'
+import { BaseContract } from './base'
+import type { LinkProfileEvent, ProfileCreatedEvent } from './abi/types/Abi'
 import type { Result } from './types'
 
-export class LinkContract {
-  protected readonly contract!: Abi
-
-  /** link profile */
-
+export class LinkContract extends BaseContract {
   /**
    * This links a profile to another profile with a given link type.
    * @param {string} fromProfileId - The profile ID of the profile that is linking to another profile.
    * @param {string} toProfileId - The profile ID of the profile you want to link to.
    * @param {string} linkType - The type of link.
-   * @returns The transaction hash of the transaction that was sent to the blockchain.
+   * @returns The linklist id and the transaction hash of the transaction that was sent to the blockchain.
    */
   async linkProfile(
     fromProfileId: string,
     toProfileId: string,
     linkType: string,
-  ): Promise<Result<undefined>> | never {
+  ): Promise<Result<string>> | never {
     const tx = await this.contract.linkProfile(
       fromProfileId,
       toProfileId,
-      linkType,
+      ethers.utils.formatBytes32String(linkType),
     )
+
     const receipt = await tx.wait()
+
+    const parser = this.parseLog<LinkProfileEvent>(receipt.logs, 'linkProfile')
+
     return {
-      data: undefined,
+      data: parser.args.linklistId.toString(),
       transactionHash: receipt.transactionHash,
     }
   }
@@ -40,21 +42,42 @@ export class LinkContract {
    * @param {string} fromProfileId - The profile ID of the profile that is creating the new profile.
    * @param {string} toAddress - The address of the profile you want to link to.
    * @param {string} linkType - The type of link you want to create. This is a string.
-   * @returns A Result object with the transaction hash of the transaction that was sent to the blockchain.
+   * @returns The transaction hash of the transaction that was sent to the blockchain, the toProfileId and linklistId.
    */
-  async createAndLinkProfile(
+  async createThenLinkProfile(
     fromProfileId: string,
     toAddress: string,
     linkType: string,
-  ): Promise<Result<undefined>> | never {
-    const tx = await this.contract.createAndLinkProfile(
+  ):
+    | Promise<
+        Result<{
+          toProfileId: string
+          linklistId: string
+        }>
+      >
+    | never {
+    const tx = await this.contract.createThenLinkProfile(
       fromProfileId,
       toAddress,
-      linkType,
+      ethers.utils.formatBytes32String(linkType),
     )
+
     const receipt = await tx.wait()
+
+    const createProfileParser = this.parseLog<ProfileCreatedEvent>(
+      receipt.logs,
+      'createProfile',
+    )
+    const linkProfileParser = this.parseLog<LinkProfileEvent>(
+      receipt.logs,
+      'linkProfile',
+    )
+
     return {
-      data: undefined,
+      data: {
+        toProfileId: createProfileParser.args.profileId.toString(),
+        linklistId: linkProfileParser.args.linklistId.toString(),
+      },
       transactionHash: receipt.transactionHash,
     }
   }
@@ -74,7 +97,7 @@ export class LinkContract {
     const tx = await this.contract.unlinkProfile(
       fromProfileId,
       toProfileId,
-      linkType,
+      ethers.utils.formatBytes32String(linkType),
     )
     const receipt = await tx.wait()
     return {
@@ -95,7 +118,7 @@ export class LinkContract {
   ): Promise<Result<string[]>> | never {
     const linkList = await this.contract.getLinkingProfileIds(
       fromProfileId,
-      linkType,
+      ethers.utils.formatBytes32String(linkType),
     )
     return {
       data: linkList.map((link) => link.toNumber().toString()),
@@ -110,24 +133,26 @@ export class LinkContract {
    * @param {string} fromProfileId - The profile ID of the profile that is linking to the address.
    * @param {string} toAddress - The address of the profile you want to link to.
    * @param {string} linkType - The type of link.
-   * @returns The transaction hash of the transaction that was sent to the blockchain.
+   * @returns The transaction hash of the transaction that was sent to the blockchain, and the linklistId.
    */
-  async linkAddress(
-    fromProfileId: string,
-    toAddress: string,
-    linkType: string,
-  ): Promise<Result<undefined>> | never {
-    const tx = await this.contract.linkAddress(
-      fromProfileId,
-      toAddress,
-      linkType,
-    )
-    const receipt = await tx.wait()
-    return {
-      data: undefined,
-      transactionHash: receipt.transactionHash,
-    }
-  }
+  // TODO: next version
+  // async linkAddress(
+  //   fromProfileId: string,
+  //   toAddress: string,
+  //   linkType: string,
+  // ): Promise<Result<undefined>> | never {
+  //   const tx = await this.contract.linkAddress(
+  //     fromProfileId,
+  //     toAddress,
+  //     linkType,
+  //   )
+  //   const receipt = await tx.wait()
+  //   const linklistId = receipt.logs[0].topics[4] as BigNumberish
+  //   return {
+  //     data: undefined,
+  //     transactionHash: receipt.transactionHash,
+  //   }
+  // }
 
   /** link any */
 
@@ -138,18 +163,19 @@ export class LinkContract {
    * @param {string} linkType - The type of link you want to create. This is a string that you can define yourself.
    * @returns The transaction hash of the transaction that was sent to the blockchain.
    */
-  async linkAny(
-    fromProfileId: string,
-    toUri: string,
-    linkType: string,
-  ): Promise<Result<undefined>> | never {
-    const tx = await this.contract.linkAny(fromProfileId, toUri, linkType)
-    const receipt = await tx.wait()
-    return {
-      data: undefined,
-      transactionHash: receipt.transactionHash,
-    }
-  }
+  // TODO: next version
+  // async linkAny(
+  //   fromProfileId: string,
+  //   toUri: string,
+  //   linkType: string,
+  // ): Promise<Result<undefined>> | never {
+  //   const tx = await this.contract.linkAny(fromProfileId, toUri, linkType)
+  //   const receipt = await tx.wait()
+  //   return {
+  //     data: undefined,
+  //     transactionHash: receipt.transactionHash,
+  //   }
+  // }
 
   /** link ERC721 token */
 
@@ -161,24 +187,25 @@ export class LinkContract {
    * @param {string} linkType - The type of link.
    * @returns The transaction hash of the transaction that was sent to the blockchain.
    */
-  async linkErc721(
-    fromProfileId: string,
-    toTokenAddress: string,
-    toTokenId: string,
-    linkType: string,
-  ): Promise<Result<undefined>> | never {
-    const tx = await this.contract.linkERC721(
-      fromProfileId,
-      toTokenAddress,
-      toTokenId,
-      linkType,
-    )
-    const receipt = await tx.wait()
-    return {
-      data: undefined,
-      transactionHash: receipt.transactionHash,
-    }
-  }
+  // TODO: next version
+  // async linkErc721(
+  //   fromProfileId: string,
+  //   toTokenAddress: string,
+  //   toTokenId: string,
+  //   linkType: string,
+  // ): Promise<Result<undefined>> | never {
+  //   const tx = await this.contract.linkERC721(
+  //     fromProfileId,
+  //     toTokenAddress,
+  //     toTokenId,
+  //     linkType,
+  //   )
+  //   const receipt = await tx.wait()
+  //   return {
+  //     data: undefined,
+  //     transactionHash: receipt.transactionHash,
+  //   }
+  // }
 
   /** link note */
   // TODO: next version

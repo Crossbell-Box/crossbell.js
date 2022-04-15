@@ -10,7 +10,7 @@ export type Result<T> = {
 export type Profile = {
   profileId: string
   handle: string
-  metadataUri: string
+  uri: string
   socialToken: string
   noteCount: number
 }

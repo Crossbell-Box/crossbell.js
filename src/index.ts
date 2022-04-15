@@ -1,5 +1,5 @@
-import { network } from './network'
+import { Network } from './network'
 import { Contract } from './contract'
 
-export default { network, Contract }
-export { network, Contract }
+export default { Network, Contract }
+export { Network, Contract }
