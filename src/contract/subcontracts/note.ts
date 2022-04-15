@@ -1,6 +1,6 @@
 import { BaseContract } from './base'
-import { Result } from './types'
-import { NIL_ADDRESS } from './utils'
+import { Result } from '../types'
+import { NIL_ADDRESS } from '../utils'
 
 export class NoteContract extends BaseContract {
   /**
