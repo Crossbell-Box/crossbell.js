@@ -7,6 +7,13 @@
     "eth",
     "contract"
   ],
+  "bugs": {
+    "url": "https://github.com/Crossbell-Box/crossbell.js/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Crossbell-Box/crossbell.js.git"
+  },
   "license": "MIT",
   "exports": {
     "import": "./dist/index.mjs",
@@ -21,18 +28,23 @@
   "scripts": {
     "build": "npm run build-fast -- --dts-resolve",
     "build-fast": "tsup",
-    "test": "vitest run",
+    "gen-abi-types": "typechain --target ethers-v5 --out-dir ./src/contract/abi/types ./src/contract/abi/abi.json",
+    "gen-doc": "typedoc",
     "prepublishOnly": "npm run build",
-    "watch": "npm run build-fast -- --watch",
-    "gen-abi-types": "abi-types-generator ./src/contracts/web3entry/abi.json --output=./src/contracts/web3entry/ --provider=ethers_v5"
+    "test": "vitest run",
+    "watch": "npm run build-fast -- --watch"
   },
   "dependencies": {
-    "ethers": "^5.6.3"
+    "ethers": "^5.6.3",
+    "ts-mixer": "^6.0.1"
   },
   "devDependencies": {
-    "ethereum-abi-types-generator": "^1.3.2",
+    "@typechain/ethers-v5": "^10.0.0",
+    "@types/node": "^17.0.24",
     "prettier": "^2.6.0",
     "tsup": "^5.12.1",
+    "typechain": "^8.0.0",
+    "typedoc": "^0.22.15",
     "typescript": "^4.6.3",
     "vitest": "^0.9.3"
   },
