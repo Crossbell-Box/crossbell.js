@@ -10,13 +10,13 @@ const logTopics = {
 } as const
 
 export class BaseContract {
-  #providerOrPrivateKey:
+  private _providerOrPrivateKey:
     | ethers.providers.ExternalProvider
     | ethers.providers.JsonRpcFetchFunc
     | string
-  #signer!: ethers.Signer
+  private _signer!: ethers.Signer
 
-  protected _contract!: Abi
+  private _contract!: Abi
 
   protected get contract(): Abi {
     if (this._contract === undefined) {
@@ -36,26 +36,26 @@ export class BaseContract {
       | ethers.providers.JsonRpcFetchFunc
       | string,
   ) {
-    this.#providerOrPrivateKey = providerOrPrivateKey
+    this._providerOrPrivateKey = providerOrPrivateKey
   }
 
   async connect() {
-    if (typeof this.#providerOrPrivateKey === 'string') {
-      this.#signer = new ethers.Wallet(
-        this.#providerOrPrivateKey,
+    if (typeof this._providerOrPrivateKey === 'string') {
+      this._signer = new ethers.Wallet(
+        this._providerOrPrivateKey,
         new ethers.providers.JsonRpcProvider(Network.getJsonRpcAddress()),
       )
     } else {
       const provider = new ethers.providers.Web3Provider(
-        this.#providerOrPrivateKey,
+        this._providerOrPrivateKey,
       )
       await provider.send('eth_requestAccounts', [])
-      this.#signer = provider.getSigner()
+      this._signer = provider.getSigner()
     }
 
     this.contract = Abi__factory.connect(
       Network.getContractAddress(),
-      this.#signer,
+      this._signer,
     )
   }
 
