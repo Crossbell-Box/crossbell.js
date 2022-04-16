@@ -10,13 +10,25 @@ const logTopics = {
 } as const
 
 export class BaseContract {
-  private providerOrPrivateKey:
+  #providerOrPrivateKey:
     | ethers.providers.ExternalProvider
     | ethers.providers.JsonRpcFetchFunc
     | string
-  private signer!: ethers.Signer
+  #signer!: ethers.Signer
 
-  protected contract!: Abi
+  protected _contract!: Abi
+
+  protected get contract(): Abi {
+    if (this._contract === undefined) {
+      throw new Error('Contract not connected. Please call connect() first.')
+    } else {
+      return this._contract
+    }
+  }
+
+  protected set contract(contract: Abi) {
+    this._contract = contract
+  }
 
   constructor(
     providerOrPrivateKey:
@@ -24,26 +36,26 @@ export class BaseContract {
       | ethers.providers.JsonRpcFetchFunc
       | string,
   ) {
-    this.providerOrPrivateKey = providerOrPrivateKey
+    this.#providerOrPrivateKey = providerOrPrivateKey
   }
 
   async connect() {
-    if (typeof this.providerOrPrivateKey === 'string') {
-      this.signer = new ethers.Wallet(
-        this.providerOrPrivateKey,
+    if (typeof this.#providerOrPrivateKey === 'string') {
+      this.#signer = new ethers.Wallet(
+        this.#providerOrPrivateKey,
         new ethers.providers.JsonRpcProvider(Network.getJsonRpcAddress()),
       )
     } else {
       const provider = new ethers.providers.Web3Provider(
-        this.providerOrPrivateKey,
+        this.#providerOrPrivateKey,
       )
       await provider.send('eth_requestAccounts', [])
-      this.signer = provider.getSigner()
+      this.#signer = provider.getSigner()
     }
 
     this.contract = Abi__factory.connect(
       Network.getContractAddress(),
-      this.signer,
+      this.#signer,
     )
   }
 

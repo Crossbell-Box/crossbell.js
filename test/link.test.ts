@@ -1,11 +1,15 @@
 import { Wallet } from 'ethers'
-import { expect, describe, test } from 'vitest'
+import { expect, describe, test, beforeAll } from 'vitest'
 import { Contract } from '../src'
 import { mockUser, genRandomHandle, metadataUri } from './mock'
 
 const contract = new Contract(mockUser.privateKey)
 
 describe('link profiles and check', () => {
+  beforeAll(async () => {
+    await contract.connect()
+  })
+
   // create two profiles first
   let profileId1: string | null = null
   let profileId2: string | null = null

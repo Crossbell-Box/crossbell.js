@@ -1,4 +1,4 @@
-import { expect, describe, test } from 'vitest'
+import { expect, describe, test, beforeAll } from 'vitest'
 import { Contract } from '../src'
 import {
   mockUser,
@@ -12,7 +12,19 @@ const contract = new Contract(mockUser.privateKey)
 
 let profileId: string | null = null
 
+describe('should fail if not connected', () => {
+  test('should fail to createProfile if not connected', () => {
+    expect(
+      contract.createProfile(mockUser.address, randomHandle, metadataUri),
+    ).rejects.toThrow(/Contract not connected/)
+  })
+})
+
 describe('create a profile and check', () => {
+  beforeAll(async () => {
+    await contract.connect()
+  })
+
   test('createProfile', async () => {
     profileId = await contract
       .createProfile(mockUser.address, randomHandle, metadataUri)
