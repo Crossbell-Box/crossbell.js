@@ -5,7 +5,7 @@ A JavaScript SDK to interact with the Crossbell.
 ## Installation
 
 ```bash
-npm install crossbell
+npm install crossbell.js
 ```
 
 ## Usage
@@ -13,14 +13,14 @@ npm install crossbell
 ### Metamask
 
 ```typescript
-import { Contract } from 'crossbell'
+import { Contract } from 'crossbell.js'
 
 // Create a new contract instance with metamask provider
 const provider = window.ethereum
 const contract = new Contract(provider)
 
 // Connect to the chain
-await contract connect()
+await contract.connect()
 
 // Example API: Create a new profile for an address
 try {

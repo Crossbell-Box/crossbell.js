@@ -2,9 +2,9 @@ export type IAvailableNetwork = 'rinkeby' | 'crossbell'
 
 export class Network {
   static #CONTRACT_ROPSTEN = '0x30094AFd225BF4723B72c42748FdDe2D86cA3671'
-  static #CONTRACT_CROSSBELL = '0x0' // TODO: mainnet is not supported yet
+  static #CONTRACT_CROSSBELL = '0xDAFf56432108DA447970FBB2D3cf911991CeC034'
 
-  static #currentNetwork: IAvailableNetwork = 'rinkeby'
+  static #currentNetwork: IAvailableNetwork = 'crossbell'
   static readonly #availableNetworks: IAvailableNetwork[] = [
     'rinkeby',
     'crossbell',
@@ -42,7 +42,7 @@ export class Network {
       case 'rinkeby':
         return 'https://rinkeby.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161'
       case 'crossbell':
-        return //
+        return 'https://rpc.crossbell.io'
       default:
         throw new Error(`Network ${this.#currentNetwork} is not available`)
     }

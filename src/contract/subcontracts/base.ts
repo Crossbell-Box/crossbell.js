@@ -1,4 +1,4 @@
-import { ethers } from 'ethers'
+import { Contract, ethers } from 'ethers'
 import { Network } from '../../network'
 import { type Abi, Abi__factory } from '../abi/types'
 
