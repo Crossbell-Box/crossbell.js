@@ -10,7 +10,7 @@ npm install crossbell.js
 
 ## Usage
 
-### Metamask
+### Connect with Metamask
 
 ```typescript
 import { Contract } from 'crossbell.js'
@@ -24,16 +24,31 @@ await contract.connect()
 
 // Example API: Create a new profile for an address
 try {
-  const data = await contract.createProfile(
+  const result = await contract.createProfile(
     '0x1234567890123456789012345678901234567890',
     'Jason',
     'ipfs://xxxx/metadata.json',
   )
-  console.log(data.profileId) // '42'
-  console.log(data.transactionHash) // '0xabcdef...'
+  console.log(result.data) // '42' (profileId)
+  console.log(result.transactionHash) // '0xabcdef...'
 } catch (e) {
   console.error(e.message) // e.g. "execution reverted: Web3Entry: HandleExists"
 }
+```
+
+### Connect with Private Key
+
+You can also connect with a private key directly.
+
+```typescript
+import { Contract } from 'crossbell.js'
+
+const privateKey =
+  '0xabcdef0123456789012345678901234567890123456789012345678901234'
+const contract = new Contract(privateKey)
+
+// Connect to the chain
+await contract.connect()
 ```
 
 For more contract api, see [docs](https://crossbell-box.github.io/crossbell.js/classes/Contract.html).
