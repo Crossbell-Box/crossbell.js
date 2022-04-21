@@ -52,3 +52,16 @@ await contract.connect()
 ```
 
 For more contract api, see [docs](https://crossbell-box.github.io/crossbell.js/classes/Contract.html).
+
+### Connect with Ready-Only
+
+You can also connect with a ready-only provider.
+
+```typescript
+import { Contract } from 'crossbell.js'
+
+const contract = new Contract() // just pass nothing to use a ready-only provider
+
+// Connect to the chain
+await contract.connect()
+```
