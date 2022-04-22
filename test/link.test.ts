@@ -62,5 +62,10 @@ describe('link profiles and check', () => {
 
     const { data } = await contract.getLinkingProfileIds(profileId1!, linkType)
     expect(data).toContain(toProfileId!)
+
+    const {
+      data: { handle },
+    } = await contract.getProfileByHandle(randomAddress)
+    expect(handle).toBe(randomAddress)
   })
 })
