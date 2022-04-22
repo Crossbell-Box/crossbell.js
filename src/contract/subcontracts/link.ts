@@ -1,5 +1,6 @@
 import { ethers } from 'ethers'
 import { BaseContract } from './base'
+import { autoSwitchMainnet } from '../decorators'
 import type { LinkProfileEvent, ProfileCreatedEvent } from '../abi/types/Abi'
 import type { Result } from '../types'
 
@@ -11,6 +12,7 @@ export class LinkContract extends BaseContract {
    * @param {string} linkType - The type of link.
    * @returns The linklist id and the transaction hash of the transaction that was sent to the blockchain.
    */
+  @autoSwitchMainnet()
   async linkProfile(
     fromProfileId: string,
     toProfileId: string,
@@ -33,17 +35,20 @@ export class LinkContract extends BaseContract {
   }
 
   /**
-   * This creates a profile for an target address and links it to the fromProfile.
+   * This creates a profile for an target address and links the fromProfile to it.
    *
    * This should be only called when the target address doesn't have any profile.
    * When called on an address that already has a profile, this will fail.
-   * When called, this will create a new profile for the target address.
+   * When called, this will create a new profile for the target address
+   * and set the new profile as the primary profile for this address.
+   * The new profile's handle will be set to the address of the target address.
    *
    * @param {string} fromProfileId - The profile ID of the profile that is creating the new profile.
    * @param {string} toAddress - The address of the profile you want to link to.
    * @param {string} linkType - The type of link you want to create. This is a string.
    * @returns The transaction hash of the transaction that was sent to the blockchain, the toProfileId and linklistId.
    */
+  @autoSwitchMainnet()
   async createThenLinkProfile(
     fromProfileId: string,
     toAddress: string,
@@ -89,6 +94,7 @@ export class LinkContract extends BaseContract {
    * @param {string} linkType - The type of link.
    * @returns The transaction hash of the transaction that was sent to the blockchain.
    */
+  @autoSwitchMainnet()
   async unlinkProfile(
     fromProfileId: string,
     toProfileId: string,
@@ -112,6 +118,7 @@ export class LinkContract extends BaseContract {
    * @param {string} linkType - The type of link you want to get.
    * @returns An array of profile ids that are linked to the profile id passed in.
    */
+  @autoSwitchMainnet()
   async getLinkingProfileIds(
     fromProfileId: string,
     linkType: string,

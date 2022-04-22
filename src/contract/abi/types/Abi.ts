@@ -49,11 +49,32 @@ export declare namespace DataTypes {
     linkModuleInitData: string;
   };
 
-  export type LinkDataStruct = { linklistId: BigNumberish; content: BytesLike };
+  export type NoteStruct = {
+    linkItemType: BytesLike;
+    linklistId: BigNumberish;
+    linkKey: BytesLike;
+    contentUri: string;
+    linkModule: string;
+    mintModule: string;
+    mintNFT: string;
+  };
 
-  export type LinkDataStructOutput = [BigNumber, string] & {
+  export type NoteStructOutput = [
+    string,
+    BigNumber,
+    string,
+    string,
+    string,
+    string,
+    string
+  ] & {
+    linkItemType: string;
     linklistId: BigNumber;
-    content: string;
+    linkKey: string;
+    contentUri: string;
+    linkModule: string;
+    mintModule: string;
+    mintNFT: string;
   };
 
   export type ProfileStruct = {
@@ -79,6 +100,18 @@ export declare namespace DataTypes {
     noteCount: BigNumber;
     socialToken: string;
     linkModule: string;
+  };
+
+  export type ProfileLinkStructStruct = {
+    fromProfileId: BigNumberish;
+    toProfileId: BigNumberish;
+    linkType: BytesLike;
+  };
+
+  export type ProfileLinkStructStructOutput = [BigNumber, BigNumber, string] & {
+    fromProfileId: BigNumber;
+    toProfileId: BigNumber;
+    linkType: string;
   };
 
   export type PostNoteDataStruct = {
@@ -119,54 +152,46 @@ export interface AbiInterface extends utils.Interface {
     "getHandle(uint256)": FunctionFragment;
     "getLinkModule4Address(address)": FunctionFragment;
     "getLinkModule4ERC721(address,uint256)": FunctionFragment;
-    "getLinkModule4Link((uint256,bytes))": FunctionFragment;
     "getLinkModule4Linklist(uint256)": FunctionFragment;
-    "getLinkModule4Profile(uint256)": FunctionFragment;
     "getLinkingProfileIds(uint256,bytes32)": FunctionFragment;
     "getLinklistContract()": FunctionFragment;
     "getLinklistUri(uint256,bytes32)": FunctionFragment;
-    "getMintModule4Link((uint256,bytes))": FunctionFragment;
-    "getMintModule4Note(uint256,uint256)": FunctionFragment;
-    "getNoteUri(uint256,uint256)": FunctionFragment;
+    "getNote(uint256,uint256)": FunctionFragment;
     "getPrimaryProfileId(address)": FunctionFragment;
     "getProfile(uint256)": FunctionFragment;
     "getProfileByHandle(string)": FunctionFragment;
     "getProfileUri(uint256)": FunctionFragment;
-    "initialize(string,string,address)": FunctionFragment;
+    "getRevision()": FunctionFragment;
+    "initialize(string,string,address,address)": FunctionFragment;
     "isApprovedForAll(address,address)": FunctionFragment;
     "isPrimaryProfile(uint256)": FunctionFragment;
     "linkAddress(uint256,address,bytes32)": FunctionFragment;
-    "linkAddressLink(uint256)": FunctionFragment;
     "linkAny(uint256,string,bytes32)": FunctionFragment;
     "linkERC721(uint256,address,uint256,bytes32)": FunctionFragment;
     "linkLinklist(uint256,uint256,bytes32)": FunctionFragment;
     "linkNote(uint256,uint256,uint256,bytes32)": FunctionFragment;
-    "linkNoteLink(uint256)": FunctionFragment;
     "linkProfile(uint256,uint256,bytes32)": FunctionFragment;
-    "linkProfileLink(uint256)": FunctionFragment;
-    "mintAddressLink((uint256,bytes),address)": FunctionFragment;
-    "mintAnyLink((uint256,bytes),address)": FunctionFragment;
-    "mintERC721Link((uint256,bytes),address)": FunctionFragment;
-    "mintLinklistLink((uint256,bytes),address)": FunctionFragment;
-    "mintNote(uint256,uint256,address)": FunctionFragment;
-    "mintNoteLink((uint256,bytes),address)": FunctionFragment;
-    "mintProfileLink((uint256,bytes),address)": FunctionFragment;
+    "linkProfileLink(uint256,(uint256,uint256,bytes32),bytes32)": FunctionFragment;
+    "mintNote(uint256,uint256,address,bytes)": FunctionFragment;
     "name()": FunctionFragment;
     "ownerOf(uint256)": FunctionFragment;
     "postNote((uint256,string,address,bytes,address,bytes))": FunctionFragment;
-    "postNoteWithLink((uint256,string,address,bytes,address,bytes),(uint256,bytes))": FunctionFragment;
+    "postNote4AddressLink((uint256,string,address,bytes,address,bytes),uint256,address,bytes32)": FunctionFragment;
+    "postNote4AnyLink((uint256,string,address,bytes,address,bytes),uint256,string,bytes32)": FunctionFragment;
+    "postNote4ERC721Link((uint256,string,address,bytes,address,bytes),uint256,address,uint256,bytes32)": FunctionFragment;
+    "postNote4LinklistLink((uint256,string,address,bytes,address,bytes),uint256,uint256,bytes32)": FunctionFragment;
+    "postNote4NoteLink((uint256,string,address,bytes,address,bytes),uint256,uint256,uint256,bytes32)": FunctionFragment;
+    "postNote4ProfileLink((uint256,string,address,bytes,address,bytes),uint256,uint256,bytes32)": FunctionFragment;
     "safeTransferFrom(address,address,uint256)": FunctionFragment;
     "safeTransferFrom(address,address,uint256,bytes)": FunctionFragment;
     "setApprovalForAll(address,bool)": FunctionFragment;
     "setHandle(uint256,string)": FunctionFragment;
     "setLinkModule4Address(address,address,bytes)": FunctionFragment;
     "setLinkModule4ERC721(address,uint256,address,bytes)": FunctionFragment;
-    "setLinkModule4Link((uint256,bytes),address,bytes)": FunctionFragment;
     "setLinkModule4Linklist(uint256,address,bytes)": FunctionFragment;
     "setLinkModule4Note(uint256,uint256,address,bytes)": FunctionFragment;
     "setLinkModule4Profile(uint256,address,bytes)": FunctionFragment;
     "setLinklistUri(uint256,string)": FunctionFragment;
-    "setMintModule4Link((uint256,bytes),address,bytes)": FunctionFragment;
     "setMintModule4Note(uint256,uint256,address,bytes)": FunctionFragment;
     "setPrimaryProfileId(uint256)": FunctionFragment;
     "setProfileUri(uint256,string)": FunctionFragment;
@@ -179,7 +204,12 @@ export interface AbiInterface extends utils.Interface {
     "totalSupply()": FunctionFragment;
     "transferFrom(address,address,uint256)": FunctionFragment;
     "unlinkAddress(uint256,address,bytes32)": FunctionFragment;
+    "unlinkAny(uint256,string,bytes32)": FunctionFragment;
+    "unlinkERC721(uint256,address,uint256,bytes32)": FunctionFragment;
+    "unlinkLinklist(uint256,uint256,bytes32)": FunctionFragment;
+    "unlinkNote(uint256,uint256,uint256,bytes32)": FunctionFragment;
     "unlinkProfile(uint256,uint256,bytes32)": FunctionFragment;
+    "unlinkProfileLink(uint256,(uint256,uint256,bytes32),bytes32)": FunctionFragment;
   };
 
   getFunction(
@@ -194,54 +224,46 @@ export interface AbiInterface extends utils.Interface {
       | "getHandle"
       | "getLinkModule4Address"
       | "getLinkModule4ERC721"
-      | "getLinkModule4Link"
       | "getLinkModule4Linklist"
-      | "getLinkModule4Profile"
       | "getLinkingProfileIds"
       | "getLinklistContract"
       | "getLinklistUri"
-      | "getMintModule4Link"
-      | "getMintModule4Note"
-      | "getNoteUri"
+      | "getNote"
       | "getPrimaryProfileId"
       | "getProfile"
       | "getProfileByHandle"
       | "getProfileUri"
+      | "getRevision"
       | "initialize"
       | "isApprovedForAll"
       | "isPrimaryProfile"
       | "linkAddress"
-      | "linkAddressLink"
       | "linkAny"
       | "linkERC721"
       | "linkLinklist"
       | "linkNote"
-      | "linkNoteLink"
       | "linkProfile"
       | "linkProfileLink"
-      | "mintAddressLink"
-      | "mintAnyLink"
-      | "mintERC721Link"
-      | "mintLinklistLink"
       | "mintNote"
-      | "mintNoteLink"
-      | "mintProfileLink"
       | "name"
       | "ownerOf"
       | "postNote"
-      | "postNoteWithLink"
+      | "postNote4AddressLink"
+      | "postNote4AnyLink"
+      | "postNote4ERC721Link"
+      | "postNote4LinklistLink"
+      | "postNote4NoteLink"
+      | "postNote4ProfileLink"
       | "safeTransferFrom(address,address,uint256)"
       | "safeTransferFrom(address,address,uint256,bytes)"
       | "setApprovalForAll"
       | "setHandle"
       | "setLinkModule4Address"
       | "setLinkModule4ERC721"
-      | "setLinkModule4Link"
       | "setLinkModule4Linklist"
       | "setLinkModule4Note"
       | "setLinkModule4Profile"
       | "setLinklistUri"
-      | "setMintModule4Link"
       | "setMintModule4Note"
       | "setPrimaryProfileId"
       | "setProfileUri"
@@ -254,7 +276,12 @@ export interface AbiInterface extends utils.Interface {
       | "totalSupply"
       | "transferFrom"
       | "unlinkAddress"
+      | "unlinkAny"
+      | "unlinkERC721"
+      | "unlinkLinklist"
+      | "unlinkNote"
       | "unlinkProfile"
+      | "unlinkProfileLink"
   ): FunctionFragment;
 
   encodeFunctionData(
@@ -295,15 +322,7 @@ export interface AbiInterface extends utils.Interface {
     values: [string, BigNumberish]
   ): string;
   encodeFunctionData(
-    functionFragment: "getLinkModule4Link",
-    values: [DataTypes.LinkDataStruct]
-  ): string;
-  encodeFunctionData(
     functionFragment: "getLinkModule4Linklist",
-    values: [BigNumberish]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "getLinkModule4Profile",
     values: [BigNumberish]
   ): string;
   encodeFunctionData(
@@ -319,15 +338,7 @@ export interface AbiInterface extends utils.Interface {
     values: [BigNumberish, BytesLike]
   ): string;
   encodeFunctionData(
-    functionFragment: "getMintModule4Link",
-    values: [DataTypes.LinkDataStruct]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "getMintModule4Note",
-    values: [BigNumberish, BigNumberish]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "getNoteUri",
+    functionFragment: "getNote",
     values: [BigNumberish, BigNumberish]
   ): string;
   encodeFunctionData(
@@ -347,8 +358,12 @@ export interface AbiInterface extends utils.Interface {
     values: [BigNumberish]
   ): string;
   encodeFunctionData(
+    functionFragment: "getRevision",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
     functionFragment: "initialize",
-    values: [string, string, string]
+    values: [string, string, string, string]
   ): string;
   encodeFunctionData(
     functionFragment: "isApprovedForAll",
@@ -361,10 +376,6 @@ export interface AbiInterface extends utils.Interface {
   encodeFunctionData(
     functionFragment: "linkAddress",
     values: [BigNumberish, string, BytesLike]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "linkAddressLink",
-    values: [BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "linkAny",
@@ -383,44 +394,16 @@ export interface AbiInterface extends utils.Interface {
     values: [BigNumberish, BigNumberish, BigNumberish, BytesLike]
   ): string;
   encodeFunctionData(
-    functionFragment: "linkNoteLink",
-    values: [BigNumberish]
-  ): string;
-  encodeFunctionData(
     functionFragment: "linkProfile",
     values: [BigNumberish, BigNumberish, BytesLike]
   ): string;
   encodeFunctionData(
     functionFragment: "linkProfileLink",
-    values: [BigNumberish]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "mintAddressLink",
-    values: [DataTypes.LinkDataStruct, string]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "mintAnyLink",
-    values: [DataTypes.LinkDataStruct, string]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "mintERC721Link",
-    values: [DataTypes.LinkDataStruct, string]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "mintLinklistLink",
-    values: [DataTypes.LinkDataStruct, string]
+    values: [BigNumberish, DataTypes.ProfileLinkStructStruct, BytesLike]
   ): string;
   encodeFunctionData(
     functionFragment: "mintNote",
-    values: [BigNumberish, BigNumberish, string]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "mintNoteLink",
-    values: [DataTypes.LinkDataStruct, string]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "mintProfileLink",
-    values: [DataTypes.LinkDataStruct, string]
+    values: [BigNumberish, BigNumberish, string, BytesLike]
   ): string;
   encodeFunctionData(functionFragment: "name", values?: undefined): string;
   encodeFunctionData(
@@ -432,8 +415,50 @@ export interface AbiInterface extends utils.Interface {
     values: [DataTypes.PostNoteDataStruct]
   ): string;
   encodeFunctionData(
-    functionFragment: "postNoteWithLink",
-    values: [DataTypes.PostNoteDataStruct, DataTypes.LinkDataStruct]
+    functionFragment: "postNote4AddressLink",
+    values: [DataTypes.PostNoteDataStruct, BigNumberish, string, BytesLike]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "postNote4AnyLink",
+    values: [DataTypes.PostNoteDataStruct, BigNumberish, string, BytesLike]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "postNote4ERC721Link",
+    values: [
+      DataTypes.PostNoteDataStruct,
+      BigNumberish,
+      string,
+      BigNumberish,
+      BytesLike
+    ]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "postNote4LinklistLink",
+    values: [
+      DataTypes.PostNoteDataStruct,
+      BigNumberish,
+      BigNumberish,
+      BytesLike
+    ]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "postNote4NoteLink",
+    values: [
+      DataTypes.PostNoteDataStruct,
+      BigNumberish,
+      BigNumberish,
+      BigNumberish,
+      BytesLike
+    ]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "postNote4ProfileLink",
+    values: [
+      DataTypes.PostNoteDataStruct,
+      BigNumberish,
+      BigNumberish,
+      BytesLike
+    ]
   ): string;
   encodeFunctionData(
     functionFragment: "safeTransferFrom(address,address,uint256)",
@@ -460,10 +485,6 @@ export interface AbiInterface extends utils.Interface {
     values: [string, BigNumberish, string, BytesLike]
   ): string;
   encodeFunctionData(
-    functionFragment: "setLinkModule4Link",
-    values: [DataTypes.LinkDataStruct, string, BytesLike]
-  ): string;
-  encodeFunctionData(
     functionFragment: "setLinkModule4Linklist",
     values: [BigNumberish, string, BytesLike]
   ): string;
@@ -478,10 +499,6 @@ export interface AbiInterface extends utils.Interface {
   encodeFunctionData(
     functionFragment: "setLinklistUri",
     values: [BigNumberish, string]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "setMintModule4Link",
-    values: [DataTypes.LinkDataStruct, string, BytesLike]
   ): string;
   encodeFunctionData(
     functionFragment: "setMintModule4Note",
@@ -529,8 +546,28 @@ export interface AbiInterface extends utils.Interface {
     values: [BigNumberish, string, BytesLike]
   ): string;
   encodeFunctionData(
+    functionFragment: "unlinkAny",
+    values: [BigNumberish, string, BytesLike]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "unlinkERC721",
+    values: [BigNumberish, string, BigNumberish, BytesLike]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "unlinkLinklist",
+    values: [BigNumberish, BigNumberish, BytesLike]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "unlinkNote",
+    values: [BigNumberish, BigNumberish, BigNumberish, BytesLike]
+  ): string;
+  encodeFunctionData(
     functionFragment: "unlinkProfile",
     values: [BigNumberish, BigNumberish, BytesLike]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "unlinkProfileLink",
+    values: [BigNumberish, DataTypes.ProfileLinkStructStruct, BytesLike]
   ): string;
 
   decodeFunctionResult(functionFragment: "approve", data: BytesLike): Result;
@@ -565,15 +602,7 @@ export interface AbiInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "getLinkModule4Link",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
     functionFragment: "getLinkModule4Linklist",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "getLinkModule4Profile",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -588,15 +617,7 @@ export interface AbiInterface extends utils.Interface {
     functionFragment: "getLinklistUri",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(
-    functionFragment: "getMintModule4Link",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "getMintModule4Note",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(functionFragment: "getNoteUri", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "getNote", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "getPrimaryProfileId",
     data: BytesLike
@@ -608,6 +629,10 @@ export interface AbiInterface extends utils.Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "getProfileUri",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getRevision",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "initialize", data: BytesLike): Result;
@@ -623,10 +648,6 @@ export interface AbiInterface extends utils.Interface {
     functionFragment: "linkAddress",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(
-    functionFragment: "linkAddressLink",
-    data: BytesLike
-  ): Result;
   decodeFunctionResult(functionFragment: "linkAny", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "linkERC721", data: BytesLike): Result;
   decodeFunctionResult(
@@ -635,10 +656,6 @@ export interface AbiInterface extends utils.Interface {
   ): Result;
   decodeFunctionResult(functionFragment: "linkNote", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "linkNoteLink",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
     functionFragment: "linkProfile",
     data: BytesLike
   ): Result;
@@ -646,36 +663,32 @@ export interface AbiInterface extends utils.Interface {
     functionFragment: "linkProfileLink",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(
-    functionFragment: "mintAddressLink",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "mintAnyLink",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "mintERC721Link",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "mintLinklistLink",
-    data: BytesLike
-  ): Result;
   decodeFunctionResult(functionFragment: "mintNote", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "mintNoteLink",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "mintProfileLink",
-    data: BytesLike
-  ): Result;
   decodeFunctionResult(functionFragment: "name", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "ownerOf", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "postNote", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "postNoteWithLink",
+    functionFragment: "postNote4AddressLink",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "postNote4AnyLink",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "postNote4ERC721Link",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "postNote4LinklistLink",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "postNote4NoteLink",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "postNote4ProfileLink",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -700,10 +713,6 @@ export interface AbiInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "setLinkModule4Link",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
     functionFragment: "setLinkModule4Linklist",
     data: BytesLike
   ): Result;
@@ -717,10 +726,6 @@ export interface AbiInterface extends utils.Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "setLinklistUri",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "setMintModule4Link",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -765,8 +770,22 @@ export interface AbiInterface extends utils.Interface {
     functionFragment: "unlinkAddress",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "unlinkAny", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "unlinkERC721",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "unlinkLinklist",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "unlinkNote", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "unlinkProfile",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "unlinkProfileLink",
     data: BytesLike
   ): Result;
 
@@ -774,42 +793,68 @@ export interface AbiInterface extends utils.Interface {
     "Approval(address,address,uint256)": EventFragment;
     "ApprovalForAll(address,address,bool)": EventFragment;
     "Transfer(address,address,uint256)": EventFragment;
-    "AttachLinklist(uint256,bytes32,uint256)": EventFragment;
     "BaseInitialized(string,string,uint256)": EventFragment;
-    "DetachLinklist(uint256,bytes32,uint256)": EventFragment;
+    "LinkAddress(uint256,address,bytes32,uint256)": EventFragment;
+    "LinkAny(uint256,string,bytes32,uint256)": EventFragment;
+    "LinkERC721(uint256,address,uint256,bytes32,uint256)": EventFragment;
+    "LinkLinklist(uint256,uint256,bytes32,uint256)": EventFragment;
+    "LinkNote(uint256,uint256,uint256,bytes32,uint256)": EventFragment;
     "LinkProfile(address,uint256,uint256,bytes32,uint256)": EventFragment;
+    "LinkProfileLink(uint256,bytes32,uint256,uint256,bytes32)": EventFragment;
     "LinklistNFTInitialized(uint256)": EventFragment;
     "MintNFTInitialized(uint256,uint256,uint256)": EventFragment;
+    "MintNote(address,uint256,uint256,uint256,bytes,uint256)": EventFragment;
     "ProfileCreated(uint256,address,address,string,uint256)": EventFragment;
     "SetHandle(address,uint256,string)": EventFragment;
     "SetLinkModule4Address(address,address,bytes,uint256)": EventFragment;
+    "SetLinkModule4ERC721(address,uint256,address,bytes,uint256)": EventFragment;
+    "SetLinkModule4Linklist(uint256,address,bytes,uint256)": EventFragment;
     "SetLinkModule4Note(uint256,uint256,address,bytes,uint256)": EventFragment;
     "SetLinkModule4Profile(uint256,address,bytes,uint256)": EventFragment;
     "SetMintModule4Note(uint256,uint256,address,bytes,uint256)": EventFragment;
     "SetPrimaryProfileId(address,uint256)": EventFragment;
     "SetSocialToken(address,uint256,address)": EventFragment;
+    "UninkLinklist(uint256,uint256,bytes32,uint256)": EventFragment;
+    "UnlinkAddress(uint256,address,bytes32)": EventFragment;
+    "UnlinkAny(uint256,string,bytes32)": EventFragment;
+    "UnlinkERC721(uint256,address,uint256,bytes32,uint256)": EventFragment;
+    "UnlinkNote(uint256,uint256,uint256,bytes32,uint256)": EventFragment;
     "UnlinkProfile(address,uint256,uint256,bytes32)": EventFragment;
+    "UnlinkProfileLink(uint256,bytes32,uint256,uint256,bytes32)": EventFragment;
     "Web3EntryInitialized(uint256)": EventFragment;
   };
 
   getEvent(nameOrSignatureOrTopic: "Approval"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "ApprovalForAll"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Transfer"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "AttachLinklist"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "BaseInitialized"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "DetachLinklist"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "LinkAddress"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "LinkAny"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "LinkERC721"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "LinkLinklist"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "LinkNote"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "LinkProfile"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "LinkProfileLink"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "LinklistNFTInitialized"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "MintNFTInitialized"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "MintNote"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "ProfileCreated"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "SetHandle"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "SetLinkModule4Address"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "SetLinkModule4ERC721"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "SetLinkModule4Linklist"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "SetLinkModule4Note"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "SetLinkModule4Profile"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "SetMintModule4Note"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "SetPrimaryProfileId"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "SetSocialToken"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "UninkLinklist"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "UnlinkAddress"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "UnlinkAny"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "UnlinkERC721"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "UnlinkNote"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "UnlinkProfile"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "UnlinkProfileLink"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Web3EntryInitialized"): EventFragment;
 }
 
@@ -849,18 +894,6 @@ export type TransferEvent = TypedEvent<
 
 export type TransferEventFilter = TypedEventFilter<TransferEvent>;
 
-export interface AttachLinklistEventObject {
-  profileId: BigNumber;
-  linkType: string;
-  linklistId: BigNumber;
-}
-export type AttachLinklistEvent = TypedEvent<
-  [BigNumber, string, BigNumber],
-  AttachLinklistEventObject
->;
-
-export type AttachLinklistEventFilter = TypedEventFilter<AttachLinklistEvent>;
-
 export interface BaseInitializedEventObject {
   name: string;
   symbol: string;
@@ -873,17 +906,72 @@ export type BaseInitializedEvent = TypedEvent<
 
 export type BaseInitializedEventFilter = TypedEventFilter<BaseInitializedEvent>;
 
-export interface DetachLinklistEventObject {
-  profileId: BigNumber;
+export interface LinkAddressEventObject {
+  fromProfileId: BigNumber;
+  ethAddress: string;
   linkType: string;
   linklistId: BigNumber;
 }
-export type DetachLinklistEvent = TypedEvent<
-  [BigNumber, string, BigNumber],
-  DetachLinklistEventObject
+export type LinkAddressEvent = TypedEvent<
+  [BigNumber, string, string, BigNumber],
+  LinkAddressEventObject
 >;
 
-export type DetachLinklistEventFilter = TypedEventFilter<DetachLinklistEvent>;
+export type LinkAddressEventFilter = TypedEventFilter<LinkAddressEvent>;
+
+export interface LinkAnyEventObject {
+  fromProfileId: BigNumber;
+  toUri: string;
+  linkType: string;
+  linklistId: BigNumber;
+}
+export type LinkAnyEvent = TypedEvent<
+  [BigNumber, string, string, BigNumber],
+  LinkAnyEventObject
+>;
+
+export type LinkAnyEventFilter = TypedEventFilter<LinkAnyEvent>;
+
+export interface LinkERC721EventObject {
+  fromProfileId: BigNumber;
+  tokenAddress: string;
+  toNoteId: BigNumber;
+  linkType: string;
+  linklistId: BigNumber;
+}
+export type LinkERC721Event = TypedEvent<
+  [BigNumber, string, BigNumber, string, BigNumber],
+  LinkERC721EventObject
+>;
+
+export type LinkERC721EventFilter = TypedEventFilter<LinkERC721Event>;
+
+export interface LinkLinklistEventObject {
+  fromProfileId: BigNumber;
+  toLinklistId: BigNumber;
+  linkType: string;
+  linklistId: BigNumber;
+}
+export type LinkLinklistEvent = TypedEvent<
+  [BigNumber, BigNumber, string, BigNumber],
+  LinkLinklistEventObject
+>;
+
+export type LinkLinklistEventFilter = TypedEventFilter<LinkLinklistEvent>;
+
+export interface LinkNoteEventObject {
+  fromProfileId: BigNumber;
+  toProfileId: BigNumber;
+  toNoteId: BigNumber;
+  linkType: string;
+  linklistId: BigNumber;
+}
+export type LinkNoteEvent = TypedEvent<
+  [BigNumber, BigNumber, BigNumber, string, BigNumber],
+  LinkNoteEventObject
+>;
+
+export type LinkNoteEventFilter = TypedEventFilter<LinkNoteEvent>;
 
 export interface LinkProfileEventObject {
   account: string;
@@ -898,6 +986,20 @@ export type LinkProfileEvent = TypedEvent<
 >;
 
 export type LinkProfileEventFilter = TypedEventFilter<LinkProfileEvent>;
+
+export interface LinkProfileLinkEventObject {
+  fromProfileId: BigNumber;
+  linkType: string;
+  plFromProfileId: BigNumber;
+  plToProfileId: BigNumber;
+  plLinkType: string;
+}
+export type LinkProfileLinkEvent = TypedEvent<
+  [BigNumber, string, BigNumber, BigNumber, string],
+  LinkProfileLinkEventObject
+>;
+
+export type LinkProfileLinkEventFilter = TypedEventFilter<LinkProfileLinkEvent>;
 
 export interface LinklistNFTInitializedEventObject {
   timestamp: BigNumber;
@@ -922,6 +1024,21 @@ export type MintNFTInitializedEvent = TypedEvent<
 
 export type MintNFTInitializedEventFilter =
   TypedEventFilter<MintNFTInitializedEvent>;
+
+export interface MintNoteEventObject {
+  to: string;
+  profileId: BigNumber;
+  noteId: BigNumber;
+  tokenId: BigNumber;
+  data: string;
+  timestamp: BigNumber;
+}
+export type MintNoteEvent = TypedEvent<
+  [string, BigNumber, BigNumber, BigNumber, string, BigNumber],
+  MintNoteEventObject
+>;
+
+export type MintNoteEventFilter = TypedEventFilter<MintNoteEvent>;
 
 export interface ProfileCreatedEventObject {
   profileId: BigNumber;
@@ -962,6 +1079,35 @@ export type SetLinkModule4AddressEvent = TypedEvent<
 
 export type SetLinkModule4AddressEventFilter =
   TypedEventFilter<SetLinkModule4AddressEvent>;
+
+export interface SetLinkModule4ERC721EventObject {
+  tokenAddress: string;
+  tokenId: BigNumber;
+  linkModule: string;
+  returnData: string;
+  timestamp: BigNumber;
+}
+export type SetLinkModule4ERC721Event = TypedEvent<
+  [string, BigNumber, string, string, BigNumber],
+  SetLinkModule4ERC721EventObject
+>;
+
+export type SetLinkModule4ERC721EventFilter =
+  TypedEventFilter<SetLinkModule4ERC721Event>;
+
+export interface SetLinkModule4LinklistEventObject {
+  linklistId: BigNumber;
+  linkModule: string;
+  returnData: string;
+  timestamp: BigNumber;
+}
+export type SetLinkModule4LinklistEvent = TypedEvent<
+  [BigNumber, string, string, BigNumber],
+  SetLinkModule4LinklistEventObject
+>;
+
+export type SetLinkModule4LinklistEventFilter =
+  TypedEventFilter<SetLinkModule4LinklistEvent>;
 
 export interface SetLinkModule4NoteEventObject {
   profileId: BigNumber;
@@ -1031,6 +1177,71 @@ export type SetSocialTokenEvent = TypedEvent<
 
 export type SetSocialTokenEventFilter = TypedEventFilter<SetSocialTokenEvent>;
 
+export interface UninkLinklistEventObject {
+  fromProfileId: BigNumber;
+  toLinklistId: BigNumber;
+  linkType: string;
+  linklistId: BigNumber;
+}
+export type UninkLinklistEvent = TypedEvent<
+  [BigNumber, BigNumber, string, BigNumber],
+  UninkLinklistEventObject
+>;
+
+export type UninkLinklistEventFilter = TypedEventFilter<UninkLinklistEvent>;
+
+export interface UnlinkAddressEventObject {
+  fromProfileId: BigNumber;
+  ethAddress: string;
+  linkType: string;
+}
+export type UnlinkAddressEvent = TypedEvent<
+  [BigNumber, string, string],
+  UnlinkAddressEventObject
+>;
+
+export type UnlinkAddressEventFilter = TypedEventFilter<UnlinkAddressEvent>;
+
+export interface UnlinkAnyEventObject {
+  fromProfileId: BigNumber;
+  toUri: string;
+  linkType: string;
+}
+export type UnlinkAnyEvent = TypedEvent<
+  [BigNumber, string, string],
+  UnlinkAnyEventObject
+>;
+
+export type UnlinkAnyEventFilter = TypedEventFilter<UnlinkAnyEvent>;
+
+export interface UnlinkERC721EventObject {
+  fromProfileId: BigNumber;
+  tokenAddress: string;
+  toNoteId: BigNumber;
+  linkType: string;
+  linklistId: BigNumber;
+}
+export type UnlinkERC721Event = TypedEvent<
+  [BigNumber, string, BigNumber, string, BigNumber],
+  UnlinkERC721EventObject
+>;
+
+export type UnlinkERC721EventFilter = TypedEventFilter<UnlinkERC721Event>;
+
+export interface UnlinkNoteEventObject {
+  fromProfileId: BigNumber;
+  toProfileId: BigNumber;
+  toNoteId: BigNumber;
+  linkType: string;
+  linklistId: BigNumber;
+}
+export type UnlinkNoteEvent = TypedEvent<
+  [BigNumber, BigNumber, BigNumber, string, BigNumber],
+  UnlinkNoteEventObject
+>;
+
+export type UnlinkNoteEventFilter = TypedEventFilter<UnlinkNoteEvent>;
+
 export interface UnlinkProfileEventObject {
   account: string;
   fromProfileId: BigNumber;
@@ -1043,6 +1254,21 @@ export type UnlinkProfileEvent = TypedEvent<
 >;
 
 export type UnlinkProfileEventFilter = TypedEventFilter<UnlinkProfileEvent>;
+
+export interface UnlinkProfileLinkEventObject {
+  fromProfileId: BigNumber;
+  linkType: string;
+  plFromProfileId: BigNumber;
+  plToProfileId: BigNumber;
+  plLinkType: string;
+}
+export type UnlinkProfileLinkEvent = TypedEvent<
+  [BigNumber, string, BigNumber, BigNumber, string],
+  UnlinkProfileLinkEventObject
+>;
+
+export type UnlinkProfileLinkEventFilter =
+  TypedEventFilter<UnlinkProfileLinkEvent>;
 
 export interface Web3EntryInitializedEventObject {
   timestamp: BigNumber;
@@ -1097,7 +1323,7 @@ export interface Abi extends BaseContract {
     balanceOf(owner: string, overrides?: CallOverrides): Promise<[BigNumber]>;
 
     createProfile(
-      profileData: DataTypes.CreateProfileDataStruct,
+      vars: DataTypes.CreateProfileDataStruct,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -1135,18 +1361,8 @@ export interface Abi extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[string]>;
 
-    getLinkModule4Link(
-      linkData: DataTypes.LinkDataStruct,
-      overrides?: CallOverrides
-    ): Promise<[string]>;
-
     getLinkModule4Linklist(
       tokenId: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<[string]>;
-
-    getLinkModule4Profile(
-      profileId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<[string]>;
 
@@ -1164,22 +1380,11 @@ export interface Abi extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[string]>;
 
-    getMintModule4Link(
-      linkData: DataTypes.LinkDataStruct,
-      overrides?: CallOverrides
-    ): Promise<[string]>;
-
-    getMintModule4Note(
+    getNote(
       profileId: BigNumberish,
       noteId: BigNumberish,
       overrides?: CallOverrides
-    ): Promise<[string]>;
-
-    getNoteUri(
-      profileId: BigNumberish,
-      noteId: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<[string]>;
+    ): Promise<[DataTypes.NoteStructOutput]>;
 
     getPrimaryProfileId(
       account: string,
@@ -1201,10 +1406,13 @@ export interface Abi extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[string]>;
 
+    getRevision(overrides?: CallOverrides): Promise<[BigNumber]>;
+
     initialize(
       _name: string,
       _symbol: string,
-      _linkListContract: string,
+      _linklistContract: string,
+      _mintNFTImpl: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -1226,11 +1434,6 @@ export interface Abi extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    linkAddressLink(
-      fromProfileId: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
-
     linkAny(
       fromProfileId: BigNumberish,
       toUri: string,
@@ -1248,7 +1451,7 @@ export interface Abi extends BaseContract {
 
     linkLinklist(
       fromProfileId: BigNumberish,
-      linkListId: BigNumberish,
+      toLinkListId: BigNumberish,
       linkType: BytesLike,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
@@ -1261,11 +1464,6 @@ export interface Abi extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    linkNoteLink(
-      fromProfileId: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
-
     linkProfile(
       fromProfileId: BigNumberish,
       toProfileId: BigNumberish,
@@ -1275,30 +1473,8 @@ export interface Abi extends BaseContract {
 
     linkProfileLink(
       fromProfileId: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
-
-    mintAddressLink(
-      linkData: DataTypes.LinkDataStruct,
-      to: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
-
-    mintAnyLink(
-      linkData: DataTypes.LinkDataStruct,
-      to: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
-
-    mintERC721Link(
-      linkData: DataTypes.LinkDataStruct,
-      to: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
-
-    mintLinklistLink(
-      linkData: DataTypes.LinkDataStruct,
-      to: string,
+      linkData: DataTypes.ProfileLinkStructStruct,
+      linkType: BytesLike,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -1306,18 +1482,7 @@ export interface Abi extends BaseContract {
       profileId: BigNumberish,
       noteId: BigNumberish,
       to: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
-
-    mintNoteLink(
-      linkData: DataTypes.LinkDataStruct,
-      to: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
-
-    mintProfileLink(
-      linkData: DataTypes.LinkDataStruct,
-      to: string,
+      mintModuleData: BytesLike,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -1333,9 +1498,53 @@ export interface Abi extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    postNoteWithLink(
+    postNote4AddressLink(
       noteData: DataTypes.PostNoteDataStruct,
-      linkData: DataTypes.LinkDataStruct,
+      fromProfileId: BigNumberish,
+      ethAddress: string,
+      linkType: BytesLike,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    postNote4AnyLink(
+      noteData: DataTypes.PostNoteDataStruct,
+      fromProfileId: BigNumberish,
+      toUri: string,
+      linkType: BytesLike,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    postNote4ERC721Link(
+      noteData: DataTypes.PostNoteDataStruct,
+      fromProfileId: BigNumberish,
+      tokenAddress: string,
+      tokenId: BigNumberish,
+      linkType: BytesLike,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    postNote4LinklistLink(
+      noteData: DataTypes.PostNoteDataStruct,
+      fromProfileId: BigNumberish,
+      toLinkListId: BigNumberish,
+      linkType: BytesLike,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    postNote4NoteLink(
+      noteData: DataTypes.PostNoteDataStruct,
+      fromProfileId: BigNumberish,
+      toProfileId: BigNumberish,
+      toNoteId: BigNumberish,
+      linkType: BytesLike,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    postNote4ProfileLink(
+      noteData: DataTypes.PostNoteDataStruct,
+      fromProfileId: BigNumberish,
+      toProfileId: BigNumberish,
+      linkType: BytesLike,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -1381,15 +1590,8 @@ export interface Abi extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    setLinkModule4Link(
-      linkData: DataTypes.LinkDataStruct,
-      linkModule: string,
-      linkModuleInitData: BytesLike,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
-
     setLinkModule4Linklist(
-      tokenId: BigNumberish,
+      linklistId: BigNumberish,
       linkModule: string,
       linkModuleInitData: BytesLike,
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -1411,21 +1613,14 @@ export interface Abi extends BaseContract {
     ): Promise<ContractTransaction>;
 
     setLinklistUri(
-      linkListId: BigNumberish,
+      linklistId: BigNumberish,
       uri: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
-
-    setMintModule4Link(
-      linkData: DataTypes.LinkDataStruct,
-      mintModule: string,
-      mintModuleInitData: BytesLike,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
     setMintModule4Note(
       profileId: BigNumberish,
-      toNoteId: BigNumberish,
+      noteId: BigNumberish,
       mintModule: string,
       mintModuleInitData: BytesLike,
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -1487,9 +1682,46 @@ export interface Abi extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
+    unlinkAny(
+      fromProfileId: BigNumberish,
+      toUri: string,
+      linkType: BytesLike,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    unlinkERC721(
+      fromProfileId: BigNumberish,
+      tokenAddress: string,
+      tokenId: BigNumberish,
+      linkType: BytesLike,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    unlinkLinklist(
+      fromProfileId: BigNumberish,
+      toLinkListId: BigNumberish,
+      linkType: BytesLike,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    unlinkNote(
+      fromProfileId: BigNumberish,
+      toProfileId: BigNumberish,
+      toNoteId: BigNumberish,
+      linkType: BytesLike,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
     unlinkProfile(
       fromProfileId: BigNumberish,
       toProfileId: BigNumberish,
+      linkType: BytesLike,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    unlinkProfileLink(
+      fromProfileId: BigNumberish,
+      linkData: DataTypes.ProfileLinkStructStruct,
       linkType: BytesLike,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
@@ -1510,7 +1742,7 @@ export interface Abi extends BaseContract {
   balanceOf(owner: string, overrides?: CallOverrides): Promise<BigNumber>;
 
   createProfile(
-    profileData: DataTypes.CreateProfileDataStruct,
+    vars: DataTypes.CreateProfileDataStruct,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -1548,18 +1780,8 @@ export interface Abi extends BaseContract {
     overrides?: CallOverrides
   ): Promise<string>;
 
-  getLinkModule4Link(
-    linkData: DataTypes.LinkDataStruct,
-    overrides?: CallOverrides
-  ): Promise<string>;
-
   getLinkModule4Linklist(
     tokenId: BigNumberish,
-    overrides?: CallOverrides
-  ): Promise<string>;
-
-  getLinkModule4Profile(
-    profileId: BigNumberish,
     overrides?: CallOverrides
   ): Promise<string>;
 
@@ -1577,22 +1799,11 @@ export interface Abi extends BaseContract {
     overrides?: CallOverrides
   ): Promise<string>;
 
-  getMintModule4Link(
-    linkData: DataTypes.LinkDataStruct,
-    overrides?: CallOverrides
-  ): Promise<string>;
-
-  getMintModule4Note(
+  getNote(
     profileId: BigNumberish,
     noteId: BigNumberish,
     overrides?: CallOverrides
-  ): Promise<string>;
-
-  getNoteUri(
-    profileId: BigNumberish,
-    noteId: BigNumberish,
-    overrides?: CallOverrides
-  ): Promise<string>;
+  ): Promise<DataTypes.NoteStructOutput>;
 
   getPrimaryProfileId(
     account: string,
@@ -1614,10 +1825,13 @@ export interface Abi extends BaseContract {
     overrides?: CallOverrides
   ): Promise<string>;
 
+  getRevision(overrides?: CallOverrides): Promise<BigNumber>;
+
   initialize(
     _name: string,
     _symbol: string,
-    _linkListContract: string,
+    _linklistContract: string,
+    _mintNFTImpl: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -1639,11 +1853,6 @@ export interface Abi extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  linkAddressLink(
-    fromProfileId: BigNumberish,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
-
   linkAny(
     fromProfileId: BigNumberish,
     toUri: string,
@@ -1661,7 +1870,7 @@ export interface Abi extends BaseContract {
 
   linkLinklist(
     fromProfileId: BigNumberish,
-    linkListId: BigNumberish,
+    toLinkListId: BigNumberish,
     linkType: BytesLike,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
@@ -1674,11 +1883,6 @@ export interface Abi extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  linkNoteLink(
-    fromProfileId: BigNumberish,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
-
   linkProfile(
     fromProfileId: BigNumberish,
     toProfileId: BigNumberish,
@@ -1688,30 +1892,8 @@ export interface Abi extends BaseContract {
 
   linkProfileLink(
     fromProfileId: BigNumberish,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
-
-  mintAddressLink(
-    linkData: DataTypes.LinkDataStruct,
-    to: string,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
-
-  mintAnyLink(
-    linkData: DataTypes.LinkDataStruct,
-    to: string,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
-
-  mintERC721Link(
-    linkData: DataTypes.LinkDataStruct,
-    to: string,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
-
-  mintLinklistLink(
-    linkData: DataTypes.LinkDataStruct,
-    to: string,
+    linkData: DataTypes.ProfileLinkStructStruct,
+    linkType: BytesLike,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -1719,18 +1901,7 @@ export interface Abi extends BaseContract {
     profileId: BigNumberish,
     noteId: BigNumberish,
     to: string,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
-
-  mintNoteLink(
-    linkData: DataTypes.LinkDataStruct,
-    to: string,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
-
-  mintProfileLink(
-    linkData: DataTypes.LinkDataStruct,
-    to: string,
+    mintModuleData: BytesLike,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -1743,9 +1914,53 @@ export interface Abi extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  postNoteWithLink(
+  postNote4AddressLink(
     noteData: DataTypes.PostNoteDataStruct,
-    linkData: DataTypes.LinkDataStruct,
+    fromProfileId: BigNumberish,
+    ethAddress: string,
+    linkType: BytesLike,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  postNote4AnyLink(
+    noteData: DataTypes.PostNoteDataStruct,
+    fromProfileId: BigNumberish,
+    toUri: string,
+    linkType: BytesLike,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  postNote4ERC721Link(
+    noteData: DataTypes.PostNoteDataStruct,
+    fromProfileId: BigNumberish,
+    tokenAddress: string,
+    tokenId: BigNumberish,
+    linkType: BytesLike,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  postNote4LinklistLink(
+    noteData: DataTypes.PostNoteDataStruct,
+    fromProfileId: BigNumberish,
+    toLinkListId: BigNumberish,
+    linkType: BytesLike,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  postNote4NoteLink(
+    noteData: DataTypes.PostNoteDataStruct,
+    fromProfileId: BigNumberish,
+    toProfileId: BigNumberish,
+    toNoteId: BigNumberish,
+    linkType: BytesLike,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  postNote4ProfileLink(
+    noteData: DataTypes.PostNoteDataStruct,
+    fromProfileId: BigNumberish,
+    toProfileId: BigNumberish,
+    linkType: BytesLike,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -1791,15 +2006,8 @@ export interface Abi extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  setLinkModule4Link(
-    linkData: DataTypes.LinkDataStruct,
-    linkModule: string,
-    linkModuleInitData: BytesLike,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
-
   setLinkModule4Linklist(
-    tokenId: BigNumberish,
+    linklistId: BigNumberish,
     linkModule: string,
     linkModuleInitData: BytesLike,
     overrides?: Overrides & { from?: string | Promise<string> }
@@ -1821,21 +2029,14 @@ export interface Abi extends BaseContract {
   ): Promise<ContractTransaction>;
 
   setLinklistUri(
-    linkListId: BigNumberish,
+    linklistId: BigNumberish,
     uri: string,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
-
-  setMintModule4Link(
-    linkData: DataTypes.LinkDataStruct,
-    mintModule: string,
-    mintModuleInitData: BytesLike,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   setMintModule4Note(
     profileId: BigNumberish,
-    toNoteId: BigNumberish,
+    noteId: BigNumberish,
     mintModule: string,
     mintModuleInitData: BytesLike,
     overrides?: Overrides & { from?: string | Promise<string> }
@@ -1894,9 +2095,46 @@ export interface Abi extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
+  unlinkAny(
+    fromProfileId: BigNumberish,
+    toUri: string,
+    linkType: BytesLike,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  unlinkERC721(
+    fromProfileId: BigNumberish,
+    tokenAddress: string,
+    tokenId: BigNumberish,
+    linkType: BytesLike,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  unlinkLinklist(
+    fromProfileId: BigNumberish,
+    toLinkListId: BigNumberish,
+    linkType: BytesLike,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  unlinkNote(
+    fromProfileId: BigNumberish,
+    toProfileId: BigNumberish,
+    toNoteId: BigNumberish,
+    linkType: BytesLike,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
   unlinkProfile(
     fromProfileId: BigNumberish,
     toProfileId: BigNumberish,
+    linkType: BytesLike,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  unlinkProfileLink(
+    fromProfileId: BigNumberish,
+    linkData: DataTypes.ProfileLinkStructStruct,
     linkType: BytesLike,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
@@ -1917,7 +2155,7 @@ export interface Abi extends BaseContract {
     balanceOf(owner: string, overrides?: CallOverrides): Promise<BigNumber>;
 
     createProfile(
-      profileData: DataTypes.CreateProfileDataStruct,
+      vars: DataTypes.CreateProfileDataStruct,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -1955,18 +2193,8 @@ export interface Abi extends BaseContract {
       overrides?: CallOverrides
     ): Promise<string>;
 
-    getLinkModule4Link(
-      linkData: DataTypes.LinkDataStruct,
-      overrides?: CallOverrides
-    ): Promise<string>;
-
     getLinkModule4Linklist(
       tokenId: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<string>;
-
-    getLinkModule4Profile(
-      profileId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<string>;
 
@@ -1984,22 +2212,11 @@ export interface Abi extends BaseContract {
       overrides?: CallOverrides
     ): Promise<string>;
 
-    getMintModule4Link(
-      linkData: DataTypes.LinkDataStruct,
-      overrides?: CallOverrides
-    ): Promise<string>;
-
-    getMintModule4Note(
+    getNote(
       profileId: BigNumberish,
       noteId: BigNumberish,
       overrides?: CallOverrides
-    ): Promise<string>;
-
-    getNoteUri(
-      profileId: BigNumberish,
-      noteId: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<string>;
+    ): Promise<DataTypes.NoteStructOutput>;
 
     getPrimaryProfileId(
       account: string,
@@ -2021,10 +2238,13 @@ export interface Abi extends BaseContract {
       overrides?: CallOverrides
     ): Promise<string>;
 
+    getRevision(overrides?: CallOverrides): Promise<BigNumber>;
+
     initialize(
       _name: string,
       _symbol: string,
-      _linkListContract: string,
+      _linklistContract: string,
+      _mintNFTImpl: string,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -2046,11 +2266,6 @@ export interface Abi extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
-    linkAddressLink(
-      fromProfileId: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
     linkAny(
       fromProfileId: BigNumberish,
       toUri: string,
@@ -2068,7 +2283,7 @@ export interface Abi extends BaseContract {
 
     linkLinklist(
       fromProfileId: BigNumberish,
-      linkListId: BigNumberish,
+      toLinkListId: BigNumberish,
       linkType: BytesLike,
       overrides?: CallOverrides
     ): Promise<void>;
@@ -2081,11 +2296,6 @@ export interface Abi extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
-    linkNoteLink(
-      fromProfileId: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
     linkProfile(
       fromProfileId: BigNumberish,
       toProfileId: BigNumberish,
@@ -2095,30 +2305,8 @@ export interface Abi extends BaseContract {
 
     linkProfileLink(
       fromProfileId: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    mintAddressLink(
-      linkData: DataTypes.LinkDataStruct,
-      to: string,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    mintAnyLink(
-      linkData: DataTypes.LinkDataStruct,
-      to: string,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    mintERC721Link(
-      linkData: DataTypes.LinkDataStruct,
-      to: string,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    mintLinklistLink(
-      linkData: DataTypes.LinkDataStruct,
-      to: string,
+      linkData: DataTypes.ProfileLinkStructStruct,
+      linkType: BytesLike,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -2126,20 +2314,9 @@ export interface Abi extends BaseContract {
       profileId: BigNumberish,
       noteId: BigNumberish,
       to: string,
+      mintModuleData: BytesLike,
       overrides?: CallOverrides
-    ): Promise<void>;
-
-    mintNoteLink(
-      linkData: DataTypes.LinkDataStruct,
-      to: string,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    mintProfileLink(
-      linkData: DataTypes.LinkDataStruct,
-      to: string,
-      overrides?: CallOverrides
-    ): Promise<void>;
+    ): Promise<BigNumber>;
 
     name(overrides?: CallOverrides): Promise<string>;
 
@@ -2150,11 +2327,55 @@ export interface Abi extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    postNoteWithLink(
+    postNote4AddressLink(
       noteData: DataTypes.PostNoteDataStruct,
-      linkData: DataTypes.LinkDataStruct,
+      fromProfileId: BigNumberish,
+      ethAddress: string,
+      linkType: BytesLike,
       overrides?: CallOverrides
-    ): Promise<void>;
+    ): Promise<BigNumber>;
+
+    postNote4AnyLink(
+      noteData: DataTypes.PostNoteDataStruct,
+      fromProfileId: BigNumberish,
+      toUri: string,
+      linkType: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    postNote4ERC721Link(
+      noteData: DataTypes.PostNoteDataStruct,
+      fromProfileId: BigNumberish,
+      tokenAddress: string,
+      tokenId: BigNumberish,
+      linkType: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    postNote4LinklistLink(
+      noteData: DataTypes.PostNoteDataStruct,
+      fromProfileId: BigNumberish,
+      toLinkListId: BigNumberish,
+      linkType: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    postNote4NoteLink(
+      noteData: DataTypes.PostNoteDataStruct,
+      fromProfileId: BigNumberish,
+      toProfileId: BigNumberish,
+      toNoteId: BigNumberish,
+      linkType: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    postNote4ProfileLink(
+      noteData: DataTypes.PostNoteDataStruct,
+      fromProfileId: BigNumberish,
+      toProfileId: BigNumberish,
+      linkType: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
     "safeTransferFrom(address,address,uint256)"(
       from: string,
@@ -2198,15 +2419,8 @@ export interface Abi extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
-    setLinkModule4Link(
-      linkData: DataTypes.LinkDataStruct,
-      linkModule: string,
-      linkModuleInitData: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
     setLinkModule4Linklist(
-      tokenId: BigNumberish,
+      linklistId: BigNumberish,
       linkModule: string,
       linkModuleInitData: BytesLike,
       overrides?: CallOverrides
@@ -2228,21 +2442,14 @@ export interface Abi extends BaseContract {
     ): Promise<void>;
 
     setLinklistUri(
-      linkListId: BigNumberish,
+      linklistId: BigNumberish,
       uri: string,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    setMintModule4Link(
-      linkData: DataTypes.LinkDataStruct,
-      mintModule: string,
-      mintModuleInitData: BytesLike,
       overrides?: CallOverrides
     ): Promise<void>;
 
     setMintModule4Note(
       profileId: BigNumberish,
-      toNoteId: BigNumberish,
+      noteId: BigNumberish,
       mintModule: string,
       mintModuleInitData: BytesLike,
       overrides?: CallOverrides
@@ -2304,9 +2511,46 @@ export interface Abi extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
+    unlinkAny(
+      fromProfileId: BigNumberish,
+      toUri: string,
+      linkType: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    unlinkERC721(
+      fromProfileId: BigNumberish,
+      tokenAddress: string,
+      tokenId: BigNumberish,
+      linkType: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    unlinkLinklist(
+      fromProfileId: BigNumberish,
+      toLinkListId: BigNumberish,
+      linkType: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    unlinkNote(
+      fromProfileId: BigNumberish,
+      toProfileId: BigNumberish,
+      toNoteId: BigNumberish,
+      linkType: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
     unlinkProfile(
       fromProfileId: BigNumberish,
       toProfileId: BigNumberish,
+      linkType: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    unlinkProfileLink(
+      fromProfileId: BigNumberish,
+      linkData: DataTypes.ProfileLinkStructStruct,
       linkType: BytesLike,
       overrides?: CallOverrides
     ): Promise<void>;
@@ -2346,17 +2590,6 @@ export interface Abi extends BaseContract {
       tokenId?: BigNumberish | null
     ): TransferEventFilter;
 
-    "AttachLinklist(uint256,bytes32,uint256)"(
-      profileId?: BigNumberish | null,
-      linkType?: null,
-      linklistId?: BigNumberish | null
-    ): AttachLinklistEventFilter;
-    AttachLinklist(
-      profileId?: BigNumberish | null,
-      linkType?: null,
-      linklistId?: BigNumberish | null
-    ): AttachLinklistEventFilter;
-
     "BaseInitialized(string,string,uint256)"(
       name?: null,
       symbol?: null,
@@ -2368,16 +2601,74 @@ export interface Abi extends BaseContract {
       timestamp?: null
     ): BaseInitializedEventFilter;
 
-    "DetachLinklist(uint256,bytes32,uint256)"(
-      profileId?: BigNumberish | null,
+    "LinkAddress(uint256,address,bytes32,uint256)"(
+      fromProfileId?: BigNumberish | null,
+      ethAddress?: string | null,
+      linkType?: null,
+      linklistId?: null
+    ): LinkAddressEventFilter;
+    LinkAddress(
+      fromProfileId?: BigNumberish | null,
+      ethAddress?: string | null,
+      linkType?: null,
+      linklistId?: null
+    ): LinkAddressEventFilter;
+
+    "LinkAny(uint256,string,bytes32,uint256)"(
+      fromProfileId?: BigNumberish | null,
+      toUri?: null,
+      linkType?: null,
+      linklistId?: null
+    ): LinkAnyEventFilter;
+    LinkAny(
+      fromProfileId?: BigNumberish | null,
+      toUri?: null,
+      linkType?: null,
+      linklistId?: null
+    ): LinkAnyEventFilter;
+
+    "LinkERC721(uint256,address,uint256,bytes32,uint256)"(
+      fromProfileId?: BigNumberish | null,
+      tokenAddress?: string | null,
+      toNoteId?: BigNumberish | null,
+      linkType?: null,
+      linklistId?: null
+    ): LinkERC721EventFilter;
+    LinkERC721(
+      fromProfileId?: BigNumberish | null,
+      tokenAddress?: string | null,
+      toNoteId?: BigNumberish | null,
+      linkType?: null,
+      linklistId?: null
+    ): LinkERC721EventFilter;
+
+    "LinkLinklist(uint256,uint256,bytes32,uint256)"(
+      fromProfileId?: BigNumberish | null,
+      toLinklistId?: BigNumberish | null,
       linkType?: null,
       linklistId?: BigNumberish | null
-    ): DetachLinklistEventFilter;
-    DetachLinklist(
-      profileId?: BigNumberish | null,
+    ): LinkLinklistEventFilter;
+    LinkLinklist(
+      fromProfileId?: BigNumberish | null,
+      toLinklistId?: BigNumberish | null,
       linkType?: null,
       linklistId?: BigNumberish | null
-    ): DetachLinklistEventFilter;
+    ): LinkLinklistEventFilter;
+
+    "LinkNote(uint256,uint256,uint256,bytes32,uint256)"(
+      fromProfileId?: BigNumberish | null,
+      toProfileId?: BigNumberish | null,
+      toNoteId?: BigNumberish | null,
+      linkType?: null,
+      linklistId?: null
+    ): LinkNoteEventFilter;
+    LinkNote(
+      fromProfileId?: BigNumberish | null,
+      toProfileId?: BigNumberish | null,
+      toNoteId?: BigNumberish | null,
+      linkType?: null,
+      linklistId?: null
+    ): LinkNoteEventFilter;
 
     "LinkProfile(address,uint256,uint256,bytes32,uint256)"(
       account?: string | null,
@@ -2394,6 +2685,21 @@ export interface Abi extends BaseContract {
       linklistId?: null
     ): LinkProfileEventFilter;
 
+    "LinkProfileLink(uint256,bytes32,uint256,uint256,bytes32)"(
+      fromProfileId?: BigNumberish | null,
+      linkType?: BytesLike | null,
+      plFromProfileId?: null,
+      plToProfileId?: null,
+      plLinkType?: null
+    ): LinkProfileLinkEventFilter;
+    LinkProfileLink(
+      fromProfileId?: BigNumberish | null,
+      linkType?: BytesLike | null,
+      plFromProfileId?: null,
+      plToProfileId?: null,
+      plLinkType?: null
+    ): LinkProfileLinkEventFilter;
+
     "LinklistNFTInitialized(uint256)"(
       timestamp?: null
     ): LinklistNFTInitializedEventFilter;
@@ -2409,6 +2715,23 @@ export interface Abi extends BaseContract {
       noteId?: null,
       timestamp?: null
     ): MintNFTInitializedEventFilter;
+
+    "MintNote(address,uint256,uint256,uint256,bytes,uint256)"(
+      to?: string | null,
+      profileId?: BigNumberish | null,
+      noteId?: BigNumberish | null,
+      tokenId?: null,
+      data?: null,
+      timestamp?: null
+    ): MintNoteEventFilter;
+    MintNote(
+      to?: string | null,
+      profileId?: BigNumberish | null,
+      noteId?: BigNumberish | null,
+      tokenId?: null,
+      data?: null,
+      timestamp?: null
+    ): MintNoteEventFilter;
 
     "ProfileCreated(uint256,address,address,string,uint256)"(
       profileId?: BigNumberish | null,
@@ -2448,6 +2771,34 @@ export interface Abi extends BaseContract {
       returnData?: null,
       timestamp?: null
     ): SetLinkModule4AddressEventFilter;
+
+    "SetLinkModule4ERC721(address,uint256,address,bytes,uint256)"(
+      tokenAddress?: string | null,
+      tokenId?: BigNumberish | null,
+      linkModule?: string | null,
+      returnData?: null,
+      timestamp?: null
+    ): SetLinkModule4ERC721EventFilter;
+    SetLinkModule4ERC721(
+      tokenAddress?: string | null,
+      tokenId?: BigNumberish | null,
+      linkModule?: string | null,
+      returnData?: null,
+      timestamp?: null
+    ): SetLinkModule4ERC721EventFilter;
+
+    "SetLinkModule4Linklist(uint256,address,bytes,uint256)"(
+      linklistId?: BigNumberish | null,
+      linkModule?: string | null,
+      returnData?: null,
+      timestamp?: null
+    ): SetLinkModule4LinklistEventFilter;
+    SetLinkModule4Linklist(
+      linklistId?: BigNumberish | null,
+      linkModule?: string | null,
+      returnData?: null,
+      timestamp?: null
+    ): SetLinkModule4LinklistEventFilter;
 
     "SetLinkModule4Note(uint256,uint256,address,bytes,uint256)"(
       profileId?: BigNumberish | null,
@@ -2512,6 +2863,71 @@ export interface Abi extends BaseContract {
       tokenAddress?: string | null
     ): SetSocialTokenEventFilter;
 
+    "UninkLinklist(uint256,uint256,bytes32,uint256)"(
+      fromProfileId?: BigNumberish | null,
+      toLinklistId?: BigNumberish | null,
+      linkType?: null,
+      linklistId?: BigNumberish | null
+    ): UninkLinklistEventFilter;
+    UninkLinklist(
+      fromProfileId?: BigNumberish | null,
+      toLinklistId?: BigNumberish | null,
+      linkType?: null,
+      linklistId?: BigNumberish | null
+    ): UninkLinklistEventFilter;
+
+    "UnlinkAddress(uint256,address,bytes32)"(
+      fromProfileId?: BigNumberish | null,
+      ethAddress?: string | null,
+      linkType?: null
+    ): UnlinkAddressEventFilter;
+    UnlinkAddress(
+      fromProfileId?: BigNumberish | null,
+      ethAddress?: string | null,
+      linkType?: null
+    ): UnlinkAddressEventFilter;
+
+    "UnlinkAny(uint256,string,bytes32)"(
+      fromProfileId?: BigNumberish | null,
+      toUri?: null,
+      linkType?: null
+    ): UnlinkAnyEventFilter;
+    UnlinkAny(
+      fromProfileId?: BigNumberish | null,
+      toUri?: null,
+      linkType?: null
+    ): UnlinkAnyEventFilter;
+
+    "UnlinkERC721(uint256,address,uint256,bytes32,uint256)"(
+      fromProfileId?: BigNumberish | null,
+      tokenAddress?: string | null,
+      toNoteId?: BigNumberish | null,
+      linkType?: null,
+      linklistId?: null
+    ): UnlinkERC721EventFilter;
+    UnlinkERC721(
+      fromProfileId?: BigNumberish | null,
+      tokenAddress?: string | null,
+      toNoteId?: BigNumberish | null,
+      linkType?: null,
+      linklistId?: null
+    ): UnlinkERC721EventFilter;
+
+    "UnlinkNote(uint256,uint256,uint256,bytes32,uint256)"(
+      fromProfileId?: BigNumberish | null,
+      toProfileId?: BigNumberish | null,
+      toNoteId?: BigNumberish | null,
+      linkType?: null,
+      linklistId?: null
+    ): UnlinkNoteEventFilter;
+    UnlinkNote(
+      fromProfileId?: BigNumberish | null,
+      toProfileId?: BigNumberish | null,
+      toNoteId?: BigNumberish | null,
+      linkType?: null,
+      linklistId?: null
+    ): UnlinkNoteEventFilter;
+
     "UnlinkProfile(address,uint256,uint256,bytes32)"(
       account?: string | null,
       fromProfileId?: BigNumberish | null,
@@ -2524,6 +2940,21 @@ export interface Abi extends BaseContract {
       toProfileId?: BigNumberish | null,
       linkType?: null
     ): UnlinkProfileEventFilter;
+
+    "UnlinkProfileLink(uint256,bytes32,uint256,uint256,bytes32)"(
+      fromProfileId?: BigNumberish | null,
+      linkType?: BytesLike | null,
+      plFromProfileId?: null,
+      plToProfileId?: null,
+      plLinkType?: null
+    ): UnlinkProfileLinkEventFilter;
+    UnlinkProfileLink(
+      fromProfileId?: BigNumberish | null,
+      linkType?: BytesLike | null,
+      plFromProfileId?: null,
+      plToProfileId?: null,
+      plLinkType?: null
+    ): UnlinkProfileLinkEventFilter;
 
     "Web3EntryInitialized(uint256)"(
       timestamp?: null
@@ -2547,7 +2978,7 @@ export interface Abi extends BaseContract {
     balanceOf(owner: string, overrides?: CallOverrides): Promise<BigNumber>;
 
     createProfile(
-      profileData: DataTypes.CreateProfileDataStruct,
+      vars: DataTypes.CreateProfileDataStruct,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -2585,18 +3016,8 @@ export interface Abi extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    getLinkModule4Link(
-      linkData: DataTypes.LinkDataStruct,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
     getLinkModule4Linklist(
       tokenId: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    getLinkModule4Profile(
-      profileId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -2614,18 +3035,7 @@ export interface Abi extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    getMintModule4Link(
-      linkData: DataTypes.LinkDataStruct,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    getMintModule4Note(
-      profileId: BigNumberish,
-      noteId: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    getNoteUri(
+    getNote(
       profileId: BigNumberish,
       noteId: BigNumberish,
       overrides?: CallOverrides
@@ -2651,10 +3061,13 @@ export interface Abi extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    getRevision(overrides?: CallOverrides): Promise<BigNumber>;
+
     initialize(
       _name: string,
       _symbol: string,
-      _linkListContract: string,
+      _linklistContract: string,
+      _mintNFTImpl: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -2676,11 +3089,6 @@ export interface Abi extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    linkAddressLink(
-      fromProfileId: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
     linkAny(
       fromProfileId: BigNumberish,
       toUri: string,
@@ -2698,7 +3106,7 @@ export interface Abi extends BaseContract {
 
     linkLinklist(
       fromProfileId: BigNumberish,
-      linkListId: BigNumberish,
+      toLinkListId: BigNumberish,
       linkType: BytesLike,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
@@ -2711,11 +3119,6 @@ export interface Abi extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    linkNoteLink(
-      fromProfileId: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
     linkProfile(
       fromProfileId: BigNumberish,
       toProfileId: BigNumberish,
@@ -2725,30 +3128,8 @@ export interface Abi extends BaseContract {
 
     linkProfileLink(
       fromProfileId: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
-    mintAddressLink(
-      linkData: DataTypes.LinkDataStruct,
-      to: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
-    mintAnyLink(
-      linkData: DataTypes.LinkDataStruct,
-      to: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
-    mintERC721Link(
-      linkData: DataTypes.LinkDataStruct,
-      to: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
-    mintLinklistLink(
-      linkData: DataTypes.LinkDataStruct,
-      to: string,
+      linkData: DataTypes.ProfileLinkStructStruct,
+      linkType: BytesLike,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -2756,18 +3137,7 @@ export interface Abi extends BaseContract {
       profileId: BigNumberish,
       noteId: BigNumberish,
       to: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
-    mintNoteLink(
-      linkData: DataTypes.LinkDataStruct,
-      to: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
-    mintProfileLink(
-      linkData: DataTypes.LinkDataStruct,
-      to: string,
+      mintModuleData: BytesLike,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -2783,9 +3153,53 @@ export interface Abi extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    postNoteWithLink(
+    postNote4AddressLink(
       noteData: DataTypes.PostNoteDataStruct,
-      linkData: DataTypes.LinkDataStruct,
+      fromProfileId: BigNumberish,
+      ethAddress: string,
+      linkType: BytesLike,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    postNote4AnyLink(
+      noteData: DataTypes.PostNoteDataStruct,
+      fromProfileId: BigNumberish,
+      toUri: string,
+      linkType: BytesLike,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    postNote4ERC721Link(
+      noteData: DataTypes.PostNoteDataStruct,
+      fromProfileId: BigNumberish,
+      tokenAddress: string,
+      tokenId: BigNumberish,
+      linkType: BytesLike,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    postNote4LinklistLink(
+      noteData: DataTypes.PostNoteDataStruct,
+      fromProfileId: BigNumberish,
+      toLinkListId: BigNumberish,
+      linkType: BytesLike,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    postNote4NoteLink(
+      noteData: DataTypes.PostNoteDataStruct,
+      fromProfileId: BigNumberish,
+      toProfileId: BigNumberish,
+      toNoteId: BigNumberish,
+      linkType: BytesLike,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    postNote4ProfileLink(
+      noteData: DataTypes.PostNoteDataStruct,
+      fromProfileId: BigNumberish,
+      toProfileId: BigNumberish,
+      linkType: BytesLike,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -2831,15 +3245,8 @@ export interface Abi extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    setLinkModule4Link(
-      linkData: DataTypes.LinkDataStruct,
-      linkModule: string,
-      linkModuleInitData: BytesLike,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
     setLinkModule4Linklist(
-      tokenId: BigNumberish,
+      linklistId: BigNumberish,
       linkModule: string,
       linkModuleInitData: BytesLike,
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -2861,21 +3268,14 @@ export interface Abi extends BaseContract {
     ): Promise<BigNumber>;
 
     setLinklistUri(
-      linkListId: BigNumberish,
+      linklistId: BigNumberish,
       uri: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
-    setMintModule4Link(
-      linkData: DataTypes.LinkDataStruct,
-      mintModule: string,
-      mintModuleInitData: BytesLike,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     setMintModule4Note(
       profileId: BigNumberish,
-      toNoteId: BigNumberish,
+      noteId: BigNumberish,
       mintModule: string,
       mintModuleInitData: BytesLike,
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -2937,9 +3337,46 @@ export interface Abi extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
+    unlinkAny(
+      fromProfileId: BigNumberish,
+      toUri: string,
+      linkType: BytesLike,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    unlinkERC721(
+      fromProfileId: BigNumberish,
+      tokenAddress: string,
+      tokenId: BigNumberish,
+      linkType: BytesLike,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    unlinkLinklist(
+      fromProfileId: BigNumberish,
+      toLinkListId: BigNumberish,
+      linkType: BytesLike,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    unlinkNote(
+      fromProfileId: BigNumberish,
+      toProfileId: BigNumberish,
+      toNoteId: BigNumberish,
+      linkType: BytesLike,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
     unlinkProfile(
       fromProfileId: BigNumberish,
       toProfileId: BigNumberish,
+      linkType: BytesLike,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    unlinkProfileLink(
+      fromProfileId: BigNumberish,
+      linkData: DataTypes.ProfileLinkStructStruct,
       linkType: BytesLike,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
@@ -2964,7 +3401,7 @@ export interface Abi extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     createProfile(
-      profileData: DataTypes.CreateProfileDataStruct,
+      vars: DataTypes.CreateProfileDataStruct,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -3002,18 +3439,8 @@ export interface Abi extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    getLinkModule4Link(
-      linkData: DataTypes.LinkDataStruct,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
     getLinkModule4Linklist(
       tokenId: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    getLinkModule4Profile(
-      profileId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
@@ -3033,18 +3460,7 @@ export interface Abi extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    getMintModule4Link(
-      linkData: DataTypes.LinkDataStruct,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    getMintModule4Note(
-      profileId: BigNumberish,
-      noteId: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    getNoteUri(
+    getNote(
       profileId: BigNumberish,
       noteId: BigNumberish,
       overrides?: CallOverrides
@@ -3070,10 +3486,13 @@ export interface Abi extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
+    getRevision(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
     initialize(
       _name: string,
       _symbol: string,
-      _linkListContract: string,
+      _linklistContract: string,
+      _mintNFTImpl: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -3095,11 +3514,6 @@ export interface Abi extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    linkAddressLink(
-      fromProfileId: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
     linkAny(
       fromProfileId: BigNumberish,
       toUri: string,
@@ -3117,7 +3531,7 @@ export interface Abi extends BaseContract {
 
     linkLinklist(
       fromProfileId: BigNumberish,
-      linkListId: BigNumberish,
+      toLinkListId: BigNumberish,
       linkType: BytesLike,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
@@ -3130,11 +3544,6 @@ export interface Abi extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    linkNoteLink(
-      fromProfileId: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
     linkProfile(
       fromProfileId: BigNumberish,
       toProfileId: BigNumberish,
@@ -3144,30 +3553,8 @@ export interface Abi extends BaseContract {
 
     linkProfileLink(
       fromProfileId: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
-    mintAddressLink(
-      linkData: DataTypes.LinkDataStruct,
-      to: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
-    mintAnyLink(
-      linkData: DataTypes.LinkDataStruct,
-      to: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
-    mintERC721Link(
-      linkData: DataTypes.LinkDataStruct,
-      to: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
-    mintLinklistLink(
-      linkData: DataTypes.LinkDataStruct,
-      to: string,
+      linkData: DataTypes.ProfileLinkStructStruct,
+      linkType: BytesLike,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -3175,18 +3562,7 @@ export interface Abi extends BaseContract {
       profileId: BigNumberish,
       noteId: BigNumberish,
       to: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
-    mintNoteLink(
-      linkData: DataTypes.LinkDataStruct,
-      to: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
-    mintProfileLink(
-      linkData: DataTypes.LinkDataStruct,
-      to: string,
+      mintModuleData: BytesLike,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -3202,9 +3578,53 @@ export interface Abi extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    postNoteWithLink(
+    postNote4AddressLink(
       noteData: DataTypes.PostNoteDataStruct,
-      linkData: DataTypes.LinkDataStruct,
+      fromProfileId: BigNumberish,
+      ethAddress: string,
+      linkType: BytesLike,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    postNote4AnyLink(
+      noteData: DataTypes.PostNoteDataStruct,
+      fromProfileId: BigNumberish,
+      toUri: string,
+      linkType: BytesLike,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    postNote4ERC721Link(
+      noteData: DataTypes.PostNoteDataStruct,
+      fromProfileId: BigNumberish,
+      tokenAddress: string,
+      tokenId: BigNumberish,
+      linkType: BytesLike,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    postNote4LinklistLink(
+      noteData: DataTypes.PostNoteDataStruct,
+      fromProfileId: BigNumberish,
+      toLinkListId: BigNumberish,
+      linkType: BytesLike,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    postNote4NoteLink(
+      noteData: DataTypes.PostNoteDataStruct,
+      fromProfileId: BigNumberish,
+      toProfileId: BigNumberish,
+      toNoteId: BigNumberish,
+      linkType: BytesLike,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    postNote4ProfileLink(
+      noteData: DataTypes.PostNoteDataStruct,
+      fromProfileId: BigNumberish,
+      toProfileId: BigNumberish,
+      linkType: BytesLike,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -3250,15 +3670,8 @@ export interface Abi extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    setLinkModule4Link(
-      linkData: DataTypes.LinkDataStruct,
-      linkModule: string,
-      linkModuleInitData: BytesLike,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
     setLinkModule4Linklist(
-      tokenId: BigNumberish,
+      linklistId: BigNumberish,
       linkModule: string,
       linkModuleInitData: BytesLike,
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -3280,21 +3693,14 @@ export interface Abi extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     setLinklistUri(
-      linkListId: BigNumberish,
+      linklistId: BigNumberish,
       uri: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
-    setMintModule4Link(
-      linkData: DataTypes.LinkDataStruct,
-      mintModule: string,
-      mintModuleInitData: BytesLike,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     setMintModule4Note(
       profileId: BigNumberish,
-      toNoteId: BigNumberish,
+      noteId: BigNumberish,
       mintModule: string,
       mintModuleInitData: BytesLike,
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -3356,9 +3762,46 @@ export interface Abi extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
+    unlinkAny(
+      fromProfileId: BigNumberish,
+      toUri: string,
+      linkType: BytesLike,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    unlinkERC721(
+      fromProfileId: BigNumberish,
+      tokenAddress: string,
+      tokenId: BigNumberish,
+      linkType: BytesLike,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    unlinkLinklist(
+      fromProfileId: BigNumberish,
+      toLinkListId: BigNumberish,
+      linkType: BytesLike,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    unlinkNote(
+      fromProfileId: BigNumberish,
+      toProfileId: BigNumberish,
+      toNoteId: BigNumberish,
+      linkType: BytesLike,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
     unlinkProfile(
       fromProfileId: BigNumberish,
       toProfileId: BigNumberish,
+      linkType: BytesLike,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    unlinkProfileLink(
+      fromProfileId: BigNumberish,
+      linkData: DataTypes.ProfileLinkStructStruct,
       linkType: BytesLike,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;

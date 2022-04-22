@@ -18,12 +18,29 @@ export class BaseContract {
 
   private _contract!: Abi
 
+  private _hasConnected: boolean = false
+
   protected get contract(): Abi {
-    if (this._contract === undefined) {
-      throw new Error('Contract not connected. Please call connect() first.')
-    } else {
-      return this._contract
+    if (!this._hasConnected) {
+      throw new Error(
+        'Contract not connected. Please call contract.connect() first.',
+      )
     }
+
+    // if (this._signerOrProvider instanceof ethers.providers.Web3Provider) {
+    //   if (
+    //     this._signerOrProvider.network.chainId !==
+    //     Network.getCrossbellNetworkInfo().chainId
+    //   ) {
+    //     throw new Error(
+    //       `Wrong network. Expected ${
+    //         Network.getCrossbellNetworkInfo().chainId
+    //       } but got ${this._signerOrProvider.network.chainId}`,
+    //     )
+    //   }
+    // }
+
+    return this._contract
   }
 
   protected set contract(contract: Abi) {
@@ -38,6 +55,11 @@ export class BaseContract {
   ) {
     this._providerOrPrivateKey = providerOrPrivateKey
   }
+
+  /**
+   * Connects to the contract.
+   * You need to call this before you can use the contract.
+   */
 
   async connect() {
     if (typeof this._providerOrPrivateKey === 'undefined') {
@@ -56,11 +78,11 @@ export class BaseContract {
       await provider.send('eth_requestAccounts', [])
       this._signerOrProvider = provider.getSigner()
     }
-
     this.contract = Abi__factory.connect(
       Network.getContractAddress(),
       this._signerOrProvider,
     )
+    this._hasConnected = true
   }
 
   protected parseLog<T>(

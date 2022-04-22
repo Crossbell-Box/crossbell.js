@@ -1,5 +1,6 @@
 import { NIL_ADDRESS } from '../utils'
 import { BaseContract } from './base'
+import { autoSwitchMainnet } from '../decorators'
 import type { ProfileCreatedEvent } from '../abi/types/Abi'
 import type { Result, Profile } from '../types'
 
@@ -12,6 +13,7 @@ export class ProfileContract extends BaseContract {
    * @param {string} uri - The URI of the file.
    * @returns The transaction hash and the profile ID.
    */
+  @autoSwitchMainnet()
   async createProfile(
     owner: string,
     handle: string,
@@ -43,6 +45,7 @@ export class ProfileContract extends BaseContract {
    * @param {string} handle - The handle you want to set.
    * @returns The transaction hash of the transaction that was sent to the blockchain.
    */
+  @autoSwitchMainnet()
   async setHandle(
     profileId: string,
     handle: string,
@@ -56,11 +59,12 @@ export class ProfileContract extends BaseContract {
   }
 
   /**
-   * This changes a profile's  URI.
-   * @param profileId - The profile ID of the user you want to set the  URI for.
-   * @param uri - The  URI you want to set.
+   * This changes a profile's URI.
+   * @param profileId - The profile ID of the user you want to set the URI for.
+   * @param uri - The URI you want to set.
    * @returns The transaction hash of the transaction that was sent to the blockchain.
    */
+  @autoSwitchMainnet()
   async setProfileUri(
     profileId: string,
     uri: string,
@@ -79,6 +83,7 @@ export class ProfileContract extends BaseContract {
    * @param {string} socialToken - The token address you want to set for the profile.
    * @returns The transaction hash of the transaction that was sent to the blockchain.
    */
+  @autoSwitchMainnet()
   async setSocialToken(
     profileId: string,
     socialToken: string,
@@ -96,6 +101,7 @@ export class ProfileContract extends BaseContract {
    * @param {string} profileId - The profile ID of the profile you want to set as primary.
    * @returns The transaction hash of the transaction that was sent to the blockchain.
    */
+  @autoSwitchMainnet()
   async setPrimaryProfileId(
     profileId: string,
   ): Promise<Result<undefined>> | never {
@@ -112,6 +118,7 @@ export class ProfileContract extends BaseContract {
    * @param {string} address - The address of the user you want to get the primary profile ID for.
    * @returns The profileId of the primary profile of the address.
    */
+  @autoSwitchMainnet()
   async getPrimaryProfileId(address: string): Promise<Result<string>> | never {
     const profileId = await this.contract.getPrimaryProfileId(address)
     return {
@@ -120,10 +127,11 @@ export class ProfileContract extends BaseContract {
   }
 
   /**
-   * This returns a boolean indicating whether the profileId is the primary profileId
+   * This returns a boolean indicating whether the profileId is a primary profileId of an address.
    * @param {string} profileId - The profile ID of the profile you want to check.
    * @returns A boolean value.
    */
+  @autoSwitchMainnet()
   async isPrimaryProfileId(
     profileId: string,
   ): Promise<Result<boolean>> | never {
@@ -134,10 +142,11 @@ export class ProfileContract extends BaseContract {
   }
 
   /**
-   * This returns the profile of a user given their handle.
-   * @param {string} handle - string - The handle of the profile you want to get the content of.
-   * @returns The profile of the profile with the given handle.
+   * This returns a profile given its handle.
+   * @param {string} handle - The handle of the profile you want to get the content of.
+   * @returns The profile with the given handle.
    */
+  @autoSwitchMainnet()
   async getProfileByHandle(handle: string): Promise<Result<Profile>> | never {
     const profile = await this.contract.getProfileByHandle(handle)
     return {
@@ -152,10 +161,11 @@ export class ProfileContract extends BaseContract {
   }
 
   /**
-   * This returns the handle and Uri of the profile from the given profileId.
+   * This returns a profile given its profileId.
    * @param {string} profileId - The profile ID of the profile you want to get.
-   * @returns The handle and Uri of the profile.
+   * @returns The profile with the given profileId.
    */
+  @autoSwitchMainnet()
   async getProfile(profileId: string): Promise<Result<Profile>> | never {
     const profile = await this.contract.getProfile(profileId)
     return {
@@ -174,6 +184,7 @@ export class ProfileContract extends BaseContract {
    * @param {string} profileId - The profileId of the profile you want to get the handle for.
    * @returns The handle of the profile.
    */
+  @autoSwitchMainnet()
   async getHandle(profileId: string): Promise<Result<string>> | never {
     const handle = await this.contract.getHandle(profileId)
     return {
@@ -186,6 +197,7 @@ export class ProfileContract extends BaseContract {
    * @param {string} profileId - The profile ID of the profile you want to get the URI for.
    * @returns The URI of the profile.
    */
+  @autoSwitchMainnet()
   async getProfileUri(profileId: string): Promise<Result<string>> | never {
     const uri = await this.contract.getProfileUri(profileId)
     return {

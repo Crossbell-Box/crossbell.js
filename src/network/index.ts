@@ -1,14 +1,12 @@
+import { ethers } from 'ethers'
+
 export type IAvailableNetwork = 'rinkeby' | 'crossbell'
 
 export class Network {
-  static #CONTRACT_ROPSTEN = '0x30094AFd225BF4723B72c42748FdDe2D86cA3671'
-  static #CONTRACT_CROSSBELL = '0xDAFf56432108DA447970FBB2D3cf911991CeC034'
+  static #CONTRACT_CROSSBELL = '0x72E0Bc50e94804bC8F6DDdC527c7223D3b352b43'
 
   static #currentNetwork: IAvailableNetwork = 'crossbell'
-  static readonly #availableNetworks: IAvailableNetwork[] = [
-    'rinkeby',
-    'crossbell',
-  ]
+  static readonly #availableNetworks: IAvailableNetwork[] = ['crossbell']
 
   /**
    * This returns the current network.
@@ -39,8 +37,8 @@ export class Network {
     switch (this.#currentNetwork) {
       // case 'ropsten':
       //   return 'https://ropsten.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161'
-      case 'rinkeby':
-        return 'https://rinkeby.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161'
+      // case 'rinkeby':
+      //   return 'https://rinkeby.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161'
       case 'crossbell':
         return 'https://rpc.crossbell.io'
       default:
@@ -54,12 +52,98 @@ export class Network {
    */
   static getContractAddress() {
     switch (this.getNetwork()) {
-      case 'rinkeby':
-        return this.#CONTRACT_ROPSTEN
+      // case 'rinkeby':
+      //   return this.#CONTRACT_ROPSTEN
       case 'crossbell':
         return this.#CONTRACT_CROSSBELL
       default:
         throw new Error(`Network ${this.getNetwork()} is not available`)
+    }
+  }
+
+  /**
+   * This returns an object with the properties of the Crossbell chain.
+   * @returns An object with the properties of the Crossbell chain.
+   */
+  static getCrossbellMainnetInfo() {
+    return {
+      chainName: 'Crossbell',
+      network: 'crossbell',
+      chainId: 3737,
+      tokenName: 'CSB',
+      tokenSymbol: 'CSB',
+      chainIdHex: '0x' + (3737).toString(16),
+      rpc: 'https://rpc.crossbell.io',
+      explorer: 'https://scan.crossbell.io',
+      contract: this.#CONTRACT_CROSSBELL,
+    }
+  }
+
+  /**
+   * This checks if the current network is the Crossbell mainnet.
+   * @param provider - The provider to check if it's the Crossbell mainnet.
+   * @returns A boolean value indicating if the current network is the Crossbell mainnet.
+   */
+  static async isCrossbellMainnet(
+    provider: ethers.providers.ExternalProvider | ethers.providers.Provider,
+  ) {
+    const { chainId } = this.getCrossbellMainnetInfo()
+    if (
+      provider instanceof ethers.providers.Web3Provider ||
+      provider instanceof ethers.providers.Provider
+    ) {
+      return (await provider.getNetwork()).chainId === chainId
+    } else {
+      // ExternalProvider
+      provider = new ethers.providers.Web3Provider(provider)
+      return (await provider.getNetwork()).chainId === chainId
+    }
+  }
+
+  /**
+   * This adds the Crossbell chain to the wallet if it's not already there, and then switches to it.
+   * @param provider - The provider that the wallet is connected to
+   */
+  static async switchToCrossbellMainnet(
+    provider: ethers.providers.ExternalProvider | ethers.providers.Web3Provider,
+  ) {
+    if (provider instanceof ethers.providers.Web3Provider) {
+      provider = provider.provider
+    }
+
+    if (typeof provider.request !== 'function') {
+      throw new Error(
+        'this provider does not follow EIP-1193 API signature. It does not have the provider.request function',
+      )
+    }
+
+    const { chainIdHex, chainName, tokenName, tokenSymbol, rpc, explorer } =
+      this.getCrossbellMainnetInfo()
+
+    try {
+      await provider.request({
+        method: 'wallet_switchEthereumChain',
+        params: [{ chainId: chainIdHex }],
+      })
+    } catch (e) {
+      // if (e.code === 4902) {
+      await provider.request({
+        method: 'wallet_addEthereumChain',
+        params: [
+          {
+            chainId: chainIdHex,
+            chainName: chainName,
+            nativeCurrency: {
+              name: tokenName,
+              symbol: tokenSymbol,
+              decimals: 18,
+            },
+            rpcUrls: [rpc],
+            blockExplorerUrls: [explorer],
+          },
+        ],
+      })
+      // }
     }
   }
 }
