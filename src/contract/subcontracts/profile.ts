@@ -19,6 +19,8 @@ export class ProfileContract extends BaseContract {
     handle: string,
     uri: string,
   ): Promise<Result<string>> | never {
+    this.validateHandleFormat(handle)
+
     const tx = await this.contract.createProfile({
       to: owner,
       handle: handle,
@@ -33,6 +35,7 @@ export class ProfileContract extends BaseContract {
       receipt.logs,
       'createProfile',
     )
+
     return {
       data: parser.args.profileId.toString(),
       transactionHash: receipt.transactionHash,
@@ -50,6 +53,8 @@ export class ProfileContract extends BaseContract {
     profileId: string,
     handle: string,
   ): Promise<Result<undefined>> | never {
+    this.validateHandleFormat(handle)
+
     const tx = await this.contract.setHandle(profileId, handle)
     const receipt = await tx.wait()
     return {
@@ -202,6 +207,20 @@ export class ProfileContract extends BaseContract {
     const uri = await this.contract.getProfileUri(profileId)
     return {
       data: uri,
+    }
+  }
+
+  /**
+   * This validates if a handle is in correct format.
+   * @param {string} handle - The handle of the profile you want to get the social token for.
+   */
+  private validateHandleFormat(handle: string): void | never {
+    if (handle.length >= 32) {
+      throw new Error(`Invalid handle: handle must be less than 32 characters.`)
+    }
+
+    if (!/^[a-z0-9\.\-\_]+$/.test(handle)) {
+      throw new Error(`Invalid handle: handle must only contain [a-z0-9.-_].`)
     }
   }
 }

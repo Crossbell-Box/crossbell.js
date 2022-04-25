@@ -75,7 +75,16 @@ export class BaseContract {
       const provider = new ethers.providers.Web3Provider(
         this._providerOrPrivateKey,
       )
-      await provider.send('eth_requestAccounts', [])
+      try {
+        await provider.send('eth_requestAccounts', [])
+      } catch (e) {
+        console.warn(
+          'Provider may not support eth_requestAccounts. Fallback to provider.enable()',
+          e,
+        )
+        // @ts-ignore
+        await provider.enable()
+      }
       this._signerOrProvider = provider.getSigner()
     }
     this.contract = Abi__factory.connect(

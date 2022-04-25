@@ -26,6 +26,24 @@ describe('profile', () => {
   })
 
   describe('create a profile and check', () => {
+    test('should fail to createProfile if the handle is not in correct format', () => {
+      expect(
+        contract.createProfile(
+          mockUser.address,
+          'cannot contain whitespace',
+          metadataUri,
+        ),
+      ).rejects.toThrow(/Invalid handle/)
+
+      expect(
+        contract.createProfile(
+          mockUser.address,
+          'cannot-contain-be-more-than-32-characters-longlonglonglonglonglonglonglonglong',
+          metadataUri,
+        ),
+      ).rejects.toThrow(/Invalid handle/)
+    })
+
     test('createProfile', async () => {
       profileId = await contract
         .createProfile(mockUser.address, randomHandle, metadataUri)

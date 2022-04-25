@@ -146,7 +146,7 @@
           updateHint(`profile created.  ${JSON.stringify(data, null, 2)}`)
         } catch (e) {
           console.error(e)
-          updateHint(e.error.message)
+          updateHint(e.message)
         }
       }
 
@@ -160,7 +160,7 @@
           updateHint(`profile: ${JSON.stringify(data, null, 2)}`)
         } catch (e) {
           console.error(e)
-          updateHint(e.error.message)
+          updateHint(e.message)
         }
       }
 

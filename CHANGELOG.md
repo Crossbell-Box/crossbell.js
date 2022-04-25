@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 0.2.3
+
+- handle can only contains `[a-z, 0-9, '.-_']`. now the SDK will throw an error if you try to create a profile or set a handle with an invalid handle.
+- when connecting, fallback to `provider.enable()` if `provider.send("eth_requestAccounts")` fails.
+
 ## 0.2.2 (2019-04-22)
 
 - update contract abi to latest version (DO UPDATE!)
