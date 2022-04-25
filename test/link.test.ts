@@ -66,6 +66,6 @@ describe('link profiles and check', () => {
     const {
       data: { handle },
     } = await contract.getProfileByHandle(randomAddress)
-    expect(handle).toBe(randomAddress)
+    expect(handle).toBe(randomAddress.toLowerCase())
   })
 })

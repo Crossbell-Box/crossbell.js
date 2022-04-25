@@ -153,6 +153,7 @@ export class ProfileContract extends BaseContract {
    */
   @autoSwitchMainnet()
   async getProfileByHandle(handle: string): Promise<Result<Profile>> | never {
+    handle = handle.toLowerCase()
     const profile = await this.contract.getProfileByHandle(handle)
     return {
       data: {

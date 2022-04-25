@@ -1,17 +1,21 @@
 # CHANGELOG
 
-## 0.2.3
+## 0.2.4 (2022-04-25)
+
+- convert handle to lowercase when `getProfileByHandle` is called
+
+## 0.2.3 (2022-04-25)
 
 - handle can only contains `[a-z, 0-9, '.-_']`. now the SDK will throw an error if you try to create a profile or set a handle with an invalid handle.
 - when connecting, fallback to `provider.enable()` if `provider.send("eth_requestAccounts")` fails.
 
-## 0.2.2 (2019-04-22)
+## 0.2.2 (2022-04-22)
 
 - update contract abi to latest version (DO UPDATE!)
 - auto switch to crossbell mainnet when calling contract if connected to other network
 - add changelog
 
-## 0.2.1 (2020-04-21)
+## 0.2.1 (2022-04-21)
 
 - allow connect contract with read-only provider
 
