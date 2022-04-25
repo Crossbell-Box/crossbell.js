@@ -5,6 +5,7 @@ import type { Result } from '../types'
 export class CsbContract extends BaseContract {
   /**
    * It returns the $CSB balance of the owner.
+   * @category CSB
    * @param {string} owner - The address of the account to get the $CSB balance of.
    * @returns The $CSB balance of the owner.
    */

@@ -82,8 +82,16 @@ export class BaseContract {
           'Provider may not support eth_requestAccounts. Fallback to provider.enable()',
           e,
         )
+
         // @ts-ignore
-        await provider.enable()
+        if (typeof this._providerOrPrivateKey.enable === 'function') {
+          // @ts-ignore
+          await this._providerOrPrivateKey.enable()
+        } else {
+          throw new Error(
+            'Provider does not support eth_requestAccounts and does not support enable()',
+          )
+        }
       }
       this._signerOrProvider = provider.getSigner()
     }

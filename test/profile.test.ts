@@ -44,11 +44,19 @@ describe('profile', () => {
       ).rejects.toThrow(/Invalid handle/)
     })
 
-    test('createProfile', async () => {
-      profileId = await contract
-        .createProfile(mockUser.address, randomHandle, metadataUri)
-        .then(({ data }) => data)
-      expect(profileId).not.toBeNull()
+    test('createProfile and getProfileByTransaction', async () => {
+      const result = await contract.createProfile(
+        mockUser.address,
+        randomHandle,
+        metadataUri,
+      )
+      profileId = result.data
+      expect(result.data).not.toBeNull()
+
+      const profile = await contract.getProfileByTransaction(
+        result.transactionHash,
+      )
+      expect(profile.data.profileId).toBe(profileId)
     })
 
     test.concurrent('getProfile', async () => {

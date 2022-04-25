@@ -1,11 +1,14 @@
 /**
  * The result of a call to a transaction / get function.
  */
-export type Result<T> = {
+export type Result<T, HasTxHash extends boolean = false> = {
   data: T
-  /* only available for transactions */
-  transactionHash?: string
-}
+} & (HasTxHash extends true
+  ? {
+      /** only available for write operation */
+      transactionHash: string
+    }
+  : {})
 
 export type Profile = {
   profileId: string

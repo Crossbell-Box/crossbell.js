@@ -28,11 +28,18 @@ describe('link profiles and check', () => {
   const linkType = 'follow'
   let linklistId: string | null = null
   test('linkProfile', async () => {
-    linklistId = await contract
-      .linkProfile(profileId1!, profileId2!, linkType)
-      .then(({ data }) => data)
-
+    const result = await contract.linkProfile(
+      profileId1!,
+      profileId2!,
+      linkType,
+    )
+    linklistId = result.data
     expect(linklistId).not.toBeNull()
+
+    const linklist = await contract.getLinklistIdByTransaction(
+      result.transactionHash,
+    )
+    expect(linklist.data).toBe(linklistId)
   })
 
   test('getLinkingProfileIds', async () => {
@@ -53,19 +60,27 @@ describe('link profiles and check', () => {
     const wallet = Wallet.createRandom()
     const randomAddress = wallet.address
 
-    const { toProfileId, linklistId } = await contract
-      .createThenLinkProfile(profileId1!, randomAddress, linkType)
-      .then(({ data }) => data)
+    const result = await contract.createThenLinkProfile(
+      profileId1!,
+      randomAddress,
+      linkType,
+    )
 
-    expect(toProfileId).not.toBeNull()
+    expect(result.data.toProfileId).not.toBeNull()
     expect(linklistId).not.toBeNull()
 
     const { data } = await contract.getLinkingProfileIds(profileId1!, linkType)
-    expect(data).toContain(toProfileId!)
+    expect(data).toContain(result.data.toProfileId!)
 
     const {
       data: { handle },
     } = await contract.getProfileByHandle(randomAddress)
     expect(handle).toBe(randomAddress.toLowerCase())
+
+    // should also able to get profile by transaction
+    const { data: profile } = await contract.getProfileByTransaction(
+      result.transactionHash,
+    )
+    expect(profile.profileId).toBe(result.data.toProfileId)
   })
 })

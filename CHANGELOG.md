@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## 0.2.6 （2022-04-25)
+
+- add `Contract.getLinklistIdByTransaction(txhash: string)` and `Contract.getProfileByTransaction(txhash: string)`
+
+## 0.2.5 （2022-04-25)
+
+- fix the `provider.enable()` bug
+
 ## 0.2.4 (2022-04-25)
 
 - convert handle to lowercase when `getProfileByHandle` is called
