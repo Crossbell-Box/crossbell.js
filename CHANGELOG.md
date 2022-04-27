@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.2.7 (2022-04-26)
+
+- throw error when no log event is found
+
 ## 0.2.6 （2022-04-25)
 
 - add `Contract.getLinklistIdByTransaction(txhash: string)` and `Contract.getProfileByTransaction(txhash: string)`

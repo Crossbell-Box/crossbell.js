@@ -59,8 +59,8 @@ export class BaseContract {
   /**
    * Connects to the contract.
    * You need to call this before you can use the contract.
+   * @category Basic
    */
-
   async connect() {
     if (typeof this._providerOrPrivateKey === 'undefined') {
       this._signerOrProvider = new ethers.providers.JsonRpcProvider(
@@ -106,13 +106,17 @@ export class BaseContract {
     logs: ethers.providers.Log[],
     filterTopic: keyof typeof logTopics,
   ) {
-    const log = logs.filter(
-      (log) => log.topics[0] === logTopics[filterTopic],
-    )[0]
+    const _logs = logs.filter((log) => log.topics[0] === logTopics[filterTopic])
 
-    if (!log) {
+    if (_logs.length === 0) {
       throw new Error(`Log with topic ${filterTopic} not found`)
     }
+
+    if (_logs.length > 1) {
+      throw new Error(`More than one log with topic ${filterTopic} found`)
+    }
+
+    const log = _logs[0]
 
     return this.contract.interface.parseLog(log) as unknown as T
   }
