@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.3.0 (2022-04-28)
+
+- BREAKING CHANGE: new contract address
+
 ## 0.2.7 (2022-04-26)
 
 - throw error when no log event is found

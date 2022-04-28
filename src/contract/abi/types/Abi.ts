@@ -145,6 +145,7 @@ export interface AbiInterface extends utils.Interface {
     "approve(address,uint256)": FunctionFragment;
     "attachLinklist(uint256,uint256)": FunctionFragment;
     "balanceOf(address)": FunctionFragment;
+    "burn(uint256)": FunctionFragment;
     "createProfile((address,string,string,address,bytes))": FunctionFragment;
     "createThenLinkProfile(uint256,address,bytes32)": FunctionFragment;
     "detachLinklist(uint256,uint256)": FunctionFragment;
@@ -217,6 +218,7 @@ export interface AbiInterface extends utils.Interface {
       | "approve"
       | "attachLinklist"
       | "balanceOf"
+      | "burn"
       | "createProfile"
       | "createThenLinkProfile"
       | "detachLinklist"
@@ -293,6 +295,7 @@ export interface AbiInterface extends utils.Interface {
     values: [BigNumberish, BigNumberish]
   ): string;
   encodeFunctionData(functionFragment: "balanceOf", values: [string]): string;
+  encodeFunctionData(functionFragment: "burn", values: [BigNumberish]): string;
   encodeFunctionData(
     functionFragment: "createProfile",
     values: [DataTypes.CreateProfileDataStruct]
@@ -576,6 +579,7 @@ export interface AbiInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "balanceOf", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "burn", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "createProfile",
     data: BytesLike
@@ -793,7 +797,9 @@ export interface AbiInterface extends utils.Interface {
     "Approval(address,address,uint256)": EventFragment;
     "ApprovalForAll(address,address,bool)": EventFragment;
     "Transfer(address,address,uint256)": EventFragment;
+    "AttachLinklist(uint256,uint256,bytes32)": EventFragment;
     "BaseInitialized(string,string,uint256)": EventFragment;
+    "DetachLinklist(uint256,uint256,bytes32)": EventFragment;
     "LinkAddress(uint256,address,bytes32,uint256)": EventFragment;
     "LinkAny(uint256,string,bytes32,uint256)": EventFragment;
     "LinkERC721(uint256,address,uint256,bytes32,uint256)": EventFragment;
@@ -804,6 +810,7 @@ export interface AbiInterface extends utils.Interface {
     "LinklistNFTInitialized(uint256)": EventFragment;
     "MintNFTInitialized(uint256,uint256,uint256)": EventFragment;
     "MintNote(address,uint256,uint256,uint256,bytes,uint256)": EventFragment;
+    "PostNote(uint256,uint256,bool,uint256)": EventFragment;
     "ProfileCreated(uint256,address,address,string,uint256)": EventFragment;
     "SetHandle(address,uint256,string)": EventFragment;
     "SetLinkModule4Address(address,address,bytes,uint256)": EventFragment;
@@ -813,11 +820,12 @@ export interface AbiInterface extends utils.Interface {
     "SetLinkModule4Profile(uint256,address,bytes,uint256)": EventFragment;
     "SetMintModule4Note(uint256,uint256,address,bytes,uint256)": EventFragment;
     "SetPrimaryProfileId(address,uint256)": EventFragment;
+    "SetProfileUri(uint256,string)": EventFragment;
     "SetSocialToken(address,uint256,address)": EventFragment;
-    "UninkLinklist(uint256,uint256,bytes32,uint256)": EventFragment;
     "UnlinkAddress(uint256,address,bytes32)": EventFragment;
     "UnlinkAny(uint256,string,bytes32)": EventFragment;
     "UnlinkERC721(uint256,address,uint256,bytes32,uint256)": EventFragment;
+    "UnlinkLinklist(uint256,uint256,bytes32,uint256)": EventFragment;
     "UnlinkNote(uint256,uint256,uint256,bytes32,uint256)": EventFragment;
     "UnlinkProfile(address,uint256,uint256,bytes32)": EventFragment;
     "UnlinkProfileLink(uint256,bytes32,uint256,uint256,bytes32)": EventFragment;
@@ -827,7 +835,9 @@ export interface AbiInterface extends utils.Interface {
   getEvent(nameOrSignatureOrTopic: "Approval"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "ApprovalForAll"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Transfer"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "AttachLinklist"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "BaseInitialized"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "DetachLinklist"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "LinkAddress"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "LinkAny"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "LinkERC721"): EventFragment;
@@ -838,6 +848,7 @@ export interface AbiInterface extends utils.Interface {
   getEvent(nameOrSignatureOrTopic: "LinklistNFTInitialized"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "MintNFTInitialized"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "MintNote"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "PostNote"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "ProfileCreated"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "SetHandle"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "SetLinkModule4Address"): EventFragment;
@@ -847,11 +858,12 @@ export interface AbiInterface extends utils.Interface {
   getEvent(nameOrSignatureOrTopic: "SetLinkModule4Profile"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "SetMintModule4Note"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "SetPrimaryProfileId"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "SetProfileUri"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "SetSocialToken"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "UninkLinklist"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "UnlinkAddress"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "UnlinkAny"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "UnlinkERC721"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "UnlinkLinklist"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "UnlinkNote"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "UnlinkProfile"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "UnlinkProfileLink"): EventFragment;
@@ -894,6 +906,18 @@ export type TransferEvent = TypedEvent<
 
 export type TransferEventFilter = TypedEventFilter<TransferEvent>;
 
+export interface AttachLinklistEventObject {
+  linklistId: BigNumber;
+  profileId: BigNumber;
+  linkType: string;
+}
+export type AttachLinklistEvent = TypedEvent<
+  [BigNumber, BigNumber, string],
+  AttachLinklistEventObject
+>;
+
+export type AttachLinklistEventFilter = TypedEventFilter<AttachLinklistEvent>;
+
 export interface BaseInitializedEventObject {
   name: string;
   symbol: string;
@@ -905,6 +929,18 @@ export type BaseInitializedEvent = TypedEvent<
 >;
 
 export type BaseInitializedEventFilter = TypedEventFilter<BaseInitializedEvent>;
+
+export interface DetachLinklistEventObject {
+  linklistId: BigNumber;
+  profileId: BigNumber;
+  linkType: string;
+}
+export type DetachLinklistEvent = TypedEvent<
+  [BigNumber, BigNumber, string],
+  DetachLinklistEventObject
+>;
+
+export type DetachLinklistEventFilter = TypedEventFilter<DetachLinklistEvent>;
 
 export interface LinkAddressEventObject {
   fromProfileId: BigNumber;
@@ -1040,6 +1076,19 @@ export type MintNoteEvent = TypedEvent<
 
 export type MintNoteEventFilter = TypedEventFilter<MintNoteEvent>;
 
+export interface PostNoteEventObject {
+  profileId: BigNumber;
+  noteId: BigNumber;
+  noteWithlink: boolean;
+  timestamp: BigNumber;
+}
+export type PostNoteEvent = TypedEvent<
+  [BigNumber, BigNumber, boolean, BigNumber],
+  PostNoteEventObject
+>;
+
+export type PostNoteEventFilter = TypedEventFilter<PostNoteEvent>;
+
 export interface ProfileCreatedEventObject {
   profileId: BigNumber;
   creator: string;
@@ -1165,6 +1214,17 @@ export type SetPrimaryProfileIdEvent = TypedEvent<
 export type SetPrimaryProfileIdEventFilter =
   TypedEventFilter<SetPrimaryProfileIdEvent>;
 
+export interface SetProfileUriEventObject {
+  profileId: BigNumber;
+  newUri: string;
+}
+export type SetProfileUriEvent = TypedEvent<
+  [BigNumber, string],
+  SetProfileUriEventObject
+>;
+
+export type SetProfileUriEventFilter = TypedEventFilter<SetProfileUriEvent>;
+
 export interface SetSocialTokenEventObject {
   account: string;
   profileId: BigNumber;
@@ -1176,19 +1236,6 @@ export type SetSocialTokenEvent = TypedEvent<
 >;
 
 export type SetSocialTokenEventFilter = TypedEventFilter<SetSocialTokenEvent>;
-
-export interface UninkLinklistEventObject {
-  fromProfileId: BigNumber;
-  toLinklistId: BigNumber;
-  linkType: string;
-  linklistId: BigNumber;
-}
-export type UninkLinklistEvent = TypedEvent<
-  [BigNumber, BigNumber, string, BigNumber],
-  UninkLinklistEventObject
->;
-
-export type UninkLinklistEventFilter = TypedEventFilter<UninkLinklistEvent>;
 
 export interface UnlinkAddressEventObject {
   fromProfileId: BigNumber;
@@ -1227,6 +1274,19 @@ export type UnlinkERC721Event = TypedEvent<
 >;
 
 export type UnlinkERC721EventFilter = TypedEventFilter<UnlinkERC721Event>;
+
+export interface UnlinkLinklistEventObject {
+  fromProfileId: BigNumber;
+  toLinklistId: BigNumber;
+  linkType: string;
+  linklistId: BigNumber;
+}
+export type UnlinkLinklistEvent = TypedEvent<
+  [BigNumber, BigNumber, string, BigNumber],
+  UnlinkLinklistEventObject
+>;
+
+export type UnlinkLinklistEventFilter = TypedEventFilter<UnlinkLinklistEvent>;
 
 export interface UnlinkNoteEventObject {
   fromProfileId: BigNumber;
@@ -1322,6 +1382,11 @@ export interface Abi extends BaseContract {
 
     balanceOf(owner: string, overrides?: CallOverrides): Promise<[BigNumber]>;
 
+    burn(
+      tokenId: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
     createProfile(
       vars: DataTypes.CreateProfileDataStruct,
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -1370,7 +1435,7 @@ export interface Abi extends BaseContract {
       fromProfileId: BigNumberish,
       linkType: BytesLike,
       overrides?: CallOverrides
-    ): Promise<[BigNumber[]]>;
+    ): Promise<[BigNumber[]] & { results: BigNumber[] }>;
 
     getLinklistContract(overrides?: CallOverrides): Promise<[string]>;
 
@@ -1494,7 +1559,7 @@ export interface Abi extends BaseContract {
     ): Promise<[string]>;
 
     postNote(
-      noteData: DataTypes.PostNoteDataStruct,
+      vars: DataTypes.PostNoteDataStruct,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -1741,6 +1806,11 @@ export interface Abi extends BaseContract {
 
   balanceOf(owner: string, overrides?: CallOverrides): Promise<BigNumber>;
 
+  burn(
+    tokenId: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
   createProfile(
     vars: DataTypes.CreateProfileDataStruct,
     overrides?: Overrides & { from?: string | Promise<string> }
@@ -1910,7 +1980,7 @@ export interface Abi extends BaseContract {
   ownerOf(tokenId: BigNumberish, overrides?: CallOverrides): Promise<string>;
 
   postNote(
-    noteData: DataTypes.PostNoteDataStruct,
+    vars: DataTypes.PostNoteDataStruct,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -2154,6 +2224,8 @@ export interface Abi extends BaseContract {
 
     balanceOf(owner: string, overrides?: CallOverrides): Promise<BigNumber>;
 
+    burn(tokenId: BigNumberish, overrides?: CallOverrides): Promise<void>;
+
     createProfile(
       vars: DataTypes.CreateProfileDataStruct,
       overrides?: CallOverrides
@@ -2323,7 +2395,7 @@ export interface Abi extends BaseContract {
     ownerOf(tokenId: BigNumberish, overrides?: CallOverrides): Promise<string>;
 
     postNote(
-      noteData: DataTypes.PostNoteDataStruct,
+      vars: DataTypes.PostNoteDataStruct,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -2590,6 +2662,17 @@ export interface Abi extends BaseContract {
       tokenId?: BigNumberish | null
     ): TransferEventFilter;
 
+    "AttachLinklist(uint256,uint256,bytes32)"(
+      linklistId?: BigNumberish | null,
+      profileId?: BigNumberish | null,
+      linkType?: BytesLike | null
+    ): AttachLinklistEventFilter;
+    AttachLinklist(
+      linklistId?: BigNumberish | null,
+      profileId?: BigNumberish | null,
+      linkType?: BytesLike | null
+    ): AttachLinklistEventFilter;
+
     "BaseInitialized(string,string,uint256)"(
       name?: null,
       symbol?: null,
@@ -2600,6 +2683,17 @@ export interface Abi extends BaseContract {
       symbol?: null,
       timestamp?: null
     ): BaseInitializedEventFilter;
+
+    "DetachLinklist(uint256,uint256,bytes32)"(
+      linklistId?: BigNumberish | null,
+      profileId?: BigNumberish | null,
+      linkType?: BytesLike | null
+    ): DetachLinklistEventFilter;
+    DetachLinklist(
+      linklistId?: BigNumberish | null,
+      profileId?: BigNumberish | null,
+      linkType?: BytesLike | null
+    ): DetachLinklistEventFilter;
 
     "LinkAddress(uint256,address,bytes32,uint256)"(
       fromProfileId?: BigNumberish | null,
@@ -2733,6 +2827,19 @@ export interface Abi extends BaseContract {
       timestamp?: null
     ): MintNoteEventFilter;
 
+    "PostNote(uint256,uint256,bool,uint256)"(
+      profileId?: BigNumberish | null,
+      noteId?: BigNumberish | null,
+      noteWithlink?: null,
+      timestamp?: null
+    ): PostNoteEventFilter;
+    PostNote(
+      profileId?: BigNumberish | null,
+      noteId?: BigNumberish | null,
+      noteWithlink?: null,
+      timestamp?: null
+    ): PostNoteEventFilter;
+
     "ProfileCreated(uint256,address,address,string,uint256)"(
       profileId?: BigNumberish | null,
       creator?: string | null,
@@ -2852,6 +2959,15 @@ export interface Abi extends BaseContract {
       profileId?: BigNumberish | null
     ): SetPrimaryProfileIdEventFilter;
 
+    "SetProfileUri(uint256,string)"(
+      profileId?: BigNumberish | null,
+      newUri?: null
+    ): SetProfileUriEventFilter;
+    SetProfileUri(
+      profileId?: BigNumberish | null,
+      newUri?: null
+    ): SetProfileUriEventFilter;
+
     "SetSocialToken(address,uint256,address)"(
       account?: string | null,
       profileId?: BigNumberish | null,
@@ -2862,19 +2978,6 @@ export interface Abi extends BaseContract {
       profileId?: BigNumberish | null,
       tokenAddress?: string | null
     ): SetSocialTokenEventFilter;
-
-    "UninkLinklist(uint256,uint256,bytes32,uint256)"(
-      fromProfileId?: BigNumberish | null,
-      toLinklistId?: BigNumberish | null,
-      linkType?: null,
-      linklistId?: BigNumberish | null
-    ): UninkLinklistEventFilter;
-    UninkLinklist(
-      fromProfileId?: BigNumberish | null,
-      toLinklistId?: BigNumberish | null,
-      linkType?: null,
-      linklistId?: BigNumberish | null
-    ): UninkLinklistEventFilter;
 
     "UnlinkAddress(uint256,address,bytes32)"(
       fromProfileId?: BigNumberish | null,
@@ -2912,6 +3015,19 @@ export interface Abi extends BaseContract {
       linkType?: null,
       linklistId?: null
     ): UnlinkERC721EventFilter;
+
+    "UnlinkLinklist(uint256,uint256,bytes32,uint256)"(
+      fromProfileId?: BigNumberish | null,
+      toLinklistId?: BigNumberish | null,
+      linkType?: null,
+      linklistId?: BigNumberish | null
+    ): UnlinkLinklistEventFilter;
+    UnlinkLinklist(
+      fromProfileId?: BigNumberish | null,
+      toLinklistId?: BigNumberish | null,
+      linkType?: null,
+      linklistId?: BigNumberish | null
+    ): UnlinkLinklistEventFilter;
 
     "UnlinkNote(uint256,uint256,uint256,bytes32,uint256)"(
       fromProfileId?: BigNumberish | null,
@@ -2976,6 +3092,11 @@ export interface Abi extends BaseContract {
     ): Promise<BigNumber>;
 
     balanceOf(owner: string, overrides?: CallOverrides): Promise<BigNumber>;
+
+    burn(
+      tokenId: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
 
     createProfile(
       vars: DataTypes.CreateProfileDataStruct,
@@ -3149,7 +3270,7 @@ export interface Abi extends BaseContract {
     ): Promise<BigNumber>;
 
     postNote(
-      noteData: DataTypes.PostNoteDataStruct,
+      vars: DataTypes.PostNoteDataStruct,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -3400,6 +3521,11 @@ export interface Abi extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
+    burn(
+      tokenId: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
     createProfile(
       vars: DataTypes.CreateProfileDataStruct,
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -3574,7 +3700,7 @@ export interface Abi extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     postNote(
-      noteData: DataTypes.PostNoteDataStruct,
+      vars: DataTypes.PostNoteDataStruct,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 

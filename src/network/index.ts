@@ -3,10 +3,11 @@ import { ethers } from 'ethers'
 export type IAvailableNetwork = 'rinkeby' | 'crossbell'
 
 export class Network {
-  static #CONTRACT_CROSSBELL = '0x72E0Bc50e94804bC8F6DDdC527c7223D3b352b43'
+  static readonly #CONTRACT_CROSSBELL =
+    '0xa6f969045641Cf486a747A2688F3a5A6d43cd0D8'
 
-  static #currentNetwork: IAvailableNetwork = 'crossbell'
   static readonly #availableNetworks: IAvailableNetwork[] = ['crossbell']
+  static #currentNetwork: IAvailableNetwork = 'crossbell'
 
   /**
    * This returns the current network.
