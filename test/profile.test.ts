@@ -1,3 +1,4 @@
+import { Wallet } from 'ethers'
 import { expect, describe, test, beforeAll } from 'vitest'
 import { Contract } from '../src'
 import {
@@ -6,6 +7,7 @@ import {
   randomHandle2,
   metadataUri,
   metadataUri2,
+  genRandomHandle,
 } from './mock'
 
 const contract = new Contract(mockUser.privateKey)
@@ -42,6 +44,39 @@ describe('profile', () => {
           metadataUri,
         ),
       ).rejects.toThrow(/Invalid handle/)
+    })
+
+    test('check if a profile exists', async () => {
+      const wallet = Wallet.createRandom()
+      const randomAddress = wallet.address
+      const randomHandle = genRandomHandle()
+
+      // not exists if not created
+      const { data: exists } = await contract.existsProfileForAddress(
+        randomAddress,
+      )
+      expect(exists).toBe(false)
+      const { data: exists2 } = await contract.existsProfileForHandle(
+        randomHandle,
+      )
+      expect(exists2).toBe(false)
+
+      // create one
+      const profileId = await contract
+        .createProfile(randomAddress, randomHandle, metadataUri)
+        .then(({ data }) => data)
+
+      expect(profileId).not.toBeNull()
+
+      // should exist now
+      const { data: exists3 } = await contract.existsProfileForAddress(
+        randomAddress,
+      )
+      expect(exists3).toBe(true)
+      const { data: exists4 } = await contract.existsProfileForHandle(
+        randomHandle,
+      )
+      expect(exists4).toBe(true)
     })
 
     test('createProfile and getProfileByTransaction', async () => {

@@ -1,6 +1,6 @@
 {
   "name": "crossbell.js",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "JavaScript SDK to interact with Crossbell",
   "keywords": [
     "crossbell",
@@ -30,7 +30,7 @@
     "build-fast": "tsup",
     "gen-abi-types": "typechain --target ethers-v5 --out-dir ./src/contract/abi/types ./src/contract/abi/abi.json",
     "gen-doc": "typedoc",
-    "prepublishOnly": "npm run build",
+    "prepublishOnly": "npm run gen-doc && npm run build",
     "test": "vitest run",
     "watch": "npm run build-fast -- --watch"
   },

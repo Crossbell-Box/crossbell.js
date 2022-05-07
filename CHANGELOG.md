@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.3.2 (2022-05-07)
+
+- add `contract.existsProfileForAddress()` and `contract.getProfileForAddress()`
+
 ## 0.3.1 (2022-05-07)
 
 - to prevent the confusion with `.eth` suffix, `.` is not allowed in profile handle

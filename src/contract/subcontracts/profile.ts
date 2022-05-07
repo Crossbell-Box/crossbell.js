@@ -246,6 +246,38 @@ export class ProfileContract extends BaseContract {
   }
 
   /**
+   * This checks if a profile exists.
+   * @param address - The address of a user.
+   * @returns A boolean indicating whether the profile exists.
+   */
+  @autoSwitchMainnet()
+  async existsProfileForAddress(
+    address: string,
+  ): Promise<Result<boolean>> | never {
+    const profileId = await this.contract.getPrimaryProfileId(address)
+    const exists = profileId.toString() !== '0'
+    return {
+      data: exists,
+    }
+  }
+
+  /**
+   * This checks if a profile exists.
+   * @param handle - The handle of a profile.
+   * @returns A boolean indicating whether the profile exists.
+   */
+  @autoSwitchMainnet()
+  async existsProfileForHandle(
+    handle: string,
+  ): Promise<Result<boolean>> | never {
+    const data = await this.contract.getProfileByHandle(handle)
+    const exists = data.handle !== ''
+    return {
+      data: exists,
+    }
+  }
+
+  /**
    * This validates if a handle is in a correct format.
    * @param {string} handle - The handle of the profile you want to get the social token for.
    */
