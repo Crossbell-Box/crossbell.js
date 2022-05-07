@@ -2,13 +2,13 @@ import { ethers } from 'ethers'
 import { BaseContract } from './base'
 import { autoSwitchMainnet } from '../decorators'
 import type { LinkProfileEvent, ProfileCreatedEvent } from '../abi/types/Abi'
-import type { Result } from '../types'
+import type { Profile, Result } from '../types'
 
 export class LinkContract extends BaseContract {
   /**
    * This links a profile to another profile with a given link type.
    * @category Link
-   * @param {string} fromProfileId - The profile ID of the profile that is linking to another profile.
+   * @param {string} fromProfileId - The profile ID of the profile that is linking to another profile. Must be your own profile, otherwise it will be rejected.
    * @param {string} toProfileId - The profile ID of the profile you want to link to.
    * @param {string} linkType - The type of link.
    * @returns The linklist id and the transaction hash of the transaction that was sent to the blockchain.
@@ -64,7 +64,7 @@ export class LinkContract extends BaseContract {
    * The new profile's handle will be set to the address of the target address.
    *
    * @category Link
-   * @param {string} fromProfileId - The profile ID of the profile that is creating the new profile.
+   * @param {string} fromProfileId - The profile ID of the profile that is creating the new profile. Must be your own profile, otherwise it will be rejected.
    * @param {string} toAddress - The address of the profile you want to link to.
    * @param {string} linkType - The type of link you want to create. This is a string.
    * @returns The transaction hash of the transaction that was sent to the blockchain, the toProfileId and linklistId.
@@ -138,7 +138,7 @@ export class LinkContract extends BaseContract {
   }
 
   /**
-   * This returns the linked profile ID of a profile with a given link type.
+   * This returns the *attached* linked profile ID of a profile with a given link type.
    * @category Link
    * @param {string} fromProfileId - The profile ID of the profile you want to get the linked profiles from.
    * @param {string} linkType - The type of link you want to get.
@@ -155,6 +155,31 @@ export class LinkContract extends BaseContract {
     )
     return {
       data: linkList.map((link) => link.toNumber().toString()),
+    }
+  }
+
+  /**
+   * This returns the *attached* linked profile of a profile with a given link type.
+   * @category Link
+   * @param {string} fromProfileId - The profile ID of the profile you want to get the linked profiles from.
+   * @param {string} linkType - The type of link you want to get.
+   * @returns An array of profile that are linked to the profile id passed in.
+   */
+  @autoSwitchMainnet()
+  async getLinkingProfiles(
+    fromProfileId: string,
+    linkType: string,
+  ): Promise<Result<Profile[]>> | never {
+    const ids = await this.contract.getLinkingProfileIds(
+      fromProfileId,
+      ethers.utils.formatBytes32String(linkType),
+    )
+    const profiles = await Promise.all(
+      /// @ts-ignore
+      ids.map((ids) => this.getProfile(ids.toString())),
+    )
+    return {
+      data: profiles.map((profile) => profile.data),
     }
   }
 

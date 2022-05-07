@@ -63,18 +63,15 @@ export class BaseContract {
    */
   async connect() {
     if (typeof this._providerOrPrivateKey === 'undefined') {
-      this._signerOrProvider = new ethers.providers.JsonRpcProvider(
-        Network.getJsonRpcAddress(),
-      )
+      const provider = this.getDefaultProvider()
+      this._signerOrProvider = provider
     } else if (typeof this._providerOrPrivateKey === 'string') {
-      this._signerOrProvider = new ethers.Wallet(
-        this._providerOrPrivateKey,
-        new ethers.providers.JsonRpcProvider(Network.getJsonRpcAddress()),
-      )
+      const provider = this.getDefaultProvider()
+      const wallet = new ethers.Wallet(this._providerOrPrivateKey, provider)
+      this._signerOrProvider = wallet
     } else {
-      const provider = new ethers.providers.Web3Provider(
-        this._providerOrPrivateKey,
-      )
+      const provider = this.getExternalProvider(this._providerOrPrivateKey)
+
       try {
         await provider.send('eth_requestAccounts', [])
       } catch (e) {
@@ -95,10 +92,12 @@ export class BaseContract {
       }
       this._signerOrProvider = provider.getSigner()
     }
+
     this.contract = Abi__factory.connect(
       Network.getContractAddress(),
       this._signerOrProvider,
     )
+
     this._hasConnected = true
   }
 
@@ -119,5 +118,25 @@ export class BaseContract {
     const log = _logs[0]
 
     return this.contract.interface.parseLog(log) as unknown as T
+  }
+
+  private getDefaultProvider(): ethers.providers.JsonRpcProvider {
+    const provider = new ethers.providers.JsonRpcProvider(
+      Network.getJsonRpcAddress(),
+    )
+    provider.pollingInterval = 500
+
+    return provider
+  }
+
+  private getExternalProvider(
+    externalProvider:
+      | ethers.providers.ExternalProvider
+      | ethers.providers.JsonRpcFetchFunc,
+  ): ethers.providers.Web3Provider {
+    const provider = new ethers.providers.Web3Provider(externalProvider)
+    provider.pollingInterval = 500
+
+    return provider
   }
 }

@@ -254,8 +254,8 @@ export class ProfileContract extends BaseContract {
       throw new Error(`Invalid handle: handle must be less than 32 characters.`)
     }
 
-    if (!/^[a-z0-9\.\-\_]+$/.test(handle)) {
-      throw new Error(`Invalid handle: handle must only contain [a-z0-9.-_].`)
+    if (!/^[a-z0-9\-\_]+$/.test(handle)) {
+      throw new Error(`Invalid handle: handle must only contain [a-z0-9-_].`)
     }
   }
 }

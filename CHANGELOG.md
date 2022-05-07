@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 0.3.1 (2022-05-07)
+
+- to prevent the confusion with `.eth` suffix, `.` is not allowed in profile handle
+- add `contract.getRevision()` and `contract.checkRevision()`
+
 ## 0.3.0 (2022-04-28)
 
 - BREAKING CHANGE: new contract address

@@ -1,6 +1,8 @@
 # crossbell.js
 
-A JavaScript SDK to interact with the Crossbell.
+A JavaScript SDK to interact with the Crossbell. It works for both browser and Node.js.
+
+[![npm version](https://badgen.net/npm/v/crossbell.js)](https://npm.im/crossbell.js) [![npm downloads](https://badgen.net/npm/dm/crossbell.js)](https://npm.im/crossbell.js)
 
 ## Installation
 
@@ -51,14 +53,14 @@ const contract = new Contract(privateKey)
 await contract.connect()
 ```
 
-### Connect with Ready-Only
+### Connect with Read-Only
 
-You can also connect with a ready-only provider.
+You can also connect with a read-only provider. Note that in this case, you can't do write operations like `createProfile`.
 
 ```typescript
 import { Contract } from 'crossbell.js'
 
-const contract = new Contract() // just pass nothing to use a ready-only provider
+const contract = new Contract() // just pass nothing to use a read-only provider
 
 // Connect to the chain
 await contract.connect()
