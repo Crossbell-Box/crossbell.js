@@ -134,7 +134,8 @@ export class LinkIndexer extends BaseIndexer {
    * @param linkTypes - The types of links you want to fetch. e.g. ['follow']
    * @param options - The options to send to the indexer.
    * @returns The list of links.
-   * @example
+   *
+   * @example Get all followings of a profile
    * ```
    * const links = await indexer.getLinkingProfiles('0x...', ['follow'])
    * const profiles = links.list.map((link) => link.to_detail)
@@ -165,7 +166,8 @@ export class LinkIndexer extends BaseIndexer {
    * @param linkTypes - The types of links you want to fetch. e.g. ['follow']
    * @param options - The options to send to the indexer.
    * @returns The list of links.
-   * @example
+   *
+   * @example Get all followers of a profile
    * ```
    * const links = await indexer.getBacklinkingProfiles('0x...', ['follow'])
    * const profiles = links.list.map((link) => link.to_detail)

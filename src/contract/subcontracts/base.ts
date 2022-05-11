@@ -47,6 +47,31 @@ export class BaseContract {
     this._contract = contract
   }
 
+  /**
+   * This creates a new Contract instance to interact with.
+   * @param providerOrPrivateKey - The provider or private key to connect to the contract.
+   * @returns The Contract instance.
+   *
+   * @example Connect with Metamask
+   * ```
+   * import { Contract } from 'crossbell.js'
+   * const provider = window.ethereum // the metamask provider
+   * const contract = new Contract(provider)
+   * ```
+   *
+   * @example Connect with Private Key
+   * ```
+   * import { Contract } from 'crossbell.js'
+   * const privateKey = '0xabcdef0123456789012345678901234567890123456789012345678901234'
+   * const contract = new Contract(privateKey)
+   * ```
+   *
+   * @example Connect with a Readonly Contract
+   * ```
+   * import { Contract } from 'crossbell.js'
+   * const contract = new Contract() // readonly contract
+   * ```
+   */
   constructor(
     providerOrPrivateKey?:
       | ethers.providers.ExternalProvider
