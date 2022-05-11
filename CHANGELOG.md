@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.3.3 (2022-05-11)
+
+- add `Indexer`.
+
 ## 0.3.2 (2022-05-07)
 
 - add `contract.existsProfileForAddress()` and `contract.getProfileForAddress()`

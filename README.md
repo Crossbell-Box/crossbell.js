@@ -12,7 +12,9 @@ npm install crossbell.js
 
 ## Usage
 
-### Connect with Metamask
+### Contract
+
+#### Connect with Metamask
 
 ```typescript
 import { Contract } from 'crossbell.js'
@@ -38,7 +40,7 @@ try {
 }
 ```
 
-### Connect with Private Key
+#### Connect with Private Key
 
 You can also connect with a private key directly.
 
@@ -53,7 +55,7 @@ const contract = new Contract(privateKey)
 await contract.connect()
 ```
 
-### Connect with Read-Only
+#### Connect with Read-Only
 
 You can also connect with a read-only provider. Note that in this case, you can't do write operations like `createProfile`.
 
@@ -67,3 +69,21 @@ await contract.connect()
 ```
 
 For more contract api, see [docs](https://crossbell-box.github.io/crossbell.js/classes/Contract.html).
+
+### Indexer
+
+You can fetch data from the crossbell indexer.
+
+```typescript
+import { Indexer } from '.crossbell.js'
+
+const indexer = new Indexer()
+
+// get a list of profiles owned by a specific address
+const res = await indexer.getProfiles(
+  '0x1234567890123456789012345678901234567890',
+)
+console.log(res.list)
+```
+
+For more indexer api, see [docs](https://crossbell-box.github.io/crossbell.js/classes/Indexer.html).

@@ -1,6 +1,6 @@
 import { ethers } from 'ethers'
 
-export type IAvailableNetwork = 'rinkeby' | 'crossbell'
+export type IAvailableNetwork = 'crossbell'
 
 export class Network {
   static readonly #CONTRACT_CROSSBELL =
