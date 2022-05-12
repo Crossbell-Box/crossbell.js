@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## 0.3.5 (2022-05-12)
+
+- support websocket rpc url.
+
+## 0.3.4 (2022-05-12)
+
+- fix backlink api issue.
+
 ## 0.3.3 (2022-05-11)
 
 - add `Indexer`.

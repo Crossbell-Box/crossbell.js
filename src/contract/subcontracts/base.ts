@@ -145,13 +145,18 @@ export class BaseContract {
     return this.contract.interface.parseLog(log) as unknown as T
   }
 
-  private getDefaultProvider(): ethers.providers.JsonRpcProvider {
-    const provider = new ethers.providers.JsonRpcProvider(
-      Network.getJsonRpcAddress(),
-    )
-    provider.pollingInterval = 500
-
-    return provider
+  private getDefaultProvider():
+    | ethers.providers.JsonRpcProvider
+    | ethers.providers.WebSocketProvider {
+    const addr = Network.getJsonRpcAddress()
+    if (addr.startsWith('ws')) {
+      const provider = new ethers.providers.WebSocketProvider(addr)
+      return provider
+    } else {
+      const provider = new ethers.providers.JsonRpcProvider(addr)
+      provider.pollingInterval = 100
+      return provider
+    }
   }
 
   private getExternalProvider(
@@ -160,7 +165,7 @@ export class BaseContract {
       | ethers.providers.JsonRpcFetchFunc,
   ): ethers.providers.Web3Provider {
     const provider = new ethers.providers.Web3Provider(externalProvider)
-    provider.pollingInterval = 500
+    provider.pollingInterval = 100
 
     return provider
   }

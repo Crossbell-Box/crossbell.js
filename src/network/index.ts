@@ -8,6 +8,7 @@ export class Network {
 
   static readonly #availableNetworks: IAvailableNetwork[] = ['crossbell']
   static #currentNetwork: IAvailableNetwork = 'crossbell'
+  static jsonRpcAddress = 'https://rpc.crossbell.io'
 
   /**
    * This returns the current network.
@@ -35,16 +36,7 @@ export class Network {
    * @returns The address of the JSON RPC server for the current network.
    */
   static getJsonRpcAddress() {
-    switch (this.#currentNetwork) {
-      // case 'ropsten':
-      //   return 'https://ropsten.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161'
-      // case 'rinkeby':
-      //   return 'https://rinkeby.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161'
-      case 'crossbell':
-        return 'https://rpc.crossbell.io'
-      default:
-        throw new Error(`Network ${this.#currentNetwork} is not available`)
-    }
+    return this.jsonRpcAddress
   }
 
   /**
@@ -52,14 +44,7 @@ export class Network {
    * @returns The contract address for the network that is being used.
    */
   static getContractAddress() {
-    switch (this.getNetwork()) {
-      // case 'rinkeby':
-      //   return this.#CONTRACT_ROPSTEN
-      case 'crossbell':
-        return this.#CONTRACT_CROSSBELL
-      default:
-        throw new Error(`Network ${this.getNetwork()} is not available`)
-    }
+    return this.#CONTRACT_CROSSBELL
   }
 
   /**
