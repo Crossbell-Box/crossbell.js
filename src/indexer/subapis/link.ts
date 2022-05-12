@@ -113,7 +113,7 @@ export class LinkIndexer extends BaseIndexer {
       fromTypes = [fromTypes]
     }
 
-    let url = `${this.endpoint}/${address}/links?`
+    let url = `${this.endpoint}/${address}/backlinks?`
     const params = new URLSearchParams()
     linkTypes.forEach((t) => params.append('link_types', t))
     fromTypes.forEach((t) => params.append('from_types', t))
