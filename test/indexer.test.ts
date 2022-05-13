@@ -23,20 +23,18 @@ describe.concurrent('links', () => {
   })
 
   test.concurrent('getLinkingItems', async () => {
-    const res = await indexer.getLinkingItems(
-      mockUser.address,
-      'follow',
-      'profile',
-    )
+    const res = await indexer.getLinkingItems(mockUser.address, {
+      linkTypes: 'follow',
+      fromTypes: 'profile',
+    })
     expect(res.list).toBeInstanceOf(Array)
   })
 
   test.concurrent('getBacklinkingItems', async () => {
-    const res = await indexer.getBacklinkingItems(
-      mockUser.address,
-      'follow',
-      'profile',
-    )
+    const res = await indexer.getBacklinkingItems(mockUser.address, {
+      linkTypes: 'follow',
+      fromTypes: 'profile',
+    })
     expect(res.list).toBeInstanceOf(Array)
   })
 })

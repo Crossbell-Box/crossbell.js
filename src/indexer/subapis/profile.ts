@@ -25,7 +25,7 @@ export class ProfileIndexer extends BaseIndexer {
       lastIdentifier?: string
     } = {},
   ) {
-    let url = `${this.endpoint}/${address}/profiles?`
+    let url = `${this.endpoint}/addresses/${address}/profiles?`
     const params = new URLSearchParams()
     params.append('limit', limit.toString())
     if (typeof lastIdentifier !== 'undefined') {

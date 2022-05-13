@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.4.0 (2022-05-13)
+
+- Breaking changes to the Indexer API. See more on the docs.
+
 ## 0.3.5 (2022-05-12)
 
 - support websocket rpc url.

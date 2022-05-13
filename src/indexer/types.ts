@@ -65,3 +65,20 @@ export type Link<
   created_at: string
   updated_at: string
 }
+
+export type GetLinkingItemsOptions = {
+  /** E.g. ['follow'] */
+  linkTypes?: string | string[]
+  /** E.g. ['profile'] */
+  fromTypes?: LinkFromToType | LinkFromToType[]
+  /** E.g. ['profile'] */
+  toTypes?: LinkFromToType | LinkFromToType[]
+  /** Restrict what from (token_id) to fetch. */
+  from?: string[]
+  /** Restrict what to (token_id) to fetch. */
+  to?: string[]
+  /** Limit the count of items returned. */
+  limit?: number
+  /** Only returns the links in an attached linklist; true by default. */
+  attached?: boolean
+}
