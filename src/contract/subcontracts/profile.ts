@@ -247,6 +247,7 @@ export class ProfileContract extends BaseContract {
 
   /**
    * This checks if a profile exists.
+   * @category Profile
    * @param address - The address of a user.
    * @returns A boolean indicating whether the profile exists.
    */
@@ -263,6 +264,7 @@ export class ProfileContract extends BaseContract {
 
   /**
    * This checks if a profile exists.
+   * @category Profile
    * @param handle - The handle of a profile.
    * @returns A boolean indicating whether the profile exists.
    */

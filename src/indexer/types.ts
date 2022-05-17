@@ -74,9 +74,9 @@ export type GetLinkingItemsOptions = {
   /** E.g. ['profile'] */
   toTypes?: LinkFromToType | LinkFromToType[]
   /** Restrict what from (token_id) to fetch. */
-  from?: string[]
+  from?: string | string[]
   /** Restrict what to (token_id) to fetch. */
-  to?: string[]
+  to?: string | string[]
   /** Limit the count of items returned. */
   limit?: number
   /** Only returns the links in an attached linklist; true by default. */

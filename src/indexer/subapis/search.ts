@@ -1,5 +1,4 @@
 import { BaseIndexer } from './base'
-import { fetch } from '../fetch'
 import type { ListResponse, ProfileDetail } from '../types'
 
 export class SearchIndexer extends BaseIndexer {

@@ -1,6 +1,7 @@
 import { ethers } from 'ethers'
 import { BaseContract } from './base'
 import { autoSwitchMainnet } from '../decorators'
+import { NIL_ADDRESS } from '../utils'
 import type { LinkProfileEvent, ProfileCreatedEvent } from '../abi/types/Abi'
 import type { Profile, Result } from '../types'
 
@@ -11,6 +12,7 @@ export class LinkContract extends BaseContract {
    * @param {string} fromProfileId - The profile ID of the profile that is linking to another profile. Must be your own profile, otherwise it will be rejected.
    * @param {string} toProfileId - The profile ID of the profile you want to link to.
    * @param {string} linkType - The type of link.
+   * @param {string} data - The data to be passed to the link module if the profile has one.
    * @returns The linklist id and the transaction hash of the transaction that was sent to the blockchain.
    */
   @autoSwitchMainnet()
@@ -18,12 +20,14 @@ export class LinkContract extends BaseContract {
     fromProfileId: string,
     toProfileId: string,
     linkType: string,
+    data?: string,
   ): Promise<Result<string, true>> | never {
-    const tx = await this.contract.linkProfile(
-      fromProfileId,
-      toProfileId,
-      ethers.utils.formatBytes32String(linkType),
-    )
+    const tx = await this.contract.linkProfile({
+      fromProfileId: fromProfileId,
+      toProfileId: toProfileId,
+      linkType: ethers.utils.formatBytes32String(linkType),
+      data: data ?? NIL_ADDRESS,
+    })
 
     const receipt = await tx.wait()
 
@@ -85,11 +89,11 @@ export class LinkContract extends BaseContract {
         >
       >
     | never {
-    const tx = await this.contract.createThenLinkProfile(
-      fromProfileId,
-      toAddress,
-      ethers.utils.formatBytes32String(linkType),
-    )
+    const tx = await this.contract.createThenLinkProfile({
+      fromProfileId: fromProfileId,
+      to: toAddress,
+      linkType: ethers.utils.formatBytes32String(linkType),
+    })
 
     const receipt = await tx.wait()
 
@@ -125,11 +129,11 @@ export class LinkContract extends BaseContract {
     toProfileId: string,
     linkType: string,
   ): Promise<Result<undefined, true>> | never {
-    const tx = await this.contract.unlinkProfile(
-      fromProfileId,
-      toProfileId,
-      ethers.utils.formatBytes32String(linkType),
-    )
+    const tx = await this.contract.unlinkProfile({
+      fromProfileId: fromProfileId,
+      toProfileId: toProfileId,
+      linkType: ethers.utils.formatBytes32String(linkType),
+    })
     const receipt = await tx.wait()
     return {
       data: undefined,

@@ -75,7 +75,7 @@ For more contract api, see [docs](https://crossbell-box.github.io/crossbell.js/c
 You can fetch data from the crossbell indexer.
 
 ```typescript
-import { Indexer } from '.crossbell.js'
+import { Indexer } from 'crossbell.js'
 
 const indexer = new Indexer()
 

@@ -1,5 +1,4 @@
 import { BaseIndexer } from './base'
-import { fetch } from '../fetch'
 import type {
   GetLinkingItemsOptions,
   Link,

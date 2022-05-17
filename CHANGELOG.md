@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## 0.5.1 (2022-05-17)
+
+- fix compatibility with Next.js
+
+## 0.5.0 (2022-05-17)
+
+- Crossbell has breaking changes on `linkProfile` & `unlinkProfile` & `createThenLinkProfile`. This version is to be compatible with the latest version of the ABI. The API usage keeps the same as before.
+
 ## 0.4.0 (2022-05-13)
 
 - Breaking changes to the Indexer API. See more on the docs.

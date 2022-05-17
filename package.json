@@ -1,6 +1,6 @@
 {
   "name": "crossbell.js",
-  "version": "0.4.0",
+  "version": "0.5.1",
   "description": "JavaScript SDK to interact with Crossbell",
   "keywords": [
     "crossbell",
@@ -28,26 +28,25 @@
   "scripts": {
     "build": "npm run build-fast -- --dts-resolve",
     "build-fast": "tsup",
-    "gen-abi-types": "typechain --target ethers-v5 --out-dir ./src/contract/abi/types ./src/contract/abi/abi.json",
+    "update-abi": "node ./scripts/update-abi.js",
     "gen-doc": "typedoc",
     "prepublishOnly": "npm run gen-doc && npm run build",
     "test": "vitest run",
     "watch": "npm run build-fast -- --watch"
   },
   "dependencies": {
-    "browser-or-node": "^2.0.0",
     "ethers": "^5.6.3",
-    "ts-mixer": "^6.0.1"
+    "ts-mixer": "^6.0.1",
+    "undici": "^5.2.0"
   },
   "devDependencies": {
     "@typechain/ethers-v5": "^10.0.0",
     "@types/node": "^17.0.24",
     "prettier": "^2.6.0",
-    "tsup": "^5.12.1",
+    "tsup": "^5.12.8",
     "typechain": "^8.0.0",
     "typedoc": "^0.22.15",
     "typescript": "^4.6.3",
-    "undici": "^5.0.0",
     "vitest": "^0.9.3"
   },
   "publishConfig": {
