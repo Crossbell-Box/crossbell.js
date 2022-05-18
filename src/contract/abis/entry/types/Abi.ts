@@ -63,7 +63,6 @@ export declare namespace DataTypes {
 
   export type NoteStruct = {
     linkItemType: BytesLike;
-    linklistId: BigNumberish;
     linkKey: BytesLike;
     contentUri: string;
     linkModule: string;
@@ -74,7 +73,6 @@ export declare namespace DataTypes {
 
   export type NoteStructOutput = [
     string,
-    BigNumber,
     string,
     string,
     string,
@@ -83,7 +81,6 @@ export declare namespace DataTypes {
     boolean
   ] & {
     linkItemType: string;
-    linklistId: BigNumber;
     linkKey: string;
     contentUri: string;
     linkModule: string;
@@ -482,12 +479,12 @@ export interface AbiInterface extends utils.Interface {
     "name()": FunctionFragment;
     "ownerOf(uint256)": FunctionFragment;
     "postNote((uint256,string,address,bytes,address,bytes))": FunctionFragment;
-    "postNote4AddressLink((uint256,string,address,bytes,address,bytes),uint256,address,bytes32)": FunctionFragment;
-    "postNote4AnyLink((uint256,string,address,bytes,address,bytes),uint256,string,bytes32)": FunctionFragment;
-    "postNote4ERC721Link((uint256,string,address,bytes,address,bytes),uint256,address,uint256,bytes32)": FunctionFragment;
-    "postNote4LinklistLink((uint256,string,address,bytes,address,bytes),uint256,uint256,bytes32)": FunctionFragment;
-    "postNote4NoteLink((uint256,string,address,bytes,address,bytes),uint256,uint256,uint256,bytes32)": FunctionFragment;
-    "postNote4ProfileLink((uint256,string,address,bytes,address,bytes),uint256,uint256,bytes32)": FunctionFragment;
+    "postNote4AddressLink((uint256,string,address,bytes,address,bytes),(uint256,address,bytes32,bytes))": FunctionFragment;
+    "postNote4AnyLink((uint256,string,address,bytes,address,bytes),(uint256,string,bytes32,bytes))": FunctionFragment;
+    "postNote4ERC721Link((uint256,string,address,bytes,address,bytes),(uint256,address,uint256,bytes32,bytes))": FunctionFragment;
+    "postNote4LinklistLink((uint256,string,address,bytes,address,bytes),(uint256,uint256,bytes32,bytes))": FunctionFragment;
+    "postNote4NoteLink((uint256,string,address,bytes,address,bytes),(uint256,uint256,uint256,bytes32,bytes))": FunctionFragment;
+    "postNote4ProfileLink((uint256,string,address,bytes,address,bytes),(uint256,uint256,bytes32,bytes))": FunctionFragment;
     "safeTransferFrom(address,address,uint256)": FunctionFragment;
     "safeTransferFrom(address,address,uint256,bytes)": FunctionFragment;
     "setApprovalForAll(address,bool)": FunctionFragment;
@@ -729,49 +726,27 @@ export interface AbiInterface extends utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "postNote4AddressLink",
-    values: [DataTypes.PostNoteDataStruct, BigNumberish, string, BytesLike]
+    values: [DataTypes.PostNoteDataStruct, DataTypes.LinkAddressDataStruct]
   ): string;
   encodeFunctionData(
     functionFragment: "postNote4AnyLink",
-    values: [DataTypes.PostNoteDataStruct, BigNumberish, string, BytesLike]
+    values: [DataTypes.PostNoteDataStruct, DataTypes.LinkAnyDataStruct]
   ): string;
   encodeFunctionData(
     functionFragment: "postNote4ERC721Link",
-    values: [
-      DataTypes.PostNoteDataStruct,
-      BigNumberish,
-      string,
-      BigNumberish,
-      BytesLike
-    ]
+    values: [DataTypes.PostNoteDataStruct, DataTypes.LinkERC721DataStruct]
   ): string;
   encodeFunctionData(
     functionFragment: "postNote4LinklistLink",
-    values: [
-      DataTypes.PostNoteDataStruct,
-      BigNumberish,
-      BigNumberish,
-      BytesLike
-    ]
+    values: [DataTypes.PostNoteDataStruct, DataTypes.LinkLinklistDataStruct]
   ): string;
   encodeFunctionData(
     functionFragment: "postNote4NoteLink",
-    values: [
-      DataTypes.PostNoteDataStruct,
-      BigNumberish,
-      BigNumberish,
-      BigNumberish,
-      BytesLike
-    ]
+    values: [DataTypes.PostNoteDataStruct, DataTypes.LinkNoteDataStruct]
   ): string;
   encodeFunctionData(
     functionFragment: "postNote4ProfileLink",
-    values: [
-      DataTypes.PostNoteDataStruct,
-      BigNumberish,
-      BigNumberish,
-      BytesLike
-    ]
+    values: [DataTypes.PostNoteDataStruct, DataTypes.LinkProfileDataStruct]
   ): string;
   encodeFunctionData(
     functionFragment: "safeTransferFrom(address,address,uint256)",
@@ -1863,51 +1838,37 @@ export interface Abi extends BaseContract {
 
     postNote4AddressLink(
       noteData: DataTypes.PostNoteDataStruct,
-      fromProfileId: BigNumberish,
-      ethAddress: string,
-      linkType: BytesLike,
+      linkData: DataTypes.LinkAddressDataStruct,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
     postNote4AnyLink(
       noteData: DataTypes.PostNoteDataStruct,
-      fromProfileId: BigNumberish,
-      toUri: string,
-      linkType: BytesLike,
+      linkData: DataTypes.LinkAnyDataStruct,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
     postNote4ERC721Link(
       noteData: DataTypes.PostNoteDataStruct,
-      fromProfileId: BigNumberish,
-      tokenAddress: string,
-      tokenId: BigNumberish,
-      linkType: BytesLike,
+      linkData: DataTypes.LinkERC721DataStruct,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
     postNote4LinklistLink(
       noteData: DataTypes.PostNoteDataStruct,
-      fromProfileId: BigNumberish,
-      toLinkListId: BigNumberish,
-      linkType: BytesLike,
+      linkData: DataTypes.LinkLinklistDataStruct,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
     postNote4NoteLink(
       noteData: DataTypes.PostNoteDataStruct,
-      fromProfileId: BigNumberish,
-      toProfileId: BigNumberish,
-      toNoteId: BigNumberish,
-      linkType: BytesLike,
+      linkData: DataTypes.LinkNoteDataStruct,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
     postNote4ProfileLink(
       noteData: DataTypes.PostNoteDataStruct,
-      fromProfileId: BigNumberish,
-      toProfileId: BigNumberish,
-      linkType: BytesLike,
+      linkData: DataTypes.LinkProfileDataStruct,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -2242,51 +2203,37 @@ export interface Abi extends BaseContract {
 
   postNote4AddressLink(
     noteData: DataTypes.PostNoteDataStruct,
-    fromProfileId: BigNumberish,
-    ethAddress: string,
-    linkType: BytesLike,
+    linkData: DataTypes.LinkAddressDataStruct,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   postNote4AnyLink(
     noteData: DataTypes.PostNoteDataStruct,
-    fromProfileId: BigNumberish,
-    toUri: string,
-    linkType: BytesLike,
+    linkData: DataTypes.LinkAnyDataStruct,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   postNote4ERC721Link(
     noteData: DataTypes.PostNoteDataStruct,
-    fromProfileId: BigNumberish,
-    tokenAddress: string,
-    tokenId: BigNumberish,
-    linkType: BytesLike,
+    linkData: DataTypes.LinkERC721DataStruct,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   postNote4LinklistLink(
     noteData: DataTypes.PostNoteDataStruct,
-    fromProfileId: BigNumberish,
-    toLinkListId: BigNumberish,
-    linkType: BytesLike,
+    linkData: DataTypes.LinkLinklistDataStruct,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   postNote4NoteLink(
     noteData: DataTypes.PostNoteDataStruct,
-    fromProfileId: BigNumberish,
-    toProfileId: BigNumberish,
-    toNoteId: BigNumberish,
-    linkType: BytesLike,
+    linkData: DataTypes.LinkNoteDataStruct,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   postNote4ProfileLink(
     noteData: DataTypes.PostNoteDataStruct,
-    fromProfileId: BigNumberish,
-    toProfileId: BigNumberish,
-    linkType: BytesLike,
+    linkData: DataTypes.LinkProfileDataStruct,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -2615,51 +2562,37 @@ export interface Abi extends BaseContract {
 
     postNote4AddressLink(
       noteData: DataTypes.PostNoteDataStruct,
-      fromProfileId: BigNumberish,
-      ethAddress: string,
-      linkType: BytesLike,
+      linkData: DataTypes.LinkAddressDataStruct,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     postNote4AnyLink(
       noteData: DataTypes.PostNoteDataStruct,
-      fromProfileId: BigNumberish,
-      toUri: string,
-      linkType: BytesLike,
+      linkData: DataTypes.LinkAnyDataStruct,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     postNote4ERC721Link(
       noteData: DataTypes.PostNoteDataStruct,
-      fromProfileId: BigNumberish,
-      tokenAddress: string,
-      tokenId: BigNumberish,
-      linkType: BytesLike,
+      linkData: DataTypes.LinkERC721DataStruct,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     postNote4LinklistLink(
       noteData: DataTypes.PostNoteDataStruct,
-      fromProfileId: BigNumberish,
-      toLinkListId: BigNumberish,
-      linkType: BytesLike,
+      linkData: DataTypes.LinkLinklistDataStruct,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     postNote4NoteLink(
       noteData: DataTypes.PostNoteDataStruct,
-      fromProfileId: BigNumberish,
-      toProfileId: BigNumberish,
-      toNoteId: BigNumberish,
-      linkType: BytesLike,
+      linkData: DataTypes.LinkNoteDataStruct,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     postNote4ProfileLink(
       noteData: DataTypes.PostNoteDataStruct,
-      fromProfileId: BigNumberish,
-      toProfileId: BigNumberish,
-      linkType: BytesLike,
+      linkData: DataTypes.LinkProfileDataStruct,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -3448,51 +3381,37 @@ export interface Abi extends BaseContract {
 
     postNote4AddressLink(
       noteData: DataTypes.PostNoteDataStruct,
-      fromProfileId: BigNumberish,
-      ethAddress: string,
-      linkType: BytesLike,
+      linkData: DataTypes.LinkAddressDataStruct,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     postNote4AnyLink(
       noteData: DataTypes.PostNoteDataStruct,
-      fromProfileId: BigNumberish,
-      toUri: string,
-      linkType: BytesLike,
+      linkData: DataTypes.LinkAnyDataStruct,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     postNote4ERC721Link(
       noteData: DataTypes.PostNoteDataStruct,
-      fromProfileId: BigNumberish,
-      tokenAddress: string,
-      tokenId: BigNumberish,
-      linkType: BytesLike,
+      linkData: DataTypes.LinkERC721DataStruct,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     postNote4LinklistLink(
       noteData: DataTypes.PostNoteDataStruct,
-      fromProfileId: BigNumberish,
-      toLinkListId: BigNumberish,
-      linkType: BytesLike,
+      linkData: DataTypes.LinkLinklistDataStruct,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     postNote4NoteLink(
       noteData: DataTypes.PostNoteDataStruct,
-      fromProfileId: BigNumberish,
-      toProfileId: BigNumberish,
-      toNoteId: BigNumberish,
-      linkType: BytesLike,
+      linkData: DataTypes.LinkNoteDataStruct,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     postNote4ProfileLink(
       noteData: DataTypes.PostNoteDataStruct,
-      fromProfileId: BigNumberish,
-      toProfileId: BigNumberish,
-      linkType: BytesLike,
+      linkData: DataTypes.LinkProfileDataStruct,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -3836,51 +3755,37 @@ export interface Abi extends BaseContract {
 
     postNote4AddressLink(
       noteData: DataTypes.PostNoteDataStruct,
-      fromProfileId: BigNumberish,
-      ethAddress: string,
-      linkType: BytesLike,
+      linkData: DataTypes.LinkAddressDataStruct,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     postNote4AnyLink(
       noteData: DataTypes.PostNoteDataStruct,
-      fromProfileId: BigNumberish,
-      toUri: string,
-      linkType: BytesLike,
+      linkData: DataTypes.LinkAnyDataStruct,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     postNote4ERC721Link(
       noteData: DataTypes.PostNoteDataStruct,
-      fromProfileId: BigNumberish,
-      tokenAddress: string,
-      tokenId: BigNumberish,
-      linkType: BytesLike,
+      linkData: DataTypes.LinkERC721DataStruct,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     postNote4LinklistLink(
       noteData: DataTypes.PostNoteDataStruct,
-      fromProfileId: BigNumberish,
-      toLinkListId: BigNumberish,
-      linkType: BytesLike,
+      linkData: DataTypes.LinkLinklistDataStruct,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     postNote4NoteLink(
       noteData: DataTypes.PostNoteDataStruct,
-      fromProfileId: BigNumberish,
-      toProfileId: BigNumberish,
-      toNoteId: BigNumberish,
-      linkType: BytesLike,
+      linkData: DataTypes.LinkNoteDataStruct,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     postNote4ProfileLink(
       noteData: DataTypes.PostNoteDataStruct,
-      fromProfileId: BigNumberish,
-      toProfileId: BigNumberish,
-      linkType: BytesLike,
+      linkData: DataTypes.LinkProfileDataStruct,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 

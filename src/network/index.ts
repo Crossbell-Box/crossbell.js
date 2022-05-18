@@ -5,10 +5,13 @@ export type IAvailableNetwork = 'crossbell'
 export class Network {
   static readonly #CONTRACT_CROSSBELL =
     '0xa6f969045641Cf486a747A2688F3a5A6d43cd0D8'
+  static readonly #CONTRACT_CROSSBELL_PERIPHERY =
+    '0x96e96b7af62d628ce7eb2016d2c1d2786614ea73'
 
   static readonly #availableNetworks: IAvailableNetwork[] = ['crossbell']
   static #currentNetwork: IAvailableNetwork = 'crossbell'
-  static jsonRpcAddress = 'https://rpc.crossbell.io'
+  static jsonRpcAddress =
+    process.env.CROSSBELL_RPC_ADDRESS ?? 'https://rpc.crossbell.io'
 
   /**
    * This returns the current network.
@@ -40,11 +43,19 @@ export class Network {
   }
 
   /**
-   * This returns the contract address of the network that the user is currently connected to
-   * @returns The contract address for the network that is being used.
+   * This returns the contract address of the main contract
+   * @returns The contract address of the main contract
    */
   static getContractAddress() {
     return this.#CONTRACT_CROSSBELL
+  }
+
+  /**
+   * This returns the contract address of the peripheral contract
+   * @returns The contract address of the peripheral contract
+   */
+  static getPeripheryContractAddress() {
+    return this.#CONTRACT_CROSSBELL_PERIPHERY
   }
 
   /**

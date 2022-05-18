@@ -6,7 +6,7 @@ import type {
   Linklist,
   ListResponse,
   ProfileDetail,
-} from '../types'
+} from '../../types/indexer'
 
 export class LinkIndexer extends BaseIndexer {
   /** linklists */

@@ -1,0 +1,68 @@
+[
+  {
+    "inputs": [
+      {
+        "internalType": "contract IWeb3Entry",
+        "name": "_web3Entry",
+        "type": "address"
+      }
+    ],
+    "name": "initialize",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "fromProfileId",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256[]",
+            "name": "toProfileIds",
+            "type": "uint256[]"
+          },
+          {
+            "internalType": "bytes[]",
+            "name": "data",
+            "type": "bytes[]"
+          },
+          {
+            "internalType": "address[]",
+            "name": "toAddresses",
+            "type": "address[]"
+          },
+          {
+            "internalType": "bytes32",
+            "name": "linkType",
+            "type": "bytes32"
+          }
+        ],
+        "internalType": "struct DataTypes.linkProfilesInBatchData",
+        "name": "vars",
+        "type": "tuple"
+      }
+    ],
+    "name": "linkProfilesInBatch",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "web3Entry",
+    "outputs": [
+      {
+        "internalType": "contract IWeb3Entry",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  }
+]

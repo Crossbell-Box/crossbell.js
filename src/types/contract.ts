@@ -1,3 +1,5 @@
+import { ProfileMetadata } from './metadata'
+
 /**
  * The result of a call to a transaction / get function.
  */
@@ -16,4 +18,5 @@ export type Profile = {
   uri: string
   socialToken: string
   noteCount: number
+  metadata?: ProfileMetadata
 }

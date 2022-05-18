@@ -440,11 +440,6 @@ const _abi = [
             type: "bytes32",
           },
           {
-            internalType: "uint256",
-            name: "linklistId",
-            type: "uint256",
-          },
-          {
             internalType: "bytes32",
             name: "linkKey",
             type: "bytes32",
@@ -1131,19 +1126,31 @@ const _abi = [
         type: "tuple",
       },
       {
-        internalType: "uint256",
-        name: "fromProfileId",
-        type: "uint256",
-      },
-      {
-        internalType: "address",
-        name: "ethAddress",
-        type: "address",
-      },
-      {
-        internalType: "bytes32",
-        name: "linkType",
-        type: "bytes32",
+        components: [
+          {
+            internalType: "uint256",
+            name: "fromProfileId",
+            type: "uint256",
+          },
+          {
+            internalType: "address",
+            name: "ethAddress",
+            type: "address",
+          },
+          {
+            internalType: "bytes32",
+            name: "linkType",
+            type: "bytes32",
+          },
+          {
+            internalType: "bytes",
+            name: "data",
+            type: "bytes",
+          },
+        ],
+        internalType: "struct DataTypes.linkAddressData",
+        name: "linkData",
+        type: "tuple",
       },
     ],
     name: "postNote4AddressLink",
@@ -1197,19 +1204,31 @@ const _abi = [
         type: "tuple",
       },
       {
-        internalType: "uint256",
-        name: "fromProfileId",
-        type: "uint256",
-      },
-      {
-        internalType: "string",
-        name: "toUri",
-        type: "string",
-      },
-      {
-        internalType: "bytes32",
-        name: "linkType",
-        type: "bytes32",
+        components: [
+          {
+            internalType: "uint256",
+            name: "fromProfileId",
+            type: "uint256",
+          },
+          {
+            internalType: "string",
+            name: "toUri",
+            type: "string",
+          },
+          {
+            internalType: "bytes32",
+            name: "linkType",
+            type: "bytes32",
+          },
+          {
+            internalType: "bytes",
+            name: "data",
+            type: "bytes",
+          },
+        ],
+        internalType: "struct DataTypes.linkAnyData",
+        name: "linkData",
+        type: "tuple",
       },
     ],
     name: "postNote4AnyLink",
@@ -1263,24 +1282,36 @@ const _abi = [
         type: "tuple",
       },
       {
-        internalType: "uint256",
-        name: "fromProfileId",
-        type: "uint256",
-      },
-      {
-        internalType: "address",
-        name: "tokenAddress",
-        type: "address",
-      },
-      {
-        internalType: "uint256",
-        name: "tokenId",
-        type: "uint256",
-      },
-      {
-        internalType: "bytes32",
-        name: "linkType",
-        type: "bytes32",
+        components: [
+          {
+            internalType: "uint256",
+            name: "fromProfileId",
+            type: "uint256",
+          },
+          {
+            internalType: "address",
+            name: "tokenAddress",
+            type: "address",
+          },
+          {
+            internalType: "uint256",
+            name: "tokenId",
+            type: "uint256",
+          },
+          {
+            internalType: "bytes32",
+            name: "linkType",
+            type: "bytes32",
+          },
+          {
+            internalType: "bytes",
+            name: "data",
+            type: "bytes",
+          },
+        ],
+        internalType: "struct DataTypes.linkERC721Data",
+        name: "linkData",
+        type: "tuple",
       },
     ],
     name: "postNote4ERC721Link",
@@ -1334,19 +1365,31 @@ const _abi = [
         type: "tuple",
       },
       {
-        internalType: "uint256",
-        name: "fromProfileId",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "toLinkListId",
-        type: "uint256",
-      },
-      {
-        internalType: "bytes32",
-        name: "linkType",
-        type: "bytes32",
+        components: [
+          {
+            internalType: "uint256",
+            name: "fromProfileId",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "toLinkListId",
+            type: "uint256",
+          },
+          {
+            internalType: "bytes32",
+            name: "linkType",
+            type: "bytes32",
+          },
+          {
+            internalType: "bytes",
+            name: "data",
+            type: "bytes",
+          },
+        ],
+        internalType: "struct DataTypes.linkLinklistData",
+        name: "linkData",
+        type: "tuple",
       },
     ],
     name: "postNote4LinklistLink",
@@ -1400,24 +1443,36 @@ const _abi = [
         type: "tuple",
       },
       {
-        internalType: "uint256",
-        name: "fromProfileId",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "toProfileId",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "toNoteId",
-        type: "uint256",
-      },
-      {
-        internalType: "bytes32",
-        name: "linkType",
-        type: "bytes32",
+        components: [
+          {
+            internalType: "uint256",
+            name: "fromProfileId",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "toProfileId",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "toNoteId",
+            type: "uint256",
+          },
+          {
+            internalType: "bytes32",
+            name: "linkType",
+            type: "bytes32",
+          },
+          {
+            internalType: "bytes",
+            name: "data",
+            type: "bytes",
+          },
+        ],
+        internalType: "struct DataTypes.linkNoteData",
+        name: "linkData",
+        type: "tuple",
       },
     ],
     name: "postNote4NoteLink",
@@ -1471,19 +1526,31 @@ const _abi = [
         type: "tuple",
       },
       {
-        internalType: "uint256",
-        name: "fromProfileId",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "toProfileId",
-        type: "uint256",
-      },
-      {
-        internalType: "bytes32",
-        name: "linkType",
-        type: "bytes32",
+        components: [
+          {
+            internalType: "uint256",
+            name: "fromProfileId",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "toProfileId",
+            type: "uint256",
+          },
+          {
+            internalType: "bytes32",
+            name: "linkType",
+            type: "bytes32",
+          },
+          {
+            internalType: "bytes",
+            name: "data",
+            type: "bytes",
+          },
+        ],
+        internalType: "struct DataTypes.linkProfileData",
+        name: "linkData",
+        type: "tuple",
       },
     ],
     name: "postNote4ProfileLink",

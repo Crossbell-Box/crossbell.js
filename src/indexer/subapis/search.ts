@@ -1,5 +1,5 @@
 import { BaseIndexer } from './base'
-import type { ListResponse, ProfileDetail } from '../types'
+import type { ListResponse, ProfileDetail } from '../../types/indexer'
 
 export class SearchIndexer extends BaseIndexer {
   /**

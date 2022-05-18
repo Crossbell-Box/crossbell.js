@@ -2,8 +2,11 @@ import { ethers } from 'ethers'
 import { BaseContract } from './base'
 import { autoSwitchMainnet } from '../decorators'
 import { NIL_ADDRESS } from '../utils'
-import type { LinkProfileEvent, ProfileCreatedEvent } from '../abi/types/Abi'
-import type { Profile, Result } from '../types'
+import type {
+  LinkProfileEvent,
+  ProfileCreatedEvent,
+} from '../abis/entry/types/Abi'
+import type { Profile, Result } from '../../types/contract'
 
 export class LinkContract extends BaseContract {
   /**
@@ -27,6 +30,45 @@ export class LinkContract extends BaseContract {
       toProfileId: toProfileId,
       linkType: ethers.utils.formatBytes32String(linkType),
       data: data ?? NIL_ADDRESS,
+    })
+
+    const receipt = await tx.wait()
+
+    const parser = this.parseLog<LinkProfileEvent>(receipt.logs, 'linkProfile')
+
+    return {
+      data: parser.args.linklistId.toString(),
+      transactionHash: receipt.transactionHash,
+    }
+  }
+
+  /**
+   * This links a profile to multiple profiles with a given link type in batch.
+   *
+   * This could be considered a bulk version of {@link linkProfile} & {@link createThenLinkProfile}
+   *
+   * @category Link
+   * @param {string} fromProfileId - The profile ID of the profile that is linking to another profile. Must be your own profile, otherwise it will be rejected.
+   * @param {string} toProfileIds - The profile IDs of the profile you want to link to.
+   * @param {string} toAddresses - The addresses of the profiles you want to link to (who don't have a profile). See more on {@link createThenLinkProfile}
+   * @param {string} linkType - The type of link.
+   * @param {string} data - The data to be passed to the link module if the profile has one. It should has the same length as `toProfileIds`.
+   * @returns The linklist id and the transaction hash of the transaction that was sent to the blockchain.
+   */
+  @autoSwitchMainnet()
+  async linkProfilesInBatch(
+    fromProfileId: string,
+    toProfileIds: string[],
+    toAddresses: string[],
+    linkType: string,
+    data?: string[],
+  ): Promise<Result<string, true>> | never {
+    const tx = await this.peripheryContract.linkProfilesInBatch({
+      fromProfileId: fromProfileId,
+      toProfileIds,
+      toAddresses,
+      linkType: ethers.utils.formatBytes32String(linkType),
+      data: data ?? toProfileIds.map(() => NIL_ADDRESS),
     })
 
     const receipt = await tx.wait()

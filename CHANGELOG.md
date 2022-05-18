@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 0.5.2 (2022-05-18)
+
+- New APIs
+  - `contract.setProfileMetadata()`, `contract.changeProfileMetadata()`.
+  - `contract.linkProfilesInBatch()`
+  - `Ipfs.uploadJson()` for metadata uploading.
+
 ## 0.5.1 (2022-05-17)
 
 - fix compatibility with Next.js

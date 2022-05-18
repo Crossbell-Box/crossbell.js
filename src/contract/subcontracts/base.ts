@@ -1,6 +1,13 @@
 import { ethers } from 'ethers'
 import { Network } from '../../network'
-import { type Abi, Abi__factory } from '../abi/types'
+import {
+  type Abi as EntryAbi,
+  Abi__factory as EntryAbi__factory,
+} from '../abis/entry/types'
+import {
+  type Abi as PeripheryAbi,
+  Abi__factory as PeripheryAbi__factory,
+} from '../abis/periphery/types'
 
 const logTopics = {
   linkProfile:
@@ -16,34 +23,28 @@ export class BaseContract {
     | string
   private _signerOrProvider!: ethers.Signer | ethers.providers.Provider
 
-  private _contract!: Abi
+  private _contract!: EntryAbi
+  private _peripheryContract!: PeripheryAbi
 
   private _hasConnected: boolean = false
 
-  protected get contract(): Abi {
-    if (!this._hasConnected) {
-      throw new Error(
-        'Contract not connected. Please call contract.connect() first.',
-      )
-    }
-
-    // if (this._signerOrProvider instanceof ethers.providers.Web3Provider) {
-    //   if (
-    //     this._signerOrProvider.network.chainId !==
-    //     Network.getCrossbellNetworkInfo().chainId
-    //   ) {
-    //     throw new Error(
-    //       `Wrong network. Expected ${
-    //         Network.getCrossbellNetworkInfo().chainId
-    //       } but got ${this._signerOrProvider.network.chainId}`,
-    //     )
-    //   }
-    // }
+  protected get contract(): EntryAbi {
+    this.checkConnection()
 
     return this._contract
   }
 
-  protected set contract(contract: Abi) {
+  protected set peripheryContract(contract: PeripheryAbi) {
+    this._peripheryContract = contract
+  }
+
+  protected get peripheryContract(): PeripheryAbi {
+    this.checkConnection()
+
+    return this._peripheryContract
+  }
+
+  protected set contract(contract: EntryAbi) {
     this._contract = contract
   }
 
@@ -118,8 +119,13 @@ export class BaseContract {
       this._signerOrProvider = provider.getSigner()
     }
 
-    this.contract = Abi__factory.connect(
+    this.contract = EntryAbi__factory.connect(
       Network.getContractAddress(),
+      this._signerOrProvider,
+    )
+
+    this.peripheryContract = PeripheryAbi__factory.connect(
+      Network.getPeripheryContractAddress(),
       this._signerOrProvider,
     )
 
@@ -168,5 +174,26 @@ export class BaseContract {
     provider.pollingInterval = 100
 
     return provider
+  }
+
+  private checkConnection() {
+    if (!this._hasConnected) {
+      throw new Error(
+        'Contract not connected. Please call contract.connect() first.',
+      )
+    }
+
+    // if (this._signerOrProvider instanceof ethers.providers.Web3Provider) {
+    //   if (
+    //     this._signerOrProvider.network.chainId !==
+    //     Network.getCrossbellNetworkInfo().chainId
+    //   ) {
+    //     throw new Error(
+    //       `Wrong network. Expected ${
+    //         Network.getCrossbellNetworkInfo().chainId
+    //       } but got ${this._signerOrProvider.network.chainId}`,
+    //     )
+    //   }
+    // }
   }
 }

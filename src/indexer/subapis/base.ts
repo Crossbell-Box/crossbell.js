@@ -1,4 +1,4 @@
-import '../fetch'
+import '../../utils/fetch'
 
 export class BaseIndexer {
   /** The indexer endpoint */

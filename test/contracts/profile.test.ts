@@ -1,6 +1,6 @@
 import { Wallet } from 'ethers'
 import { expect, describe, test, beforeAll } from 'vitest'
-import { Contract } from '../src'
+import { Contract } from '../../src'
 import {
   mockUser,
   randomHandle,
@@ -8,7 +8,7 @@ import {
   metadataUri,
   metadataUri2,
   genRandomHandle,
-} from './mock'
+} from '../mock'
 
 const contract = new Contract(mockUser.privateKey)
 
@@ -149,6 +149,34 @@ describe('profile', () => {
     test('getMetadataUri', async () => {
       const { data } = await contract.getProfileUri(profileId!)
       expect(data).toBe(metadataUri2)
+    })
+  })
+
+  describe('change profile metadata and check', () => {
+    test('setProfileMetadata', async () => {
+      await contract.setProfileMetadata(profileId!, {
+        name: 'test-name',
+        bio: 'test-bio',
+      })
+
+      const { data } = await contract.getProfile(profileId!)
+
+      expect(data.metadata?.name).toBe('test-name')
+      expect(data.metadata?.bio).toBe('test-bio')
+    })
+
+    test('changeProfileMetadata', async () => {
+      await contract.changeProfileMetadata(profileId!, (metadata) => {
+        metadata = {
+          ...metadata,
+          name: 'test-name-2',
+        }
+        return metadata
+      })
+      const { data } = await contract.getProfile(profileId!)
+
+      expect(data.metadata?.name).toBe('test-name-2')
+      expect(data.metadata?.bio).toBe('test-bio')
     })
   })
 })

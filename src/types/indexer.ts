@@ -1,12 +1,12 @@
-export type LinkFromToType = 'profile' | 'erc721' | 'note' | 'any'
-
-export type LinkFromToDetails = ProfileDetail | undefined
-
 export type ListResponse<T> = {
   updated_at: string
   total: number
   list: T[]
 }
+
+export type LinkFromToType = 'profile' | 'erc721' | 'note' | 'any'
+
+export type LinkFromToDetails = ProfileDetail | undefined
 
 export type ProfileDetail = {
   token_id: string

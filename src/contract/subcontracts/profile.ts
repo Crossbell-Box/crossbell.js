@@ -1,8 +1,10 @@
 import { NIL_ADDRESS } from '../utils'
 import { BaseContract } from './base'
 import { autoSwitchMainnet } from '../decorators'
-import type { ProfileCreatedEvent } from '../abi/types/Abi'
-import type { Result, Profile } from '../types'
+import type { ProfileCreatedEvent } from '../abis/entry/types/Abi'
+import type { Result, Profile } from '../../types/contract'
+import { ProfileMetadata } from '../../types/metadata'
+import { Ipfs } from '../../ipfs'
 
 export class ProfileContract extends BaseContract {
   /**
@@ -11,16 +13,27 @@ export class ProfileContract extends BaseContract {
    * @category Profile
    * @param {string} owner - The Ethereum address of the profile owner.
    * @param {string} handle - The handle of the profile you want to create.
-   * @param {string} uri - The URI of the file.
+   * @param {string} metadataOrUri - The metadata or URI of the profile.
    * @returns The transaction hash and the profile ID.
    */
   @autoSwitchMainnet()
   async createProfile(
     owner: string,
     handle: string,
-    uri: string,
+    metadataOrUri: ProfileMetadata | string,
   ): Promise<Result<string, true>> | never {
     this.validateHandleFormat(handle)
+
+    let uri
+    if (typeof metadataOrUri !== 'string') {
+      const metadata = metadataOrUri
+      if (!metadata.type) {
+        metadata.type = 'profile'
+      }
+      uri = await Ipfs.metadataToUri(metadata)
+    } else {
+      uri = metadataOrUri
+    }
 
     const tx = await this.contract.createProfile({
       to: owner,
@@ -66,23 +79,111 @@ export class ProfileContract extends BaseContract {
   }
 
   /**
-   * This changes a profile's URI.
+   * This sets a profile's metadata (URI).
    * @category Profile
    * @param profileId - The profile ID of the user you want to set the URI for.
-   * @param uri - The URI you want to set.
+   * @param metadataOrUri - The URI you want to set.
    * @returns The transaction hash of the transaction that was sent to the blockchain.
    */
   @autoSwitchMainnet()
   async setProfileUri(
     profileId: string,
-    uri: string,
-  ): Promise<Result<undefined, true>> | never {
+    metadataOrUri: ProfileMetadata | string,
+  ):
+    | Promise<
+        Result<
+          {
+            uri: string
+            metadata: ProfileMetadata
+          },
+          true
+        >
+      >
+    | never {
+    let uri
+    let metadata
+    if (typeof metadataOrUri !== 'string') {
+      metadata = metadataOrUri
+      if (!metadata.type) {
+        metadata.type = 'profile'
+      }
+      uri = await Ipfs.metadataToUri(metadata)
+    } else {
+      uri = metadataOrUri
+      metadata = await Ipfs.uriToMetadata<ProfileMetadata>(uri)
+    }
+
     const tx = await this.contract.setProfileUri(profileId, uri)
     const receipt = await tx.wait()
+
     return {
-      data: undefined,
+      data: {
+        uri,
+        metadata,
+      },
       transactionHash: receipt.transactionHash,
     }
+  }
+
+  /**
+   * This is the same as {@link setProfileUri}
+   * @category Profile
+   */
+  setProfileMetadata = this.setProfileUri
+
+  /**
+   * This changes a profile's metadata (URI).
+   * @category Profile
+   * @param profileId - The profile ID of the user you want to set the URI for.
+   * @param modifier - The callback function that modifies the metadata.
+   * @returns The transaction hash of the transaction that was sent to the blockchain.
+   * @example change a profile's metadata name and bio
+   *
+   * ```js
+   * await contract.changeProfileMetadata('42', metadata => {
+   *   if (metadata !== undefined) {
+   *     metadata.name = 'John Doe'
+   *     metadata.bio = 'I am a person'
+   *   } else {
+   *     metadata = {
+   *       name: 'John Doe',
+   *       bio: 'I am a person',
+   *     }
+   *   }
+   *   return metadata
+   * })
+   * ```
+   *
+   * @example change a profile's metadata name and bio (using spread operator)
+   *
+   * ```js
+   * await contract.changeProfileMetadata('42', metadata => {
+   *   metadata = {
+   *     ...metadata,
+   *     name: 'John Doe',
+   *     bio: 'I am a person',
+   *   }
+   *   return metadata
+   * })
+   * ```
+   */
+  @autoSwitchMainnet()
+  async changeProfileMetadata(
+    profileId: string,
+    modifier: (metadata?: ProfileMetadata) => ProfileMetadata,
+  ) {
+    const profile = await this.getProfile(profileId)
+
+    const metadata = modifier(profile.data.metadata)
+    if (typeof metadata === 'undefined') {
+      throw new Error('The modified metadata is undefined. Did you return it?')
+    }
+
+    if (!metadata.type) {
+      metadata.type = 'profile'
+    }
+
+    return this.setProfileMetadata(profileId, metadata)
   }
 
   /**
@@ -183,6 +284,12 @@ export class ProfileContract extends BaseContract {
   @autoSwitchMainnet()
   async getProfile(profileId: string): Promise<Result<Profile>> | never {
     const profile = await this.contract.getProfile(profileId)
+
+    let metadata: ProfileMetadata | undefined = undefined
+    if (profile.uri) {
+      metadata = await Ipfs.uriToMetadata(profile.uri)
+    }
+
     return {
       data: {
         profileId: profile.profileId.toNumber().toString(),
@@ -190,6 +297,7 @@ export class ProfileContract extends BaseContract {
         uri: profile.uri,
         socialToken: profile.socialToken,
         noteCount: profile.noteCount.toNumber(),
+        metadata,
       },
     }
   }

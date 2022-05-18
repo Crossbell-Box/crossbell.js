@@ -1,6 +1,6 @@
 import { expect, describe, test } from 'vitest'
-import { Indexer } from '../src'
-import { mockUser } from './mock'
+import { Indexer } from '../../src'
+import { mockUser } from '../mock'
 
 const indexer = new Indexer()
 

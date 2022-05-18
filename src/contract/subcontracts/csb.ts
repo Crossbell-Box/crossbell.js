@@ -1,6 +1,6 @@
 import { BaseContract } from './base'
 import { autoSwitchMainnet } from '../decorators'
-import type { Result } from '../types'
+import type { Result } from '../../types/contract'
 
 export class CsbContract extends BaseContract {
   /**

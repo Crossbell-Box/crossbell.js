@@ -1,7 +1,7 @@
 import { Wallet } from 'ethers'
 import { expect, describe, test, beforeAll } from 'vitest'
-import { Contract } from '../src'
-import { mockUser, genRandomHandle, metadataUri } from './mock'
+import { Contract } from '../../src'
+import { mockUser, genRandomHandle, metadataUri } from '../mock'
 
 const contract = new Contract(mockUser.privateKey)
 
@@ -40,6 +40,17 @@ describe('link profiles and check', () => {
       result.transactionHash,
     )
     expect(linklist.data).toBe(linklistId)
+  })
+
+  test('linkProfilesInBatch', async () => {
+    const result = await contract.linkProfilesInBatch(
+      profileId1!,
+      [profileId2!],
+      [],
+      linkType,
+    )
+
+    expect(result.data).toBe(linklistId)
   })
 
   test('getLinkingProfileIds', async () => {
