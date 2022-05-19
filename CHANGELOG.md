@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 0.5.6 (2022-05-19)
+
+- Change default ipfs gateway to `https://gateway.ipfs.io/ipfs/`
+- New API
+  - `Network.setIpfsGateway('https://cf-ipfs.com/ipfs/')` to customize your gateway.
+
 ## 0.5.5 (2022-05-19)
 
 - fix metadata type for note.

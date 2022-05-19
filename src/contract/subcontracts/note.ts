@@ -82,12 +82,33 @@ export class NoteContract extends BaseContract {
   }
 
   /**
+   * This deletes a note.
+   * @category Note
+   * @param profileId - The profile ID of the owner who post this note. Must be your own profile, otherwise it will be rejected.
+   * @param noteId - The id of the note you want to delete.
+   * @returns The transaction hash of the transaction.
+   */
+  async deleteNote(
+    profileId: string,
+    noteId: string,
+  ): Promise<Result<undefined, true>> | never {
+    const tx = await this.contract.deleteNote(profileId, noteId)
+
+    const receipt = await tx.wait()
+
+    return {
+      data: undefined,
+      transactionHash: receipt.transactionHash,
+    }
+  }
+
+  /**
    * This mints a note as an NFT.
    * @category Note
    * @param profileId - The profile ID of the address who owns the note.
    * @param noteId - The id of the note you want to get the info for.
-   * @param toAddress
-   * @returns
+   * @param toAddress - The address you want to mint the note to.
+   * @returns The transaction hash of the transaction.
    */
   async mintNote(
     profileId: string,

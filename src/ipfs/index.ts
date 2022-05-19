@@ -6,6 +6,7 @@ import type {
   ProfileMetadata,
 } from '../types/metadata'
 import { IpfsResponse } from '../types/ipfs'
+import { Network } from '../network'
 
 export class Ipfs {
   static async uploadJson(json: any) {
@@ -30,7 +31,7 @@ export class Ipfs {
   static async uriToMetadata<T extends Metadata>(uri: string) {
     if (uri.startsWith('ipfs://')) {
       // to cf-ipfs endpoint
-      uri = uri.replace('ipfs://', 'https://cf-ipfs.com/ipfs/')
+      uri = uri.replace('ipfs://', Network.getIpfsGateway())
     }
 
     let res
