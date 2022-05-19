@@ -23,9 +23,7 @@ export class ProfileContract extends BaseContract {
   ): Promise<Result<string, true>> | never {
     this.validateHandleFormat(handle)
 
-    const { uri } = await Ipfs.parseMetadataOrUri<ProfileMetadata>(
-      metadataOrUri,
-    )
+    const { uri } = await Ipfs.parseMetadataOrUri('profile', metadataOrUri)
 
     const tx = await this.contract.createProfile({
       to: owner,
@@ -78,18 +76,9 @@ export class ProfileContract extends BaseContract {
   async setProfileUri(
     profileId: string,
     metadataOrUri: ProfileMetadata | string,
-  ):
-    | Promise<
-        Result<
-          {
-            uri: string
-            metadata: ProfileMetadata
-          },
-          true
-        >
-      >
-    | never {
-    const { uri, metadata } = await Ipfs.parseMetadataOrUri<ProfileMetadata>(
+  ): Promise<Result<{ uri: string; metadata: ProfileMetadata }, true>> | never {
+    const { uri, metadata } = await Ipfs.parseMetadataOrUri(
+      'profile',
       metadataOrUri,
       true,
     )
@@ -275,7 +264,8 @@ export class ProfileContract extends BaseContract {
   async getProfile(profileId: string): Promise<Result<Profile>> | never {
     const profile = await this.contract.getProfile(profileId)
 
-    const { metadata } = await Ipfs.parseMetadataOrUri<ProfileMetadata>(
+    const { metadata } = await Ipfs.parseMetadataOrUri(
+      'profile',
       profile.uri,
       true,
     )

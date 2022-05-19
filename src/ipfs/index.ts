@@ -1,7 +1,11 @@
 import '../utils/fetch'
-import type { ProfileMetadata, NoteMetadata } from '../types/metadata'
-
-type Metadata = ProfileMetadata | NoteMetadata
+import type {
+  BaseMetadata,
+  Metadata,
+  NoteMetadata,
+  ProfileMetadata,
+} from '../types/metadata'
+import { IpfsResponse } from '../types/ipfs'
 
 export class Ipfs {
   static async uploadJson(json: any) {
@@ -41,26 +45,31 @@ export class Ipfs {
     }
   }
 
-  static async parseMetadataOrUri<T extends Metadata>(
+  static async parseMetadataOrUri<T = NoteMetadata>(
+    type: 'note',
     metadataOrUri: T | string,
     retrieveMetadataIfNeeded?: false,
-  ): Promise<{
-    uri: string
-  }>
-  static async parseMetadataOrUri<T extends Metadata>(
+  ): Promise<{ uri: string }>
+  static async parseMetadataOrUri<T = NoteMetadata>(
+    type: 'note',
     metadataOrUri: T | string,
     retrieveMetadataIfNeeded: true,
-  ): Promise<{
-    metadata: T
-    uri: string
-  }>
+  ): Promise<{ metadata: NoteMetadata; uri: string }>
+  static async parseMetadataOrUri<T = ProfileMetadata>(
+    type: 'profile',
+    metadataOrUri: T | string,
+    retrieveMetadataIfNeeded?: false,
+  ): Promise<{ uri: string }>
+  static async parseMetadataOrUri<T = ProfileMetadata>(
+    type: 'profile',
+    metadataOrUri: T | string,
+    retrieveMetadataIfNeeded: true,
+  ): Promise<{ metadata: ProfileMetadata; uri: string }>
   static async parseMetadataOrUri<T extends Metadata>(
+    type: BaseMetadata['type'],
     metadataOrUri: T | string,
     retrieveMetadataIfNeeded: boolean = false,
-  ): Promise<{
-    metadata?: T
-    uri: string
-  }> {
+  ): Promise<{ metadata?: T; uri: string }> {
     if (metadataOrUri === '') {
       return { uri: '', metadata: undefined }
     }
@@ -75,7 +84,7 @@ export class Ipfs {
     } else {
       metadata = metadataOrUri
       if (!metadata.type) {
-        metadata.type = 'profile'
+        metadata.type = type
       }
       uri = await Ipfs.metadataToUri(metadata)
     }
@@ -85,13 +94,4 @@ export class Ipfs {
       uri,
     }
   }
-}
-
-type IpfsResponse = {
-  status: 'ok' | 'error'
-  cid: string
-  /** ipfs url. e.g. `ipfs://...` */
-  url: string
-  /** http url. e.g. `https://...` */
-  web2url: string
 }

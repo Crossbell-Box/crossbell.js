@@ -71,3 +71,5 @@ export type NoteMetadata = BaseMetadata & {
    */
   summary?: string
 }
+
+export type Metadata = ProfileMetadata | NoteMetadata

@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.5.5 (2022-05-19)
+
+- fix metadata type for note.
+
 ## 0.5.4 (2022-05-19)
 
 - New APIs

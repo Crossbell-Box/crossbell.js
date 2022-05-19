@@ -16,7 +16,7 @@ export class NoteContract extends BaseContract {
     profileId: string,
     metadataOrUri: NoteMetadata | string,
   ): Promise<Result<{ noteId: string }, true>> | never {
-    const { uri } = await Ipfs.parseMetadataOrUri<NoteMetadata>(metadataOrUri)
+    const { uri } = await Ipfs.parseMetadataOrUri('note', metadataOrUri)
 
     const tx = await this.contract.postNote({
       profileId: profileId,
