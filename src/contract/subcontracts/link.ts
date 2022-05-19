@@ -2,20 +2,16 @@ import { ethers } from 'ethers'
 import { BaseContract } from './base'
 import { autoSwitchMainnet } from '../decorators'
 import { NIL_ADDRESS } from '../utils'
-import type {
-  LinkProfileEvent,
-  ProfileCreatedEvent,
-} from '../abis/entry/types/Abi'
 import type { Profile, Result } from '../../types/contract'
 
 export class LinkContract extends BaseContract {
   /**
    * This links a profile to another profile with a given link type.
    * @category Link
-   * @param {string} fromProfileId - The profile ID of the profile that is linking to another profile. Must be your own profile, otherwise it will be rejected.
-   * @param {string} toProfileId - The profile ID of the profile you want to link to.
-   * @param {string} linkType - The type of link.
-   * @param {string} data - The data to be passed to the link module if the profile has one.
+   * @param fromProfileId - The profile ID of the profile that is linking to another profile. Must be your own profile, otherwise it will be rejected.
+   * @param toProfileId - The profile ID of the profile you want to link to.
+   * @param linkType - The type of link.
+   * @param data - The data to be passed to the link module if the profile has one.
    * @returns The linklist id and the transaction hash of the transaction that was sent to the blockchain.
    */
   @autoSwitchMainnet()
@@ -34,7 +30,7 @@ export class LinkContract extends BaseContract {
 
     const receipt = await tx.wait()
 
-    const parser = this.parseLog<LinkProfileEvent>(receipt.logs, 'linkProfile')
+    const parser = this.parseLog(receipt.logs, 'linkProfile')
 
     return {
       data: parser.args.linklistId.toString(),
@@ -48,11 +44,11 @@ export class LinkContract extends BaseContract {
    * This could be considered a bulk version of {@link linkProfile} & {@link createThenLinkProfile}
    *
    * @category Link
-   * @param {string} fromProfileId - The profile ID of the profile that is linking to another profile. Must be your own profile, otherwise it will be rejected.
-   * @param {string} toProfileIds - The profile IDs of the profile you want to link to.
-   * @param {string} toAddresses - The addresses of the profiles you want to link to (who don't have a profile). See more on {@link createThenLinkProfile}
-   * @param {string} linkType - The type of link.
-   * @param {string} data - The data to be passed to the link module if the profile has one. It should has the same length as `toProfileIds`.
+   * @param fromProfileId - The profile ID of the profile that is linking to another profile. Must be your own profile, otherwise it will be rejected.
+   * @param toProfileIds - The profile IDs of the profile you want to link to.
+   * @param toAddresses - The addresses of the profiles you want to link to (who don't have a profile). See more on {@link createThenLinkProfile}
+   * @param linkType - The type of link.
+   * @param data - The data to be passed to the link module if the profile has one. It should has the same length as `toProfileIds`.
    * @returns The linklist id and the transaction hash of the transaction that was sent to the blockchain.
    */
   @autoSwitchMainnet()
@@ -73,7 +69,7 @@ export class LinkContract extends BaseContract {
 
     const receipt = await tx.wait()
 
-    const parser = this.parseLog<LinkProfileEvent>(receipt.logs, 'linkProfile')
+    const parser = this.parseLog(receipt.logs, 'linkProfile')
 
     return {
       data: parser.args.linklistId.toString(),
@@ -84,7 +80,7 @@ export class LinkContract extends BaseContract {
   /**
    * This gets the linklist id of a {@link linkProfile} transaction.
    * @category Link
-   * @param txHash {string} - The transaction hash of the transaction you want to get the linklist id of.
+   * @param txHash - The transaction hash of the transaction you want to get the linklist id of.
    * @returns The linklist id of the transaction.
    */
   @autoSwitchMainnet()
@@ -93,7 +89,7 @@ export class LinkContract extends BaseContract {
   ): Promise<Result<string>> | never {
     const receipt = await this.contract.provider.getTransactionReceipt(txHash)
 
-    const parser = this.parseLog<LinkProfileEvent>(receipt.logs, 'linkProfile')
+    const parser = this.parseLog(receipt.logs, 'linkProfile')
 
     return {
       data: parser.args.linklistId.toString(),
@@ -110,9 +106,9 @@ export class LinkContract extends BaseContract {
    * The new profile's handle will be set to the address of the target address.
    *
    * @category Link
-   * @param {string} fromProfileId - The profile ID of the profile that is creating the new profile. Must be your own profile, otherwise it will be rejected.
-   * @param {string} toAddress - The address of the profile you want to link to.
-   * @param {string} linkType - The type of link you want to create. This is a string.
+   * @param fromProfileId - The profile ID of the profile that is creating the new profile. Must be your own profile, otherwise it will be rejected.
+   * @param toAddress - The address of the profile you want to link to.
+   * @param linkType - The type of link you want to create. This is a string.
    * @returns The transaction hash of the transaction that was sent to the blockchain, the toProfileId and linklistId.
    */
   @autoSwitchMainnet()
@@ -121,15 +117,7 @@ export class LinkContract extends BaseContract {
     toAddress: string,
     linkType: string,
   ):
-    | Promise<
-        Result<
-          {
-            toProfileId: string
-            linklistId: string
-          },
-          true
-        >
-      >
+    | Promise<Result<{ toProfileId: string; linklistId: string }, true>>
     | never {
     const tx = await this.contract.createThenLinkProfile({
       fromProfileId: fromProfileId,
@@ -139,14 +127,8 @@ export class LinkContract extends BaseContract {
 
     const receipt = await tx.wait()
 
-    const createProfileParser = this.parseLog<ProfileCreatedEvent>(
-      receipt.logs,
-      'createProfile',
-    )
-    const linkProfileParser = this.parseLog<LinkProfileEvent>(
-      receipt.logs,
-      'linkProfile',
-    )
+    const createProfileParser = this.parseLog(receipt.logs, 'createProfile')
+    const linkProfileParser = this.parseLog(receipt.logs, 'linkProfile')
 
     return {
       data: {
@@ -160,9 +142,9 @@ export class LinkContract extends BaseContract {
   /**
    * This removes a link from a profile to another profile.
    * @category Link
-   * @param {string} fromProfileId - The profile ID of the profile that is linking to another profile.
-   * @param {string} toProfileId - The profile you want to link to.
-   * @param {string} linkType - The type of link.
+   * @param fromProfileId - The profile ID of the profile that is linking to another profile.
+   * @param toProfileId - The profile you want to link to.
+   * @param linkType - The type of link.
    * @returns The transaction hash of the transaction that was sent to the blockchain.
    */
   @autoSwitchMainnet()
@@ -186,8 +168,8 @@ export class LinkContract extends BaseContract {
   /**
    * This returns the *attached* linked profile ID of a profile with a given link type.
    * @category Link
-   * @param {string} fromProfileId - The profile ID of the profile you want to get the linked profiles from.
-   * @param {string} linkType - The type of link you want to get.
+   * @param fromProfileId - The profile ID of the profile you want to get the linked profiles from.
+   * @param linkType - The type of link you want to get.
    * @returns An array of profile ids that are linked to the profile id passed in.
    */
   @autoSwitchMainnet()
@@ -207,8 +189,8 @@ export class LinkContract extends BaseContract {
   /**
    * This returns the *attached* linked profile of a profile with a given link type.
    * @category Link
-   * @param {string} fromProfileId - The profile ID of the profile you want to get the linked profiles from.
-   * @param {string} linkType - The type of link you want to get.
+   * @param fromProfileId - The profile ID of the profile you want to get the linked profiles from.
+   * @param linkType - The type of link you want to get.
    * @returns An array of profile that are linked to the profile id passed in.
    */
   @autoSwitchMainnet()
@@ -234,9 +216,9 @@ export class LinkContract extends BaseContract {
   /**
    * This links a profile to an address with a given link type.
    * @category Link
-   * @param {string} fromProfileId - The profile ID of the profile that is linking to the address.
-   * @param {string} toAddress - The address of the profile you want to link to.
-   * @param {string} linkType - The type of link.
+   * @param fromProfileId - The profile ID of the profile that is linking to the address.
+   * @param toAddress - The address of the profile you want to link to.
+   * @param linkType - The type of link.
    * @returns The transaction hash of the transaction that was sent to the blockchain, and the linklistId.
    */
   // TODO: next version
@@ -263,9 +245,9 @@ export class LinkContract extends BaseContract {
   /**
    * This links a profile to any URI with a given link type.
    * @category Link
-   * @param {string} fromProfileId - The profile ID of the profile that is linking to another profile.
-   * @param {string} toUri - The URI of the profile you want to link to.
-   * @param {string} linkType - The type of link you want to create. This is a string that you can define yourself.
+   * @param fromProfileId - The profile ID of the profile that is linking to another profile.
+   * @param toUri - The URI of the profile you want to link to.
+   * @param linkType - The type of link you want to create. This is a string that you can define yourself.
    * @returns The transaction hash of the transaction that was sent to the blockchain.
    */
   // TODO: next version
@@ -287,10 +269,10 @@ export class LinkContract extends BaseContract {
   /**
    * This links a profile to an ERC721 token with a given link type.
    * @category Link
-   * @param {string} fromProfileId - The profile ID of the profile you want to link from.
-   * @param {string} toTokenAddress - The address of the ERC721 token you want to link to.
-   * @param {string} toTokenId - The token ID of the ERC721 token you want to link to.
-   * @param {string} linkType - The type of link.
+   * @param fromProfileId - The profile ID of the profile you want to link from.
+   * @param toTokenAddress - The address of the ERC721 token you want to link to.
+   * @param toTokenId - The token ID of the ERC721 token you want to link to.
+   * @param linkType - The type of link.
    * @returns The transaction hash of the transaction that was sent to the blockchain.
    */
   // TODO: next version

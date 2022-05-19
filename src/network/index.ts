@@ -11,7 +11,7 @@ export class Network {
   static readonly #availableNetworks: IAvailableNetwork[] = ['crossbell']
   static #currentNetwork: IAvailableNetwork = 'crossbell'
   static jsonRpcAddress =
-    process.env.CROSSBELL_RPC_ADDRESS ?? 'https://rpc.crossbell.io'
+    globalThis.process?.env.CROSSBELL_RPC_ADDRESS ?? 'https://rpc.crossbell.io'
 
   /**
    * This returns the current network.

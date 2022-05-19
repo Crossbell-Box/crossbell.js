@@ -5,15 +5,22 @@ import {
   Abi__factory as EntryAbi__factory,
 } from '../abis/entry/types'
 import {
+  LinkProfileEvent,
+  PostNoteEvent,
+  ProfileCreatedEvent,
+} from '../abis/entry/types/Abi'
+import {
   type Abi as PeripheryAbi,
   Abi__factory as PeripheryAbi__factory,
 } from '../abis/periphery/types'
 
-const logTopics = {
-  linkProfile:
-    '0xbc914995d574dd9ef2df364e4eee2b85deda3ba35d054a62425fba1b97275716',
-  createProfile:
-    '0xa5802a04162552328d75eaac538a033704a7c3beab65d0a83e52da1c8c9b7cdf',
+const logTopics: Record<
+  'createProfile' | 'linkProfile' | 'postNote',
+  keyof EntryAbi['filters']
+> = {
+  createProfile: 'ProfileCreated(uint256,address,address,string,uint256)',
+  linkProfile: 'LinkProfile(address,uint256,uint256,bytes32,uint256)',
+  postNote: 'PostNote(uint256,uint256,bool,uint256)',
 } as const
 
 export class BaseContract {
@@ -132,11 +139,27 @@ export class BaseContract {
     this._hasConnected = true
   }
 
+  protected parseLog<T = ProfileCreatedEvent>(
+    logs: ethers.providers.Log[],
+    filterTopic: 'createProfile',
+  ): T
+  protected parseLog<T = LinkProfileEvent>(
+    logs: ethers.providers.Log[],
+    filterTopic: 'linkProfile',
+  ): T
+  protected parseLog<T = PostNoteEvent>(
+    logs: ethers.providers.Log[],
+    filterTopic: 'postNote',
+  ): T
   protected parseLog<T>(
     logs: ethers.providers.Log[],
     filterTopic: keyof typeof logTopics,
-  ) {
-    const _logs = logs.filter((log) => log.topics[0] === logTopics[filterTopic])
+  ): T {
+    const targetTopicHash = ethers.utils.keccak256(
+      ethers.utils.toUtf8Bytes(logTopics[filterTopic]),
+    )
+
+    const _logs = logs.filter((log) => log.topics[0] === targetTopicHash)
 
     if (_logs.length === 0) {
       throw new Error(`Log with topic ${filterTopic} not found`)

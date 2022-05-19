@@ -1,5 +1,16 @@
 # CHANGELOG
 
+## 0.5.4 (2022-05-19)
+
+- New APIs
+  - `contract.postNote()`
+  - `contract.getNote()`
+  - `contract.mintNote()`
+
+## 0.5.3 (2022-05-19)
+
+- fix compatibility with browser
+
 ## 0.5.2 (2022-05-18)
 
 - New APIs

@@ -48,3 +48,26 @@ export type ProfileMetadata = BaseMetadata & {
    */
   connected_avatars?: string[]
 }
+
+export type NoteMetadata = BaseMetadata & {
+  /**
+   * The tags of this note.
+   *
+   * @example
+   * ['article', 'dairy']
+   */
+  tags?: string[]
+
+  /**
+   * The title of this note.
+   */
+  title?: string
+
+  /**
+   * The (markdown) content of this note.
+   *
+   * @example
+   * '# Hello World\n\nThis is a markdown note.'
+   */
+  summary?: string
+}
