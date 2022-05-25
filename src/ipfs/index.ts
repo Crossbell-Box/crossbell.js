@@ -48,22 +48,22 @@ export class Ipfs {
 
   static async parseMetadataOrUri<T = NoteMetadata>(
     type: 'note',
-    metadataOrUri: T | string,
+    metadataOrUri: NoteMetadata | string,
     retrieveMetadataIfNeeded?: false,
   ): Promise<{ uri: string }>
   static async parseMetadataOrUri<T = NoteMetadata>(
     type: 'note',
-    metadataOrUri: T | string,
+    metadataOrUri: NoteMetadata | string,
     retrieveMetadataIfNeeded: true,
   ): Promise<{ metadata: NoteMetadata; uri: string }>
   static async parseMetadataOrUri<T = ProfileMetadata>(
     type: 'profile',
-    metadataOrUri: T | string,
+    metadataOrUri: ProfileMetadata | string,
     retrieveMetadataIfNeeded?: false,
   ): Promise<{ uri: string }>
   static async parseMetadataOrUri<T = ProfileMetadata>(
     type: 'profile',
-    metadataOrUri: T | string,
+    metadataOrUri: ProfileMetadata | string,
     retrieveMetadataIfNeeded: true,
   ): Promise<{ metadata: ProfileMetadata; uri: string }>
   static async parseMetadataOrUri<T extends Metadata>(

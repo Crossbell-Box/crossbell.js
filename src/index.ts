@@ -6,3 +6,4 @@ import { Ipfs } from './ipfs'
 export default { Network, Contract, Indexer, Ipfs }
 export { Network, Contract, Indexer, Ipfs }
 export * from './types'
+export * as utils from './utils'

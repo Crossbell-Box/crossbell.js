@@ -177,7 +177,7 @@ export class LinkContract extends BaseContract {
     fromProfileId: string,
     linkType: string,
   ): Promise<Result<string[]>> | never {
-    const linkList = await this.contract.getLinkingProfileIds(
+    const linkList = await this.peripheryContract.getLinkingProfileIds(
       fromProfileId,
       ethers.utils.formatBytes32String(linkType),
     )
@@ -198,7 +198,7 @@ export class LinkContract extends BaseContract {
     fromProfileId: string,
     linkType: string,
   ): Promise<Result<Profile[]>> | never {
-    const ids = await this.contract.getLinkingProfileIds(
+    const ids = await this.peripheryContract.getLinkingProfileIds(
       fromProfileId,
       ethers.utils.formatBytes32String(linkType),
     )

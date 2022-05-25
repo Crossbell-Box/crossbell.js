@@ -23,6 +23,88 @@ import type {
 } from "./common";
 
 export declare namespace DataTypes {
+  export type CreateProfileThenPostNoteDataStruct = {
+    handle: string;
+    uri: string;
+    profileLinkModule: string;
+    profileLinkModuleInitData: BytesLike;
+    contentUri: string;
+    noteLinkModule: string;
+    noteLinkModuleInitData: BytesLike;
+    mintModule: string;
+    mintModuleInitData: BytesLike;
+  };
+
+  export type CreateProfileThenPostNoteDataStructOutput = [
+    string,
+    string,
+    string,
+    string,
+    string,
+    string,
+    string,
+    string,
+    string
+  ] & {
+    handle: string;
+    uri: string;
+    profileLinkModule: string;
+    profileLinkModuleInitData: string;
+    contentUri: string;
+    noteLinkModule: string;
+    noteLinkModuleInitData: string;
+    mintModule: string;
+    mintModuleInitData: string;
+  };
+
+  export type ERC721StructStruct = {
+    tokenAddress: string;
+    erc721TokenId: BigNumberish;
+  };
+
+  export type ERC721StructStructOutput = [string, BigNumber] & {
+    tokenAddress: string;
+    erc721TokenId: BigNumber;
+  };
+
+  export type NoteStructStruct = {
+    profileId: BigNumberish;
+    noteId: BigNumberish;
+  };
+
+  export type NoteStructStructOutput = [BigNumber, BigNumber] & {
+    profileId: BigNumber;
+    noteId: BigNumber;
+  };
+
+  export type NoteStruct = {
+    linkItemType: BytesLike;
+    linkKey: BytesLike;
+    contentUri: string;
+    linkModule: string;
+    mintModule: string;
+    mintNFT: string;
+    deleted: boolean;
+  };
+
+  export type NoteStructOutput = [
+    string,
+    string,
+    string,
+    string,
+    string,
+    string,
+    boolean
+  ] & {
+    linkItemType: string;
+    linkKey: string;
+    contentUri: string;
+    linkModule: string;
+    mintModule: string;
+    mintNFT: string;
+    deleted: boolean;
+  };
+
   export type LinkProfilesInBatchDataStruct = {
     fromProfileId: BigNumberish;
     toProfileIds: BigNumberish[];
@@ -48,27 +130,117 @@ export declare namespace DataTypes {
 
 export interface AbiInterface extends utils.Interface {
   functions: {
-    "initialize(address)": FunctionFragment;
+    "createProfileThenPostNote((string,string,address,bytes,string,address,bytes,address,bytes))": FunctionFragment;
+    "getLinkingAnyUri(bytes32)": FunctionFragment;
+    "getLinkingAnyUris(uint256,bytes32)": FunctionFragment;
+    "getLinkingERC721(bytes32)": FunctionFragment;
+    "getLinkingERC721s(uint256,bytes32)": FunctionFragment;
+    "getLinkingNote(bytes32)": FunctionFragment;
+    "getLinkingNotes(uint256,bytes32)": FunctionFragment;
+    "getLinkingProfileIds(uint256,bytes32)": FunctionFragment;
+    "initialize(address,address)": FunctionFragment;
     "linkProfilesInBatch((uint256,uint256[],bytes[],address[],bytes32))": FunctionFragment;
+    "linklist()": FunctionFragment;
     "web3Entry()": FunctionFragment;
   };
 
   getFunction(
-    nameOrSignatureOrTopic: "initialize" | "linkProfilesInBatch" | "web3Entry"
+    nameOrSignatureOrTopic:
+      | "createProfileThenPostNote"
+      | "getLinkingAnyUri"
+      | "getLinkingAnyUris"
+      | "getLinkingERC721"
+      | "getLinkingERC721s"
+      | "getLinkingNote"
+      | "getLinkingNotes"
+      | "getLinkingProfileIds"
+      | "initialize"
+      | "linkProfilesInBatch"
+      | "linklist"
+      | "web3Entry"
   ): FunctionFragment;
 
-  encodeFunctionData(functionFragment: "initialize", values: [string]): string;
+  encodeFunctionData(
+    functionFragment: "createProfileThenPostNote",
+    values: [DataTypes.CreateProfileThenPostNoteDataStruct]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getLinkingAnyUri",
+    values: [BytesLike]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getLinkingAnyUris",
+    values: [BigNumberish, BytesLike]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getLinkingERC721",
+    values: [BytesLike]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getLinkingERC721s",
+    values: [BigNumberish, BytesLike]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getLinkingNote",
+    values: [BytesLike]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getLinkingNotes",
+    values: [BigNumberish, BytesLike]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getLinkingProfileIds",
+    values: [BigNumberish, BytesLike]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "initialize",
+    values: [string, string]
+  ): string;
   encodeFunctionData(
     functionFragment: "linkProfilesInBatch",
     values: [DataTypes.LinkProfilesInBatchDataStruct]
   ): string;
+  encodeFunctionData(functionFragment: "linklist", values?: undefined): string;
   encodeFunctionData(functionFragment: "web3Entry", values?: undefined): string;
 
+  decodeFunctionResult(
+    functionFragment: "createProfileThenPostNote",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getLinkingAnyUri",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getLinkingAnyUris",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getLinkingERC721",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getLinkingERC721s",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getLinkingNote",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getLinkingNotes",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getLinkingProfileIds",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "initialize", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "linkProfilesInBatch",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "linklist", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "web3Entry", data: BytesLike): Result;
 
   events: {};
@@ -101,8 +273,59 @@ export interface Abi extends BaseContract {
   removeListener: OnEvent<this>;
 
   functions: {
+    createProfileThenPostNote(
+      vars: DataTypes.CreateProfileThenPostNoteDataStruct,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    getLinkingAnyUri(
+      linkKey: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<[string]>;
+
+    getLinkingAnyUris(
+      fromProfileId: BigNumberish,
+      linkType: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<[string[]] & { results: string[] }>;
+
+    getLinkingERC721(
+      linkKey: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<[DataTypes.ERC721StructStructOutput]>;
+
+    getLinkingERC721s(
+      fromProfileId: BigNumberish,
+      linkType: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<
+      [DataTypes.ERC721StructStructOutput[]] & {
+        results: DataTypes.ERC721StructStructOutput[];
+      }
+    >;
+
+    getLinkingNote(
+      linkKey: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<[DataTypes.NoteStructStructOutput]>;
+
+    getLinkingNotes(
+      fromProfileId: BigNumberish,
+      linkType: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<
+      [DataTypes.NoteStructOutput[]] & { results: DataTypes.NoteStructOutput[] }
+    >;
+
+    getLinkingProfileIds(
+      fromProfileId: BigNumberish,
+      linkType: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber[]] & { results: BigNumber[] }>;
+
     initialize(
       _web3Entry: string,
+      _linklist: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -111,11 +334,58 @@ export interface Abi extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
+    linklist(overrides?: CallOverrides): Promise<[string]>;
+
     web3Entry(overrides?: CallOverrides): Promise<[string]>;
   };
 
+  createProfileThenPostNote(
+    vars: DataTypes.CreateProfileThenPostNoteDataStruct,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  getLinkingAnyUri(
+    linkKey: BytesLike,
+    overrides?: CallOverrides
+  ): Promise<string>;
+
+  getLinkingAnyUris(
+    fromProfileId: BigNumberish,
+    linkType: BytesLike,
+    overrides?: CallOverrides
+  ): Promise<string[]>;
+
+  getLinkingERC721(
+    linkKey: BytesLike,
+    overrides?: CallOverrides
+  ): Promise<DataTypes.ERC721StructStructOutput>;
+
+  getLinkingERC721s(
+    fromProfileId: BigNumberish,
+    linkType: BytesLike,
+    overrides?: CallOverrides
+  ): Promise<DataTypes.ERC721StructStructOutput[]>;
+
+  getLinkingNote(
+    linkKey: BytesLike,
+    overrides?: CallOverrides
+  ): Promise<DataTypes.NoteStructStructOutput>;
+
+  getLinkingNotes(
+    fromProfileId: BigNumberish,
+    linkType: BytesLike,
+    overrides?: CallOverrides
+  ): Promise<DataTypes.NoteStructOutput[]>;
+
+  getLinkingProfileIds(
+    fromProfileId: BigNumberish,
+    linkType: BytesLike,
+    overrides?: CallOverrides
+  ): Promise<BigNumber[]>;
+
   initialize(
     _web3Entry: string,
+    _linklist: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -124,15 +394,67 @@ export interface Abi extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
+  linklist(overrides?: CallOverrides): Promise<string>;
+
   web3Entry(overrides?: CallOverrides): Promise<string>;
 
   callStatic: {
-    initialize(_web3Entry: string, overrides?: CallOverrides): Promise<void>;
+    createProfileThenPostNote(
+      vars: DataTypes.CreateProfileThenPostNoteDataStruct,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    getLinkingAnyUri(
+      linkKey: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<string>;
+
+    getLinkingAnyUris(
+      fromProfileId: BigNumberish,
+      linkType: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<string[]>;
+
+    getLinkingERC721(
+      linkKey: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<DataTypes.ERC721StructStructOutput>;
+
+    getLinkingERC721s(
+      fromProfileId: BigNumberish,
+      linkType: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<DataTypes.ERC721StructStructOutput[]>;
+
+    getLinkingNote(
+      linkKey: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<DataTypes.NoteStructStructOutput>;
+
+    getLinkingNotes(
+      fromProfileId: BigNumberish,
+      linkType: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<DataTypes.NoteStructOutput[]>;
+
+    getLinkingProfileIds(
+      fromProfileId: BigNumberish,
+      linkType: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<BigNumber[]>;
+
+    initialize(
+      _web3Entry: string,
+      _linklist: string,
+      overrides?: CallOverrides
+    ): Promise<void>;
 
     linkProfilesInBatch(
       vars: DataTypes.LinkProfilesInBatchDataStruct,
       overrides?: CallOverrides
     ): Promise<void>;
+
+    linklist(overrides?: CallOverrides): Promise<string>;
 
     web3Entry(overrides?: CallOverrides): Promise<string>;
   };
@@ -140,8 +462,53 @@ export interface Abi extends BaseContract {
   filters: {};
 
   estimateGas: {
+    createProfileThenPostNote(
+      vars: DataTypes.CreateProfileThenPostNoteDataStruct,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    getLinkingAnyUri(
+      linkKey: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    getLinkingAnyUris(
+      fromProfileId: BigNumberish,
+      linkType: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    getLinkingERC721(
+      linkKey: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    getLinkingERC721s(
+      fromProfileId: BigNumberish,
+      linkType: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    getLinkingNote(
+      linkKey: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    getLinkingNotes(
+      fromProfileId: BigNumberish,
+      linkType: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    getLinkingProfileIds(
+      fromProfileId: BigNumberish,
+      linkType: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     initialize(
       _web3Entry: string,
+      _linklist: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -149,13 +516,60 @@ export interface Abi extends BaseContract {
       vars: DataTypes.LinkProfilesInBatchDataStruct,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
+
+    linklist(overrides?: CallOverrides): Promise<BigNumber>;
 
     web3Entry(overrides?: CallOverrides): Promise<BigNumber>;
   };
 
   populateTransaction: {
+    createProfileThenPostNote(
+      vars: DataTypes.CreateProfileThenPostNoteDataStruct,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    getLinkingAnyUri(
+      linkKey: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    getLinkingAnyUris(
+      fromProfileId: BigNumberish,
+      linkType: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    getLinkingERC721(
+      linkKey: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    getLinkingERC721s(
+      fromProfileId: BigNumberish,
+      linkType: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    getLinkingNote(
+      linkKey: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    getLinkingNotes(
+      fromProfileId: BigNumberish,
+      linkType: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    getLinkingProfileIds(
+      fromProfileId: BigNumberish,
+      linkType: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
     initialize(
       _web3Entry: string,
+      _linklist: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -163,6 +577,8 @@ export interface Abi extends BaseContract {
       vars: DataTypes.LinkProfilesInBatchDataStruct,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
+
+    linklist(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     web3Entry(overrides?: CallOverrides): Promise<PopulatedTransaction>;
   };

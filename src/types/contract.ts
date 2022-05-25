@@ -28,12 +28,18 @@ export type Profile = {
 }
 
 export type LinkItemType =
-  | 'ProfileLink'
-  | 'AddressLink'
-  | 'NoteLink'
-  | 'ERC721Link'
-  | 'ListLink'
-  | 'AnyLink'
+  | 'Profile'
+  | 'Address'
+  | 'Note'
+  | 'ERC721'
+  | 'Linklist'
+  | 'AnyUri'
+// | 'ProfileLink'
+// | 'AddressLink'
+// | 'NoteLink'
+// | 'ERC721Link'
+// | 'ListLink'
+// | 'AnyLink'
 
 export type Note = {
   /** The profile id of the address who owns the note.  */
@@ -47,10 +53,13 @@ export type Note = {
   metadata?: NoteMetadata
 
   /** The bytes32 representation of the link if there is one. */
-  linkItemTypeBytes32: string
+  linkItemType: string
   /** The type of the link if there is one. */
-  linkItemType?: LinkItemType
-  /** The primary key (id) of the linking target. It's keccak256 encoded. */
+  linkItemTypeString?: LinkItemType
+  /**
+   * The primary key (id) of the linking target. It's keccak256 encoded.
+   * You may need to use `contract.getLinkingXXX(linkKey)` to get the target.
+   **/
   linkKey: string
   /** The link module address of the note. */
   linkModule: string

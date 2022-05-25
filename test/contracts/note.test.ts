@@ -58,5 +58,23 @@ describe('should post note', () => {
     )
 
     expect(deleteHash).toBeDefined()
+
+    const { data: note } = await contract.getNote(profileId, data.noteId)
+    expect(note.deleted).toBeTruthy()
+  })
+
+  test('postNoteForAnyUri', async () => {
+    const { data } = await contract.postNoteForAnyUri(
+      profileId,
+      { title: 'test', summary: 'test' },
+      'https://example.com',
+    )
+
+    expect(data.noteId).toBeDefined()
+
+    const { data: note } = await contract.getNote(profileId, data.noteId)
+    expect(note.linkKey).toBe(
+      contract.getLinkKeyForAnyUri('https://example.com'),
+    )
   })
 })
