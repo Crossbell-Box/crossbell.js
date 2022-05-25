@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## 0.5.11 (2022-05-26)
+
+- Add `linkItem` response to `contract.getNote()`
+
+## 0.5.10 (2022-05-25)
+
+- Update abi.
+
 ## 0.5.8 (2022-05-25)
 
 - New API

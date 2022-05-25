@@ -1,6 +1,6 @@
 {
   "name": "crossbell.js",
-  "version": "0.5.9",
+  "version": "0.5.11",
   "description": "JavaScript SDK to interact with Crossbell",
   "keywords": [
     "crossbell",
@@ -27,6 +27,7 @@
   ],
   "scripts": {
     "build": "npm run build-fast -- --dts-resolve",
+    "postbuild": "node ./scripts/post-build.js",
     "build-fast": "tsup",
     "update-abi": "node ./scripts/update-abi.js",
     "gen-doc": "typedoc",

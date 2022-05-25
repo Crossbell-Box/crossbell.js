@@ -20,7 +20,7 @@ const logTopics: Record<
 > = {
   createProfile: 'ProfileCreated(uint256,address,address,string,uint256)',
   linkProfile: 'LinkProfile(address,uint256,uint256,bytes32,uint256)',
-  postNote: 'PostNote(uint256,uint256,bytes32,bytes)',
+  postNote: 'PostNote(uint256,uint256,bytes32,bytes32,bytes)',
 } as const
 
 export class BaseContract {

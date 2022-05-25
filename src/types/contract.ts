@@ -41,7 +41,18 @@ export type LinkItemType =
 // | 'ListLink'
 // | 'AnyLink'
 
-export type Note = {
+export type LinkItemAnyUri = {
+  uri: string
+}
+
+export type LinkItemERC721 = {
+  contractAddress: string
+  tokenId: string
+}
+
+export type LinkItem = LinkItemAnyUri | LinkItemERC721
+
+export type Note<T extends LinkItem | undefined = undefined> = {
   /** The profile id of the address who owns the note.  */
   profileId: string
   /** The id of this note. Each id is unique under one profile. */
@@ -56,6 +67,9 @@ export type Note = {
   linkItemType: string
   /** The type of the link if there is one. */
   linkItemTypeString?: LinkItemType
+
+  linkItem: T
+
   /**
    * The primary key (id) of the linking target. It's keccak256 encoded.
    * You may need to use `contract.getLinkingXXX(linkKey)` to get the target.

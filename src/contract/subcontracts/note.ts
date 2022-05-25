@@ -1,6 +1,13 @@
 import { ethers } from 'ethers'
 import { BaseContract } from './base'
-import { Result, Note, NoteMetadata } from '../../types'
+import {
+  Result,
+  Note,
+  NoteMetadata,
+  LinkItem,
+  LinkItemAnyUri,
+  LinkItemERC721,
+} from '../../types'
 import { Ipfs } from '../../ipfs'
 import { NIL_ADDRESS } from '../utils'
 import { autoSwitchMainnet } from '../decorators'
@@ -87,24 +94,53 @@ export class NoteContract extends BaseContract {
    * @param noteId - The id of the note you want to get the info for.
    * @returns The info of the note.
    */
-  @autoSwitchMainnet()
-  async getNote(
+  async getNote<T = undefined>(
     profileId: string,
     noteId: string,
-  ): Promise<Result<Note>> | never {
+  ): Promise<Result<Note<undefined>>> | never
+  async getNote<T = LinkItemERC721>(
+    profileId: string,
+    noteId: string,
+    linkItemType: 'ERC721',
+  ): Promise<Result<Note<LinkItemERC721>>> | never
+  async getNote<T = LinkItemAnyUri>(
+    profileId: string,
+    noteId: string,
+    linkItemType: 'AnyUri',
+  ): Promise<Result<Note<LinkItemAnyUri>>> | never
+  @autoSwitchMainnet()
+  async getNote<T extends LinkItem>(
+    profileId: string,
+    noteId: string,
+    linkItemType?: Note['linkItemTypeString'],
+  ): Promise<Result<Note<T>>> | never {
     const data = await this.contract.getNote(profileId, noteId)
 
-    const linkItemTypeString = ethers.utils.parseBytes32String(
-      data.linkItemType,
-    )
-    const linkItemType =
-      linkItemTypeString === ''
+    const _linkItemType = ethers.utils.parseBytes32String(data.linkItemType)
+    const linkItemTypeString =
+      _linkItemType === ''
         ? undefined
-        : (linkItemTypeString as Note['linkItemTypeString'])
+        : (_linkItemType as Note['linkItemTypeString'])
 
     const metadata = data.contentUri
       ? await Ipfs.uriToMetadata<NoteMetadata>(data.contentUri)
       : undefined
+
+    let linkItem: T
+    if (linkItemType === 'AnyUri') {
+      const uri = await this.peripheryContract.getLinkingAnyUri(data.linkKey)
+      linkItem = {
+        uri: uri,
+      } as T
+    } else if (linkItemType === 'ERC721') {
+      const erc721 = await this.peripheryContract.getLinkingERC721(data.linkKey)
+      linkItem = {
+        contractAddress: erc721.tokenAddress.toString(),
+        tokenId: erc721.erc721TokenId.toString(),
+      } as T
+    } else {
+      linkItem = undefined as unknown as T
+    }
 
     return {
       data: {
@@ -113,7 +149,8 @@ export class NoteContract extends BaseContract {
         contentUri: data.contentUri,
         metadata,
         linkItemType: data.linkItemType,
-        linkItemTypeString: linkItemType,
+        linkItemTypeString: linkItemTypeString,
+        linkItem,
         linkKey: data.linkKey,
         linkModule: data.linkModule,
         mintNFT: data.mintNFT,

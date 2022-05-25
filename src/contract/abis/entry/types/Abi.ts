@@ -1195,7 +1195,7 @@ export interface AbiInterface extends utils.Interface {
     "LinklistNFTInitialized(uint256)": EventFragment;
     "MintNFTInitialized(uint256,uint256,uint256)": EventFragment;
     "MintNote(address,uint256,uint256,uint256,bytes,uint256)": EventFragment;
-    "PostNote(uint256,uint256,bytes32,bytes)": EventFragment;
+    "PostNote(uint256,uint256,bytes32,bytes32,bytes)": EventFragment;
     "ProfileCreated(uint256,address,address,string,uint256)": EventFragment;
     "SetDispatcher(uint256,address,uint256)": EventFragment;
     "SetHandle(address,uint256,string)": EventFragment;
@@ -1466,11 +1466,12 @@ export type MintNoteEventFilter = TypedEventFilter<MintNoteEvent>;
 export interface PostNoteEventObject {
   profileId: BigNumber;
   noteId: BigNumber;
+  linkKey: string;
   linkItemType: string;
   data: string;
 }
 export type PostNoteEvent = TypedEvent<
-  [BigNumber, BigNumber, string, string],
+  [BigNumber, BigNumber, string, string, string],
   PostNoteEventObject
 >;
 
@@ -3168,16 +3169,18 @@ export interface Abi extends BaseContract {
       timestamp?: null
     ): MintNoteEventFilter;
 
-    "PostNote(uint256,uint256,bytes32,bytes)"(
+    "PostNote(uint256,uint256,bytes32,bytes32,bytes)"(
       profileId?: BigNumberish | null,
       noteId?: BigNumberish | null,
-      linkItemType?: BytesLike | null,
+      linkKey?: BytesLike | null,
+      linkItemType?: null,
       data?: null
     ): PostNoteEventFilter;
     PostNote(
       profileId?: BigNumberish | null,
       noteId?: BigNumberish | null,
-      linkItemType?: BytesLike | null,
+      linkKey?: BytesLike | null,
+      linkItemType?: null,
       data?: null
     ): PostNoteEventFilter;
 

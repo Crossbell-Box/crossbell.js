@@ -2770,6 +2770,12 @@ const _abi = [
       {
         indexed: true,
         internalType: "bytes32",
+        name: "linkKey",
+        type: "bytes32",
+      },
+      {
+        indexed: false,
+        internalType: "bytes32",
         name: "linkItemType",
         type: "bytes32",
       },
