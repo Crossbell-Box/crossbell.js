@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.5.12 (2022-05-26)
+
+- Rollback esm dynamic import implementation.
+
 ## 0.5.11 (2022-05-26)
 
 - Add `linkItem` response to `contract.getNote()`
