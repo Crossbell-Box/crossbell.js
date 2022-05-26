@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.5.13 (2022-05-26)
+
+- Fix NoteMetadata typings.
+
 ## 0.5.12 (2022-05-26)
 
 - Rollback esm dynamic import implementation.

@@ -16,7 +16,7 @@ describe('should post note', () => {
   test('postNote and check', async () => {
     const { data } = await contract.postNote(profileId, {
       title: 'test',
-      summary: 'test',
+      content: 'test',
     })
 
     expect(data.noteId).toBeDefined()
@@ -28,7 +28,7 @@ describe('should post note', () => {
   test('mintNote', async () => {
     const { data } = await contract.postNote(profileId, {
       title: 'test',
-      summary: 'test',
+      content: 'test',
     })
 
     expect(data.noteId).toBeDefined()
@@ -47,7 +47,7 @@ describe('should post note', () => {
   test('deleteNote', async () => {
     const { data } = await contract.postNote(profileId, {
       title: 'test',
-      summary: 'test',
+      content: 'test',
     })
 
     expect(data.noteId).toBeDefined()
@@ -66,7 +66,7 @@ describe('should post note', () => {
   test('postNoteForAnyUri', async () => {
     const { data } = await contract.postNoteForAnyUri(
       profileId,
-      { title: 'test', summary: 'test' },
+      { title: 'test', content: 'test' },
       'https://example.com',
     )
 

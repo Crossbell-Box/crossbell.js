@@ -69,7 +69,53 @@ export type NoteMetadata = BaseMetadata & {
    * @example
    * '# Hello World\n\nThis is a markdown note.'
    */
-  summary?: string
+  content?: string
+
+  attachments?:
+    | (
+        | {
+            /**
+             * The name of this attachment.
+             */
+            name?: string
+
+            /**
+             * The plain content of this attachment.
+             */
+            content?: string
+
+            /**
+             * The mime type of the `content`.
+             */
+            mime_type?: string
+
+            /**
+             * The size of the `content` in bytes.
+             */
+            size_in_bytes?: number
+          }
+        | {
+            /**
+             * The name of this attachment.
+             */
+            name?: string
+
+            /**
+             * The address (url) of this attachment.
+             */
+            address?: string
+
+            /**
+             * The mime type of the content of `address`.
+             */
+            mime_type?: string
+
+            /**
+             * The size of the content of `address` in bytes.
+             */
+            size_in_bytes?: number
+          }
+      )[]
 }
 
 export type Metadata = ProfileMetadata | NoteMetadata
