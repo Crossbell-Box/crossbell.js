@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.5.14 (2022-05-27)
+
+- Build outputs target node 14.
+
 ## 0.5.13 (2022-05-26)
 
 - Fix NoteMetadata typings.

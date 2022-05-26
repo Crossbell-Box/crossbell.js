@@ -10,5 +10,4 @@ export default defineConfig((options) => ({
   clean: true,
   sourcemap: true,
   minify: !options.watch,
-  target: 'node16',
 }))
