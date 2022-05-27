@@ -526,6 +526,11 @@ const _abi = [
             name: "deleted",
             type: "bool",
           },
+          {
+            internalType: "bool",
+            name: "locked",
+            type: "bool",
+          },
         ],
         internalType: "struct DataTypes.Note",
         name: "",
@@ -590,6 +595,11 @@ const _abi = [
           {
             internalType: "bool",
             name: "deleted",
+            type: "bool",
+          },
+          {
+            internalType: "bool",
+            name: "locked",
             type: "bool",
           },
         ],
@@ -1124,6 +1134,24 @@ const _abi = [
   {
     inputs: [
       {
+        internalType: "uint256",
+        name: "profileId",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "noteId",
+        type: "uint256",
+      },
+    ],
+    name: "lockNote",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
         components: [
           {
             internalType: "uint256",
@@ -1228,6 +1256,11 @@ const _abi = [
             name: "mintModuleInitData",
             type: "bytes",
           },
+          {
+            internalType: "bool",
+            name: "locked",
+            type: "bool",
+          },
         ],
         internalType: "struct DataTypes.PostNoteData",
         name: "vars",
@@ -1278,6 +1311,11 @@ const _abi = [
             internalType: "bytes",
             name: "mintModuleInitData",
             type: "bytes",
+          },
+          {
+            internalType: "bool",
+            name: "locked",
+            type: "bool",
           },
         ],
         internalType: "struct DataTypes.PostNoteData",
@@ -1335,6 +1373,11 @@ const _abi = [
             name: "mintModuleInitData",
             type: "bytes",
           },
+          {
+            internalType: "bool",
+            name: "locked",
+            type: "bool",
+          },
         ],
         internalType: "struct DataTypes.PostNoteData",
         name: "postNoteData",
@@ -1390,6 +1433,11 @@ const _abi = [
             internalType: "bytes",
             name: "mintModuleInitData",
             type: "bytes",
+          },
+          {
+            internalType: "bool",
+            name: "locked",
+            type: "bool",
           },
         ],
         internalType: "struct DataTypes.PostNoteData",
@@ -1459,6 +1507,11 @@ const _abi = [
             name: "mintModuleInitData",
             type: "bytes",
           },
+          {
+            internalType: "bool",
+            name: "locked",
+            type: "bool",
+          },
         ],
         internalType: "struct DataTypes.PostNoteData",
         name: "noteData",
@@ -1514,6 +1567,11 @@ const _abi = [
             internalType: "bytes",
             name: "mintModuleInitData",
             type: "bytes",
+          },
+          {
+            internalType: "bool",
+            name: "locked",
+            type: "bool",
           },
         ],
         internalType: "struct DataTypes.PostNoteData",
@@ -1582,6 +1640,11 @@ const _abi = [
             internalType: "bytes",
             name: "mintModuleInitData",
             type: "bytes",
+          },
+          {
+            internalType: "bool",
+            name: "locked",
+            type: "bool",
           },
         ],
         internalType: "struct DataTypes.PostNoteData",
@@ -1932,6 +1995,29 @@ const _abi = [
       },
     ],
     name: "setMintModule4Note",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "profileId",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "noteId",
+        type: "uint256",
+      },
+      {
+        internalType: "string",
+        name: "newUri",
+        type: "string",
+      },
+    ],
+    name: "setNoteUri",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
@@ -2688,6 +2774,25 @@ const _abi = [
     anonymous: false,
     inputs: [
       {
+        indexed: true,
+        internalType: "uint256",
+        name: "profileId",
+        type: "uint256",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "noteId",
+        type: "uint256",
+      },
+    ],
+    name: "LockNote",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
         indexed: false,
         internalType: "uint256",
         name: "profileId",
@@ -2732,20 +2837,14 @@ const _abi = [
       },
       {
         indexed: false,
+        internalType: "address",
+        name: "tokenAddress",
+        type: "address",
+      },
+      {
+        indexed: false,
         internalType: "uint256",
         name: "tokenId",
-        type: "uint256",
-      },
-      {
-        indexed: false,
-        internalType: "bytes",
-        name: "data",
-        type: "bytes",
-      },
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "timestamp",
         type: "uint256",
       },
     ],
@@ -3078,6 +3177,31 @@ const _abi = [
       },
     ],
     name: "SetMintModule4Note",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "uint256",
+        name: "profileId",
+        type: "uint256",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "noteId",
+        type: "uint256",
+      },
+      {
+        indexed: false,
+        internalType: "string",
+        name: "newUri",
+        type: "string",
+      },
+    ],
+    name: "SetNoteUri",
     type: "event",
   },
   {

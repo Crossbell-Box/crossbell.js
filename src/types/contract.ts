@@ -79,10 +79,17 @@ export type Note<T extends LinkItem | undefined = undefined> = {
   linkModule: string
 
   /** NFT contract address if this is a minted NFT note. */
-  mintNFT: string
+  contractAddress: string
   /** The mint module address of the note */
   mintModule: string
 
   /** Whether or not this note has been deleted. */
   deleted: boolean
+  /** Whether or not this note has been locked. I.e., not able to be edited. */
+  locked: boolean
+}
+
+export type PostNoteOptions = {
+  /** If locked, the note will be not able to be edited. */
+  locked?: boolean
 }

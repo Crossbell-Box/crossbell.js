@@ -1,5 +1,16 @@
 # CHANGELOG
 
+## 0.5.15 (2022-05-27)
+
+- Build outputs target node 12.
+- New API
+  - `contract.setNoteUri()`
+  - `contract.setNoteMetadata()`
+  - `contract.changeNoteMetadata()`
+  - `contract.lockNote()`
+- Improvements
+  - `contract.mintNote()` now returns contract address and token id.
+
 ## 0.5.14 (2022-05-27)
 
 - Build outputs target node 14.

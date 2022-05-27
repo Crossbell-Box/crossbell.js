@@ -56,6 +56,11 @@ const _abi = [
             name: "mintModuleInitData",
             type: "bytes",
           },
+          {
+            internalType: "bool",
+            name: "locked",
+            type: "bool",
+          },
         ],
         internalType: "struct DataTypes.createProfileThenPostNoteData",
         name: "vars",
@@ -258,6 +263,11 @@ const _abi = [
           {
             internalType: "bool",
             name: "deleted",
+            type: "bool",
+          },
+          {
+            internalType: "bool",
+            name: "locked",
             type: "bool",
           },
         ],

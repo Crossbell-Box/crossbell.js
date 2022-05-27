@@ -7,6 +7,7 @@ import {
   LinkItem,
   LinkItemAnyUri,
   LinkItemERC721,
+  PostNoteOptions,
 } from '../../types'
 import { Ipfs } from '../../ipfs'
 import { NIL_ADDRESS } from '../utils'
@@ -24,6 +25,7 @@ export class NoteContract extends BaseContract {
   async postNote(
     profileId: string,
     metadataOrUri: NoteMetadata | string,
+    { locked = false }: PostNoteOptions = {},
   ): Promise<Result<{ noteId: string }, true>> | never {
     const { uri } = await Ipfs.parseMetadataOrUri('note', metadataOrUri)
 
@@ -34,6 +36,7 @@ export class NoteContract extends BaseContract {
       linkModuleInitData: NIL_ADDRESS,
       mintModule: NIL_ADDRESS,
       mintModuleInitData: NIL_ADDRESS,
+      locked: locked,
     })
 
     const receipt = await tx.wait()
@@ -53,6 +56,8 @@ export class NoteContract extends BaseContract {
    * @category Note
    * @param profileId - The profile ID of the owner who post this note. Must be your own profile, otherwise it will be rejected.
    * @param metadataOrUri - The metadata or URI of the content you want to post.
+   * @param targetUri - The target uri of the note.
+   * @param options - Options for the note.
    * @returns The id of the new note.
    */
   @autoSwitchMainnet()
@@ -60,6 +65,7 @@ export class NoteContract extends BaseContract {
     profileId: string,
     metadataOrUri: NoteMetadata | string,
     targetUri: string,
+    { locked = false }: PostNoteOptions = {},
   ): Promise<Result<{ noteId: string }, true>> | never {
     const { uri } = await Ipfs.parseMetadataOrUri('note', metadataOrUri)
 
@@ -71,6 +77,7 @@ export class NoteContract extends BaseContract {
         linkModuleInitData: NIL_ADDRESS,
         mintModule: NIL_ADDRESS,
         mintModuleInitData: NIL_ADDRESS,
+        locked: locked,
       },
       targetUri,
     )
@@ -85,6 +92,108 @@ export class NoteContract extends BaseContract {
       },
       transactionHash: receipt.transactionHash,
     }
+  }
+
+  /**
+   * This sets a note's metadata (URI).
+   * @category Note
+   * @param profileId - The profile ID of the owner who post this note. Must be your own profile, otherwise it will be rejected.
+   * @param noteId - The id of the note you want to set the metadata.
+   * @param metadataOrUri - The metadata or URI of the content you want to post.
+   * @returns The transaction hash of the transaction.
+   */
+  @autoSwitchMainnet()
+  async setNoteUri(
+    profileId: string,
+    noteId: string,
+    metadataOrUri: NoteMetadata | string,
+  ): Promise<Result<{ uri: string; metadata: NoteMetadata }, true>> | never {
+    const { uri, metadata } = await Ipfs.parseMetadataOrUri(
+      'note',
+      metadataOrUri,
+      true,
+    )
+
+    const tx = await this.contract.setNoteUri(profileId, noteId, uri)
+
+    const receipt = await tx.wait()
+
+    return {
+      data: {
+        uri,
+        metadata,
+      },
+      transactionHash: receipt.transactionHash,
+    }
+  }
+
+  /**
+   * This changes a note's metadata (URI).
+   * @category Note
+   * @param profileId - The profile ID of the user you want to set the URI for.
+   * @param noteId - The id of the note you want to set the URI for.
+   * @param modifier - The callback function that modifies the metadata.
+   * @returns The transaction hash of the transaction that was sent to the blockchain.
+   * @example change a note's metadata name and content
+   *
+   * ```js
+   * await contract.changeNoteMetadata('42', '2', metadata => {
+   *   if (metadata !== undefined) {
+   *     metadata.title = 'Note Title'
+   *     metadata.content = 'Hello, world'
+   *   } else {
+   *     metadata = {
+   *       title: 'Note Title',
+   *       content: 'Hello, world',
+   *     }
+   *   }
+   *   return metadata
+   * })
+   * ```
+   *
+   * @example change a note's metadata title and content (using spread operator)
+   *
+   * ```js
+   * await contract.changeNoteMetadata('42', '2', metadata => {
+   *   metadata = {
+   *     ...metadata,
+   *     title: 'Note Title',
+   *     content: 'Hello, world',
+   *   }
+   *   return metadata
+   * })
+   * ```
+   */
+  @autoSwitchMainnet()
+  async changeNoteMetadata(
+    profileId: string,
+    noteId: string,
+    modifier: (metadata?: NoteMetadata) => NoteMetadata,
+  ) {
+    const note = await this.getNote(profileId, noteId)
+
+    const metadata = modifier(note.data.metadata)
+    if (typeof metadata === 'undefined') {
+      throw new Error('The modified metadata is undefined. Did you return it?')
+    }
+
+    if (!metadata.type) {
+      metadata.type = 'note'
+    }
+
+    return this.setNoteMetadata(profileId, noteId, metadata)
+  }
+
+  /**
+   * This is the same as {@link setNoteUri}
+   * @category Note
+   */
+  async setNoteMetadata(
+    profileId: string,
+    noteId: string,
+    metadata: NoteMetadata,
+  ) {
+    return this.setNoteUri(profileId, noteId, metadata)
   }
 
   /**
@@ -153,9 +262,10 @@ export class NoteContract extends BaseContract {
         linkItem,
         linkKey: data.linkKey,
         linkModule: data.linkModule,
-        mintNFT: data.mintNFT,
+        contractAddress: data.mintNFT,
         mintModule: data.mintModule,
         deleted: data.deleted,
+        locked: data.locked,
       },
     }
   }
@@ -186,6 +296,34 @@ export class NoteContract extends BaseContract {
   }
 
   /**
+   * This locks a note.
+   *
+   * When a note is locked, it can't be edited and unlocked anymore.
+   * I.e., you can't change the content of the note using {@link setNoteUri} {@link setNoteMetadata} {@link changeNoteMetadata}.
+   *
+   * You can still delete the note using {@link deleteNote}.
+   *
+   * @category Note
+   * @param profileId  - The profile ID of the owner who post this note. Must be your own profile, otherwise it will be rejected.
+   * @param noteId - The id of the note you want to lock.
+   * @returns The transaction hash of the transaction.
+   */
+  @autoSwitchMainnet()
+  async lockNote(
+    profileId: string,
+    noteId: string,
+  ): Promise<Result<undefined, true>> | never {
+    const tx = await this.contract.lockNote(profileId, noteId)
+
+    const receipt = await tx.wait()
+
+    return {
+      data: undefined,
+      transactionHash: receipt.transactionHash,
+    }
+  }
+
+  /**
    * This mints a note as an NFT.
    * @category Note
    * @param profileId - The profile ID of the address who owns the note.
@@ -198,7 +336,9 @@ export class NoteContract extends BaseContract {
     profileId: string,
     noteId: string,
     toAddress: string,
-  ): Promise<Result<undefined, true>> | never {
+  ):
+    | Promise<Result<{ contractAddress: string; tokenId: string }, true>>
+    | never {
     const tx = await this.contract.mintNote({
       profileId: profileId,
       noteId: noteId,
@@ -208,8 +348,13 @@ export class NoteContract extends BaseContract {
 
     const receipt = await tx.wait()
 
+    const log = this.parseLog(receipt.logs, 'mintNote')
+
     return {
-      data: undefined,
+      data: {
+        contractAddress: log.args.tokenAddress,
+        tokenId: log.args.tokenId.toNumber().toString(),
+      },
       transactionHash: receipt.transactionHash,
     }
   }

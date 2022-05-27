@@ -33,6 +33,7 @@ export declare namespace DataTypes {
     noteLinkModuleInitData: BytesLike;
     mintModule: string;
     mintModuleInitData: BytesLike;
+    locked: boolean;
   };
 
   export type CreateProfileThenPostNoteDataStructOutput = [
@@ -44,7 +45,8 @@ export declare namespace DataTypes {
     string,
     string,
     string,
-    string
+    string,
+    boolean
   ] & {
     handle: string;
     uri: string;
@@ -55,6 +57,7 @@ export declare namespace DataTypes {
     noteLinkModuleInitData: string;
     mintModule: string;
     mintModuleInitData: string;
+    locked: boolean;
   };
 
   export type ERC721StructStruct = {
@@ -85,6 +88,7 @@ export declare namespace DataTypes {
     mintModule: string;
     mintNFT: string;
     deleted: boolean;
+    locked: boolean;
   };
 
   export type NoteStructOutput = [
@@ -94,6 +98,7 @@ export declare namespace DataTypes {
     string,
     string,
     string,
+    boolean,
     boolean
   ] & {
     linkItemType: string;
@@ -103,6 +108,7 @@ export declare namespace DataTypes {
     mintModule: string;
     mintNFT: string;
     deleted: boolean;
+    locked: boolean;
   };
 
   export type LinkProfilesInBatchDataStruct = {
@@ -130,7 +136,7 @@ export declare namespace DataTypes {
 
 export interface AbiInterface extends utils.Interface {
   functions: {
-    "createProfileThenPostNote((string,string,address,bytes,string,address,bytes,address,bytes))": FunctionFragment;
+    "createProfileThenPostNote((string,string,address,bytes,string,address,bytes,address,bytes,bool))": FunctionFragment;
     "getLinkingAnyUri(bytes32)": FunctionFragment;
     "getLinkingAnyUris(uint256,bytes32)": FunctionFragment;
     "getLinkingERC721(bytes32)": FunctionFragment;

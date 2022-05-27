@@ -69,7 +69,7 @@ export class ProfileContract extends BaseContract {
    * This sets a profile's metadata (URI).
    * @category Profile
    * @param profileId - The profile ID of the user you want to set the URI for.
-   * @param metadataOrUri - The URI you want to set.
+   * @param metadataOrUri - The metadata or URI you want to set.
    * @returns The transaction hash of the transaction that was sent to the blockchain.
    */
   @autoSwitchMainnet()

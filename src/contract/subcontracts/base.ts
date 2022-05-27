@@ -6,6 +6,7 @@ import {
 } from '../abis/entry/types'
 import {
   LinkProfileEvent,
+  MintNoteEvent,
   PostNoteEvent,
   ProfileCreatedEvent,
 } from '../abis/entry/types/Abi'
@@ -15,12 +16,13 @@ import {
 } from '../abis/periphery/types'
 
 const logTopics: Record<
-  'createProfile' | 'linkProfile' | 'postNote',
+  'createProfile' | 'linkProfile' | 'postNote' | 'mintNote',
   keyof EntryAbi['filters']
 > = {
   createProfile: 'ProfileCreated(uint256,address,address,string,uint256)',
   linkProfile: 'LinkProfile(address,uint256,uint256,bytes32,uint256)',
   postNote: 'PostNote(uint256,uint256,bytes32,bytes32,bytes)',
+  mintNote: 'MintNote(address,uint256,uint256,address,uint256)',
 } as const
 
 export class BaseContract {
@@ -35,23 +37,29 @@ export class BaseContract {
 
   private _hasConnected: boolean = false
 
-  protected get contract(): EntryAbi {
+  /**
+   * Returns the internal contract.
+   */
+  get contract(): EntryAbi {
     this.checkConnection()
 
     return this._contract
   }
 
-  protected set peripheryContract(contract: PeripheryAbi) {
+  set peripheryContract(contract: PeripheryAbi) {
     this._peripheryContract = contract
   }
 
-  protected get peripheryContract(): PeripheryAbi {
+  /**
+   * Returns the internal periphery contract.
+   */
+  get peripheryContract(): PeripheryAbi {
     this.checkConnection()
 
     return this._peripheryContract
   }
 
-  protected set contract(contract: EntryAbi) {
+  set contract(contract: EntryAbi) {
     this._contract = contract
   }
 
@@ -139,6 +147,10 @@ export class BaseContract {
     this._hasConnected = true
   }
 
+  protected parseLog<T = MintNoteEvent>(
+    logs: ethers.providers.Log[],
+    filterTopic: 'mintNote',
+  ): T
   protected parseLog<T = ProfileCreatedEvent>(
     logs: ethers.providers.Log[],
     filterTopic: 'createProfile',

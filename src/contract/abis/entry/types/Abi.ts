@@ -69,6 +69,7 @@ export declare namespace DataTypes {
     mintModule: string;
     mintNFT: string;
     deleted: boolean;
+    locked: boolean;
   };
 
   export type NoteStructOutput = [
@@ -78,6 +79,7 @@ export declare namespace DataTypes {
     string,
     string,
     string,
+    boolean,
     boolean
   ] & {
     linkItemType: string;
@@ -87,6 +89,7 @@ export declare namespace DataTypes {
     mintModule: string;
     mintNFT: string;
     deleted: boolean;
+    locked: boolean;
   };
 
   export type ProfileStruct = {
@@ -272,6 +275,7 @@ export declare namespace DataTypes {
     linkModuleInitData: BytesLike;
     mintModule: string;
     mintModuleInitData: BytesLike;
+    locked: boolean;
   };
 
   export type PostNoteDataStructOutput = [
@@ -280,7 +284,8 @@ export declare namespace DataTypes {
     string,
     string,
     string,
-    string
+    string,
+    boolean
   ] & {
     profileId: BigNumber;
     contentUri: string;
@@ -288,6 +293,7 @@ export declare namespace DataTypes {
     linkModuleInitData: string;
     mintModule: string;
     mintModuleInitData: string;
+    locked: boolean;
   };
 
   export type ERC721StructStruct = {
@@ -506,16 +512,17 @@ export interface AbiInterface extends utils.Interface {
     "linkNote((uint256,uint256,uint256,bytes32,bytes))": FunctionFragment;
     "linkProfile((uint256,uint256,bytes32,bytes))": FunctionFragment;
     "linkProfileLink(uint256,(uint256,uint256,bytes32),bytes32)": FunctionFragment;
+    "lockNote(uint256,uint256)": FunctionFragment;
     "mintNote((uint256,uint256,address,bytes))": FunctionFragment;
     "name()": FunctionFragment;
     "ownerOf(uint256)": FunctionFragment;
-    "postNote((uint256,string,address,bytes,address,bytes))": FunctionFragment;
-    "postNote4Address((uint256,string,address,bytes,address,bytes),address)": FunctionFragment;
-    "postNote4AnyUri((uint256,string,address,bytes,address,bytes),string)": FunctionFragment;
-    "postNote4ERC721((uint256,string,address,bytes,address,bytes),(address,uint256))": FunctionFragment;
-    "postNote4Linklist((uint256,string,address,bytes,address,bytes),uint256)": FunctionFragment;
-    "postNote4Note((uint256,string,address,bytes,address,bytes),(uint256,uint256))": FunctionFragment;
-    "postNote4Profile((uint256,string,address,bytes,address,bytes),uint256)": FunctionFragment;
+    "postNote((uint256,string,address,bytes,address,bytes,bool))": FunctionFragment;
+    "postNote4Address((uint256,string,address,bytes,address,bytes,bool),address)": FunctionFragment;
+    "postNote4AnyUri((uint256,string,address,bytes,address,bytes,bool),string)": FunctionFragment;
+    "postNote4ERC721((uint256,string,address,bytes,address,bytes,bool),(address,uint256))": FunctionFragment;
+    "postNote4Linklist((uint256,string,address,bytes,address,bytes,bool),uint256)": FunctionFragment;
+    "postNote4Note((uint256,string,address,bytes,address,bytes,bool),(uint256,uint256))": FunctionFragment;
+    "postNote4Profile((uint256,string,address,bytes,address,bytes,bool),uint256)": FunctionFragment;
     "resolver()": FunctionFragment;
     "safeTransferFrom(address,address,uint256)": FunctionFragment;
     "safeTransferFrom(address,address,uint256,bytes)": FunctionFragment;
@@ -529,6 +536,7 @@ export interface AbiInterface extends utils.Interface {
     "setLinkModule4Profile((uint256,address,bytes))": FunctionFragment;
     "setLinklistUri(uint256,string)": FunctionFragment;
     "setMintModule4Note((uint256,uint256,address,bytes))": FunctionFragment;
+    "setNoteUri(uint256,uint256,string)": FunctionFragment;
     "setPrimaryProfileId(uint256)": FunctionFragment;
     "setProfileUri(uint256,string)": FunctionFragment;
     "setSocialToken(uint256,address)": FunctionFragment;
@@ -588,6 +596,7 @@ export interface AbiInterface extends utils.Interface {
       | "linkNote"
       | "linkProfile"
       | "linkProfileLink"
+      | "lockNote"
       | "mintNote"
       | "name"
       | "ownerOf"
@@ -611,6 +620,7 @@ export interface AbiInterface extends utils.Interface {
       | "setLinkModule4Profile"
       | "setLinklistUri"
       | "setMintModule4Note"
+      | "setNoteUri"
       | "setPrimaryProfileId"
       | "setProfileUri"
       | "setSocialToken"
@@ -777,6 +787,10 @@ export interface AbiInterface extends utils.Interface {
     values: [BigNumberish, DataTypes.ProfileLinkStructStruct, BytesLike]
   ): string;
   encodeFunctionData(
+    functionFragment: "lockNote",
+    values: [BigNumberish, BigNumberish]
+  ): string;
+  encodeFunctionData(
     functionFragment: "mintNote",
     values: [DataTypes.MintNoteDataStruct]
   ): string;
@@ -861,6 +875,10 @@ export interface AbiInterface extends utils.Interface {
   encodeFunctionData(
     functionFragment: "setMintModule4Note",
     values: [DataTypes.SetMintModule4NoteDataStruct]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "setNoteUri",
+    values: [BigNumberish, BigNumberish, string]
   ): string;
   encodeFunctionData(
     functionFragment: "setPrimaryProfileId",
@@ -1044,6 +1062,7 @@ export interface AbiInterface extends utils.Interface {
     functionFragment: "linkProfileLink",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "lockNote", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "mintNote", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "name", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "ownerOf", data: BytesLike): Result;
@@ -1118,6 +1137,7 @@ export interface AbiInterface extends utils.Interface {
     functionFragment: "setMintModule4Note",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "setNoteUri", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "setPrimaryProfileId",
     data: BytesLike
@@ -1193,8 +1213,9 @@ export interface AbiInterface extends utils.Interface {
     "LinkProfile(address,uint256,uint256,bytes32,uint256)": EventFragment;
     "LinkProfileLink(uint256,bytes32,uint256,uint256,bytes32)": EventFragment;
     "LinklistNFTInitialized(uint256)": EventFragment;
+    "LockNote(uint256,uint256)": EventFragment;
     "MintNFTInitialized(uint256,uint256,uint256)": EventFragment;
-    "MintNote(address,uint256,uint256,uint256,bytes,uint256)": EventFragment;
+    "MintNote(address,uint256,uint256,address,uint256)": EventFragment;
     "PostNote(uint256,uint256,bytes32,bytes32,bytes)": EventFragment;
     "ProfileCreated(uint256,address,address,string,uint256)": EventFragment;
     "SetDispatcher(uint256,address,uint256)": EventFragment;
@@ -1205,6 +1226,7 @@ export interface AbiInterface extends utils.Interface {
     "SetLinkModule4Note(uint256,uint256,address,bytes,uint256)": EventFragment;
     "SetLinkModule4Profile(uint256,address,bytes,uint256)": EventFragment;
     "SetMintModule4Note(uint256,uint256,address,bytes,uint256)": EventFragment;
+    "SetNoteUri(uint256,uint256,string)": EventFragment;
     "SetPrimaryProfileId(address,uint256)": EventFragment;
     "SetProfileUri(uint256,string)": EventFragment;
     "SetSocialToken(address,uint256,address)": EventFragment;
@@ -1232,6 +1254,7 @@ export interface AbiInterface extends utils.Interface {
   getEvent(nameOrSignatureOrTopic: "LinkProfile"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "LinkProfileLink"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "LinklistNFTInitialized"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "LockNote"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "MintNFTInitialized"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "MintNote"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "PostNote"): EventFragment;
@@ -1244,6 +1267,7 @@ export interface AbiInterface extends utils.Interface {
   getEvent(nameOrSignatureOrTopic: "SetLinkModule4Note"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "SetLinkModule4Profile"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "SetMintModule4Note"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "SetNoteUri"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "SetPrimaryProfileId"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "SetProfileUri"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "SetSocialToken"): EventFragment;
@@ -1435,6 +1459,17 @@ export type LinklistNFTInitializedEvent = TypedEvent<
 export type LinklistNFTInitializedEventFilter =
   TypedEventFilter<LinklistNFTInitializedEvent>;
 
+export interface LockNoteEventObject {
+  profileId: BigNumber;
+  noteId: BigNumber;
+}
+export type LockNoteEvent = TypedEvent<
+  [BigNumber, BigNumber],
+  LockNoteEventObject
+>;
+
+export type LockNoteEventFilter = TypedEventFilter<LockNoteEvent>;
+
 export interface MintNFTInitializedEventObject {
   profileId: BigNumber;
   noteId: BigNumber;
@@ -1452,12 +1487,11 @@ export interface MintNoteEventObject {
   to: string;
   profileId: BigNumber;
   noteId: BigNumber;
+  tokenAddress: string;
   tokenId: BigNumber;
-  data: string;
-  timestamp: BigNumber;
 }
 export type MintNoteEvent = TypedEvent<
-  [string, BigNumber, BigNumber, BigNumber, string, BigNumber],
+  [string, BigNumber, BigNumber, string, BigNumber],
   MintNoteEventObject
 >;
 
@@ -1601,6 +1635,18 @@ export type SetMintModule4NoteEvent = TypedEvent<
 
 export type SetMintModule4NoteEventFilter =
   TypedEventFilter<SetMintModule4NoteEvent>;
+
+export interface SetNoteUriEventObject {
+  profileId: BigNumber;
+  noteId: BigNumber;
+  newUri: string;
+}
+export type SetNoteUriEvent = TypedEvent<
+  [BigNumber, BigNumber, string],
+  SetNoteUriEventObject
+>;
+
+export type SetNoteUriEventFilter = TypedEventFilter<SetNoteUriEvent>;
 
 export interface SetPrimaryProfileIdEventObject {
   account: string;
@@ -1963,6 +2009,12 @@ export interface Abi extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
+    lockNote(
+      profileId: BigNumberish,
+      noteId: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
     mintNote(
       vars: DataTypes.MintNoteDataStruct,
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -2084,6 +2136,13 @@ export interface Abi extends BaseContract {
 
     setMintModule4Note(
       vars: DataTypes.SetMintModule4NoteDataStruct,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    setNoteUri(
+      profileId: BigNumberish,
+      noteId: BigNumberish,
+      newUri: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -2367,6 +2426,12 @@ export interface Abi extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
+  lockNote(
+    profileId: BigNumberish,
+    noteId: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
   mintNote(
     vars: DataTypes.MintNoteDataStruct,
     overrides?: Overrides & { from?: string | Promise<string> }
@@ -2485,6 +2550,13 @@ export interface Abi extends BaseContract {
 
   setMintModule4Note(
     vars: DataTypes.SetMintModule4NoteDataStruct,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  setNoteUri(
+    profileId: BigNumberish,
+    noteId: BigNumberish,
+    newUri: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -2762,6 +2834,12 @@ export interface Abi extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
+    lockNote(
+      profileId: BigNumberish,
+      noteId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
     mintNote(
       vars: DataTypes.MintNoteDataStruct,
       overrides?: CallOverrides
@@ -2880,6 +2958,13 @@ export interface Abi extends BaseContract {
 
     setMintModule4Note(
       vars: DataTypes.SetMintModule4NoteDataStruct,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    setNoteUri(
+      profileId: BigNumberish,
+      noteId: BigNumberish,
+      newUri: string,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -3141,6 +3226,15 @@ export interface Abi extends BaseContract {
     ): LinklistNFTInitializedEventFilter;
     LinklistNFTInitialized(timestamp?: null): LinklistNFTInitializedEventFilter;
 
+    "LockNote(uint256,uint256)"(
+      profileId?: BigNumberish | null,
+      noteId?: null
+    ): LockNoteEventFilter;
+    LockNote(
+      profileId?: BigNumberish | null,
+      noteId?: null
+    ): LockNoteEventFilter;
+
     "MintNFTInitialized(uint256,uint256,uint256)"(
       profileId?: null,
       noteId?: null,
@@ -3152,21 +3246,19 @@ export interface Abi extends BaseContract {
       timestamp?: null
     ): MintNFTInitializedEventFilter;
 
-    "MintNote(address,uint256,uint256,uint256,bytes,uint256)"(
+    "MintNote(address,uint256,uint256,address,uint256)"(
       to?: string | null,
       profileId?: BigNumberish | null,
       noteId?: BigNumberish | null,
-      tokenId?: null,
-      data?: null,
-      timestamp?: null
+      tokenAddress?: null,
+      tokenId?: null
     ): MintNoteEventFilter;
     MintNote(
       to?: string | null,
       profileId?: BigNumberish | null,
       noteId?: BigNumberish | null,
-      tokenId?: null,
-      data?: null,
-      timestamp?: null
+      tokenAddress?: null,
+      tokenId?: null
     ): MintNoteEventFilter;
 
     "PostNote(uint256,uint256,bytes32,bytes32,bytes)"(
@@ -3304,6 +3396,17 @@ export interface Abi extends BaseContract {
       returnData?: null,
       timestamp?: null
     ): SetMintModule4NoteEventFilter;
+
+    "SetNoteUri(uint256,uint256,string)"(
+      profileId?: BigNumberish | null,
+      noteId?: null,
+      newUri?: null
+    ): SetNoteUriEventFilter;
+    SetNoteUri(
+      profileId?: BigNumberish | null,
+      noteId?: null,
+      newUri?: null
+    ): SetNoteUriEventFilter;
 
     "SetPrimaryProfileId(address,uint256)"(
       account?: string | null,
@@ -3627,6 +3730,12 @@ export interface Abi extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
+    lockNote(
+      profileId: BigNumberish,
+      noteId: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
     mintNote(
       vars: DataTypes.MintNoteDataStruct,
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -3748,6 +3857,13 @@ export interface Abi extends BaseContract {
 
     setMintModule4Note(
       vars: DataTypes.SetMintModule4NoteDataStruct,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    setNoteUri(
+      profileId: BigNumberish,
+      noteId: BigNumberish,
+      newUri: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -4037,6 +4153,12 @@ export interface Abi extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
+    lockNote(
+      profileId: BigNumberish,
+      noteId: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
     mintNote(
       vars: DataTypes.MintNoteDataStruct,
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -4158,6 +4280,13 @@ export interface Abi extends BaseContract {
 
     setMintModule4Note(
       vars: DataTypes.SetMintModule4NoteDataStruct,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    setNoteUri(
+      profileId: BigNumberish,
+      noteId: BigNumberish,
+      newUri: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
