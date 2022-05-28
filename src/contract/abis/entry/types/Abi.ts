@@ -1227,7 +1227,7 @@ export interface AbiInterface extends utils.Interface {
     "SetLinkModule4Profile(uint256,address,bytes,uint256)": EventFragment;
     "SetMintModule4Note(uint256,uint256,address,bytes,uint256)": EventFragment;
     "SetNoteUri(uint256,uint256,string)": EventFragment;
-    "SetPrimaryProfileId(address,uint256)": EventFragment;
+    "SetPrimaryProfileId(address,uint256,uint256)": EventFragment;
     "SetProfileUri(uint256,string)": EventFragment;
     "SetSocialToken(address,uint256,address)": EventFragment;
     "UnlinkAddress(uint256,address,bytes32)": EventFragment;
@@ -1651,9 +1651,10 @@ export type SetNoteUriEventFilter = TypedEventFilter<SetNoteUriEvent>;
 export interface SetPrimaryProfileIdEventObject {
   account: string;
   profileId: BigNumber;
+  oldProfileId: BigNumber;
 }
 export type SetPrimaryProfileIdEvent = TypedEvent<
-  [string, BigNumber],
+  [string, BigNumber, BigNumber],
   SetPrimaryProfileIdEventObject
 >;
 
@@ -3408,13 +3409,15 @@ export interface Abi extends BaseContract {
       newUri?: null
     ): SetNoteUriEventFilter;
 
-    "SetPrimaryProfileId(address,uint256)"(
+    "SetPrimaryProfileId(address,uint256,uint256)"(
       account?: string | null,
-      profileId?: BigNumberish | null
+      profileId?: BigNumberish | null,
+      oldProfileId?: BigNumberish | null
     ): SetPrimaryProfileIdEventFilter;
     SetPrimaryProfileId(
       account?: string | null,
-      profileId?: BigNumberish | null
+      profileId?: BigNumberish | null,
+      oldProfileId?: BigNumberish | null
     ): SetPrimaryProfileIdEventFilter;
 
     "SetProfileUri(uint256,string)"(

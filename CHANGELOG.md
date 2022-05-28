@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## 0.5.17 (2022-05-28)
+
+- New Abi.
+
+## 0.5.16 (2022-05-27)
+
+- Expose internal types.
+
 ## 0.5.15 (2022-05-27)
 
 - Build outputs target node 12.

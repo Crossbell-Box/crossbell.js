@@ -9,3 +9,6 @@ export default { Network, Contract, Indexer, Ipfs }
 export { Network, Contract, Indexer, Ipfs, EntryAbi, PeripheryAbi }
 export * from './types'
 export * as utils from './utils'
+
+export * as EntryTypes from './contract/abis/entry/types/Abi'
+export * as PeripheryTypes from './contract/abis/periphery/types/Abi'

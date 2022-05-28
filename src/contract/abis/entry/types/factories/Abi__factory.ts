@@ -3219,6 +3219,12 @@ const _abi = [
         name: "profileId",
         type: "uint256",
       },
+      {
+        indexed: true,
+        internalType: "uint256",
+        name: "oldProfileId",
+        type: "uint256",
+      },
     ],
     name: "SetPrimaryProfileId",
     type: "event",
