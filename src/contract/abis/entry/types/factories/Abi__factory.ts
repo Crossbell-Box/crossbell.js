@@ -307,25 +307,6 @@ const _abi = [
         type: "uint256",
       },
     ],
-    name: "getDispatcher",
-    outputs: [
-      {
-        internalType: "address",
-        name: "",
-        type: "address",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "profileId",
-        type: "uint256",
-      },
-    ],
     name: "getHandle",
     outputs: [
       {
@@ -612,8 +593,14 @@ const _abi = [
     type: "function",
   },
   {
-    inputs: [],
-    name: "getPeriphery",
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "profileId",
+        type: "uint256",
+      },
+    ],
+    name: "getOperator",
     outputs: [
       {
         internalType: "address",
@@ -759,19 +746,6 @@ const _abi = [
         internalType: "string",
         name: "",
         type: "string",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "getResolver",
-    outputs: [
-      {
-        internalType: "address",
-        name: "",
-        type: "address",
       },
     ],
     stateMutability: "view",
@@ -1758,24 +1732,6 @@ const _abi = [
         type: "uint256",
       },
       {
-        internalType: "address",
-        name: "dispatcher",
-        type: "address",
-      },
-    ],
-    name: "setDispatcher",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "profileId",
-        type: "uint256",
-      },
-      {
         internalType: "string",
         name: "newHandle",
         type: "string",
@@ -2018,6 +1974,24 @@ const _abi = [
       },
     ],
     name: "setNoteUri",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "profileId",
+        type: "uint256",
+      },
+      {
+        internalType: "address",
+        name: "operator",
+        type: "address",
+      },
+    ],
+    name: "setOperator",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
@@ -2930,31 +2904,6 @@ const _abi = [
     inputs: [
       {
         indexed: true,
-        internalType: "uint256",
-        name: "profileId",
-        type: "uint256",
-      },
-      {
-        indexed: true,
-        internalType: "address",
-        name: "dispatcher",
-        type: "address",
-      },
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "timestamp",
-        type: "uint256",
-      },
-    ],
-    name: "SetDispatcher",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
         internalType: "address",
         name: "account",
         type: "address",
@@ -3202,6 +3151,31 @@ const _abi = [
       },
     ],
     name: "SetNoteUri",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "uint256",
+        name: "profileId",
+        type: "uint256",
+      },
+      {
+        indexed: true,
+        internalType: "address",
+        name: "operator",
+        type: "address",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "timestamp",
+        type: "uint256",
+      },
+    ],
+    name: "SetOperator",
     type: "event",
   },
   {

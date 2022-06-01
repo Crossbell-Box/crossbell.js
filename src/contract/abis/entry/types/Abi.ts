@@ -484,7 +484,6 @@ export interface AbiInterface extends utils.Interface {
     "deleteNote(uint256,uint256)": FunctionFragment;
     "detachLinklist(uint256,uint256)": FunctionFragment;
     "getApproved(uint256)": FunctionFragment;
-    "getDispatcher(uint256)": FunctionFragment;
     "getHandle(uint256)": FunctionFragment;
     "getLinkModule4Address(address)": FunctionFragment;
     "getLinkModule4ERC721(address,uint256)": FunctionFragment;
@@ -495,12 +494,11 @@ export interface AbiInterface extends utils.Interface {
     "getLinklistUri(uint256)": FunctionFragment;
     "getNote(uint256,uint256)": FunctionFragment;
     "getNotesByProfileId(uint256,uint256,uint256)": FunctionFragment;
-    "getPeriphery()": FunctionFragment;
+    "getOperator(uint256)": FunctionFragment;
     "getPrimaryProfileId(address)": FunctionFragment;
     "getProfile(uint256)": FunctionFragment;
     "getProfileByHandle(string)": FunctionFragment;
     "getProfileUri(uint256)": FunctionFragment;
-    "getResolver()": FunctionFragment;
     "getRevision()": FunctionFragment;
     "initialize(string,string,address,address,address,address)": FunctionFragment;
     "isApprovedForAll(address,address)": FunctionFragment;
@@ -527,7 +525,6 @@ export interface AbiInterface extends utils.Interface {
     "safeTransferFrom(address,address,uint256)": FunctionFragment;
     "safeTransferFrom(address,address,uint256,bytes)": FunctionFragment;
     "setApprovalForAll(address,bool)": FunctionFragment;
-    "setDispatcher(uint256,address)": FunctionFragment;
     "setHandle(uint256,string)": FunctionFragment;
     "setLinkModule4Address((address,address,bytes))": FunctionFragment;
     "setLinkModule4ERC721((address,uint256,address,bytes))": FunctionFragment;
@@ -537,6 +534,7 @@ export interface AbiInterface extends utils.Interface {
     "setLinklistUri(uint256,string)": FunctionFragment;
     "setMintModule4Note((uint256,uint256,address,bytes))": FunctionFragment;
     "setNoteUri(uint256,uint256,string)": FunctionFragment;
+    "setOperator(uint256,address)": FunctionFragment;
     "setPrimaryProfileId(uint256)": FunctionFragment;
     "setProfileUri(uint256,string)": FunctionFragment;
     "setSocialToken(uint256,address)": FunctionFragment;
@@ -568,7 +566,6 @@ export interface AbiInterface extends utils.Interface {
       | "deleteNote"
       | "detachLinklist"
       | "getApproved"
-      | "getDispatcher"
       | "getHandle"
       | "getLinkModule4Address"
       | "getLinkModule4ERC721"
@@ -579,12 +576,11 @@ export interface AbiInterface extends utils.Interface {
       | "getLinklistUri"
       | "getNote"
       | "getNotesByProfileId"
-      | "getPeriphery"
+      | "getOperator"
       | "getPrimaryProfileId"
       | "getProfile"
       | "getProfileByHandle"
       | "getProfileUri"
-      | "getResolver"
       | "getRevision"
       | "initialize"
       | "isApprovedForAll"
@@ -611,7 +607,6 @@ export interface AbiInterface extends utils.Interface {
       | "safeTransferFrom(address,address,uint256)"
       | "safeTransferFrom(address,address,uint256,bytes)"
       | "setApprovalForAll"
-      | "setDispatcher"
       | "setHandle"
       | "setLinkModule4Address"
       | "setLinkModule4ERC721"
@@ -621,6 +616,7 @@ export interface AbiInterface extends utils.Interface {
       | "setLinklistUri"
       | "setMintModule4Note"
       | "setNoteUri"
+      | "setOperator"
       | "setPrimaryProfileId"
       | "setProfileUri"
       | "setSocialToken"
@@ -675,10 +671,6 @@ export interface AbiInterface extends utils.Interface {
     values: [BigNumberish]
   ): string;
   encodeFunctionData(
-    functionFragment: "getDispatcher",
-    values: [BigNumberish]
-  ): string;
-  encodeFunctionData(
     functionFragment: "getHandle",
     values: [BigNumberish]
   ): string;
@@ -719,8 +711,8 @@ export interface AbiInterface extends utils.Interface {
     values: [BigNumberish, BigNumberish, BigNumberish]
   ): string;
   encodeFunctionData(
-    functionFragment: "getPeriphery",
-    values?: undefined
+    functionFragment: "getOperator",
+    values: [BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "getPrimaryProfileId",
@@ -737,10 +729,6 @@ export interface AbiInterface extends utils.Interface {
   encodeFunctionData(
     functionFragment: "getProfileUri",
     values: [BigNumberish]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "getResolver",
-    values?: undefined
   ): string;
   encodeFunctionData(
     functionFragment: "getRevision",
@@ -841,10 +829,6 @@ export interface AbiInterface extends utils.Interface {
     values: [string, boolean]
   ): string;
   encodeFunctionData(
-    functionFragment: "setDispatcher",
-    values: [BigNumberish, string]
-  ): string;
-  encodeFunctionData(
     functionFragment: "setHandle",
     values: [BigNumberish, string]
   ): string;
@@ -879,6 +863,10 @@ export interface AbiInterface extends utils.Interface {
   encodeFunctionData(
     functionFragment: "setNoteUri",
     values: [BigNumberish, BigNumberish, string]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "setOperator",
+    values: [BigNumberish, string]
   ): string;
   encodeFunctionData(
     functionFragment: "setPrimaryProfileId",
@@ -971,10 +959,6 @@ export interface AbiInterface extends utils.Interface {
     functionFragment: "getApproved",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(
-    functionFragment: "getDispatcher",
-    data: BytesLike
-  ): Result;
   decodeFunctionResult(functionFragment: "getHandle", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "getLinkModule4Address",
@@ -1010,7 +994,7 @@ export interface AbiInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "getPeriphery",
+    functionFragment: "getOperator",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -1024,10 +1008,6 @@ export interface AbiInterface extends utils.Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "getProfileUri",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "getResolver",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -1104,10 +1084,6 @@ export interface AbiInterface extends utils.Interface {
     functionFragment: "setApprovalForAll",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(
-    functionFragment: "setDispatcher",
-    data: BytesLike
-  ): Result;
   decodeFunctionResult(functionFragment: "setHandle", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "setLinkModule4Address",
@@ -1138,6 +1114,10 @@ export interface AbiInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "setNoteUri", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "setOperator",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
     functionFragment: "setPrimaryProfileId",
     data: BytesLike
@@ -1218,7 +1198,6 @@ export interface AbiInterface extends utils.Interface {
     "MintNote(address,uint256,uint256,address,uint256)": EventFragment;
     "PostNote(uint256,uint256,bytes32,bytes32,bytes)": EventFragment;
     "ProfileCreated(uint256,address,address,string,uint256)": EventFragment;
-    "SetDispatcher(uint256,address,uint256)": EventFragment;
     "SetHandle(address,uint256,string)": EventFragment;
     "SetLinkModule4Address(address,address,bytes,uint256)": EventFragment;
     "SetLinkModule4ERC721(address,uint256,address,bytes,uint256)": EventFragment;
@@ -1227,6 +1206,7 @@ export interface AbiInterface extends utils.Interface {
     "SetLinkModule4Profile(uint256,address,bytes,uint256)": EventFragment;
     "SetMintModule4Note(uint256,uint256,address,bytes,uint256)": EventFragment;
     "SetNoteUri(uint256,uint256,string)": EventFragment;
+    "SetOperator(uint256,address,uint256)": EventFragment;
     "SetPrimaryProfileId(address,uint256,uint256)": EventFragment;
     "SetProfileUri(uint256,string)": EventFragment;
     "SetSocialToken(address,uint256,address)": EventFragment;
@@ -1259,7 +1239,6 @@ export interface AbiInterface extends utils.Interface {
   getEvent(nameOrSignatureOrTopic: "MintNote"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "PostNote"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "ProfileCreated"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "SetDispatcher"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "SetHandle"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "SetLinkModule4Address"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "SetLinkModule4ERC721"): EventFragment;
@@ -1268,6 +1247,7 @@ export interface AbiInterface extends utils.Interface {
   getEvent(nameOrSignatureOrTopic: "SetLinkModule4Profile"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "SetMintModule4Note"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "SetNoteUri"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "SetOperator"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "SetPrimaryProfileId"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "SetProfileUri"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "SetSocialToken"): EventFragment;
@@ -1525,18 +1505,6 @@ export type ProfileCreatedEvent = TypedEvent<
 
 export type ProfileCreatedEventFilter = TypedEventFilter<ProfileCreatedEvent>;
 
-export interface SetDispatcherEventObject {
-  profileId: BigNumber;
-  dispatcher: string;
-  timestamp: BigNumber;
-}
-export type SetDispatcherEvent = TypedEvent<
-  [BigNumber, string, BigNumber],
-  SetDispatcherEventObject
->;
-
-export type SetDispatcherEventFilter = TypedEventFilter<SetDispatcherEvent>;
-
 export interface SetHandleEventObject {
   account: string;
   profileId: BigNumber;
@@ -1647,6 +1615,18 @@ export type SetNoteUriEvent = TypedEvent<
 >;
 
 export type SetNoteUriEventFilter = TypedEventFilter<SetNoteUriEvent>;
+
+export interface SetOperatorEventObject {
+  profileId: BigNumber;
+  operator: string;
+  timestamp: BigNumber;
+}
+export type SetOperatorEvent = TypedEvent<
+  [BigNumber, string, BigNumber],
+  SetOperatorEventObject
+>;
+
+export type SetOperatorEventFilter = TypedEventFilter<SetOperatorEvent>;
 
 export interface SetPrimaryProfileIdEventObject {
   account: string;
@@ -1867,11 +1847,6 @@ export interface Abi extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[string]>;
 
-    getDispatcher(
-      profileId: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<[string]>;
-
     getHandle(
       profileId: BigNumberish,
       overrides?: CallOverrides
@@ -1926,7 +1901,10 @@ export interface Abi extends BaseContract {
       [DataTypes.NoteStructOutput[]] & { results: DataTypes.NoteStructOutput[] }
     >;
 
-    getPeriphery(overrides?: CallOverrides): Promise<[string]>;
+    getOperator(
+      profileId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[string]>;
 
     getPrimaryProfileId(
       account: string,
@@ -1947,8 +1925,6 @@ export interface Abi extends BaseContract {
       profileId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<[string]>;
-
-    getResolver(overrides?: CallOverrides): Promise<[string]>;
 
     getRevision(overrides?: CallOverrides): Promise<[BigNumber]>;
 
@@ -2092,12 +2068,6 @@ export interface Abi extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    setDispatcher(
-      profileId: BigNumberish,
-      dispatcher: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
-
     setHandle(
       profileId: BigNumberish,
       newHandle: string,
@@ -2144,6 +2114,12 @@ export interface Abi extends BaseContract {
       profileId: BigNumberish,
       noteId: BigNumberish,
       newUri: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    setOperator(
+      profileId: BigNumberish,
+      operator: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -2286,11 +2262,6 @@ export interface Abi extends BaseContract {
     overrides?: CallOverrides
   ): Promise<string>;
 
-  getDispatcher(
-    profileId: BigNumberish,
-    overrides?: CallOverrides
-  ): Promise<string>;
-
   getHandle(
     profileId: BigNumberish,
     overrides?: CallOverrides
@@ -2343,7 +2314,10 @@ export interface Abi extends BaseContract {
     overrides?: CallOverrides
   ): Promise<DataTypes.NoteStructOutput[]>;
 
-  getPeriphery(overrides?: CallOverrides): Promise<string>;
+  getOperator(
+    profileId: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<string>;
 
   getPrimaryProfileId(
     account: string,
@@ -2364,8 +2338,6 @@ export interface Abi extends BaseContract {
     profileId: BigNumberish,
     overrides?: CallOverrides
   ): Promise<string>;
-
-  getResolver(overrides?: CallOverrides): Promise<string>;
 
   getRevision(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -2506,12 +2478,6 @@ export interface Abi extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  setDispatcher(
-    profileId: BigNumberish,
-    dispatcher: string,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
-
   setHandle(
     profileId: BigNumberish,
     newHandle: string,
@@ -2558,6 +2524,12 @@ export interface Abi extends BaseContract {
     profileId: BigNumberish,
     noteId: BigNumberish,
     newUri: string,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  setOperator(
+    profileId: BigNumberish,
+    operator: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -2694,11 +2666,6 @@ export interface Abi extends BaseContract {
       overrides?: CallOverrides
     ): Promise<string>;
 
-    getDispatcher(
-      profileId: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<string>;
-
     getHandle(
       profileId: BigNumberish,
       overrides?: CallOverrides
@@ -2751,7 +2718,10 @@ export interface Abi extends BaseContract {
       overrides?: CallOverrides
     ): Promise<DataTypes.NoteStructOutput[]>;
 
-    getPeriphery(overrides?: CallOverrides): Promise<string>;
+    getOperator(
+      profileId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<string>;
 
     getPrimaryProfileId(
       account: string,
@@ -2772,8 +2742,6 @@ export interface Abi extends BaseContract {
       profileId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<string>;
-
-    getResolver(overrides?: CallOverrides): Promise<string>;
 
     getRevision(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -2914,12 +2882,6 @@ export interface Abi extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
-    setDispatcher(
-      profileId: BigNumberish,
-      dispatcher: string,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
     setHandle(
       profileId: BigNumberish,
       newHandle: string,
@@ -2966,6 +2928,12 @@ export interface Abi extends BaseContract {
       profileId: BigNumberish,
       noteId: BigNumberish,
       newUri: string,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    setOperator(
+      profileId: BigNumberish,
+      operator: string,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -3292,17 +3260,6 @@ export interface Abi extends BaseContract {
       timestamp?: null
     ): ProfileCreatedEventFilter;
 
-    "SetDispatcher(uint256,address,uint256)"(
-      profileId?: BigNumberish | null,
-      dispatcher?: string | null,
-      timestamp?: null
-    ): SetDispatcherEventFilter;
-    SetDispatcher(
-      profileId?: BigNumberish | null,
-      dispatcher?: string | null,
-      timestamp?: null
-    ): SetDispatcherEventFilter;
-
     "SetHandle(address,uint256,string)"(
       account?: string | null,
       profileId?: BigNumberish | null,
@@ -3408,6 +3365,17 @@ export interface Abi extends BaseContract {
       noteId?: null,
       newUri?: null
     ): SetNoteUriEventFilter;
+
+    "SetOperator(uint256,address,uint256)"(
+      profileId?: BigNumberish | null,
+      operator?: string | null,
+      timestamp?: null
+    ): SetOperatorEventFilter;
+    SetOperator(
+      profileId?: BigNumberish | null,
+      operator?: string | null,
+      timestamp?: null
+    ): SetOperatorEventFilter;
 
     "SetPrimaryProfileId(address,uint256,uint256)"(
       account?: string | null,
@@ -3592,11 +3560,6 @@ export interface Abi extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    getDispatcher(
-      profileId: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
     getHandle(
       profileId: BigNumberish,
       overrides?: CallOverrides
@@ -3649,7 +3612,10 @@ export interface Abi extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    getPeriphery(overrides?: CallOverrides): Promise<BigNumber>;
+    getOperator(
+      profileId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
     getPrimaryProfileId(
       account: string,
@@ -3670,8 +3636,6 @@ export interface Abi extends BaseContract {
       profileId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
-
-    getResolver(overrides?: CallOverrides): Promise<BigNumber>;
 
     getRevision(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -3815,12 +3779,6 @@ export interface Abi extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    setDispatcher(
-      profileId: BigNumberish,
-      dispatcher: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
     setHandle(
       profileId: BigNumberish,
       newHandle: string,
@@ -3867,6 +3825,12 @@ export interface Abi extends BaseContract {
       profileId: BigNumberish,
       noteId: BigNumberish,
       newUri: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    setOperator(
+      profileId: BigNumberish,
+      operator: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -4013,11 +3977,6 @@ export interface Abi extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    getDispatcher(
-      profileId: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
     getHandle(
       profileId: BigNumberish,
       overrides?: CallOverrides
@@ -4072,7 +4031,10 @@ export interface Abi extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    getPeriphery(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    getOperator(
+      profileId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
 
     getPrimaryProfileId(
       account: string,
@@ -4093,8 +4055,6 @@ export interface Abi extends BaseContract {
       profileId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
-
-    getResolver(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     getRevision(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
@@ -4238,12 +4198,6 @@ export interface Abi extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    setDispatcher(
-      profileId: BigNumberish,
-      dispatcher: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
     setHandle(
       profileId: BigNumberish,
       newHandle: string,
@@ -4290,6 +4244,12 @@ export interface Abi extends BaseContract {
       profileId: BigNumberish,
       noteId: BigNumberish,
       newUri: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    setOperator(
+      profileId: BigNumberish,
+      operator: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 

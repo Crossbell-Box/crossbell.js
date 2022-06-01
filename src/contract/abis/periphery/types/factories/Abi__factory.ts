@@ -80,6 +80,49 @@ const _abi = [
         type: "bytes32",
       },
     ],
+    name: "getLinkingAddress",
+    outputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "fromProfileId",
+        type: "uint256",
+      },
+      {
+        internalType: "bytes32",
+        name: "linkType",
+        type: "bytes32",
+      },
+    ],
+    name: "getLinkingAddresses",
+    outputs: [
+      {
+        internalType: "address[]",
+        name: "",
+        type: "address[]",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "bytes32",
+        name: "linkKey",
+        type: "bytes32",
+      },
+    ],
     name: "getLinkingAnyUri",
     outputs: [
       {
@@ -190,6 +233,49 @@ const _abi = [
         type: "bytes32",
       },
     ],
+    name: "getLinkingLinklistId",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "linklistId",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "fromProfileId",
+        type: "uint256",
+      },
+      {
+        internalType: "bytes32",
+        name: "linkType",
+        type: "bytes32",
+      },
+    ],
+    name: "getLinkingLinklistIds",
+    outputs: [
+      {
+        internalType: "uint256[]",
+        name: "linklistIds",
+        type: "uint256[]",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "bytes32",
+        name: "linkKey",
+        type: "bytes32",
+      },
+    ],
     name: "getLinkingNote",
     outputs: [
       {
@@ -274,6 +360,25 @@ const _abi = [
         internalType: "struct DataTypes.Note[]",
         name: "results",
         type: "tuple[]",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "bytes32",
+        name: "linkKey",
+        type: "bytes32",
+      },
+    ],
+    name: "getLinkingProfileId",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "profileId",
+        type: "uint256",
       },
     ],
     stateMutability: "view",

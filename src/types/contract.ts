@@ -41,8 +41,17 @@ export type LinkItemType =
 // | 'ListLink'
 // | 'AnyLink'
 
-export type LinkItemAnyUri = {
-  uri: string
+export type LinkItemProfile = {
+  profileId: string
+}
+
+export type LinkItemAddress = {
+  address: string
+}
+
+export type LinkItemNote = {
+  profileId: string
+  noteId: string
 }
 
 export type LinkItemERC721 = {
@@ -50,7 +59,21 @@ export type LinkItemERC721 = {
   tokenId: string
 }
 
-export type LinkItem = LinkItemAnyUri | LinkItemERC721
+export type LinkItemLinklist = {
+  linklistId: string
+}
+
+export type LinkItemAnyUri = {
+  uri: string
+}
+
+export type LinkItem =
+  | LinkItemProfile
+  | LinkItemAddress
+  | LinkItemNote
+  | LinkItemERC721
+  | LinkItemLinklist
+  | LinkItemAnyUri
 
 export type Note<T extends LinkItem | undefined = undefined> = {
   /** The profile id of the address who owns the note.  */

@@ -8,6 +8,10 @@ import {
   LinkItemAnyUri,
   LinkItemERC721,
   PostNoteOptions,
+  LinkItemProfile,
+  LinkItemAddress,
+  LinkItemNote,
+  LinkItemLinklist,
 } from '../../types'
 import { Ipfs } from '../../ipfs'
 import { NIL_ADDRESS } from '../utils'
@@ -217,6 +221,26 @@ export class NoteContract extends BaseContract {
     noteId: string,
     linkItemType: 'AnyUri',
   ): Promise<Result<Note<LinkItemAnyUri>>> | never
+  async getNote<T = LinkItemAnyUri>(
+    profileId: string,
+    noteId: string,
+    linkItemType: 'Profile',
+  ): Promise<Result<Note<LinkItemProfile>>> | never
+  async getNote<T = LinkItemAnyUri>(
+    profileId: string,
+    noteId: string,
+    linkItemType: 'Address',
+  ): Promise<Result<Note<LinkItemAddress>>> | never
+  async getNote<T = LinkItemAnyUri>(
+    profileId: string,
+    noteId: string,
+    linkItemType: 'Note',
+  ): Promise<Result<Note<LinkItemNote>>> | never
+  async getNote<T = LinkItemAnyUri>(
+    profileId: string,
+    noteId: string,
+    linkItemType: 'Linklist',
+  ): Promise<Result<Note<LinkItemLinklist>>> | never
   @autoSwitchMainnet()
   async getNote<T extends LinkItem>(
     profileId: string,
@@ -246,6 +270,32 @@ export class NoteContract extends BaseContract {
       linkItem = {
         contractAddress: erc721.tokenAddress.toString(),
         tokenId: erc721.erc721TokenId.toString(),
+      } as T
+    } else if (linkItemType === 'Address') {
+      const address = await this.peripheryContract.getLinkingAddress(
+        data.linkKey,
+      )
+      linkItem = {
+        address: address.toString(),
+      } as T
+    } else if (linkItemType === 'Profile') {
+      const profileId = await this.peripheryContract.getLinkingProfileId(
+        data.linkKey,
+      )
+      linkItem = {
+        profileId: profileId.toString(),
+      } as T
+    } else if (linkItemType === 'Note') {
+      const noteId = await this.peripheryContract.getLinkingNote(data.linkKey)
+      linkItem = {
+        noteId: noteId.toString(),
+      } as T
+    } else if (linkItemType === 'Linklist') {
+      const linklistId = await this.peripheryContract.getLinkingLinklistId(
+        data.linkKey,
+      )
+      linkItem = {
+        linklistId: linklistId.toString(),
       } as T
     } else {
       linkItem = undefined as unknown as T

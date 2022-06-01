@@ -299,25 +299,6 @@
         "type": "uint256"
       }
     ],
-    "name": "getDispatcher",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "profileId",
-        "type": "uint256"
-      }
-    ],
     "name": "getHandle",
     "outputs": [
       {
@@ -604,8 +585,14 @@
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "getPeriphery",
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "profileId",
+        "type": "uint256"
+      }
+    ],
+    "name": "getOperator",
     "outputs": [
       {
         "internalType": "address",
@@ -751,19 +738,6 @@
         "internalType": "string",
         "name": "",
         "type": "string"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "getResolver",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
       }
     ],
     "stateMutability": "view",
@@ -1750,24 +1724,6 @@
         "type": "uint256"
       },
       {
-        "internalType": "address",
-        "name": "dispatcher",
-        "type": "address"
-      }
-    ],
-    "name": "setDispatcher",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "profileId",
-        "type": "uint256"
-      },
-      {
         "internalType": "string",
         "name": "newHandle",
         "type": "string"
@@ -2010,6 +1966,24 @@
       }
     ],
     "name": "setNoteUri",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "profileId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "operator",
+        "type": "address"
+      }
+    ],
+    "name": "setOperator",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -2922,31 +2896,6 @@
     "inputs": [
       {
         "indexed": true,
-        "internalType": "uint256",
-        "name": "profileId",
-        "type": "uint256"
-      },
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "dispatcher",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "timestamp",
-        "type": "uint256"
-      }
-    ],
-    "name": "SetDispatcher",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
         "internalType": "address",
         "name": "account",
         "type": "address"
@@ -3194,6 +3143,31 @@
       }
     ],
     "name": "SetNoteUri",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "profileId",
+        "type": "uint256"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "operator",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "timestamp",
+        "type": "uint256"
+      }
+    ],
+    "name": "SetOperator",
     "type": "event"
   },
   {

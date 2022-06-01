@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.5.18 (2022-06-01)
+
+- Add more linkItem parser to `contract.getNote()`
+
 ## 0.5.17 (2022-05-28)
 
 - New Abi.
