@@ -2471,6 +2471,25 @@ const _abi = [
       {
         indexed: true,
         internalType: "uint256",
+        name: "profileId",
+        type: "uint256",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "noteId",
+        type: "uint256",
+      },
+    ],
+    name: "DeleteNote",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "uint256",
         name: "linklistId",
         type: "uint256",
       },

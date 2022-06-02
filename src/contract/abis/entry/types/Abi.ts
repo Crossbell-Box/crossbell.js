@@ -1184,6 +1184,7 @@ export interface AbiInterface extends utils.Interface {
     "Transfer(address,address,uint256)": EventFragment;
     "AttachLinklist(uint256,uint256,bytes32)": EventFragment;
     "BaseInitialized(string,string,uint256)": EventFragment;
+    "DeleteNote(uint256,uint256)": EventFragment;
     "DetachLinklist(uint256,uint256,bytes32)": EventFragment;
     "LinkAddress(uint256,address,bytes32,uint256)": EventFragment;
     "LinkAnyUri(uint256,string,bytes32,uint256)": EventFragment;
@@ -1225,6 +1226,7 @@ export interface AbiInterface extends utils.Interface {
   getEvent(nameOrSignatureOrTopic: "Transfer"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "AttachLinklist"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "BaseInitialized"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "DeleteNote"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "DetachLinklist"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "LinkAddress"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "LinkAnyUri"): EventFragment;
@@ -1320,6 +1322,17 @@ export type BaseInitializedEvent = TypedEvent<
 >;
 
 export type BaseInitializedEventFilter = TypedEventFilter<BaseInitializedEvent>;
+
+export interface DeleteNoteEventObject {
+  profileId: BigNumber;
+  noteId: BigNumber;
+}
+export type DeleteNoteEvent = TypedEvent<
+  [BigNumber, BigNumber],
+  DeleteNoteEventObject
+>;
+
+export type DeleteNoteEventFilter = TypedEventFilter<DeleteNoteEvent>;
 
 export interface DetachLinklistEventObject {
   linklistId: BigNumber;
@@ -3079,6 +3092,15 @@ export interface Abi extends BaseContract {
       symbol?: null,
       timestamp?: null
     ): BaseInitializedEventFilter;
+
+    "DeleteNote(uint256,uint256)"(
+      profileId?: BigNumberish | null,
+      noteId?: null
+    ): DeleteNoteEventFilter;
+    DeleteNote(
+      profileId?: BigNumberish | null,
+      noteId?: null
+    ): DeleteNoteEventFilter;
 
     "DetachLinklist(uint256,uint256,bytes32)"(
       linklistId?: BigNumberish | null,
