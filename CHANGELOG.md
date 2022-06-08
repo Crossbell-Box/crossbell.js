@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.7.0 (2022-06-08)
+
+- BREAKING CHANGE: A more general indexer.getNotes API.
+
 ## 0.6.0 (2022-06-08)
 
 - BREAKING CHANGE: New Indexer API.

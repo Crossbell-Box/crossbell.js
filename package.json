@@ -1,6 +1,6 @@
 {
   "name": "crossbell.js",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "description": "JavaScript SDK to interact with Crossbell",
   "keywords": [
     "crossbell",
