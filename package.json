@@ -1,11 +1,12 @@
 {
   "name": "crossbell.js",
-  "version": "0.5.19",
+  "version": "0.6.0",
   "description": "JavaScript SDK to interact with Crossbell",
   "keywords": [
     "crossbell",
     "eth",
-    "contract"
+    "contract",
+    "web3"
   ],
   "bugs": {
     "url": "https://github.com/Crossbell-Box/crossbell.js/issues"
@@ -36,7 +37,8 @@
     "watch": "npm run build-fast -- --watch"
   },
   "dependencies": {
-    "ethers": "^5.6.3",
+    "ethers": "^5.6.8",
+    "query-string": "^7.1.1",
     "ts-mixer": "^6.0.1",
     "undici": "^5.4.0"
   },
@@ -48,7 +50,7 @@
     "typechain": "^8.0.0",
     "typedoc": "^0.22.17",
     "typescript": "^4.7.2",
-    "vitest": "^0.13.1"
+    "vitest": "^0.14.1"
   },
   "publishConfig": {
     "access": "public"

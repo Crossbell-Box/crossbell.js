@@ -409,6 +409,12 @@ export class NoteContract extends BaseContract {
     }
   }
 
+  /**
+   * This returns the linkKey of a note linked to a profile.
+   * @category Note
+   * @param toProfileId - The profile ID of the profile you want to get the linkKey of.
+   * @returns The linkKey of the note.
+   */
   getLinkKeyForProfile(toProfileId: string): string {
     return ethers.utils.solidityKeccak256(
       ['string', 'uint'],
@@ -416,6 +422,12 @@ export class NoteContract extends BaseContract {
     )
   }
 
+  /**
+   * This returns the linkKey of a note linked to a note.
+   * @category Note
+   * @param toAddress - The address you want to get the linkKey of.
+   * @returns The linkKey of the note.
+   */
   getLinkKeyForAddress(toAddress: string): string {
     return ethers.utils.solidityKeccak256(
       ['string', 'address'],
@@ -423,6 +435,13 @@ export class NoteContract extends BaseContract {
     )
   }
 
+  /**
+   * This returns the linkKey of a note linked to a note.
+   * @category Note
+   * @param toProfileId - The profile ID of the profile you want to get the linkKey of.
+   * @param toNoteId - The id of the note you want to get the linkKey of.
+   * @returns The linkKey of the note.
+   */
   getLinkKeyForNote(toProfileId: string, toNoteId: string): string {
     return ethers.utils.solidityKeccak256(
       ['string', 'uint', 'uint'],
@@ -430,6 +449,13 @@ export class NoteContract extends BaseContract {
     )
   }
 
+  /**
+   * This returns the linkKey of a note linked to an ERC721 token.
+   * @category Note
+   * @param toContractAddress - The address of the ERC721 token you want to get the linkKey of.
+   * @param toTokenId - The id of the ERC721 token you want to get the linkKey of.
+   * @returns The linkKey of the note.
+   */
   getLinkKeyForERC721(toContractAddress: string, toTokenId: string): string {
     return ethers.utils.solidityKeccak256(
       ['string', 'address', 'uint'],
@@ -437,6 +463,12 @@ export class NoteContract extends BaseContract {
     )
   }
 
+  /**
+   * This returns the linkKey of a note linked to a linklist.
+   * @category Note
+   * @param toLinkListId - The id of the linklist you want to get the linkKey of.
+   * @returns The linkKey of the note.
+   */
   getLinkKeyForLinklist(toLinkListId: string): string {
     return ethers.utils.solidityKeccak256(
       ['string', 'uint'],
@@ -444,6 +476,12 @@ export class NoteContract extends BaseContract {
     )
   }
 
+  /**
+   * This returns the linkKey of a note linked to an any uri.
+   * @category Note
+   * @param toUri - The uri you want to get the linkKey of.
+   * @returns The linkKey of the note.
+   */
   getLinkKeyForAnyUri(toUri: string): string {
     return ethers.utils.solidityKeccak256(
       ['string', 'string'],

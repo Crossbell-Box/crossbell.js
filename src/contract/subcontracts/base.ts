@@ -39,6 +39,7 @@ export class BaseContract {
 
   /**
    * Returns the internal contract.
+   * @category Internal Contract
    */
   get contract(): EntryAbi {
     this.checkConnection()
@@ -46,12 +47,13 @@ export class BaseContract {
     return this._contract
   }
 
-  set peripheryContract(contract: PeripheryAbi) {
-    this._peripheryContract = contract
+  set contract(contract: EntryAbi) {
+    this._contract = contract
   }
 
   /**
    * Returns the internal periphery contract.
+   * @category Internal Contract
    */
   get peripheryContract(): PeripheryAbi {
     this.checkConnection()
@@ -59,8 +61,8 @@ export class BaseContract {
     return this._peripheryContract
   }
 
-  set contract(contract: EntryAbi) {
-    this._contract = contract
+  set peripheryContract(contract: PeripheryAbi) {
+    this._peripheryContract = contract
   }
 
   /**
@@ -69,21 +71,21 @@ export class BaseContract {
    * @returns The Contract instance.
    *
    * @example Connect with Metamask
-   * ```
+   * ```js
    * import { Contract } from 'crossbell.js'
    * const provider = window.ethereum // the metamask provider
    * const contract = new Contract(provider)
    * ```
    *
    * @example Connect with Private Key
-   * ```
+   * ```js
    * import { Contract } from 'crossbell.js'
    * const privateKey = '0xabcdef0123456789012345678901234567890123456789012345678901234'
    * const contract = new Contract(privateKey)
    * ```
    *
    * @example Connect with a Readonly Contract
-   * ```
+   * ```js
    * import { Contract } from 'crossbell.js'
    * const contract = new Contract() // readonly contract
    * ```

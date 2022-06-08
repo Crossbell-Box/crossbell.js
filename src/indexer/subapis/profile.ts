@@ -1,5 +1,6 @@
 import { BaseIndexer } from './base'
-import type { ListResponse, ProfileDetail } from '../../types/indexer'
+import queryString from 'query-string'
+import type { ListResponse, ProfileEntity } from '../../types/indexer'
 
 export class ProfileIndexer extends BaseIndexer {
   /**
@@ -14,30 +15,22 @@ export class ProfileIndexer extends BaseIndexer {
     {
       primary = false,
       limit = 20,
-      lastIdentifier,
+      cursor,
     }: {
       /** If true, return only the primary profile. */
       primary?: boolean
       /** Limit the count of items returned. */
       limit?: number
       /** Used for pagination. */
-      lastIdentifier?: string
+      cursor?: string
     } = {},
-  ) {
+  ): Promise<ListResponse<ProfileEntity>> {
     let url = `${this.endpoint}/addresses/${address}/profiles?`
-    const params = new URLSearchParams()
-    params.append('limit', limit.toString())
-    if (typeof lastIdentifier !== 'undefined') {
-      params.append('last_identifier', lastIdentifier)
-    }
-    if (primary) {
-      params.append('primary', 'true')
-    }
-    url += params.toString()
+    url += queryString.stringify({ primary, limit, cursor })
 
     const res = await fetch(url).then((res) => res.json())
 
-    return res as ListResponse<ProfileDetail>
+    return res as ListResponse<ProfileEntity>
   }
 
   /**
@@ -47,9 +40,37 @@ export class ProfileIndexer extends BaseIndexer {
    * @param address - The address of the profile owner.
    * @returns The primary profile.
    */
-  async getPrimaryProfile(address: string): Promise<ProfileDetail | null> {
+  async getPrimaryProfile(address: string): Promise<ProfileEntity | null> {
     return this.getProfiles(address, { limit: 1, primary: true }).then(
       (res) => res.list?.[0] ?? null,
     )
+  }
+
+  /**
+   * This returns a profile by id; null if none exists.
+   * @category Profile
+   * @param profileId - The id of the profile.
+   * @returns The profile.
+   */
+  async getProfile(profileId: number): Promise<ProfileEntity | null> {
+    let url = `${this.endpoint}/profiles/${profileId}`
+
+    const res = await fetch(url).then((res) => res.json())
+
+    return res as ProfileEntity
+  }
+
+  /**
+   * This returns a profile by handle; null if none exists.
+   * @category Profile
+   * @param handle - The handle of the profile.
+   * @returns The profile.
+   */
+  async getProfileByHandle(handle: string): Promise<ProfileEntity | null> {
+    let url = `${this.endpoint}/handles/${handle}/profile`
+
+    const res = await fetch(url).then((res) => res.json())
+
+    return res as ProfileEntity
   }
 }

@@ -1,0 +1,85 @@
+import { BaseIndexer } from './base'
+import queryString from 'query-string'
+import type { LinklistEntity, ListResponse } from '../../types/indexer'
+
+export class LinklistIndexer extends BaseIndexer {
+  /**
+   * This returns a list of linklists owned by a specific address.
+   * @category Linklist
+   * @param address - The address of the linklists owner.
+   * @param options - The options to send to the indexer.
+   * @returns The list of linklist.
+   */
+  async getLinklistsByAddress(
+    address: string,
+    {
+      attached = false,
+      linkType,
+      limit = 20,
+      cursor,
+    }: {
+      /** If true, return only the attached linklists. */
+      attached?: boolean
+      /** The link type to filter by. */
+      linkType?: string
+      /** Limit the count of items returned. */
+      limit?: number
+      /** Used for pagination. */
+      cursor?: string
+    } = {},
+  ): Promise<ListResponse<LinklistEntity>> {
+    let url = `${this.endpoint}/addresses/${address}/linklists?`
+    url += queryString.stringify({ attached, linkType, limit, cursor })
+
+    const res = await fetch(url).then((res) => res.json())
+
+    return res as ListResponse<LinklistEntity>
+  }
+
+  /**
+   * This returns a list of linklists owned by a specific profile.
+   * @category Linklist
+   * @param profileId - The profileId of the linklists owner.
+   * @param options - The options to send to the indexer.
+   * @returns The list of linklist.
+   */
+  async getLinklistsByProfile(
+    profileId: string,
+    {
+      attached = false,
+      linkType,
+      limit = 20,
+      cursor,
+    }: {
+      /** If true, return only the attached linklists. */
+      attached?: boolean
+      /** The link type to filter by. */
+      linkType?: string
+      /** Limit the count of items returned. */
+      limit?: number
+      /** Used for pagination. */
+      cursor?: string
+    } = {},
+  ): Promise<ListResponse<LinklistEntity>> {
+    let url = `${this.endpoint}/profiles/${profileId}/linklists?`
+    url += queryString.stringify({ attached, linkType, limit, cursor })
+
+    const res = await fetch(url).then((res) => res.json())
+
+    return res as ListResponse<LinklistEntity>
+  }
+
+  /**
+   * This returns a linklist by id; null if none exists.
+   * @category Linklist
+   * @param linklistId - The id of the linklist.
+   * @returns The profile.
+   */
+  async getLinklist(linklistId: string): Promise<LinklistEntity | null> {
+    let url = `${this.endpoint}/linklists/${linklistId}`
+
+    const res = await fetch(url).then((res) => res.json())
+
+    return res as LinklistEntity
+  }
+}

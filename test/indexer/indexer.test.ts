@@ -18,23 +18,25 @@ describe.concurrent('profiles', () => {
 
 describe.concurrent('links', () => {
   test.concurrent('getLinklists', async () => {
-    const res = await indexer.getLinklists(mockUser.address)
+    const res = await indexer.getLinklistsByAddress(mockUser.address)
     expect(res.list).toBeInstanceOf(Array)
   })
 
   test.concurrent('getLinkingItems', async () => {
-    const res = await indexer.getLinkingItems(mockUser.address, {
-      linkTypes: 'follow',
-      fromTypes: 'profile',
+    const res = await indexer.getLinks('10', {
+      linkType: 'follow',
+      linkItemType: 'Profile',
     })
     expect(res.list).toBeInstanceOf(Array)
   })
 
   test.concurrent('getBacklinkingItems', async () => {
-    const res = await indexer.getBacklinkingItems(mockUser.address, {
-      linkTypes: 'follow',
-      fromTypes: 'profile',
+    const res = await indexer.getBacklinksOfProfile('10', {
+      linkType: 'follow',
     })
+
     expect(res.list).toBeInstanceOf(Array)
   })
 })
+
+// TODO: more apis

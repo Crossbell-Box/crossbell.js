@@ -1,10 +1,10 @@
-export type BaseMetadata = {
+export interface BaseMetadata {
   // version: '1' // TODO: do we need this?
 
   type?: 'profile' | 'note' | 'linklist'
 }
 
-export type ProfileMetadata = BaseMetadata & {
+export interface ProfileMetadata extends BaseMetadata {
   /** The name of this profile. */
   name?: string
 
@@ -49,7 +49,7 @@ export type ProfileMetadata = BaseMetadata & {
   connected_avatars?: string[]
 }
 
-export type NoteMetadata = BaseMetadata & {
+export interface NoteMetadata extends BaseMetadata {
   /**
    * The tags of this note.
    *

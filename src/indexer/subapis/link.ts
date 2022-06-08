@@ -1,268 +1,269 @@
 import { BaseIndexer } from './base'
-import type {
-  GetLinkingItemsOptions,
-  Link,
-  LinkFromToDetails,
-  Linklist,
-  ListResponse,
-  ProfileDetail,
-} from '../../types/indexer'
+import queryString from 'query-string'
+import type { LinkEntity, ListResponse } from '../../types/indexer'
+import type { LinkItemType } from '../../types/contract'
 
 export class LinkIndexer extends BaseIndexer {
-  /** linklists */
-
   /**
-   * This returns a list of linklists owned by a specific address.
+   * This returns a list of links starts from a specific profile.
+   *
+   * Note that all links can only start from profiles, but can end to profiles, notes or other item types.
+   *
    * @category Link
-   * @param address - The address of the profile owner.
+   * @param profileId - The profileId of the link owner.
    * @param options - The options to send to the indexer.
-   * @returns The list of linklists.
+   * @returns The list of links.
    */
-  async getLinklists(
-    address: string,
+  async getLinks(
+    profileId: string,
     {
       limit = 20,
+      cursor,
+      linkType,
+      linkItemType,
+      fromProfileId,
+      toProfileId,
+      toAddress,
+      toNoteId,
+      toContractAddress,
+      toTokenId,
+      toLinklistId,
+      toUri,
     }: {
       /** Limit the count of items returned. */
       limit?: number
+      /** Used for pagination. */
+      cursor?: string
+      /** The link type to filter by. e.g. 'follow' */
+      linkType?: string
+      /** The link item type to filter by. e.g. 'Profile' */
+      linkItemType?: LinkItemType
+      /** The fromProfileId to filter by. */
+      fromProfileId?: string
+      /** The toProfileId to filter by. */
+      toProfileId?: string
+      /** The toAddress to filter by. */
+      toAddress?: string
+      /** The toNoteId to filter by. */
+      toNoteId?: string
+      /** The toContractAddress to filter by. */
+      toContractAddress?: string
+      /** The toTokenId to filter by. */
+      toTokenId?: string
+      /** The toLinklistId to filter by. */
+      toLinklistId?: string
+      /** The toUri to filter by. */
+      toUri?: string
     } = {},
-  ) {
-    let url = `${this.endpoint}/addresses/${address}/linklists?`
-    const params = new URLSearchParams()
-    params.append('limit', limit.toString())
-    url += params.toString()
+  ): Promise<ListResponse<LinkEntity>> {
+    let url = `${this.endpoint}/profiles/${profileId}/links?`
+    url += queryString.stringify({
+      limit,
+      cursor,
+      linkType,
+      linkItemType,
+      fromProfileId,
+      toProfileId,
+      toAddress,
+      toNoteId,
+      toContractAddress,
+      toTokenId,
+      toLinklistId,
+      toUri,
+    })
 
     const res = await fetch(url).then((res) => res.json())
-    return res as ListResponse<Linklist>
+
+    return res as ListResponse<LinkEntity>
   }
 
-  /** links */
-
-  private async _getLinkingOrBacklinkingItems<
-    TFromDetail extends LinkFromToDetails = LinkFromToDetails,
-    TToDetail extends LinkFromToDetails = LinkFromToDetails,
-  >(
-    scope: 'addresses' | 'profiles',
-    linkDirection: 'links' | 'backlinks',
-    id: string,
+  /**
+   * This returns a list of links ends at a specific profile.
+   *
+   * @category Link
+   * @param profileId - The profileId of the link ends to.
+   * @param options - The options to send to the indexer.
+   * @return The list of links.
+   */
+  async getBacklinksOfProfile(
+    profileId: string,
     {
-      linkTypes = [],
-      fromTypes = [],
-      toTypes = [],
-      from = [],
-      to = [],
       limit = 20,
-      attached = true,
-    }: GetLinkingItemsOptions = {},
-  ) {
-    if (typeof linkTypes === 'string') {
-      linkTypes = [linkTypes]
-    }
-
-    if (typeof fromTypes === 'string') {
-      fromTypes = [fromTypes]
-    }
-
-    if (typeof toTypes === 'string') {
-      toTypes = [toTypes]
-    }
-
-    if (typeof from === 'string') {
-      from = [from]
-    }
-
-    if (typeof to === 'string') {
-      to = [to]
-    }
-
-    let url = `${this.endpoint}/${scope}/${id}/${linkDirection}?`
-    const params = new URLSearchParams()
-    linkTypes.forEach((x) => params.append('link_types', x))
-    fromTypes.forEach((x) => params.append('from_types', x))
-    toTypes.forEach((x) => params.append('to_types', x))
-    from.forEach((x) => params.append('from', x))
-    to.forEach((x) => params.append('to', x))
-    params.append('limit', limit.toString())
-    params.append('attached', attached.toString())
-    url += params.toString()
+      cursor,
+      linkType,
+    }: {
+      /** Limit the count of items returned. */
+      limit?: number
+      /** Used for pagination. */
+      cursor?: string
+      /** The link type to filter by. e.g. 'follow' */
+      linkType?: string
+    } = {},
+  ): Promise<ListResponse<LinkEntity>> {
+    let url = `${this.endpoint}/profiles/${profileId}/backlinks?`
+    url += queryString.stringify({ limit, cursor, linkType })
 
     const res = await fetch(url).then((res) => res.json())
 
-    return res as ListResponse<Link<TFromDetail, TToDetail>>
+    return res as ListResponse<LinkEntity>
   }
 
   /**
-   * This returns a list of linking targets of a specific address.
-   * @category Link
-   * @param address - The address of the profile owner.
-   * @param options - The options to send to the indexer.
-   * @returns The list of links.
-   */
-  async getLinkingItems<
-    TFromDetail extends LinkFromToDetails = LinkFromToDetails,
-    TToDetail extends LinkFromToDetails = LinkFromToDetails,
-  >(address: string, options: GetLinkingItemsOptions) {
-    const res = await this._getLinkingOrBacklinkingItems<
-      TFromDetail,
-      TToDetail
-    >('addresses', 'links', address, options)
-
-    return res
-  }
-
-  /**
-   * This returns an attached list of backlinking target of a specific address.
-   * @category Link
-   * @param address - The address of the profile owner.
-   * @param options - The options to send to the indexer.
-   * @returns The list of links.
-   */
-  async getBacklinkingItems<
-    TFromDetail extends LinkFromToDetails = LinkFromToDetails,
-    TToDetail extends LinkFromToDetails = LinkFromToDetails,
-  >(address: string, options: GetLinkingItemsOptions) {
-    const res = await this._getLinkingOrBacklinkingItems<
-      TFromDetail,
-      TToDetail
-    >('addresses', 'backlinks', address, options)
-
-    return res
-  }
-
-  /**
-   * This returns a list of linking targets of a specific profile.
-   * @category Link
-   * @param profileId - The id of the profile.
-   * @param options - The options to send to the indexer.
-   * @returns The list of links.
-   */
-  async getLinkingItemsByProfileId<
-    TFromDetail extends LinkFromToDetails = LinkFromToDetails,
-    TToDetail extends LinkFromToDetails = LinkFromToDetails,
-  >(profileId: string, options: GetLinkingItemsOptions) {
-    const res = await this._getLinkingOrBacklinkingItems<
-      TFromDetail,
-      TToDetail
-    >('profiles', 'links', profileId, options)
-
-    return res
-  }
-
-  /**
-   * This returns a list of backlinking targets of a specific profile.
-   * @category Link
-   * @param profileId - The id of the profile.
-   * @param options - The options to send to the indexer.
-   * @returns The list of links.
-   */
-  async getBacklinkingItemsByProfileId<
-    TFromDetail extends LinkFromToDetails = LinkFromToDetails,
-    TToDetail extends LinkFromToDetails = LinkFromToDetails,
-  >(profileId: string, options: GetLinkingItemsOptions) {
-    const res = await this._getLinkingOrBacklinkingItems<
-      TFromDetail,
-      TToDetail
-    >('profiles', 'backlinks', profileId, options)
-
-    return res
-  }
-
-  /** profile */
-
-  /**
-   * This returns a list of linking target of a specific address.
-   * @category Link
-   * @param address - The address of the profile owner.
-   * @param options - The options to send to the indexer.
-   * @returns The list of links.
+   * This returns a list of links ends at a specific address.
    *
-   * @example Get all followings of a address('s primary profile)
-   * ```
-   * const links = await indexer.getLinkingProfiles('0x...', { linkTypes: ['follow'] })
-   * const profiles = links.list.map((link) => link.to_detail)
-   * ```
-   */
-  async getLinkingProfiles(address: string, options: GetLinkingItemsOptions) {
-    const res = await this._getLinkingOrBacklinkingItems<
-      undefined,
-      ProfileDetail
-    >('addresses', 'links', address, options)
-
-    return res
-  }
-
-  /**
-   * This returns a list of backlinking target of a specific address.
    * @category Link
-   * @param address - The address of the profile owner.
+   * @param address - The address of the link ends to.
    * @param options - The options to send to the indexer.
-   * @returns The list of links.
-   *
-   * @example Get all followers of an address('s primary profile)
-   * ```
-   * const links = await indexer.getBacklinkingProfiles('0x...', { linkTypes: ['follow'] })
-   * const profiles = links.list.map((link) => link.from_detail)
-   * ```
+   * @return The list of links.
    */
-  async getBacklinkingProfiles(
+  async getBacklinksOfAddress(
     address: string,
-    options: GetLinkingItemsOptions,
-  ) {
-    const res = await this._getLinkingOrBacklinkingItems<
-      ProfileDetail,
-      undefined
-    >('addresses', 'backlinks', address, options)
+    {
+      limit = 20,
+      cursor,
+      linkType,
+    }: {
+      /** Limit the count of items returned. */
+      limit?: number
+      /** Used for pagination. */
+      cursor?: string
+      /** The link type to filter by. e.g. 'follow' */
+      linkType?: string
+    } = {},
+  ): Promise<ListResponse<LinkEntity>> {
+    let url = `${this.endpoint}/addresses/${address}/backlinks?`
+    url += queryString.stringify({ limit, cursor, linkType })
 
-    return res
+    const res = await fetch(url).then((res) => res.json())
+
+    return res as ListResponse<LinkEntity>
   }
 
   /**
-   * This returns a list of linking target of a specific profile.
-   * @category Link
-   * @param profileId - The id of the profile.
-   * @param options - The options to send to the indexer.
-   * @returns The list of links.
+   * This returns a list of links ends at a specific notes.
    *
-   * @example Get all followings of a profile
-   * ```
-   * const links = await indexer.getLinkingProfilesByProfileId('42', { linkTypes: ['follow'] })
-   * const profiles = links.list.map((link) => link.to_detail)
-   * ```
+   * @category Link
+   * @param profileId - The profileId of the note owner.
+   * @param noteId - The noteId of the link ends to.
+   * @param options - The options to send to the indexer.
+   * @return The list of links.
    */
-  async getLinkingProfilesByProfileId(
+  async getBacklinksOfNote(
     profileId: string,
-    options: GetLinkingItemsOptions,
-  ) {
-    const res = await this._getLinkingOrBacklinkingItems<
-      undefined,
-      ProfileDetail
-    >('profiles', 'links', profileId, options)
+    noteId: string,
+    {
+      limit = 20,
+      cursor,
+      linkType,
+    }: {
+      /** Limit the count of items returned. */
+      limit?: number
+      /** Used for pagination. */
+      cursor?: string
+      /** The link type to filter by. e.g. 'follow' */
+      linkType?: string
+    } = {},
+  ): Promise<ListResponse<LinkEntity>> {
+    let url = `${this.endpoint}/notes/${profileId}/${noteId}/backlinks?`
+    url += queryString.stringify({ limit, cursor, linkType })
 
-    return res
+    const res = await fetch(url).then((res) => res.json())
+
+    return res as ListResponse<LinkEntity>
   }
 
   /**
-   * This returns a list of backlinking target of a specific profile.
-   * @category Link
-   * @param profileId - The id of the profile.
-   * @param options - The options to send to the indexer.
-   * @returns The list of links.
+   * This returns a list of links ends at a specific ERC721 token.
    *
-   * @example Get all followings of a profile
-   * ```
-   * const links = await indexer.getBacklinkingProfilesByProfileId('42', { linkTypes: ['follow'] })
-   * const profiles = links.list.map((link) => link.from_detail)
-   * ```
+   * @category Link
+   * @param contractAddress - The contractAddress of the ERC721 token.
+   * @param tokenId - The tokenId of the link ends to.
+   * @param options - The options to send to the indexer.
+   * @return The list of links.
    */
-  async getBacklinkingProfilesByProfileId(
-    profileId: string,
-    options: GetLinkingItemsOptions,
-  ) {
-    const res = await this._getLinkingOrBacklinkingItems<
-      ProfileDetail,
-      undefined
-    >('profiles', 'backlinks', profileId, options)
+  async getBacklinksOfErc721(
+    contractAddress: string,
+    tokenId: string,
+    {
+      limit = 20,
+      cursor,
+      linkType,
+    }: {
+      /** Limit the count of items returned. */
+      limit?: number
+      /** Used for pagination. */
+      cursor?: string
+      /** The link type to filter by. e.g. 'follow' */
+      linkType?: string
+    } = {},
+  ): Promise<ListResponse<LinkEntity>> {
+    let url = `${this.endpoint}/erc721s/${contractAddress}/${tokenId}/backlinks?`
+    url += queryString.stringify({ limit, cursor, linkType })
 
-    return res
+    const res = await fetch(url).then((res) => res.json())
+
+    return res as ListResponse<LinkEntity>
+  }
+
+  /**
+   * This returns a list of links ends at a specific linklist.
+   *
+   * @category Link
+   * @param linklistId - The linklistId of the link ends to.
+   * @param options - The options to send to the indexer.
+   * @return The list of links.
+   */
+  async getBacklinksOfLinklist(
+    linklistId: string,
+    {
+      limit = 20,
+      cursor,
+      linkType,
+    }: {
+      /** Limit the count of items returned. */
+      limit?: number
+      /** Used for pagination. */
+      cursor?: string
+      /** The link type to filter by. e.g. 'follow' */
+      linkType?: string
+    } = {},
+  ): Promise<ListResponse<LinkEntity>> {
+    let url = `${this.endpoint}/linklists/${linklistId}/backlinks?`
+    url += queryString.stringify({ limit, cursor, linkType })
+
+    const res = await fetch(url).then((res) => res.json())
+
+    return res as ListResponse<LinkEntity>
+  }
+
+  /**
+   * This returns a list of links ends at a specific uri.
+   *
+   * @category Link
+   * @param uri - The uri of the link ends to.
+   * @param options - The options to send to the indexer.
+   * @return The list of links.
+   */
+  async getBacklinksOfAnyUri(
+    uri: string,
+    {
+      limit = 20,
+      cursor,
+      linkType,
+    }: {
+      /** Limit the count of items returned. */
+      limit?: number
+      /** Used for pagination. */
+      cursor?: string
+      /** The link type to filter by. e.g. 'follow' */
+      linkType?: string
+    } = {},
+  ): Promise<ListResponse<LinkEntity>> {
+    let url = `${this.endpoint}/anyuris/${uri}/backlinks?`
+    url += queryString.stringify({ limit, cursor, linkType })
+
+    const res = await fetch(url).then((res) => res.json())
+
+    return res as ListResponse<LinkEntity>
   }
 }

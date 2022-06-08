@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## 0.6.0 (2022-06-08)
+
+- BREAKING CHANGE: New Indexer API.
+
+## 0.5.20 (2022-06-05)
+
+- fix esm support.
+
 ## 0.5.19 (2022-06-02)
 
 - New Abi.
