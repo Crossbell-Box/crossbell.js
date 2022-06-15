@@ -409,6 +409,18 @@ export declare namespace DataTypes {
     mintModuleInitData: string;
   };
 
+  export type UnlinkAddressDataStruct = {
+    fromProfileId: BigNumberish;
+    ethAddress: string;
+    linkType: BytesLike;
+  };
+
+  export type UnlinkAddressDataStructOutput = [BigNumber, string, string] & {
+    fromProfileId: BigNumber;
+    ethAddress: string;
+    linkType: string;
+  };
+
   export type UnlinkAnyUriDataStruct = {
     fromProfileId: BigNumberish;
     toUri: string;
@@ -439,6 +451,18 @@ export declare namespace DataTypes {
     tokenId: BigNumber;
     linkType: string;
   };
+
+  export type UnlinkLinklistDataStruct = {
+    fromProfileId: BigNumberish;
+    toLinkListId: BigNumberish;
+    linkType: BytesLike;
+  };
+
+  export type UnlinkLinklistDataStructOutput = [
+    BigNumber,
+    BigNumber,
+    string
+  ] & { fromProfileId: BigNumber; toLinkListId: BigNumber; linkType: string };
 
   export type UnlinkNoteDataStruct = {
     fromProfileId: BigNumberish;
@@ -493,7 +517,6 @@ export interface AbiInterface extends utils.Interface {
     "getLinklistType(uint256)": FunctionFragment;
     "getLinklistUri(uint256)": FunctionFragment;
     "getNote(uint256,uint256)": FunctionFragment;
-    "getNotesByProfileId(uint256,uint256,uint256)": FunctionFragment;
     "getOperator(uint256)": FunctionFragment;
     "getPrimaryProfileId(address)": FunctionFragment;
     "getProfile(uint256)": FunctionFragment;
@@ -545,10 +568,10 @@ export interface AbiInterface extends utils.Interface {
     "tokenURI(uint256)": FunctionFragment;
     "totalSupply()": FunctionFragment;
     "transferFrom(address,address,uint256)": FunctionFragment;
-    "unlinkAddress((uint256,address,bytes32,bytes))": FunctionFragment;
+    "unlinkAddress((uint256,address,bytes32))": FunctionFragment;
     "unlinkAnyUri((uint256,string,bytes32))": FunctionFragment;
     "unlinkERC721((uint256,address,uint256,bytes32))": FunctionFragment;
-    "unlinkLinklist((uint256,uint256,bytes32,bytes))": FunctionFragment;
+    "unlinkLinklist((uint256,uint256,bytes32))": FunctionFragment;
     "unlinkNote((uint256,uint256,uint256,bytes32))": FunctionFragment;
     "unlinkProfile((uint256,uint256,bytes32))": FunctionFragment;
     "unlinkProfileLink(uint256,(uint256,uint256,bytes32),bytes32)": FunctionFragment;
@@ -575,7 +598,6 @@ export interface AbiInterface extends utils.Interface {
       | "getLinklistType"
       | "getLinklistUri"
       | "getNote"
-      | "getNotesByProfileId"
       | "getOperator"
       | "getPrimaryProfileId"
       | "getProfile"
@@ -705,10 +727,6 @@ export interface AbiInterface extends utils.Interface {
   encodeFunctionData(
     functionFragment: "getNote",
     values: [BigNumberish, BigNumberish]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "getNotesByProfileId",
-    values: [BigNumberish, BigNumberish, BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "getOperator",
@@ -907,7 +925,7 @@ export interface AbiInterface extends utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "unlinkAddress",
-    values: [DataTypes.LinkAddressDataStruct]
+    values: [DataTypes.UnlinkAddressDataStruct]
   ): string;
   encodeFunctionData(
     functionFragment: "unlinkAnyUri",
@@ -919,7 +937,7 @@ export interface AbiInterface extends utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "unlinkLinklist",
-    values: [DataTypes.LinkLinklistDataStruct]
+    values: [DataTypes.UnlinkLinklistDataStruct]
   ): string;
   encodeFunctionData(
     functionFragment: "unlinkNote",
@@ -989,10 +1007,6 @@ export interface AbiInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "getNote", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "getNotesByProfileId",
-    data: BytesLike
-  ): Result;
   decodeFunctionResult(
     functionFragment: "getOperator",
     data: BytesLike
@@ -1905,15 +1919,6 @@ export interface Abi extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[DataTypes.NoteStructOutput]>;
 
-    getNotesByProfileId(
-      profileId: BigNumberish,
-      offset: BigNumberish,
-      limit: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<
-      [DataTypes.NoteStructOutput[]] & { results: DataTypes.NoteStructOutput[] }
-    >;
-
     getOperator(
       profileId: BigNumberish,
       overrides?: CallOverrides
@@ -2186,7 +2191,7 @@ export interface Abi extends BaseContract {
     ): Promise<ContractTransaction>;
 
     unlinkAddress(
-      vars: DataTypes.LinkAddressDataStruct,
+      vars: DataTypes.UnlinkAddressDataStruct,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -2201,7 +2206,7 @@ export interface Abi extends BaseContract {
     ): Promise<ContractTransaction>;
 
     unlinkLinklist(
-      vars: DataTypes.LinkLinklistDataStruct,
+      vars: DataTypes.UnlinkLinklistDataStruct,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -2319,13 +2324,6 @@ export interface Abi extends BaseContract {
     noteId: BigNumberish,
     overrides?: CallOverrides
   ): Promise<DataTypes.NoteStructOutput>;
-
-  getNotesByProfileId(
-    profileId: BigNumberish,
-    offset: BigNumberish,
-    limit: BigNumberish,
-    overrides?: CallOverrides
-  ): Promise<DataTypes.NoteStructOutput[]>;
 
   getOperator(
     profileId: BigNumberish,
@@ -2593,7 +2591,7 @@ export interface Abi extends BaseContract {
   ): Promise<ContractTransaction>;
 
   unlinkAddress(
-    vars: DataTypes.LinkAddressDataStruct,
+    vars: DataTypes.UnlinkAddressDataStruct,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -2608,7 +2606,7 @@ export interface Abi extends BaseContract {
   ): Promise<ContractTransaction>;
 
   unlinkLinklist(
-    vars: DataTypes.LinkLinklistDataStruct,
+    vars: DataTypes.UnlinkLinklistDataStruct,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -2723,13 +2721,6 @@ export interface Abi extends BaseContract {
       noteId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<DataTypes.NoteStructOutput>;
-
-    getNotesByProfileId(
-      profileId: BigNumberish,
-      offset: BigNumberish,
-      limit: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<DataTypes.NoteStructOutput[]>;
 
     getOperator(
       profileId: BigNumberish,
@@ -3000,7 +2991,7 @@ export interface Abi extends BaseContract {
     ): Promise<void>;
 
     unlinkAddress(
-      vars: DataTypes.LinkAddressDataStruct,
+      vars: DataTypes.UnlinkAddressDataStruct,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -3015,7 +3006,7 @@ export interface Abi extends BaseContract {
     ): Promise<void>;
 
     unlinkLinklist(
-      vars: DataTypes.LinkLinklistDataStruct,
+      vars: DataTypes.UnlinkLinklistDataStruct,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -3627,13 +3618,6 @@ export interface Abi extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    getNotesByProfileId(
-      profileId: BigNumberish,
-      offset: BigNumberish,
-      limit: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
     getOperator(
       profileId: BigNumberish,
       overrides?: CallOverrides
@@ -3906,7 +3890,7 @@ export interface Abi extends BaseContract {
     ): Promise<BigNumber>;
 
     unlinkAddress(
-      vars: DataTypes.LinkAddressDataStruct,
+      vars: DataTypes.UnlinkAddressDataStruct,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -3921,7 +3905,7 @@ export interface Abi extends BaseContract {
     ): Promise<BigNumber>;
 
     unlinkLinklist(
-      vars: DataTypes.LinkLinklistDataStruct,
+      vars: DataTypes.UnlinkLinklistDataStruct,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -4043,13 +4027,6 @@ export interface Abi extends BaseContract {
     getNote(
       profileId: BigNumberish,
       noteId: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    getNotesByProfileId(
-      profileId: BigNumberish,
-      offset: BigNumberish,
-      limit: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
@@ -4325,7 +4302,7 @@ export interface Abi extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     unlinkAddress(
-      vars: DataTypes.LinkAddressDataStruct,
+      vars: DataTypes.UnlinkAddressDataStruct,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -4340,7 +4317,7 @@ export interface Abi extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     unlinkLinklist(
-      vars: DataTypes.LinkLinklistDataStruct,
+      vars: DataTypes.UnlinkLinklistDataStruct,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 

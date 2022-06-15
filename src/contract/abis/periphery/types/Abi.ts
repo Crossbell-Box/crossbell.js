@@ -149,6 +149,7 @@ export interface AbiInterface extends utils.Interface {
     "getLinkingNotes(uint256,bytes32)": FunctionFragment;
     "getLinkingProfileId(bytes32)": FunctionFragment;
     "getLinkingProfileIds(uint256,bytes32)": FunctionFragment;
+    "getNotesByProfileId(uint256,uint256,uint256)": FunctionFragment;
     "initialize(address,address)": FunctionFragment;
     "linkProfilesInBatch((uint256,uint256[],bytes[],address[],bytes32))": FunctionFragment;
     "linklist()": FunctionFragment;
@@ -170,6 +171,7 @@ export interface AbiInterface extends utils.Interface {
       | "getLinkingNotes"
       | "getLinkingProfileId"
       | "getLinkingProfileIds"
+      | "getNotesByProfileId"
       | "initialize"
       | "linkProfilesInBatch"
       | "linklist"
@@ -227,6 +229,10 @@ export interface AbiInterface extends utils.Interface {
   encodeFunctionData(
     functionFragment: "getLinkingProfileIds",
     values: [BigNumberish, BytesLike]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getNotesByProfileId",
+    values: [BigNumberish, BigNumberish, BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "initialize",
@@ -289,6 +295,10 @@ export interface AbiInterface extends utils.Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "getLinkingProfileIds",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getNotesByProfileId",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "initialize", data: BytesLike): Result;
@@ -406,6 +416,15 @@ export interface Abi extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[BigNumber[]] & { results: BigNumber[] }>;
 
+    getNotesByProfileId(
+      profileId: BigNumberish,
+      offset: BigNumberish,
+      limit: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<
+      [DataTypes.NoteStructOutput[]] & { results: DataTypes.NoteStructOutput[] }
+    >;
+
     initialize(
       _web3Entry: string,
       _linklist: string,
@@ -493,6 +512,13 @@ export interface Abi extends BaseContract {
     overrides?: CallOverrides
   ): Promise<BigNumber[]>;
 
+  getNotesByProfileId(
+    profileId: BigNumberish,
+    offset: BigNumberish,
+    limit: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<DataTypes.NoteStructOutput[]>;
+
   initialize(
     _web3Entry: string,
     _linklist: string,
@@ -579,6 +605,13 @@ export interface Abi extends BaseContract {
       linkType: BytesLike,
       overrides?: CallOverrides
     ): Promise<BigNumber[]>;
+
+    getNotesByProfileId(
+      profileId: BigNumberish,
+      offset: BigNumberish,
+      limit: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<DataTypes.NoteStructOutput[]>;
 
     initialize(
       _web3Entry: string,
@@ -670,6 +703,13 @@ export interface Abi extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    getNotesByProfileId(
+      profileId: BigNumberish,
+      offset: BigNumberish,
+      limit: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     initialize(
       _web3Entry: string,
       _linklist: string,
@@ -755,6 +795,13 @@ export interface Abi extends BaseContract {
     getLinkingProfileIds(
       fromProfileId: BigNumberish,
       linkType: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    getNotesByProfileId(
+      profileId: BigNumberish,
+      offset: BigNumberish,
+      limit: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 

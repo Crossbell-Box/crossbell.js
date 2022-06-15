@@ -528,77 +528,6 @@ const _abi = [
         name: "profileId",
         type: "uint256",
       },
-      {
-        internalType: "uint256",
-        name: "offset",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "limit",
-        type: "uint256",
-      },
-    ],
-    name: "getNotesByProfileId",
-    outputs: [
-      {
-        components: [
-          {
-            internalType: "bytes32",
-            name: "linkItemType",
-            type: "bytes32",
-          },
-          {
-            internalType: "bytes32",
-            name: "linkKey",
-            type: "bytes32",
-          },
-          {
-            internalType: "string",
-            name: "contentUri",
-            type: "string",
-          },
-          {
-            internalType: "address",
-            name: "linkModule",
-            type: "address",
-          },
-          {
-            internalType: "address",
-            name: "mintModule",
-            type: "address",
-          },
-          {
-            internalType: "address",
-            name: "mintNFT",
-            type: "address",
-          },
-          {
-            internalType: "bool",
-            name: "deleted",
-            type: "bool",
-          },
-          {
-            internalType: "bool",
-            name: "locked",
-            type: "bool",
-          },
-        ],
-        internalType: "struct DataTypes.Note[]",
-        name: "results",
-        type: "tuple[]",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "profileId",
-        type: "uint256",
-      },
     ],
     name: "getOperator",
     outputs: [
@@ -2194,13 +2123,8 @@ const _abi = [
             name: "linkType",
             type: "bytes32",
           },
-          {
-            internalType: "bytes",
-            name: "data",
-            type: "bytes",
-          },
         ],
-        internalType: "struct DataTypes.linkAddressData",
+        internalType: "struct DataTypes.unlinkAddressData",
         name: "vars",
         type: "tuple",
       },
@@ -2294,13 +2218,8 @@ const _abi = [
             name: "linkType",
             type: "bytes32",
           },
-          {
-            internalType: "bytes",
-            name: "data",
-            type: "bytes",
-          },
         ],
-        internalType: "struct DataTypes.linkLinklistData",
+        internalType: "struct DataTypes.unlinkLinklistData",
         name: "vars",
         type: "tuple",
       },
