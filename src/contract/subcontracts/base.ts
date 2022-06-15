@@ -1,5 +1,6 @@
 import { ethers } from 'ethers'
 import { Network } from '../../network'
+import WebsocketProvider from 'web3-providers-ws'
 import {
   type Abi as EntryAbi,
   Abi__factory as EntryAbi__factory,
@@ -190,11 +191,24 @@ export class BaseContract {
 
   private getDefaultProvider():
     | ethers.providers.JsonRpcProvider
-    | ethers.providers.WebSocketProvider {
+    | ethers.providers.Web3Provider {
     const addr = Network.getJsonRpcAddress()
     if (addr.startsWith('ws')) {
-      const provider = new ethers.providers.WebSocketProvider(addr)
-
+      // @ts-ignore
+      const ws = new WebsocketProvider(addr, {
+        timeout: 30_000,
+        clientConfig: {
+          keepalive: true,
+          keepaliveInterval: 55_000,
+        },
+        reconnect: {
+          auto: true,
+          delay: 5000,
+          maxAttempts: 5,
+          onTimeout: false,
+        },
+      })
+      const provider = new ethers.providers.Web3Provider(ws)
       return provider
     } else {
       const provider = new ethers.providers.JsonRpcProvider(addr)
