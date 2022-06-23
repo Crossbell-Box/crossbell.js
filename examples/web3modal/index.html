@@ -13,32 +13,32 @@
 
     <button onclick="connectContract()">connect contract</button>
 
-    <h3>Create Profile</h3>
+    <h3>Create Character</h3>
 
     <input
       type="text"
-      id="create-profile-address"
+      id="create-character-address"
       placeholder="address"
       value=""
     />
     <input
       type="text"
-      id="create-profile-handle"
+      id="create-character-handle"
       placeholder="handler"
-      value="my profile handle"
+      value="my character handle"
     />
     <input
       type="text"
-      id="create-profile-uri"
-      placeholder="profile uri"
+      id="create-character-uri"
+      placeholder="character uri"
       value="https://example.com"
     />
 
-    <button onclick="createProfile()">createProfile</button>
+    <button onclick="createCharacter()">createCharacter</button>
 
-    <h3>Get Profile</h3>
+    <h3>Get Character</h3>
 
-    <button onclick="getProfileByHandle()">getProfileByHandle</button>
+    <button onclick="getCharacterByHandle()">getCharacterByHandle</button>
 
     <script>
       const Web3Modal = window.Web3Modal.default
@@ -120,7 +120,7 @@
           await contract.connect(provider)
           const address = ethereum.selectedAddress
           updateHint(`your address is ${address}`)
-          document.getElementById('create-profile-address').value = address
+          document.getElementById('create-character-address').value = address
         } catch (e) {
           console.error(e)
           updateHint('connect failed')
@@ -128,36 +128,40 @@
         }
       }
 
-      async function createProfile() {
-        console.log('creating profile...')
-        updateHint('creating profile...')
+      async function createCharacter() {
+        console.log('creating character...')
+        updateHint('creating character...')
         try {
           const address = document.getElementById(
-            'create-profile-address',
+            'create-character-address',
           ).value
-          const handle = document.getElementById('create-profile-handle').value
-          const uri = document.getElementById('create-profile-uri').value
-          const data = await contract.createProfile(
+          const handle = document.getElementById(
+            'create-character-handle',
+          ).value
+          const uri = document.getElementById('create-character-uri').value
+          const data = await contract.createCharacter(
             ethereum.selectedAddress,
             handle,
             uri,
           )
           console.log(data)
-          updateHint(`profile created.  ${JSON.stringify(data, null, 2)}`)
+          updateHint(`character created.  ${JSON.stringify(data, null, 2)}`)
         } catch (e) {
           console.error(e)
           updateHint(e.message)
         }
       }
 
-      async function getProfileByHandle() {
-        console.log('getting profile...')
-        updateHint('getting profile...')
+      async function getCharacterByHandle() {
+        console.log('getting character...')
+        updateHint('getting character...')
         try {
-          const handle = document.getElementById('create-profile-handle').value
-          const data = await contract.getProfileByHandle(handle)
+          const handle = document.getElementById(
+            'create-character-handle',
+          ).value
+          const data = await contract.getCharacterByHandle(handle)
           console.log(data)
-          updateHint(`profile: ${JSON.stringify(data, null, 2)}`)
+          updateHint(`character: ${JSON.stringify(data, null, 2)}`)
         } catch (e) {
           console.error(e)
           updateHint(e.message)

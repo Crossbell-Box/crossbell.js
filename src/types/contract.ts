@@ -1,4 +1,4 @@
-import { NoteMetadata, ProfileMetadata } from './metadata'
+import { NoteMetadata, CharacterMetadata } from './metadata'
 
 /**
  * The result of a call to a transaction / get function.
@@ -12,37 +12,37 @@ export type Result<T, HasTxHash extends boolean = false> = {
     }
   : {})
 
-export type Profile = {
-  /** The id of this profile. */
-  profileId: string
-  /** The handle of this profile. */
+export type Character = {
+  /** The id of this character. */
+  characterId: string
+  /** The handle of this character. */
   handle: string
-  /** The metadata URI of this profile. */
+  /** The metadata URI of this character. */
   uri: string
-  /** The metadata of this profile. */
-  metadata?: ProfileMetadata
-  /** The social token of this profile. */
+  /** The metadata of this character. */
+  metadata?: CharacterMetadata
+  /** The social token of this character. */
   socialToken: string
-  /** The count of notes this profile posted. */
+  /** The count of notes this character posted. */
   noteCount: number
 }
 
 export type LinkItemType =
-  | 'Profile'
+  | 'Character'
   | 'Address'
   | 'Note'
   | 'ERC721'
   | 'Linklist'
   | 'AnyUri'
-// | 'ProfileLink'
+// | 'CharacterLink'
 // | 'AddressLink'
 // | 'NoteLink'
 // | 'ERC721Link'
 // | 'ListLink'
 // | 'AnyLink'
 
-export type LinkItemProfile = {
-  profileId: string
+export type LinkItemCharacter = {
+  characterId: string
 }
 
 export type LinkItemAddress = {
@@ -50,7 +50,7 @@ export type LinkItemAddress = {
 }
 
 export type LinkItemNote = {
-  profileId: string
+  characterId: string
   noteId: string
 }
 
@@ -68,7 +68,7 @@ export type LinkItemAnyUri = {
 }
 
 export type LinkItem =
-  | LinkItemProfile
+  | LinkItemCharacter
   | LinkItemAddress
   | LinkItemNote
   | LinkItemERC721
@@ -76,9 +76,9 @@ export type LinkItem =
   | LinkItemAnyUri
 
 export type Note<T extends LinkItem | undefined = undefined> = {
-  /** The profile id of the address who owns the note.  */
-  profileId: string
-  /** The id of this note. Each id is unique under one profile. */
+  /** The character id of the address who owns the note.  */
+  characterId: string
+  /** The id of this note. Each id is unique under one character. */
   noteId: string
 
   /** The content URI of this note. */

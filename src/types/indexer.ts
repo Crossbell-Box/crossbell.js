@@ -1,5 +1,5 @@
 import { LinkItemType } from './contract'
-import { NoteMetadata, ProfileMetadata } from './metadata'
+import { NoteMetadata, CharacterMetadata } from './metadata'
 
 export type ListResponse<T> = {
   cursor: string | null
@@ -13,14 +13,14 @@ export type MetadataEntity<T extends MetadataType> = {
   uri: string
   type: MetadataType | null
   content: T extends 'PROFILE'
-    ? ProfileMetadata
+    ? CharacterMetadata
     : T extends 'NOTE'
     ? NoteMetadata
     : object
 }
 
-export type ProfileEntity = {
-  profileId: number
+export type CharacterEntity = {
+  characterId: number
   handle: string
   primary: boolean
   uri: string | null
@@ -43,7 +43,7 @@ export type ProfileEntity = {
 export type LinklistEntity = {
   linklistId: number
   attached: boolean
-  fromProfileId: number | null
+  fromCharacterId: number | null
   linkType: string
   uri: string | null
   metadata?: MetadataEntity<'LINKLIST'> | null
@@ -61,12 +61,12 @@ export type LinklistEntity = {
 }
 
 export type NoteEntity = {
-  profileId: number | null
+  characterId: number | null
   noteId: number
   linkItemType: LinkItemType | null
   linkKey: string
-  toProfileId: number | null
-  toProfile?: ProfileEntity | null
+  toCharacterId: number | null
+  toCharacter?: CharacterEntity | null
   toAddress: string | null
   toNoteId: number | null
   toNote?: NoteEntity | null
@@ -99,10 +99,10 @@ export type LinkEntity = {
   linkType: string
   linkItemType: LinkItemType
   linkValue: string
-  fromProfileId: number | null
-  fromProfile?: ProfileEntity | null
-  toProfileId: number | null
-  toProfile?: ProfileEntity | null
+  fromCharacterId: number | null
+  fromCharacter?: CharacterEntity | null
+  toCharacterId: number | null
+  toCharacter?: CharacterEntity | null
   toAddress: string | null
   toNoteId: number | null
   toNote?: NoteEntity | null

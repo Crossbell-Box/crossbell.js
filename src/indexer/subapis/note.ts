@@ -12,9 +12,9 @@ export class NoteIndexer extends BaseIndexer {
    * @returns The list of linklist.
    */
   async getNotes({
-    profileId,
+    characterId,
     linkItemType,
-    toProfileId,
+    toCharacterId,
     toAddress,
     toNoteId,
     toContractAddress,
@@ -27,11 +27,11 @@ export class NoteIndexer extends BaseIndexer {
     cursor,
   }: {
     /** The owner of this note */
-    profileId?: string
-    /** The link item type to filter by. e.g. 'Profile' */
+    characterId?: string
+    /** The link item type to filter by. e.g. 'Character' */
     linkItemType?: LinkItemType
-    /** The toProfileId to filter by. */
-    toProfileId?: string
+    /** The toCharacterId to filter by. */
+    toCharacterId?: string
     /** The toAddress to filter by. */
     toAddress?: string
     /** The toNoteId to filter by. */
@@ -53,12 +53,12 @@ export class NoteIndexer extends BaseIndexer {
     /** Used for pagination. */
     cursor?: string
   } = {}): Promise<ListResponse<NoteEntity>> {
-    let url = `${this.endpoint}/profiles/${profileId}/notes?`
+    let url = `${this.endpoint}/characters/${characterId}/notes?`
     url += queryString.stringify({
       limit,
       cursor,
       linkItemType,
-      toProfileId,
+      toCharacterId,
       toAddress,
       toNoteId,
       toContractAddress,
@@ -78,12 +78,15 @@ export class NoteIndexer extends BaseIndexer {
    * This returns a specific note.
    *
    * @category Note
-   * @param profileId - The profileId of the notes owner.
+   * @param characterId - The characterId of the notes owner.
    * @param noteId - The noteId of the note to get.
    * @returns The note.
    */
-  async getNote(profileId: string, noteId: string): Promise<NoteEntity | null> {
-    const url = `${this.endpoint}/profiles/${profileId}/notes/${noteId}`
+  async getNote(
+    characterId: string,
+    noteId: string,
+  ): Promise<NoteEntity | null> {
+    const url = `${this.endpoint}/characters/${characterId}/notes/${noteId}`
     const res = await fetch(url).then((res) => res.json())
 
     return res as NoteEntity

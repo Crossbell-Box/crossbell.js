@@ -4,7 +4,7 @@ import { Ipfs } from '../../src/ipfs'
 describe.concurrent('ipfs', () => {
   test.concurrent('uploadJson', async () => {
     const res = await Ipfs.uploadJson({
-      type: 'profile',
+      type: 'character',
       name: 'test',
     })
 

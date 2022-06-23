@@ -2,35 +2,35 @@ import { ethers } from 'ethers'
 import { BaseContract } from './base'
 import { autoSwitchMainnet } from '../decorators'
 import { NIL_ADDRESS } from '../utils'
-import type { Profile, Result } from '../../types/contract'
+import type { Character, Result } from '../../types/contract'
 
 export class LinkContract extends BaseContract {
   /**
-   * This links a profile to another profile with a given link type.
+   * This links a character to another character with a given link type.
    * @category Link
-   * @param fromProfileId - The profile ID of the profile that is linking to another profile. Must be your own profile, otherwise it will be rejected.
-   * @param toProfileId - The profile ID of the profile you want to link to.
+   * @param fromCharacterId - The character ID of the character that is linking to another character. Must be your own character, otherwise it will be rejected.
+   * @param toCharacterId - The character ID of the character you want to link to.
    * @param linkType - The type of link.
-   * @param data - The data to be passed to the link module if the profile has one.
+   * @param data - The data to be passed to the link module if the character has one.
    * @returns The linklist id and the transaction hash of the transaction that was sent to the blockchain.
    */
   @autoSwitchMainnet()
-  async linkProfile(
-    fromProfileId: string,
-    toProfileId: string,
+  async linkCharacter(
+    fromCharacterId: string,
+    toCharacterId: string,
     linkType: string,
     data?: string,
   ): Promise<Result<string, true>> | never {
-    const tx = await this.contract.linkProfile({
-      fromProfileId: fromProfileId,
-      toProfileId: toProfileId,
+    const tx = await this.contract.linkCharacter({
+      fromCharacterId: fromCharacterId,
+      toCharacterId: toCharacterId,
       linkType: ethers.utils.formatBytes32String(linkType),
       data: data ?? NIL_ADDRESS,
     })
 
     const receipt = await tx.wait()
 
-    const parser = this.parseLog(receipt.logs, 'linkProfile')
+    const parser = this.parseLog(receipt.logs, 'linkCharacter')
 
     return {
       data: parser.args.linklistId.toString(),
@@ -39,37 +39,37 @@ export class LinkContract extends BaseContract {
   }
 
   /**
-   * This links a profile to multiple profiles with a given link type in batch.
+   * This links a character to multiple characters with a given link type in batch.
    *
-   * This could be considered a bulk version of {@link linkProfile} & {@link createThenLinkProfile}
+   * This could be considered a bulk version of {@link linkCharacter} & {@link createThenLinkCharacter}
    *
    * @category Link
-   * @param fromProfileId - The profile ID of the profile that is linking to another profile. Must be your own profile, otherwise it will be rejected.
-   * @param toProfileIds - The profile IDs of the profile you want to link to.
-   * @param toAddresses - The addresses of the profiles you want to link to (who don't have a profile). See more on {@link createThenLinkProfile}
+   * @param fromCharacterId - The character ID of the character that is linking to another character. Must be your own character, otherwise it will be rejected.
+   * @param toCharacterIds - The character IDs of the character you want to link to.
+   * @param toAddresses - The addresses of the characters you want to link to (who don't have a character). See more on {@link createThenLinkCharacter}
    * @param linkType - The type of link.
-   * @param data - The data to be passed to the link module if the profile has one. It should has the same length as `toProfileIds`.
+   * @param data - The data to be passed to the link module if the character has one. It should has the same length as `toCharacterIds`.
    * @returns The linklist id and the transaction hash of the transaction that was sent to the blockchain.
    */
   @autoSwitchMainnet()
-  async linkProfilesInBatch(
-    fromProfileId: string,
-    toProfileIds: string[],
+  async linkCharactersInBatch(
+    fromCharacterId: string,
+    toCharacterIds: string[],
     toAddresses: string[],
     linkType: string,
     data?: string[],
   ): Promise<Result<string, true>> | never {
-    const tx = await this.peripheryContract.linkProfilesInBatch({
-      fromProfileId: fromProfileId,
-      toProfileIds,
+    const tx = await this.peripheryContract.linkCharactersInBatch({
+      fromCharacterId: fromCharacterId,
+      toCharacterIds,
       toAddresses,
       linkType: ethers.utils.formatBytes32String(linkType),
-      data: data ?? toProfileIds.map(() => NIL_ADDRESS),
+      data: data ?? toCharacterIds.map(() => NIL_ADDRESS),
     })
 
     const receipt = await tx.wait()
 
-    const parser = this.parseLog(receipt.logs, 'linkProfile')
+    const parser = this.parseLog(receipt.logs, 'linkCharacter')
 
     return {
       data: parser.args.linklistId.toString(),
@@ -78,7 +78,7 @@ export class LinkContract extends BaseContract {
   }
 
   /**
-   * This gets the linklist id of a {@link linkProfile} transaction.
+   * This gets the linklist id of a {@link linkCharacter} transaction.
    * @category Link
    * @param txHash - The transaction hash of the transaction you want to get the linklist id of.
    * @returns The linklist id of the transaction.
@@ -89,7 +89,7 @@ export class LinkContract extends BaseContract {
   ): Promise<Result<string>> | never {
     const receipt = await this.contract.provider.getTransactionReceipt(txHash)
 
-    const parser = this.parseLog(receipt.logs, 'linkProfile')
+    const parser = this.parseLog(receipt.logs, 'linkCharacter')
 
     return {
       data: parser.args.linklistId.toString(),
@@ -97,65 +97,65 @@ export class LinkContract extends BaseContract {
   }
 
   /**
-   * This creates a profile for an target address and links the fromProfile to it.
+   * This creates a character for an target address and links the fromCharacter to it.
    *
-   * This should be only called when the target address doesn't have any profile.
-   * When called on an address that already has a profile, this will fail.
-   * When called, this will create a new profile for the target address
-   * and set the new profile as the primary profile for this address.
-   * The new profile's handle will be set to the address of the target address.
+   * This should be only called when the target address doesn't have any character.
+   * When called on an address that already has a character, this will fail.
+   * When called, this will create a new character for the target address
+   * and set the new character as the primary character for this address.
+   * The new character's handle will be set to the address of the target address.
    *
    * @category Link
-   * @param fromProfileId - The profile ID of the profile that is creating the new profile. Must be your own profile, otherwise it will be rejected.
-   * @param toAddress - The address of the profile you want to link to.
+   * @param fromCharacterId - The character ID of the character that is creating the new character. Must be your own character, otherwise it will be rejected.
+   * @param toAddress - The address of the character you want to link to.
    * @param linkType - The type of link you want to create. This is a string.
-   * @returns The transaction hash of the transaction that was sent to the blockchain, the toProfileId and linklistId.
+   * @returns The transaction hash of the transaction that was sent to the blockchain, the toCharacterId and linklistId.
    */
   @autoSwitchMainnet()
-  async createThenLinkProfile(
-    fromProfileId: string,
+  async createThenLinkCharacter(
+    fromCharacterId: string,
     toAddress: string,
     linkType: string,
   ):
-    | Promise<Result<{ toProfileId: string; linklistId: string }, true>>
+    | Promise<Result<{ toCharacterId: string; linklistId: string }, true>>
     | never {
-    const tx = await this.contract.createThenLinkProfile({
-      fromProfileId: fromProfileId,
+    const tx = await this.contract.createThenLinkCharacter({
+      fromCharacterId: fromCharacterId,
       to: toAddress,
       linkType: ethers.utils.formatBytes32String(linkType),
     })
 
     const receipt = await tx.wait()
 
-    const createProfileParser = this.parseLog(receipt.logs, 'createProfile')
-    const linkProfileParser = this.parseLog(receipt.logs, 'linkProfile')
+    const createCharacterParser = this.parseLog(receipt.logs, 'createCharacter')
+    const linkCharacterParser = this.parseLog(receipt.logs, 'linkCharacter')
 
     return {
       data: {
-        toProfileId: createProfileParser.args.profileId.toString(),
-        linklistId: linkProfileParser.args.linklistId.toString(),
+        toCharacterId: createCharacterParser.args.characterId.toString(),
+        linklistId: linkCharacterParser.args.linklistId.toString(),
       },
       transactionHash: receipt.transactionHash,
     }
   }
 
   /**
-   * This removes a link from a profile to another profile.
+   * This removes a link from a character to another character.
    * @category Link
-   * @param fromProfileId - The profile ID of the profile that is linking to another profile.
-   * @param toProfileId - The profile you want to link to.
+   * @param fromCharacterId - The character ID of the character that is linking to another character.
+   * @param toCharacterId - The character you want to link to.
    * @param linkType - The type of link.
    * @returns The transaction hash of the transaction that was sent to the blockchain.
    */
   @autoSwitchMainnet()
-  async unlinkProfile(
-    fromProfileId: string,
-    toProfileId: string,
+  async unlinkCharacter(
+    fromCharacterId: string,
+    toCharacterId: string,
     linkType: string,
   ): Promise<Result<undefined, true>> | never {
-    const tx = await this.contract.unlinkProfile({
-      fromProfileId: fromProfileId,
-      toProfileId: toProfileId,
+    const tx = await this.contract.unlinkCharacter({
+      fromCharacterId: fromCharacterId,
+      toCharacterId: toCharacterId,
       linkType: ethers.utils.formatBytes32String(linkType),
     })
     const receipt = await tx.wait()
@@ -166,19 +166,19 @@ export class LinkContract extends BaseContract {
   }
 
   /**
-   * This returns the *attached* linked profile ID of a profile with a given link type.
+   * This returns the *attached* linked character ID of a character with a given link type.
    * @category Link
-   * @param fromProfileId - The profile ID of the profile you want to get the linked profiles from.
+   * @param fromCharacterId - The character ID of the character you want to get the linked characters from.
    * @param linkType - The type of link you want to get.
-   * @returns An array of profile ids that are linked to the profile id passed in.
+   * @returns An array of character ids that are linked to the character id passed in.
    */
   @autoSwitchMainnet()
-  async getLinkingProfileIds(
-    fromProfileId: string,
+  async getLinkingCharacterIds(
+    fromCharacterId: string,
     linkType: string,
   ): Promise<Result<string[]>> | never {
-    const linkList = await this.peripheryContract.getLinkingProfileIds(
-      fromProfileId,
+    const linkList = await this.peripheryContract.getLinkingCharacterIds(
+      fromCharacterId,
       ethers.utils.formatBytes32String(linkType),
     )
     return {
@@ -187,48 +187,48 @@ export class LinkContract extends BaseContract {
   }
 
   /**
-   * This returns the *attached* linked profile of a profile with a given link type.
+   * This returns the *attached* linked character of a character with a given link type.
    * @category Link
-   * @param fromProfileId - The profile ID of the profile you want to get the linked profiles from.
+   * @param fromCharacterId - The character ID of the character you want to get the linked characters from.
    * @param linkType - The type of link you want to get.
-   * @returns An array of profile that are linked to the profile id passed in.
+   * @returns An array of character that are linked to the character id passed in.
    */
   @autoSwitchMainnet()
-  async getLinkingProfiles(
-    fromProfileId: string,
+  async getLinkingCharacters(
+    fromCharacterId: string,
     linkType: string,
-  ): Promise<Result<Profile[]>> | never {
-    const ids = await this.peripheryContract.getLinkingProfileIds(
-      fromProfileId,
+  ): Promise<Result<Character[]>> | never {
+    const ids = await this.peripheryContract.getLinkingCharacterIds(
+      fromCharacterId,
       ethers.utils.formatBytes32String(linkType),
     )
-    const profiles = await Promise.all(
+    const characters = await Promise.all(
       /// @ts-ignore
-      ids.map((ids) => this.getProfile(ids.toString())),
+      ids.map((ids) => this.getCharacter(ids.toString())),
     )
     return {
-      data: profiles.map((profile) => profile.data),
+      data: characters.map((character) => character.data),
     }
   }
 
   /** link address */
 
   /**
-   * This links a profile to an address with a given link type.
+   * This links a character to an address with a given link type.
    * @category Link
-   * @param fromProfileId - The profile ID of the profile that is linking to the address.
-   * @param toAddress - The address of the profile you want to link to.
+   * @param fromCharacterId - The character ID of the character that is linking to the address.
+   * @param toAddress - The address of the character you want to link to.
    * @param linkType - The type of link.
    * @returns The transaction hash of the transaction that was sent to the blockchain, and the linklistId.
    */
   // TODO: next version
   // async linkAddress(
-  //   fromProfileId: string,
+  //   fromCharacterId: string,
   //   toAddress: string,
   //   linkType: string,
   // ): Promise<Result<undefined>> | never {
   //   const tx = await this.contract.linkAddress(
-  //     fromProfileId,
+  //     fromCharacterId,
   //     toAddress,
   //     linkType,
   //   )
@@ -243,20 +243,20 @@ export class LinkContract extends BaseContract {
   /** link any */
 
   /**
-   * This links a profile to any URI with a given link type.
+   * This links a character to any URI with a given link type.
    * @category Link
-   * @param fromProfileId - The profile ID of the profile that is linking to another profile.
-   * @param toUri - The URI of the profile you want to link to.
+   * @param fromCharacterId - The character ID of the character that is linking to another character.
+   * @param toUri - The URI of the character you want to link to.
    * @param linkType - The type of link you want to create. This is a string that you can define yourself.
    * @returns The transaction hash of the transaction that was sent to the blockchain.
    */
   // TODO: next version
   // async linkAny(
-  //   fromProfileId: string,
+  //   fromCharacterId: string,
   //   toUri: string,
   //   linkType: string,
   // ): Promise<Result<undefined>> | never {
-  //   const tx = await this.contract.linkAny(fromProfileId, toUri, linkType)
+  //   const tx = await this.contract.linkAny(fromCharacterId, toUri, linkType)
   //   const receipt = await tx.wait()
   //   return {
   //     data: undefined,
@@ -267,9 +267,9 @@ export class LinkContract extends BaseContract {
   /** link ERC721 token */
 
   /**
-   * This links a profile to an ERC721 token with a given link type.
+   * This links a character to an ERC721 token with a given link type.
    * @category Link
-   * @param fromProfileId - The profile ID of the profile you want to link from.
+   * @param fromCharacterId - The character ID of the character you want to link from.
    * @param toTokenAddress - The address of the ERC721 token you want to link to.
    * @param toTokenId - The token ID of the ERC721 token you want to link to.
    * @param linkType - The type of link.
@@ -277,13 +277,13 @@ export class LinkContract extends BaseContract {
    */
   // TODO: next version
   // async linkErc721(
-  //   fromProfileId: string,
+  //   fromCharacterId: string,
   //   toTokenAddress: string,
   //   toTokenId: string,
   //   linkType: string,
   // ): Promise<Result<undefined>> | never {
   //   const tx = await this.contract.linkERC721(
-  //     fromProfileId,
+  //     fromCharacterId,
   //     toTokenAddress,
   //     toTokenId,
   //     linkType,
@@ -298,11 +298,11 @@ export class LinkContract extends BaseContract {
   /** link note */
   // TODO: next version
   // async linkNote(
-  //   fromProfileId: string,
+  //   fromCharacterId: string,
   //   toNoteId: string,
   //   linkType: string,
   // ): Promise<Result<undefined>> | never {
-  //   const tx = await this.contract.linkNote(fromProfileId, toNoteId, linkType)
+  //   const tx = await this.contract.linkNote(fromCharacterId, toNoteId, linkType)
   //   const receipt = await tx.wait()
   //   return {
   //     data: undefined,
@@ -314,11 +314,11 @@ export class LinkContract extends BaseContract {
 
   // TODO: next version
   // async linkLink(
-  //   fromProfileId: string,
+  //   fromCharacterId: string,
   //   toLinkId: string,
   //   linkType: string,
   // ): Promise<Result<undefined>> | never {
-  //   const tx = await this.contract.linkLink(fromProfileId, {})
+  //   const tx = await this.contract.linkLink(fromCharacterId, {})
   //   const receipt = await tx.wait()
   //   return {
   //     data: undefined,
@@ -330,11 +330,11 @@ export class LinkContract extends BaseContract {
 
   // TODO: next version
   // async linkLinklist(
-  //   fromProfileId: string,
+  //   fromCharacterId: string,
   //   toLinkListId: string,
   //   linkType: string,
   // ): Promise<Result<undefined>> | never {
-  //   const tx = await this.contract.linkLinklist(fromProfileId, {})
+  //   const tx = await this.contract.linkLinklist(fromCharacterId, {})
   //   const receipt = await tx.wait()
   //   return {
   //     data: undefined,
@@ -362,10 +362,10 @@ export class LinkContract extends BaseContract {
 
   // TODO: next version
   // async setLinklistUri(
-  //   fromProfileId: string,
+  //   fromCharacterId: string,
   //   uri: string, // Name: Atlas's follow links
   // ): Promise<Result<undefined>> | never {
-  //   const tx = await this.contract.setLinklistUri(fromProfileId, uri)
+  //   const tx = await this.contract.setLinklistUri(fromCharacterId, uri)
   //   const receipt = await tx.wait()
   //   return {
   //     data: undefined,
@@ -375,10 +375,10 @@ export class LinkContract extends BaseContract {
 
   // TODO: next version
   // async getLinklistUri(
-  //   fromProfileId: string,
+  //   fromCharacterId: string,
   //   linkType: string,
   // ): Promise<Result<string>> | never {
-  //   const uri = await this.contract.getLinklistUri(fromProfileId, linkType)
+  //   const uri = await this.contract.getLinklistUri(fromCharacterId, linkType)
   //   return {
   //     data: uri,
   //     transactionHash: undefined,
@@ -389,10 +389,10 @@ export class LinkContract extends BaseContract {
 
   // TODO: next version
   // async attachLinklist(
-  //   profileId: string,
+  //   characterId: string,
   //   linklistId: string,
   // ): Promise<Result<undefined>> | never {
-  //   const tx = await this.contract.attachLinklist(profileId, linklistId) // will not overwrite and throw error if already attached a same type
+  //   const tx = await this.contract.attachLinklist(characterId, linklistId) // will not overwrite and throw error if already attached a same type
   //   const receipt = await tx.wait()
   //   return {
   //     data: undefined,
@@ -402,10 +402,10 @@ export class LinkContract extends BaseContract {
 
   // TODO: next version
   // async detachLinklist(
-  //   profileId: string,
+  //   characterId: string,
   //   linklistId: string,
   // ): Promise<Result<undefined>> | never {
-  //   const tx = await this.contract.detachLinklist(profileId, linklistId)
+  //   const tx = await this.contract.detachLinklist(characterId, linklistId)
   //   const receipt = await tx.wait()
   //   return {
   //     data: undefined,

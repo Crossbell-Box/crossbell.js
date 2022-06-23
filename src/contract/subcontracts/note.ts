@@ -8,7 +8,7 @@ import {
   LinkItemAnyUri,
   LinkItemERC721,
   PostNoteOptions,
-  LinkItemProfile,
+  LinkItemCharacter,
   LinkItemAddress,
   LinkItemNote,
   LinkItemLinklist,
@@ -21,20 +21,20 @@ export class NoteContract extends BaseContract {
   /**
    * This creates a new note.
    * @category Note
-   * @param profileId - The profile ID of the owner who post this note. Must be your own profile, otherwise it will be rejected.
+   * @param characterId - The character ID of the owner who post this note. Must be your own character, otherwise it will be rejected.
    * @param metadataOrUri - The metadata or URI of the content you want to post.
    * @returns The id of the new note.
    */
   @autoSwitchMainnet()
   async postNote(
-    profileId: string,
+    characterId: string,
     metadataOrUri: NoteMetadata | string,
     { locked = false }: PostNoteOptions = {},
   ): Promise<Result<{ noteId: string }, true>> | never {
     const { uri } = await Ipfs.parseMetadataOrUri('note', metadataOrUri)
 
     const tx = await this.contract.postNote({
-      profileId: profileId,
+      characterId: characterId,
       contentUri: uri,
       linkModule: NIL_ADDRESS, // TODO:
       linkModuleInitData: NIL_ADDRESS,
@@ -58,7 +58,7 @@ export class NoteContract extends BaseContract {
   /**
    * This creates a new note for any target uri.
    * @category Note
-   * @param profileId - The profile ID of the owner who post this note. Must be your own profile, otherwise it will be rejected.
+   * @param characterId - The character ID of the owner who post this note. Must be your own character, otherwise it will be rejected.
    * @param metadataOrUri - The metadata or URI of the content you want to post.
    * @param targetUri - The target uri of the note.
    * @param options - Options for the note.
@@ -66,7 +66,7 @@ export class NoteContract extends BaseContract {
    */
   @autoSwitchMainnet()
   async postNoteForAnyUri(
-    profileId: string,
+    characterId: string,
     metadataOrUri: NoteMetadata | string,
     targetUri: string,
     { locked = false }: PostNoteOptions = {},
@@ -75,7 +75,7 @@ export class NoteContract extends BaseContract {
 
     const tx = await this.contract.postNote4AnyUri(
       {
-        profileId: profileId,
+        characterId: characterId,
         contentUri: uri,
         linkModule: NIL_ADDRESS, // TODO:
         linkModuleInitData: NIL_ADDRESS,
@@ -101,14 +101,14 @@ export class NoteContract extends BaseContract {
   /**
    * This sets a note's metadata (URI).
    * @category Note
-   * @param profileId - The profile ID of the owner who post this note. Must be your own profile, otherwise it will be rejected.
+   * @param characterId - The character ID of the owner who post this note. Must be your own character, otherwise it will be rejected.
    * @param noteId - The id of the note you want to set the metadata.
    * @param metadataOrUri - The metadata or URI of the content you want to post.
    * @returns The transaction hash of the transaction.
    */
   @autoSwitchMainnet()
   async setNoteUri(
-    profileId: string,
+    characterId: string,
     noteId: string,
     metadataOrUri: NoteMetadata | string,
   ): Promise<Result<{ uri: string; metadata: NoteMetadata }, true>> | never {
@@ -118,7 +118,7 @@ export class NoteContract extends BaseContract {
       true,
     )
 
-    const tx = await this.contract.setNoteUri(profileId, noteId, uri)
+    const tx = await this.contract.setNoteUri(characterId, noteId, uri)
 
     const receipt = await tx.wait()
 
@@ -134,7 +134,7 @@ export class NoteContract extends BaseContract {
   /**
    * This changes a note's metadata (URI).
    * @category Note
-   * @param profileId - The profile ID of the user you want to set the URI for.
+   * @param characterId - The character ID of the user you want to set the URI for.
    * @param noteId - The id of the note you want to set the URI for.
    * @param modifier - The callback function that modifies the metadata.
    * @returns The transaction hash of the transaction that was sent to the blockchain.
@@ -170,11 +170,11 @@ export class NoteContract extends BaseContract {
    */
   @autoSwitchMainnet()
   async changeNoteMetadata(
-    profileId: string,
+    characterId: string,
     noteId: string,
     modifier: (metadata?: NoteMetadata) => NoteMetadata,
   ) {
-    const note = await this.getNote(profileId, noteId)
+    const note = await this.getNote(characterId, noteId)
 
     const metadata = modifier(note.data.metadata)
     if (typeof metadata === 'undefined') {
@@ -185,7 +185,7 @@ export class NoteContract extends BaseContract {
       metadata.type = 'note'
     }
 
-    return this.setNoteMetadata(profileId, noteId, metadata)
+    return this.setNoteMetadata(characterId, noteId, metadata)
   }
 
   /**
@@ -193,61 +193,61 @@ export class NoteContract extends BaseContract {
    * @category Note
    */
   async setNoteMetadata(
-    profileId: string,
+    characterId: string,
     noteId: string,
     metadata: NoteMetadata,
   ) {
-    return this.setNoteUri(profileId, noteId, metadata)
+    return this.setNoteUri(characterId, noteId, metadata)
   }
 
   /**
    * This returns the info of a note.
    * @category Note
-   * @param profileId - The profile ID of the address who owns the note.
+   * @param characterId - The character ID of the address who owns the note.
    * @param noteId - The id of the note you want to get the info for.
    * @returns The info of the note.
    */
   async getNote<T = undefined>(
-    profileId: string,
+    characterId: string,
     noteId: string,
   ): Promise<Result<Note<undefined>>> | never
   async getNote<T = LinkItemERC721>(
-    profileId: string,
+    characterId: string,
     noteId: string,
     linkItemType: 'ERC721',
   ): Promise<Result<Note<LinkItemERC721>>> | never
   async getNote<T = LinkItemAnyUri>(
-    profileId: string,
+    characterId: string,
     noteId: string,
     linkItemType: 'AnyUri',
   ): Promise<Result<Note<LinkItemAnyUri>>> | never
   async getNote<T = LinkItemAnyUri>(
-    profileId: string,
+    characterId: string,
     noteId: string,
-    linkItemType: 'Profile',
-  ): Promise<Result<Note<LinkItemProfile>>> | never
+    linkItemType: 'Character',
+  ): Promise<Result<Note<LinkItemCharacter>>> | never
   async getNote<T = LinkItemAnyUri>(
-    profileId: string,
+    characterId: string,
     noteId: string,
     linkItemType: 'Address',
   ): Promise<Result<Note<LinkItemAddress>>> | never
   async getNote<T = LinkItemAnyUri>(
-    profileId: string,
+    characterId: string,
     noteId: string,
     linkItemType: 'Note',
   ): Promise<Result<Note<LinkItemNote>>> | never
   async getNote<T = LinkItemAnyUri>(
-    profileId: string,
+    characterId: string,
     noteId: string,
     linkItemType: 'Linklist',
   ): Promise<Result<Note<LinkItemLinklist>>> | never
   @autoSwitchMainnet()
   async getNote<T extends LinkItem>(
-    profileId: string,
+    characterId: string,
     noteId: string,
     linkItemType?: Note['linkItemTypeString'],
   ): Promise<Result<Note<T>>> | never {
-    const data = await this.contract.getNote(profileId, noteId)
+    const data = await this.contract.getNote(characterId, noteId)
 
     const _linkItemType = ethers.utils.parseBytes32String(data.linkItemType)
     const linkItemTypeString =
@@ -278,12 +278,12 @@ export class NoteContract extends BaseContract {
       linkItem = {
         address: address.toString(),
       } as T
-    } else if (linkItemType === 'Profile') {
-      const profileId = await this.peripheryContract.getLinkingProfileId(
+    } else if (linkItemType === 'Character') {
+      const characterId = await this.peripheryContract.getLinkingCharacterId(
         data.linkKey,
       )
       linkItem = {
-        profileId: profileId.toString(),
+        characterId: characterId.toString(),
       } as T
     } else if (linkItemType === 'Note') {
       const noteId = await this.peripheryContract.getLinkingNote(data.linkKey)
@@ -303,7 +303,7 @@ export class NoteContract extends BaseContract {
 
     return {
       data: {
-        profileId: profileId,
+        characterId: characterId,
         noteId: noteId,
         contentUri: data.contentUri,
         metadata,
@@ -326,16 +326,16 @@ export class NoteContract extends BaseContract {
    * Note: This only changes the note's `deleted` property to `true`. It can't really be deleted from the blockchain.
    *
    * @category Note
-   * @param profileId - The profile ID of the owner who post this note. Must be your own profile, otherwise it will be rejected.
+   * @param characterId - The character ID of the owner who post this note. Must be your own character, otherwise it will be rejected.
    * @param noteId - The id of the note you want to delete.
    * @returns The transaction hash of the transaction.
    */
   @autoSwitchMainnet()
   async deleteNote(
-    profileId: string,
+    characterId: string,
     noteId: string,
   ): Promise<Result<undefined, true>> | never {
-    const tx = await this.contract.deleteNote(profileId, noteId)
+    const tx = await this.contract.deleteNote(characterId, noteId)
 
     const receipt = await tx.wait()
 
@@ -354,16 +354,16 @@ export class NoteContract extends BaseContract {
    * You can still delete the note using {@link deleteNote}.
    *
    * @category Note
-   * @param profileId  - The profile ID of the owner who post this note. Must be your own profile, otherwise it will be rejected.
+   * @param characterId  - The character ID of the owner who post this note. Must be your own character, otherwise it will be rejected.
    * @param noteId - The id of the note you want to lock.
    * @returns The transaction hash of the transaction.
    */
   @autoSwitchMainnet()
   async lockNote(
-    profileId: string,
+    characterId: string,
     noteId: string,
   ): Promise<Result<undefined, true>> | never {
-    const tx = await this.contract.lockNote(profileId, noteId)
+    const tx = await this.contract.lockNote(characterId, noteId)
 
     const receipt = await tx.wait()
 
@@ -376,21 +376,21 @@ export class NoteContract extends BaseContract {
   /**
    * This mints a note as an NFT.
    * @category Note
-   * @param profileId - The profile ID of the address who owns the note.
+   * @param characterId - The character ID of the address who owns the note.
    * @param noteId - The id of the note you want to get the info for.
    * @param toAddress - The address you want to mint the note to.
    * @returns The transaction hash of the transaction.
    */
   @autoSwitchMainnet()
   async mintNote(
-    profileId: string,
+    characterId: string,
     noteId: string,
     toAddress: string,
   ):
     | Promise<Result<{ contractAddress: string; tokenId: string }, true>>
     | never {
     const tx = await this.contract.mintNote({
-      profileId: profileId,
+      characterId: characterId,
       noteId: noteId,
       to: toAddress,
       mintModuleData: NIL_ADDRESS,
@@ -410,15 +410,15 @@ export class NoteContract extends BaseContract {
   }
 
   /**
-   * This returns the linkKey of a note linked to a profile.
+   * This returns the linkKey of a note linked to a character.
    * @category Note
-   * @param toProfileId - The profile ID of the profile you want to get the linkKey of.
+   * @param toCharacterId - The character ID of the character you want to get the linkKey of.
    * @returns The linkKey of the note.
    */
-  getLinkKeyForProfile(toProfileId: string): string {
+  getLinkKeyForCharacter(toCharacterId: string): string {
     return ethers.utils.solidityKeccak256(
       ['string', 'uint'],
-      ['Profile', toProfileId],
+      ['Character', toCharacterId],
     )
   }
 
@@ -438,14 +438,14 @@ export class NoteContract extends BaseContract {
   /**
    * This returns the linkKey of a note linked to a note.
    * @category Note
-   * @param toProfileId - The profile ID of the profile you want to get the linkKey of.
+   * @param toCharacterId - The character ID of the character you want to get the linkKey of.
    * @param toNoteId - The id of the note you want to get the linkKey of.
    * @returns The linkKey of the note.
    */
-  getLinkKeyForNote(toProfileId: string, toNoteId: string): string {
+  getLinkKeyForNote(toCharacterId: string, toNoteId: string): string {
     return ethers.utils.solidityKeccak256(
       ['string', 'uint', 'uint'],
-      ['Note', toProfileId, toNoteId],
+      ['Note', toCharacterId, toNoteId],
     )
   }
 

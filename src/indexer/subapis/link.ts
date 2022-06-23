@@ -5,24 +5,24 @@ import type { LinkItemType } from '../../types/contract'
 
 export class LinkIndexer extends BaseIndexer {
   /**
-   * This returns a list of links starts from a specific profile.
+   * This returns a list of links starts from a specific character.
    *
-   * Note that all links can only start from profiles, but can end to profiles, notes or other item types.
+   * Note that all links can only start from characters, but can end to characters, notes or other item types.
    *
    * @category Link
-   * @param profileId - The profileId of the link owner.
+   * @param characterId - The characterId of the link owner.
    * @param options - The options to send to the indexer.
    * @returns The list of links.
    */
   async getLinks(
-    profileId: string,
+    characterId: string,
     {
       limit = 20,
       cursor,
       linkType,
       linkItemType,
-      fromProfileId,
-      toProfileId,
+      fromCharacterId,
+      toCharacterId,
       toAddress,
       toNoteId,
       toContractAddress,
@@ -36,12 +36,12 @@ export class LinkIndexer extends BaseIndexer {
       cursor?: string
       /** The link type to filter by. e.g. 'follow' */
       linkType?: string
-      /** The link item type to filter by. e.g. 'Profile' */
+      /** The link item type to filter by. e.g. 'Character' */
       linkItemType?: LinkItemType
-      /** The fromProfileId to filter by. */
-      fromProfileId?: string
-      /** The toProfileId to filter by. */
-      toProfileId?: string
+      /** The fromCharacterId to filter by. */
+      fromCharacterId?: string
+      /** The toCharacterId to filter by. */
+      toCharacterId?: string
       /** The toAddress to filter by. */
       toAddress?: string
       /** The toNoteId to filter by. */
@@ -56,14 +56,14 @@ export class LinkIndexer extends BaseIndexer {
       toUri?: string
     } = {},
   ): Promise<ListResponse<LinkEntity>> {
-    let url = `${this.endpoint}/profiles/${profileId}/links?`
+    let url = `${this.endpoint}/characters/${characterId}/links?`
     url += queryString.stringify({
       limit,
       cursor,
       linkType,
       linkItemType,
-      fromProfileId,
-      toProfileId,
+      fromCharacterId,
+      toCharacterId,
       toAddress,
       toNoteId,
       toContractAddress,
@@ -78,15 +78,15 @@ export class LinkIndexer extends BaseIndexer {
   }
 
   /**
-   * This returns a list of links ends at a specific profile.
+   * This returns a list of links ends at a specific character.
    *
    * @category Link
-   * @param profileId - The profileId of the link ends to.
+   * @param characterId - The characterId of the link ends to.
    * @param options - The options to send to the indexer.
    * @return The list of links.
    */
-  async getBacklinksOfProfile(
-    profileId: string,
+  async getBacklinksOfCharacter(
+    characterId: string,
     {
       limit = 20,
       cursor,
@@ -100,7 +100,7 @@ export class LinkIndexer extends BaseIndexer {
       linkType?: string
     } = {},
   ): Promise<ListResponse<LinkEntity>> {
-    let url = `${this.endpoint}/profiles/${profileId}/backlinks?`
+    let url = `${this.endpoint}/characters/${characterId}/backlinks?`
     url += queryString.stringify({ limit, cursor, linkType })
 
     const res = await fetch(url).then((res) => res.json())
@@ -143,13 +143,13 @@ export class LinkIndexer extends BaseIndexer {
    * This returns a list of links ends at a specific notes.
    *
    * @category Link
-   * @param profileId - The profileId of the note owner.
+   * @param characterId - The characterId of the note owner.
    * @param noteId - The noteId of the link ends to.
    * @param options - The options to send to the indexer.
    * @return The list of links.
    */
   async getBacklinksOfNote(
-    profileId: string,
+    characterId: string,
     noteId: string,
     {
       limit = 20,
@@ -164,7 +164,7 @@ export class LinkIndexer extends BaseIndexer {
       linkType?: string
     } = {},
   ): Promise<ListResponse<LinkEntity>> {
-    let url = `${this.endpoint}/notes/${profileId}/${noteId}/backlinks?`
+    let url = `${this.endpoint}/notes/${characterId}/${noteId}/backlinks?`
     url += queryString.stringify({ limit, cursor, linkType })
 
     const res = await fetch(url).then((res) => res.json())

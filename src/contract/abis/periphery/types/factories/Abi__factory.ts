@@ -10,71 +10,6 @@ const _abi = [
   {
     inputs: [
       {
-        components: [
-          {
-            internalType: "string",
-            name: "handle",
-            type: "string",
-          },
-          {
-            internalType: "string",
-            name: "uri",
-            type: "string",
-          },
-          {
-            internalType: "address",
-            name: "profileLinkModule",
-            type: "address",
-          },
-          {
-            internalType: "bytes",
-            name: "profileLinkModuleInitData",
-            type: "bytes",
-          },
-          {
-            internalType: "string",
-            name: "contentUri",
-            type: "string",
-          },
-          {
-            internalType: "address",
-            name: "noteLinkModule",
-            type: "address",
-          },
-          {
-            internalType: "bytes",
-            name: "noteLinkModuleInitData",
-            type: "bytes",
-          },
-          {
-            internalType: "address",
-            name: "mintModule",
-            type: "address",
-          },
-          {
-            internalType: "bytes",
-            name: "mintModuleInitData",
-            type: "bytes",
-          },
-          {
-            internalType: "bool",
-            name: "locked",
-            type: "bool",
-          },
-        ],
-        internalType: "struct DataTypes.createProfileThenPostNoteData",
-        name: "vars",
-        type: "tuple",
-      },
-    ],
-    name: "createProfileThenPostNote",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
         internalType: "bytes32",
         name: "linkKey",
         type: "bytes32",
@@ -95,7 +30,7 @@ const _abi = [
     inputs: [
       {
         internalType: "uint256",
-        name: "fromProfileId",
+        name: "fromCharacterId",
         type: "uint256",
       },
       {
@@ -138,7 +73,7 @@ const _abi = [
     inputs: [
       {
         internalType: "uint256",
-        name: "fromProfileId",
+        name: "fromCharacterId",
         type: "uint256",
       },
       {
@@ -153,6 +88,49 @@ const _abi = [
         internalType: "string[]",
         name: "results",
         type: "string[]",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "bytes32",
+        name: "linkKey",
+        type: "bytes32",
+      },
+    ],
+    name: "getLinkingCharacterId",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "characterId",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "fromCharacterId",
+        type: "uint256",
+      },
+      {
+        internalType: "bytes32",
+        name: "linkType",
+        type: "bytes32",
+      },
+    ],
+    name: "getLinkingCharacterIds",
+    outputs: [
+      {
+        internalType: "uint256[]",
+        name: "results",
+        type: "uint256[]",
       },
     ],
     stateMutability: "view",
@@ -193,7 +171,7 @@ const _abi = [
     inputs: [
       {
         internalType: "uint256",
-        name: "fromProfileId",
+        name: "fromCharacterId",
         type: "uint256",
       },
       {
@@ -248,7 +226,7 @@ const _abi = [
     inputs: [
       {
         internalType: "uint256",
-        name: "fromProfileId",
+        name: "fromCharacterId",
         type: "uint256",
       },
       {
@@ -282,7 +260,7 @@ const _abi = [
         components: [
           {
             internalType: "uint256",
-            name: "profileId",
+            name: "characterId",
             type: "uint256",
           },
           {
@@ -303,7 +281,7 @@ const _abi = [
     inputs: [
       {
         internalType: "uint256",
-        name: "fromProfileId",
+        name: "fromCharacterId",
         type: "uint256",
       },
       {
@@ -368,51 +346,8 @@ const _abi = [
   {
     inputs: [
       {
-        internalType: "bytes32",
-        name: "linkKey",
-        type: "bytes32",
-      },
-    ],
-    name: "getLinkingProfileId",
-    outputs: [
-      {
         internalType: "uint256",
-        name: "profileId",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "fromProfileId",
-        type: "uint256",
-      },
-      {
-        internalType: "bytes32",
-        name: "linkType",
-        type: "bytes32",
-      },
-    ],
-    name: "getLinkingProfileIds",
-    outputs: [
-      {
-        internalType: "uint256[]",
-        name: "results",
-        type: "uint256[]",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "profileId",
+        name: "characterId",
         type: "uint256",
       },
       {
@@ -426,7 +361,7 @@ const _abi = [
         type: "uint256",
       },
     ],
-    name: "getNotesByProfileId",
+    name: "getNotesByCharacterId",
     outputs: [
       {
         components: [
@@ -503,12 +438,12 @@ const _abi = [
         components: [
           {
             internalType: "uint256",
-            name: "fromProfileId",
+            name: "fromCharacterId",
             type: "uint256",
           },
           {
             internalType: "uint256[]",
-            name: "toProfileIds",
+            name: "toCharacterIds",
             type: "uint256[]",
           },
           {
@@ -527,12 +462,12 @@ const _abi = [
             type: "bytes32",
           },
         ],
-        internalType: "struct DataTypes.linkProfilesInBatchData",
+        internalType: "struct DataTypes.linkCharactersInBatchData",
         name: "vars",
         type: "tuple",
       },
     ],
-    name: "linkProfilesInBatch",
+    name: "linkCharactersInBatch",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",

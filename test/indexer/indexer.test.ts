@@ -4,14 +4,14 @@ import { mockUser } from '../mock'
 
 const indexer = new Indexer()
 
-describe.concurrent('profiles', () => {
-  test.concurrent('getProfiles', async () => {
-    const res = await indexer.getProfiles(mockUser.address)
+describe.concurrent('characters', () => {
+  test.concurrent('getCharacters', async () => {
+    const res = await indexer.getCharacters(mockUser.address)
     expect(res.list).toBeInstanceOf(Array)
   })
 
-  test.concurrent('getPrimaryProfiles', async () => {
-    const res = await indexer.getPrimaryProfile(mockUser.address)
+  test.concurrent('getPrimaryCharacters', async () => {
+    const res = await indexer.getPrimaryCharacter(mockUser.address)
     expect(res?.handle).toBeDefined()
   })
 })
@@ -25,13 +25,13 @@ describe.concurrent('links', () => {
   test.concurrent('getLinkingItems', async () => {
     const res = await indexer.getLinks('10', {
       linkType: 'follow',
-      linkItemType: 'Profile',
+      linkItemType: 'Character',
     })
     expect(res.list).toBeInstanceOf(Array)
   })
 
   test.concurrent('getBacklinkingItems', async () => {
-    const res = await indexer.getBacklinksOfProfile('10', {
+    const res = await indexer.getBacklinksOfCharacter('10', {
       linkType: 'follow',
     })
 

@@ -2,11 +2,15 @@ import { ethers } from 'ethers'
 
 export type IAvailableNetwork = 'crossbell'
 
+globalThis.process.env.CROSSBELL_RPC_ADDRESS = 'ws://137.184.70.176:8546' // TEST
+
 export class Network {
   static readonly #CONTRACT_CROSSBELL =
-    '0xa6f969045641Cf486a747A2688F3a5A6d43cd0D8'
+    '0x467A7a27DB8A9A90f8Cb7B493A6b57Eae7f653C5' // TEST
+  // '0xa6f969045641Cf486a747A2688F3a5A6d43cd0D8'
   static readonly #CONTRACT_CROSSBELL_PERIPHERY =
-    '0x96e96b7af62d628ce7eb2016d2c1d2786614ea73'
+    '0x054B6DC4ad569d26c45dc00Bb71FD77648A10393' // TEST
+  // '0x96e96b7af62d628ce7eb2016d2c1d2786614ea73'
 
   static readonly #availableNetworks: IAvailableNetwork[] = ['crossbell']
   static #currentNetwork: IAvailableNetwork = 'crossbell'
@@ -103,6 +107,7 @@ export class Network {
   static async isCrossbellMainnet(
     provider: ethers.providers.ExternalProvider | ethers.providers.Provider,
   ) {
+    return true // TEST
     const { chainId } = this.getCrossbellMainnetInfo()
     if (
       provider instanceof ethers.providers.Web3Provider ||
