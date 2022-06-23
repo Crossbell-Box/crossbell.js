@@ -194,12 +194,14 @@ export class BaseContract {
     | ethers.providers.Web3Provider {
     const addr = Network.getJsonRpcAddress()
     if (addr.startsWith('ws')) {
-      // @ts-ignore
+      // @ts-ignore https://github.com/ChainSafe/web3.js/tree/1.x/packages/web3-providers-ws#usage
       const ws = new WebsocketProvider(addr, {
         timeout: 30_000,
         clientConfig: {
           keepalive: true,
           keepaliveInterval: 55_000,
+          maxReceivedFrameSize: 1024 * 1000 * 500, // bytes - default: 1MiB
+          maxReceivedMessageSize: 1024 * 1000 * 1000, // bytes - default: 8MiB
         },
         reconnect: {
           auto: true,
