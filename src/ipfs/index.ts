@@ -1,4 +1,5 @@
 import isIpfs from 'is-ipfs'
+import retry from 'async-retry'
 import '../utils/fetch'
 import type {
   BaseMetadata,
@@ -11,12 +12,17 @@ import { Network } from '../network'
 
 export class Ipfs {
   static async uploadJson(json: any) {
-    const res = await fetch('https://ipfs-relay.crossbell.io/json', {
-      method: 'POST',
-      body: JSON.stringify(json),
-    }).then((res) => res.json())
+    return await retry(
+      async () => {
+        const res = await fetch('https://ipfs-relay.crossbell.io/json', {
+          method: 'POST',
+          body: JSON.stringify(json),
+        }).then((res) => res.json())
 
-    return res as IpfsResponse
+        return res as IpfsResponse
+      },
+      { retries: 3 },
+    )
   }
 
   static async metadataToUri(metadata: Metadata) {
