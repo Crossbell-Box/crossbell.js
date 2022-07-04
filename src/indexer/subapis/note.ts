@@ -55,6 +55,7 @@ export class NoteIndexer extends BaseIndexer {
   } = {}): Promise<ListResponse<NoteEntity>> {
     let url = `${this.endpoint}/notes?`
     url += queryString.stringify({
+      profileId,
       limit,
       cursor,
       linkItemType,
