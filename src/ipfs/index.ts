@@ -1,3 +1,4 @@
+import isIpfs from 'is-ipfs'
 import '../utils/fetch'
 import type {
   BaseMetadata,
@@ -32,6 +33,10 @@ export class Ipfs {
     if (uri.startsWith('ipfs://')) {
       // to cf-ipfs endpoint
       uri = uri.replace('ipfs://', Network.getIpfsGateway())
+      if (!isIpfs.url(uri)) {
+        console.warn('[Crossbell.js] Wrong IPFS url: ' + uri)
+        return
+      }
     }
 
     let res
