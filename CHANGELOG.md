@@ -1,5 +1,9 @@
 # CHANGELOG
 
+For future updates, please see GitHub Releases.
+
+---
+
 ## 0.7.1 (2022-06-09)
 
 - fix websocket reconnecting problem.

@@ -7,12 +7,12 @@ export type ListResponse<T> = {
   list: T[]
 }
 
-export type MetadataType = 'PROFILE' | 'NOTE' | 'LINKLIST'
+export type MetadataType = 'CHARACTER' | 'NOTE' | 'LINKLIST'
 
 export type MetadataEntity<T extends MetadataType> = {
   uri: string
   type: MetadataType | null
-  content: T extends 'PROFILE'
+  content: T extends 'CHARACTER'
     ? CharacterMetadata
     : T extends 'NOTE'
     ? NoteMetadata
@@ -24,7 +24,7 @@ export type CharacterEntity = {
   handle: string
   primary: boolean
   uri: string | null
-  metadata?: MetadataEntity<'PROFILE'> | null
+  metadata?: MetadataEntity<'CHARACTER'> | null
   socialToken: string | null
   operator: string
   owner: string

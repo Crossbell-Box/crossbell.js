@@ -76,7 +76,9 @@ export class CharacterContract extends BaseContract {
   async setCharacterUri(
     characterId: string,
     metadataOrUri: CharacterMetadata | string,
-  ): Promise<Result<{ uri: string; metadata: CharacterMetadata }, true>> | never {
+  ):
+    | Promise<Result<{ uri: string; metadata: CharacterMetadata }, true>>
+    | never {
     const { uri, metadata } = await Ipfs.parseMetadataOrUri(
       'character',
       metadataOrUri,
@@ -203,7 +205,9 @@ export class CharacterContract extends BaseContract {
    * @returns The characterId of the primary character of the address.
    */
   @autoSwitchMainnet()
-  async getPrimaryCharacterId(address: string): Promise<Result<string>> | never {
+  async getPrimaryCharacterId(
+    address: string,
+  ): Promise<Result<string>> | never {
     const characterId = await this.contract.getPrimaryCharacterId(address)
     return {
       data: characterId.toNumber().toString(),
@@ -233,7 +237,9 @@ export class CharacterContract extends BaseContract {
    * @returns The character with the given handle.
    */
   @autoSwitchMainnet()
-  async getCharacterByHandle(handle: string): Promise<Result<Character>> | never {
+  async getCharacterByHandle(
+    handle: string,
+  ): Promise<Result<Character>> | never {
     handle = handle.toLowerCase()
 
     const character = await this.contract.getCharacterByHandle(handle)

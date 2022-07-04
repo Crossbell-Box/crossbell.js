@@ -53,7 +53,7 @@ export class NoteIndexer extends BaseIndexer {
     /** Used for pagination. */
     cursor?: string
   } = {}): Promise<ListResponse<NoteEntity>> {
-    let url = `${this.endpoint}/characters/${characterId}/notes?`
+    let url = `${this.endpoint}/notes?`
     url += queryString.stringify({
       limit,
       cursor,
@@ -67,6 +67,7 @@ export class NoteIndexer extends BaseIndexer {
       toUri,
       locked,
       includeDeleted,
+      characterId,
     })
 
     const res = await fetch(url).then((res) => res.json())

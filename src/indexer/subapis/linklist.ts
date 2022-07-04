@@ -37,7 +37,7 @@ export class LinklistIndexer extends BaseIndexer {
   }
 
   /**
-   * This returns a list of linklists owned by a specific character.
+   * This returns a list of linklists attached to a specific character.
    * @category Linklist
    * @param characterId - The characterId of the linklists owner.
    * @param options - The options to send to the indexer.
