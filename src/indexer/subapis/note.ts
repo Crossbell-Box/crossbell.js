@@ -2,6 +2,7 @@ import { BaseIndexer } from './base'
 import queryString from 'query-string'
 import type { ListResponse, NoteEntity } from '../../types/indexer'
 import type { LinkItemType } from '../../types/contract'
+import { type BigNumberish } from 'ethers'
 
 export class NoteIndexer extends BaseIndexer {
   /**
@@ -27,21 +28,21 @@ export class NoteIndexer extends BaseIndexer {
     cursor,
   }: {
     /** The owner of this note */
-    characterId?: string
+    characterId?: BigNumberish
     /** The link item type to filter by. e.g. 'Character' */
     linkItemType?: LinkItemType
     /** The toCharacterId to filter by. */
-    toCharacterId?: string
+    toCharacterId?: BigNumberish
     /** The toAddress to filter by. */
     toAddress?: string
     /** The toNoteId to filter by. */
-    toNoteId?: string
+    toNoteId?: BigNumberish
     /** The toContractAddress to filter by. */
     toContractAddress?: string
     /** The toTokenId to filter by. */
-    toTokenId?: string
+    toTokenId?: BigNumberish
     /** The toLinklistId to filter by. */
-    toLinklistId?: string
+    toLinklistId?: BigNumberish
     /** The toUri to filter by. */
     toUri?: string
     /** Only returns locked notes or not */
@@ -84,8 +85,8 @@ export class NoteIndexer extends BaseIndexer {
    * @returns The note.
    */
   async getNote(
-    characterId: string,
-    noteId: string,
+    characterId: BigNumberish,
+    noteId: BigNumberish,
   ): Promise<NoteEntity | null> {
     const url = `${this.endpoint}/characters/${characterId}/notes/${noteId}`
     const res = await fetch(url).then((res) => res.json())

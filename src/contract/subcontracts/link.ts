@@ -1,4 +1,4 @@
-import { ethers } from 'ethers'
+import { type BigNumberish, ethers } from 'ethers'
 import { BaseContract } from './base'
 import { autoSwitchMainnet } from '../decorators'
 import { NIL_ADDRESS } from '../utils'
@@ -16,11 +16,11 @@ export class LinkContract extends BaseContract {
    */
   @autoSwitchMainnet()
   async linkCharacter(
-    fromCharacterId: string,
-    toCharacterId: string,
+    fromCharacterId: BigNumberish,
+    toCharacterId: BigNumberish,
     linkType: string,
     data?: string,
-  ): Promise<Result<string, true>> | never {
+  ): Promise<Result<number, true>> | never {
     const tx = await this.contract.linkCharacter({
       fromCharacterId: fromCharacterId,
       toCharacterId: toCharacterId,
@@ -33,7 +33,7 @@ export class LinkContract extends BaseContract {
     const parser = this.parseLog(receipt.logs, 'linkCharacter')
 
     return {
-      data: parser.args.linklistId.toString(),
+      data: parser.args.linklistId.toNumber(),
       transactionHash: receipt.transactionHash,
     }
   }
@@ -53,12 +53,12 @@ export class LinkContract extends BaseContract {
    */
   @autoSwitchMainnet()
   async linkCharactersInBatch(
-    fromCharacterId: string,
-    toCharacterIds: string[],
+    fromCharacterId: BigNumberish,
+    toCharacterIds: BigNumberish[],
     toAddresses: string[],
     linkType: string,
     data?: string[],
-  ): Promise<Result<string, true>> | never {
+  ): Promise<Result<number, true>> | never {
     const tx = await this.peripheryContract.linkCharactersInBatch({
       fromCharacterId: fromCharacterId,
       toCharacterIds,
@@ -72,7 +72,7 @@ export class LinkContract extends BaseContract {
     const parser = this.parseLog(receipt.logs, 'linkCharacter')
 
     return {
-      data: parser.args.linklistId.toString(),
+      data: parser.args.linklistId.toNumber(),
       transactionHash: receipt.transactionHash,
     }
   }
@@ -86,13 +86,13 @@ export class LinkContract extends BaseContract {
   @autoSwitchMainnet()
   async getLinklistIdByTransaction(
     txHash: string,
-  ): Promise<Result<string>> | never {
+  ): Promise<Result<number>> | never {
     const receipt = await this.contract.provider.getTransactionReceipt(txHash)
 
     const parser = this.parseLog(receipt.logs, 'linkCharacter')
 
     return {
-      data: parser.args.linklistId.toString(),
+      data: parser.args.linklistId.toNumber(),
     }
   }
 
@@ -113,11 +113,11 @@ export class LinkContract extends BaseContract {
    */
   @autoSwitchMainnet()
   async createThenLinkCharacter(
-    fromCharacterId: string,
+    fromCharacterId: BigNumberish,
     toAddress: string,
     linkType: string,
   ):
-    | Promise<Result<{ toCharacterId: string; linklistId: string }, true>>
+    | Promise<Result<{ toCharacterId: number; linklistId: number }, true>>
     | never {
     const tx = await this.contract.createThenLinkCharacter({
       fromCharacterId: fromCharacterId,
@@ -132,8 +132,8 @@ export class LinkContract extends BaseContract {
 
     return {
       data: {
-        toCharacterId: createCharacterParser.args.characterId.toString(),
-        linklistId: linkCharacterParser.args.linklistId.toString(),
+        toCharacterId: createCharacterParser.args.characterId.toNumber(),
+        linklistId: linkCharacterParser.args.linklistId.toNumber(),
       },
       transactionHash: receipt.transactionHash,
     }
@@ -149,8 +149,8 @@ export class LinkContract extends BaseContract {
    */
   @autoSwitchMainnet()
   async unlinkCharacter(
-    fromCharacterId: string,
-    toCharacterId: string,
+    fromCharacterId: BigNumberish,
+    toCharacterId: BigNumberish,
     linkType: string,
   ): Promise<Result<undefined, true>> | never {
     const tx = await this.contract.unlinkCharacter({
@@ -174,15 +174,15 @@ export class LinkContract extends BaseContract {
    */
   @autoSwitchMainnet()
   async getLinkingCharacterIds(
-    fromCharacterId: string,
+    fromCharacterId: BigNumberish,
     linkType: string,
-  ): Promise<Result<string[]>> | never {
+  ): Promise<Result<number[]>> | never {
     const linkList = await this.peripheryContract.getLinkingCharacterIds(
       fromCharacterId,
       ethers.utils.formatBytes32String(linkType),
     )
     return {
-      data: linkList.map((link) => link.toNumber().toString()),
+      data: linkList.map((link) => link.toNumber()),
     }
   }
 
@@ -195,7 +195,7 @@ export class LinkContract extends BaseContract {
    */
   @autoSwitchMainnet()
   async getLinkingCharacters(
-    fromCharacterId: string,
+    fromCharacterId: BigNumberish,
     linkType: string,
   ): Promise<Result<Character[]>> | never {
     const ids = await this.peripheryContract.getLinkingCharacterIds(
@@ -204,7 +204,7 @@ export class LinkContract extends BaseContract {
     )
     const characters = await Promise.all(
       /// @ts-ignore
-      ids.map((ids) => this.getCharacter(ids.toString())),
+      ids.map((ids) => this.getCharacter(ids.toNumber())),
     )
     return {
       data: characters.map((character) => character.data),

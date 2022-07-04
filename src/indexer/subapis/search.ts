@@ -6,6 +6,7 @@ import type {
   CharacterEntity,
 } from '../../types/indexer'
 import type { LinkItemType } from '../../types/contract'
+import { type BigNumberish } from 'ethers'
 
 export class SearchIndexer extends BaseIndexer {
   /**
@@ -58,7 +59,7 @@ export class SearchIndexer extends BaseIndexer {
       /** The link item type to filter by. e.g. 'Character' */
       linkItemType?: LinkItemType
       /** Note with the given characterId owner */
-      characterId?: string
+      characterId?: BigNumberish
       /** Limit the count of items returned. */
       limit?: number
       /** Used for pagination. */

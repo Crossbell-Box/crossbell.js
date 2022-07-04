@@ -12,64 +12,64 @@ import type {
   PopulatedTransaction,
   Signer,
   utils,
-} from 'ethers'
+} from "ethers";
 import type {
   FunctionFragment,
   Result,
   EventFragment,
-} from '@ethersproject/abi'
-import type { Listener, Provider } from '@ethersproject/providers'
+} from "@ethersproject/abi";
+import type { Listener, Provider } from "@ethersproject/providers";
 import type {
   TypedEventFilter,
   TypedEvent,
   TypedListener,
   OnEvent,
   PromiseOrValue,
-} from './common'
+} from "./common";
 
 export declare namespace DataTypes {
   export type CreateCharacterDataStruct = {
-    to: PromiseOrValue<string>
-    handle: PromiseOrValue<string>
-    uri: PromiseOrValue<string>
-    linkModule: PromiseOrValue<string>
-    linkModuleInitData: PromiseOrValue<BytesLike>
-  }
+    to: PromiseOrValue<string>;
+    handle: PromiseOrValue<string>;
+    uri: PromiseOrValue<string>;
+    linkModule: PromiseOrValue<string>;
+    linkModuleInitData: PromiseOrValue<BytesLike>;
+  };
 
   export type CreateCharacterDataStructOutput = [
     string,
     string,
     string,
     string,
-    string,
+    string
   ] & {
-    to: string
-    handle: string
-    uri: string
-    linkModule: string
-    linkModuleInitData: string
-  }
+    to: string;
+    handle: string;
+    uri: string;
+    linkModule: string;
+    linkModuleInitData: string;
+  };
 
   export type CreateThenLinkCharacterDataStruct = {
-    fromCharacterId: PromiseOrValue<BigNumberish>
-    to: PromiseOrValue<string>
-    linkType: PromiseOrValue<BytesLike>
-  }
+    fromCharacterId: PromiseOrValue<BigNumberish>;
+    to: PromiseOrValue<string>;
+    linkType: PromiseOrValue<BytesLike>;
+  };
 
   export type CreateThenLinkCharacterDataStructOutput = [
     BigNumber,
     string,
-    string,
-  ] & { fromCharacterId: BigNumber; to: string; linkType: string }
+    string
+  ] & { fromCharacterId: BigNumber; to: string; linkType: string };
 
   export type CharacterStruct = {
-    characterId: PromiseOrValue<BigNumberish>
-    handle: PromiseOrValue<string>
-    uri: PromiseOrValue<string>
-    noteCount: PromiseOrValue<BigNumberish>
-    socialToken: PromiseOrValue<string>
-    linkModule: PromiseOrValue<string>
-  }
+    characterId: PromiseOrValue<BigNumberish>;
+    handle: PromiseOrValue<string>;
+    uri: PromiseOrValue<string>;
+    noteCount: PromiseOrValue<BigNumberish>;
+    socialToken: PromiseOrValue<string>;
+    linkModule: PromiseOrValue<string>;
+  };
 
   export type CharacterStructOutput = [
     BigNumber,
@@ -77,26 +77,26 @@ export declare namespace DataTypes {
     string,
     BigNumber,
     string,
-    string,
+    string
   ] & {
-    characterId: BigNumber
-    handle: string
-    uri: string
-    noteCount: BigNumber
-    socialToken: string
-    linkModule: string
-  }
+    characterId: BigNumber;
+    handle: string;
+    uri: string;
+    noteCount: BigNumber;
+    socialToken: string;
+    linkModule: string;
+  };
 
   export type NoteStruct = {
-    linkItemType: PromiseOrValue<BytesLike>
-    linkKey: PromiseOrValue<BytesLike>
-    contentUri: PromiseOrValue<string>
-    linkModule: PromiseOrValue<string>
-    mintModule: PromiseOrValue<string>
-    mintNFT: PromiseOrValue<string>
-    deleted: PromiseOrValue<boolean>
-    locked: PromiseOrValue<boolean>
-  }
+    linkItemType: PromiseOrValue<BytesLike>;
+    linkKey: PromiseOrValue<BytesLike>;
+    contentUri: PromiseOrValue<string>;
+    linkModule: PromiseOrValue<string>;
+    mintModule: PromiseOrValue<string>;
+    mintNFT: PromiseOrValue<string>;
+    deleted: PromiseOrValue<boolean>;
+    locked: PromiseOrValue<boolean>;
+  };
 
   export type NoteStructOutput = [
     string,
@@ -106,182 +106,182 @@ export declare namespace DataTypes {
     string,
     string,
     boolean,
-    boolean,
+    boolean
   ] & {
-    linkItemType: string
-    linkKey: string
-    contentUri: string
-    linkModule: string
-    mintModule: string
-    mintNFT: string
-    deleted: boolean
-    locked: boolean
-  }
+    linkItemType: string;
+    linkKey: string;
+    contentUri: string;
+    linkModule: string;
+    mintModule: string;
+    mintNFT: string;
+    deleted: boolean;
+    locked: boolean;
+  };
 
   export type LinkAddressDataStruct = {
-    fromCharacterId: PromiseOrValue<BigNumberish>
-    ethAddress: PromiseOrValue<string>
-    linkType: PromiseOrValue<BytesLike>
-    data: PromiseOrValue<BytesLike>
-  }
+    fromCharacterId: PromiseOrValue<BigNumberish>;
+    ethAddress: PromiseOrValue<string>;
+    linkType: PromiseOrValue<BytesLike>;
+    data: PromiseOrValue<BytesLike>;
+  };
 
   export type LinkAddressDataStructOutput = [
     BigNumber,
     string,
     string,
-    string,
+    string
   ] & {
-    fromCharacterId: BigNumber
-    ethAddress: string
-    linkType: string
-    data: string
-  }
+    fromCharacterId: BigNumber;
+    ethAddress: string;
+    linkType: string;
+    data: string;
+  };
 
   export type LinkAnyUriDataStruct = {
-    fromCharacterId: PromiseOrValue<BigNumberish>
-    toUri: PromiseOrValue<string>
-    linkType: PromiseOrValue<BytesLike>
-    data: PromiseOrValue<BytesLike>
-  }
+    fromCharacterId: PromiseOrValue<BigNumberish>;
+    toUri: PromiseOrValue<string>;
+    linkType: PromiseOrValue<BytesLike>;
+    data: PromiseOrValue<BytesLike>;
+  };
 
   export type LinkAnyUriDataStructOutput = [
     BigNumber,
     string,
     string,
-    string,
+    string
   ] & {
-    fromCharacterId: BigNumber
-    toUri: string
-    linkType: string
-    data: string
-  }
+    fromCharacterId: BigNumber;
+    toUri: string;
+    linkType: string;
+    data: string;
+  };
 
   export type LinkCharacterDataStruct = {
-    fromCharacterId: PromiseOrValue<BigNumberish>
-    toCharacterId: PromiseOrValue<BigNumberish>
-    linkType: PromiseOrValue<BytesLike>
-    data: PromiseOrValue<BytesLike>
-  }
+    fromCharacterId: PromiseOrValue<BigNumberish>;
+    toCharacterId: PromiseOrValue<BigNumberish>;
+    linkType: PromiseOrValue<BytesLike>;
+    data: PromiseOrValue<BytesLike>;
+  };
 
   export type LinkCharacterDataStructOutput = [
     BigNumber,
     BigNumber,
     string,
-    string,
+    string
   ] & {
-    fromCharacterId: BigNumber
-    toCharacterId: BigNumber
-    linkType: string
-    data: string
-  }
+    fromCharacterId: BigNumber;
+    toCharacterId: BigNumber;
+    linkType: string;
+    data: string;
+  };
 
   export type CharacterLinkStructStruct = {
-    fromCharacterId: PromiseOrValue<BigNumberish>
-    toCharacterId: PromiseOrValue<BigNumberish>
-    linkType: PromiseOrValue<BytesLike>
-  }
+    fromCharacterId: PromiseOrValue<BigNumberish>;
+    toCharacterId: PromiseOrValue<BigNumberish>;
+    linkType: PromiseOrValue<BytesLike>;
+  };
 
   export type CharacterLinkStructStructOutput = [
     BigNumber,
     BigNumber,
-    string,
+    string
   ] & {
-    fromCharacterId: BigNumber
-    toCharacterId: BigNumber
-    linkType: string
-  }
+    fromCharacterId: BigNumber;
+    toCharacterId: BigNumber;
+    linkType: string;
+  };
 
   export type LinkERC721DataStruct = {
-    fromCharacterId: PromiseOrValue<BigNumberish>
-    tokenAddress: PromiseOrValue<string>
-    tokenId: PromiseOrValue<BigNumberish>
-    linkType: PromiseOrValue<BytesLike>
-    data: PromiseOrValue<BytesLike>
-  }
+    fromCharacterId: PromiseOrValue<BigNumberish>;
+    tokenAddress: PromiseOrValue<string>;
+    tokenId: PromiseOrValue<BigNumberish>;
+    linkType: PromiseOrValue<BytesLike>;
+    data: PromiseOrValue<BytesLike>;
+  };
 
   export type LinkERC721DataStructOutput = [
     BigNumber,
     string,
     BigNumber,
     string,
-    string,
+    string
   ] & {
-    fromCharacterId: BigNumber
-    tokenAddress: string
-    tokenId: BigNumber
-    linkType: string
-    data: string
-  }
+    fromCharacterId: BigNumber;
+    tokenAddress: string;
+    tokenId: BigNumber;
+    linkType: string;
+    data: string;
+  };
 
   export type LinkLinklistDataStruct = {
-    fromCharacterId: PromiseOrValue<BigNumberish>
-    toLinkListId: PromiseOrValue<BigNumberish>
-    linkType: PromiseOrValue<BytesLike>
-    data: PromiseOrValue<BytesLike>
-  }
+    fromCharacterId: PromiseOrValue<BigNumberish>;
+    toLinkListId: PromiseOrValue<BigNumberish>;
+    linkType: PromiseOrValue<BytesLike>;
+    data: PromiseOrValue<BytesLike>;
+  };
 
   export type LinkLinklistDataStructOutput = [
     BigNumber,
     BigNumber,
     string,
-    string,
+    string
   ] & {
-    fromCharacterId: BigNumber
-    toLinkListId: BigNumber
-    linkType: string
-    data: string
-  }
+    fromCharacterId: BigNumber;
+    toLinkListId: BigNumber;
+    linkType: string;
+    data: string;
+  };
 
   export type LinkNoteDataStruct = {
-    fromCharacterId: PromiseOrValue<BigNumberish>
-    toCharacterId: PromiseOrValue<BigNumberish>
-    toNoteId: PromiseOrValue<BigNumberish>
-    linkType: PromiseOrValue<BytesLike>
-    data: PromiseOrValue<BytesLike>
-  }
+    fromCharacterId: PromiseOrValue<BigNumberish>;
+    toCharacterId: PromiseOrValue<BigNumberish>;
+    toNoteId: PromiseOrValue<BigNumberish>;
+    linkType: PromiseOrValue<BytesLike>;
+    data: PromiseOrValue<BytesLike>;
+  };
 
   export type LinkNoteDataStructOutput = [
     BigNumber,
     BigNumber,
     BigNumber,
     string,
-    string,
+    string
   ] & {
-    fromCharacterId: BigNumber
-    toCharacterId: BigNumber
-    toNoteId: BigNumber
-    linkType: string
-    data: string
-  }
+    fromCharacterId: BigNumber;
+    toCharacterId: BigNumber;
+    toNoteId: BigNumber;
+    linkType: string;
+    data: string;
+  };
 
   export type MintNoteDataStruct = {
-    characterId: PromiseOrValue<BigNumberish>
-    noteId: PromiseOrValue<BigNumberish>
-    to: PromiseOrValue<string>
-    mintModuleData: PromiseOrValue<BytesLike>
-  }
+    characterId: PromiseOrValue<BigNumberish>;
+    noteId: PromiseOrValue<BigNumberish>;
+    to: PromiseOrValue<string>;
+    mintModuleData: PromiseOrValue<BytesLike>;
+  };
 
   export type MintNoteDataStructOutput = [
     BigNumber,
     BigNumber,
     string,
-    string,
+    string
   ] & {
-    characterId: BigNumber
-    noteId: BigNumber
-    to: string
-    mintModuleData: string
-  }
+    characterId: BigNumber;
+    noteId: BigNumber;
+    to: string;
+    mintModuleData: string;
+  };
 
   export type PostNoteDataStruct = {
-    characterId: PromiseOrValue<BigNumberish>
-    contentUri: PromiseOrValue<string>
-    linkModule: PromiseOrValue<string>
-    linkModuleInitData: PromiseOrValue<BytesLike>
-    mintModule: PromiseOrValue<string>
-    mintModuleInitData: PromiseOrValue<BytesLike>
-    locked: PromiseOrValue<boolean>
-  }
+    characterId: PromiseOrValue<BigNumberish>;
+    contentUri: PromiseOrValue<string>;
+    linkModule: PromiseOrValue<string>;
+    linkModuleInitData: PromiseOrValue<BytesLike>;
+    mintModule: PromiseOrValue<string>;
+    mintModuleInitData: PromiseOrValue<BytesLike>;
+    locked: PromiseOrValue<boolean>;
+  };
 
   export type PostNoteDataStructOutput = [
     BigNumber,
@@ -290,1670 +290,1688 @@ export declare namespace DataTypes {
     string,
     string,
     string,
-    boolean,
+    boolean
   ] & {
-    characterId: BigNumber
-    contentUri: string
-    linkModule: string
-    linkModuleInitData: string
-    mintModule: string
-    mintModuleInitData: string
-    locked: boolean
-  }
+    characterId: BigNumber;
+    contentUri: string;
+    linkModule: string;
+    linkModuleInitData: string;
+    mintModule: string;
+    mintModuleInitData: string;
+    locked: boolean;
+  };
 
   export type ERC721StructStruct = {
-    tokenAddress: PromiseOrValue<string>
-    erc721TokenId: PromiseOrValue<BigNumberish>
-  }
+    tokenAddress: PromiseOrValue<string>;
+    erc721TokenId: PromiseOrValue<BigNumberish>;
+  };
 
   export type ERC721StructStructOutput = [string, BigNumber] & {
-    tokenAddress: string
-    erc721TokenId: BigNumber
-  }
+    tokenAddress: string;
+    erc721TokenId: BigNumber;
+  };
 
   export type NoteStructStruct = {
-    characterId: PromiseOrValue<BigNumberish>
-    noteId: PromiseOrValue<BigNumberish>
-  }
+    characterId: PromiseOrValue<BigNumberish>;
+    noteId: PromiseOrValue<BigNumberish>;
+  };
 
   export type NoteStructStructOutput = [BigNumber, BigNumber] & {
-    characterId: BigNumber
-    noteId: BigNumber
-  }
+    characterId: BigNumber;
+    noteId: BigNumber;
+  };
 
   export type SetLinkModule4AddressDataStruct = {
-    account: PromiseOrValue<string>
-    linkModule: PromiseOrValue<string>
-    linkModuleInitData: PromiseOrValue<BytesLike>
-  }
+    account: PromiseOrValue<string>;
+    linkModule: PromiseOrValue<string>;
+    linkModuleInitData: PromiseOrValue<BytesLike>;
+  };
 
   export type SetLinkModule4AddressDataStructOutput = [
     string,
     string,
-    string,
-  ] & { account: string; linkModule: string; linkModuleInitData: string }
+    string
+  ] & { account: string; linkModule: string; linkModuleInitData: string };
 
   export type SetLinkModule4CharacterDataStruct = {
-    characterId: PromiseOrValue<BigNumberish>
-    linkModule: PromiseOrValue<string>
-    linkModuleInitData: PromiseOrValue<BytesLike>
-  }
+    characterId: PromiseOrValue<BigNumberish>;
+    linkModule: PromiseOrValue<string>;
+    linkModuleInitData: PromiseOrValue<BytesLike>;
+  };
 
   export type SetLinkModule4CharacterDataStructOutput = [
     BigNumber,
     string,
-    string,
+    string
   ] & {
-    characterId: BigNumber
-    linkModule: string
-    linkModuleInitData: string
-  }
+    characterId: BigNumber;
+    linkModule: string;
+    linkModuleInitData: string;
+  };
 
   export type SetLinkModule4ERC721DataStruct = {
-    tokenAddress: PromiseOrValue<string>
-    tokenId: PromiseOrValue<BigNumberish>
-    linkModule: PromiseOrValue<string>
-    linkModuleInitData: PromiseOrValue<BytesLike>
-  }
+    tokenAddress: PromiseOrValue<string>;
+    tokenId: PromiseOrValue<BigNumberish>;
+    linkModule: PromiseOrValue<string>;
+    linkModuleInitData: PromiseOrValue<BytesLike>;
+  };
 
   export type SetLinkModule4ERC721DataStructOutput = [
     string,
     BigNumber,
     string,
-    string,
+    string
   ] & {
-    tokenAddress: string
-    tokenId: BigNumber
-    linkModule: string
-    linkModuleInitData: string
-  }
+    tokenAddress: string;
+    tokenId: BigNumber;
+    linkModule: string;
+    linkModuleInitData: string;
+  };
 
   export type SetLinkModule4LinklistDataStruct = {
-    linklistId: PromiseOrValue<BigNumberish>
-    linkModule: PromiseOrValue<string>
-    linkModuleInitData: PromiseOrValue<BytesLike>
-  }
+    linklistId: PromiseOrValue<BigNumberish>;
+    linkModule: PromiseOrValue<string>;
+    linkModuleInitData: PromiseOrValue<BytesLike>;
+  };
 
   export type SetLinkModule4LinklistDataStructOutput = [
     BigNumber,
     string,
-    string,
-  ] & { linklistId: BigNumber; linkModule: string; linkModuleInitData: string }
+    string
+  ] & { linklistId: BigNumber; linkModule: string; linkModuleInitData: string };
 
   export type SetLinkModule4NoteDataStruct = {
-    characterId: PromiseOrValue<BigNumberish>
-    noteId: PromiseOrValue<BigNumberish>
-    linkModule: PromiseOrValue<string>
-    linkModuleInitData: PromiseOrValue<BytesLike>
-  }
+    characterId: PromiseOrValue<BigNumberish>;
+    noteId: PromiseOrValue<BigNumberish>;
+    linkModule: PromiseOrValue<string>;
+    linkModuleInitData: PromiseOrValue<BytesLike>;
+  };
 
   export type SetLinkModule4NoteDataStructOutput = [
     BigNumber,
     BigNumber,
     string,
-    string,
+    string
   ] & {
-    characterId: BigNumber
-    noteId: BigNumber
-    linkModule: string
-    linkModuleInitData: string
-  }
+    characterId: BigNumber;
+    noteId: BigNumber;
+    linkModule: string;
+    linkModuleInitData: string;
+  };
 
   export type SetMintModule4NoteDataStruct = {
-    characterId: PromiseOrValue<BigNumberish>
-    noteId: PromiseOrValue<BigNumberish>
-    mintModule: PromiseOrValue<string>
-    mintModuleInitData: PromiseOrValue<BytesLike>
-  }
+    characterId: PromiseOrValue<BigNumberish>;
+    noteId: PromiseOrValue<BigNumberish>;
+    mintModule: PromiseOrValue<string>;
+    mintModuleInitData: PromiseOrValue<BytesLike>;
+  };
 
   export type SetMintModule4NoteDataStructOutput = [
     BigNumber,
     BigNumber,
     string,
-    string,
+    string
   ] & {
-    characterId: BigNumber
-    noteId: BigNumber
-    mintModule: string
-    mintModuleInitData: string
-  }
+    characterId: BigNumber;
+    noteId: BigNumber;
+    mintModule: string;
+    mintModuleInitData: string;
+  };
 
   export type UnlinkAddressDataStruct = {
-    fromCharacterId: PromiseOrValue<BigNumberish>
-    ethAddress: PromiseOrValue<string>
-    linkType: PromiseOrValue<BytesLike>
-  }
+    fromCharacterId: PromiseOrValue<BigNumberish>;
+    ethAddress: PromiseOrValue<string>;
+    linkType: PromiseOrValue<BytesLike>;
+  };
 
   export type UnlinkAddressDataStructOutput = [BigNumber, string, string] & {
-    fromCharacterId: BigNumber
-    ethAddress: string
-    linkType: string
-  }
+    fromCharacterId: BigNumber;
+    ethAddress: string;
+    linkType: string;
+  };
 
   export type UnlinkAnyUriDataStruct = {
-    fromCharacterId: PromiseOrValue<BigNumberish>
-    toUri: PromiseOrValue<string>
-    linkType: PromiseOrValue<BytesLike>
-  }
+    fromCharacterId: PromiseOrValue<BigNumberish>;
+    toUri: PromiseOrValue<string>;
+    linkType: PromiseOrValue<BytesLike>;
+  };
 
   export type UnlinkAnyUriDataStructOutput = [BigNumber, string, string] & {
-    fromCharacterId: BigNumber
-    toUri: string
-    linkType: string
-  }
+    fromCharacterId: BigNumber;
+    toUri: string;
+    linkType: string;
+  };
 
   export type UnlinkCharacterDataStruct = {
-    fromCharacterId: PromiseOrValue<BigNumberish>
-    toCharacterId: PromiseOrValue<BigNumberish>
-    linkType: PromiseOrValue<BytesLike>
-  }
+    fromCharacterId: PromiseOrValue<BigNumberish>;
+    toCharacterId: PromiseOrValue<BigNumberish>;
+    linkType: PromiseOrValue<BytesLike>;
+  };
 
   export type UnlinkCharacterDataStructOutput = [
     BigNumber,
     BigNumber,
-    string,
+    string
   ] & {
-    fromCharacterId: BigNumber
-    toCharacterId: BigNumber
-    linkType: string
-  }
+    fromCharacterId: BigNumber;
+    toCharacterId: BigNumber;
+    linkType: string;
+  };
 
   export type UnlinkERC721DataStruct = {
-    fromCharacterId: PromiseOrValue<BigNumberish>
-    tokenAddress: PromiseOrValue<string>
-    tokenId: PromiseOrValue<BigNumberish>
-    linkType: PromiseOrValue<BytesLike>
-  }
+    fromCharacterId: PromiseOrValue<BigNumberish>;
+    tokenAddress: PromiseOrValue<string>;
+    tokenId: PromiseOrValue<BigNumberish>;
+    linkType: PromiseOrValue<BytesLike>;
+  };
 
   export type UnlinkERC721DataStructOutput = [
     BigNumber,
     string,
     BigNumber,
-    string,
+    string
   ] & {
-    fromCharacterId: BigNumber
-    tokenAddress: string
-    tokenId: BigNumber
-    linkType: string
-  }
+    fromCharacterId: BigNumber;
+    tokenAddress: string;
+    tokenId: BigNumber;
+    linkType: string;
+  };
 
   export type UnlinkLinklistDataStruct = {
-    fromCharacterId: PromiseOrValue<BigNumberish>
-    toLinkListId: PromiseOrValue<BigNumberish>
-    linkType: PromiseOrValue<BytesLike>
-  }
+    fromCharacterId: PromiseOrValue<BigNumberish>;
+    toLinkListId: PromiseOrValue<BigNumberish>;
+    linkType: PromiseOrValue<BytesLike>;
+  };
 
   export type UnlinkLinklistDataStructOutput = [
     BigNumber,
     BigNumber,
-    string,
-  ] & { fromCharacterId: BigNumber; toLinkListId: BigNumber; linkType: string }
+    string
+  ] & { fromCharacterId: BigNumber; toLinkListId: BigNumber; linkType: string };
 
   export type UnlinkNoteDataStruct = {
-    fromCharacterId: PromiseOrValue<BigNumberish>
-    toCharacterId: PromiseOrValue<BigNumberish>
-    toNoteId: PromiseOrValue<BigNumberish>
-    linkType: PromiseOrValue<BytesLike>
-  }
+    fromCharacterId: PromiseOrValue<BigNumberish>;
+    toCharacterId: PromiseOrValue<BigNumberish>;
+    toNoteId: PromiseOrValue<BigNumberish>;
+    linkType: PromiseOrValue<BytesLike>;
+  };
 
   export type UnlinkNoteDataStructOutput = [
     BigNumber,
     BigNumber,
     BigNumber,
-    string,
+    string
   ] & {
-    fromCharacterId: BigNumber
-    toCharacterId: BigNumber
-    toNoteId: BigNumber
-    linkType: string
-  }
+    fromCharacterId: BigNumber;
+    toCharacterId: BigNumber;
+    toNoteId: BigNumber;
+    linkType: string;
+  };
 }
 
 export interface AbiInterface extends utils.Interface {
   functions: {
-    'approve(address,uint256)': FunctionFragment
-    'balanceOf(address)': FunctionFragment
-    'burn(uint256)': FunctionFragment
-    'canCreate(string,address)': FunctionFragment
-    'createCharacter((address,string,string,address,bytes))': FunctionFragment
-    'createThenLinkCharacter((uint256,address,bytes32))': FunctionFragment
-    'deleteNote(uint256,uint256)': FunctionFragment
-    'getApproved(uint256)': FunctionFragment
-    'getCharacter(uint256)': FunctionFragment
-    'getCharacterByHandle(string)': FunctionFragment
-    'getCharacterUri(uint256)': FunctionFragment
-    'getHandle(uint256)': FunctionFragment
-    'getLinkModule4Address(address)': FunctionFragment
-    'getLinkModule4ERC721(address,uint256)': FunctionFragment
-    'getLinkModule4Linklist(uint256)': FunctionFragment
-    'getLinklistContract()': FunctionFragment
-    'getLinklistId(uint256,bytes32)': FunctionFragment
-    'getLinklistType(uint256)': FunctionFragment
-    'getLinklistUri(uint256)': FunctionFragment
-    'getNote(uint256,uint256)': FunctionFragment
-    'getOperator(uint256)': FunctionFragment
-    'getPrimaryCharacterId(address)': FunctionFragment
-    'getRevision()': FunctionFragment
-    'initialize(string,string,address,address,address,address)': FunctionFragment
-    'isApprovedForAll(address,address)': FunctionFragment
-    'isPrimaryCharacter(uint256)': FunctionFragment
-    'linkAddress((uint256,address,bytes32,bytes))': FunctionFragment
-    'linkAnyUri((uint256,string,bytes32,bytes))': FunctionFragment
-    'linkCharacter((uint256,uint256,bytes32,bytes))': FunctionFragment
-    'linkCharacterLink(uint256,(uint256,uint256,bytes32),bytes32)': FunctionFragment
-    'linkERC721((uint256,address,uint256,bytes32,bytes))': FunctionFragment
-    'linkLinklist((uint256,uint256,bytes32,bytes))': FunctionFragment
-    'linkNote((uint256,uint256,uint256,bytes32,bytes))': FunctionFragment
-    'lockNote(uint256,uint256)': FunctionFragment
-    'mintNote((uint256,uint256,address,bytes))': FunctionFragment
-    'name()': FunctionFragment
-    'ownerOf(uint256)': FunctionFragment
-    'postNote((uint256,string,address,bytes,address,bytes,bool))': FunctionFragment
-    'postNote4Address((uint256,string,address,bytes,address,bytes,bool),address)': FunctionFragment
-    'postNote4AnyUri((uint256,string,address,bytes,address,bytes,bool),string)': FunctionFragment
-    'postNote4Character((uint256,string,address,bytes,address,bytes,bool),uint256)': FunctionFragment
-    'postNote4ERC721((uint256,string,address,bytes,address,bytes,bool),(address,uint256))': FunctionFragment
-    'postNote4Linklist((uint256,string,address,bytes,address,bytes,bool),uint256)': FunctionFragment
-    'postNote4Note((uint256,string,address,bytes,address,bytes,bool),(uint256,uint256))': FunctionFragment
-    'resolver()': FunctionFragment
-    'safeTransferFrom(address,address,uint256)': FunctionFragment
-    'safeTransferFrom(address,address,uint256,bytes)': FunctionFragment
-    'setApprovalForAll(address,bool)': FunctionFragment
-    'setCharacterUri(uint256,string)': FunctionFragment
-    'setHandle(uint256,string)': FunctionFragment
-    'setLinkModule4Address((address,address,bytes))': FunctionFragment
-    'setLinkModule4Character((uint256,address,bytes))': FunctionFragment
-    'setLinkModule4ERC721((address,uint256,address,bytes))': FunctionFragment
-    'setLinkModule4Linklist((uint256,address,bytes))': FunctionFragment
-    'setLinkModule4Note((uint256,uint256,address,bytes))': FunctionFragment
-    'setLinklistUri(uint256,string)': FunctionFragment
-    'setMintModule4Note((uint256,uint256,address,bytes))': FunctionFragment
-    'setNoteUri(uint256,uint256,string)': FunctionFragment
-    'setOperator(uint256,address)': FunctionFragment
-    'setPrimaryCharacterId(uint256)': FunctionFragment
-    'setSocialToken(uint256,address)': FunctionFragment
-    'supportsInterface(bytes4)': FunctionFragment
-    'symbol()': FunctionFragment
-    'tokenByIndex(uint256)': FunctionFragment
-    'tokenOfOwnerByIndex(address,uint256)': FunctionFragment
-    'tokenURI(uint256)': FunctionFragment
-    'totalSupply()': FunctionFragment
-    'transferFrom(address,address,uint256)': FunctionFragment
-    'unlinkAddress((uint256,address,bytes32))': FunctionFragment
-    'unlinkAnyUri((uint256,string,bytes32))': FunctionFragment
-    'unlinkCharacter((uint256,uint256,bytes32))': FunctionFragment
-    'unlinkCharacterLink(uint256,(uint256,uint256,bytes32),bytes32)': FunctionFragment
-    'unlinkERC721((uint256,address,uint256,bytes32))': FunctionFragment
-    'unlinkLinklist((uint256,uint256,bytes32))': FunctionFragment
-    'unlinkNote((uint256,uint256,uint256,bytes32))': FunctionFragment
-  }
+    "approve(address,uint256)": FunctionFragment;
+    "balanceOf(address)": FunctionFragment;
+    "burn(uint256)": FunctionFragment;
+    "canCreate(string,address)": FunctionFragment;
+    "createCharacter((address,string,string,address,bytes))": FunctionFragment;
+    "createThenLinkCharacter((uint256,address,bytes32))": FunctionFragment;
+    "deleteNote(uint256,uint256)": FunctionFragment;
+    "getApproved(uint256)": FunctionFragment;
+    "getCharacter(uint256)": FunctionFragment;
+    "getCharacterByHandle(string)": FunctionFragment;
+    "getCharacterUri(uint256)": FunctionFragment;
+    "getHandle(uint256)": FunctionFragment;
+    "getLinkModule4Address(address)": FunctionFragment;
+    "getLinkModule4ERC721(address,uint256)": FunctionFragment;
+    "getLinkModule4Linklist(uint256)": FunctionFragment;
+    "getLinklistContract()": FunctionFragment;
+    "getLinklistId(uint256,bytes32)": FunctionFragment;
+    "getLinklistType(uint256)": FunctionFragment;
+    "getLinklistUri(uint256)": FunctionFragment;
+    "getNote(uint256,uint256)": FunctionFragment;
+    "getOperator(uint256)": FunctionFragment;
+    "getPrimaryCharacterId(address)": FunctionFragment;
+    "getRevision()": FunctionFragment;
+    "initialize(string,string,address,address,address,address)": FunctionFragment;
+    "isApprovedForAll(address,address)": FunctionFragment;
+    "isPrimaryCharacter(uint256)": FunctionFragment;
+    "linkAddress((uint256,address,bytes32,bytes))": FunctionFragment;
+    "linkAnyUri((uint256,string,bytes32,bytes))": FunctionFragment;
+    "linkCharacter((uint256,uint256,bytes32,bytes))": FunctionFragment;
+    "linkCharacterLink(uint256,(uint256,uint256,bytes32),bytes32)": FunctionFragment;
+    "linkERC721((uint256,address,uint256,bytes32,bytes))": FunctionFragment;
+    "linkLinklist((uint256,uint256,bytes32,bytes))": FunctionFragment;
+    "linkNote((uint256,uint256,uint256,bytes32,bytes))": FunctionFragment;
+    "lockNote(uint256,uint256)": FunctionFragment;
+    "mintNote((uint256,uint256,address,bytes))": FunctionFragment;
+    "name()": FunctionFragment;
+    "ownerOf(uint256)": FunctionFragment;
+    "postNote((uint256,string,address,bytes,address,bytes,bool))": FunctionFragment;
+    "postNote4Address((uint256,string,address,bytes,address,bytes,bool),address)": FunctionFragment;
+    "postNote4AnyUri((uint256,string,address,bytes,address,bytes,bool),string)": FunctionFragment;
+    "postNote4Character((uint256,string,address,bytes,address,bytes,bool),uint256)": FunctionFragment;
+    "postNote4ERC721((uint256,string,address,bytes,address,bytes,bool),(address,uint256))": FunctionFragment;
+    "postNote4Linklist((uint256,string,address,bytes,address,bytes,bool),uint256)": FunctionFragment;
+    "postNote4Note((uint256,string,address,bytes,address,bytes,bool),(uint256,uint256))": FunctionFragment;
+    "resolver()": FunctionFragment;
+    "safeTransferFrom(address,address,uint256)": FunctionFragment;
+    "safeTransferFrom(address,address,uint256,bytes)": FunctionFragment;
+    "setApprovalForAll(address,bool)": FunctionFragment;
+    "setCharacterUri(uint256,string)": FunctionFragment;
+    "setHandle(uint256,string)": FunctionFragment;
+    "setLinkModule4Address((address,address,bytes))": FunctionFragment;
+    "setLinkModule4Character((uint256,address,bytes))": FunctionFragment;
+    "setLinkModule4ERC721((address,uint256,address,bytes))": FunctionFragment;
+    "setLinkModule4Linklist((uint256,address,bytes))": FunctionFragment;
+    "setLinkModule4Note((uint256,uint256,address,bytes))": FunctionFragment;
+    "setLinklistUri(uint256,string)": FunctionFragment;
+    "setMintModule4Note((uint256,uint256,address,bytes))": FunctionFragment;
+    "setNoteUri(uint256,uint256,string)": FunctionFragment;
+    "setOperator(uint256,address)": FunctionFragment;
+    "setPrimaryCharacterId(uint256)": FunctionFragment;
+    "setSocialToken(uint256,address)": FunctionFragment;
+    "supportsInterface(bytes4)": FunctionFragment;
+    "symbol()": FunctionFragment;
+    "tokenByIndex(uint256)": FunctionFragment;
+    "tokenOfOwnerByIndex(address,uint256)": FunctionFragment;
+    "tokenURI(uint256)": FunctionFragment;
+    "totalSupply()": FunctionFragment;
+    "transferFrom(address,address,uint256)": FunctionFragment;
+    "unlinkAddress((uint256,address,bytes32))": FunctionFragment;
+    "unlinkAnyUri((uint256,string,bytes32))": FunctionFragment;
+    "unlinkCharacter((uint256,uint256,bytes32))": FunctionFragment;
+    "unlinkCharacterLink(uint256,(uint256,uint256,bytes32),bytes32)": FunctionFragment;
+    "unlinkERC721((uint256,address,uint256,bytes32))": FunctionFragment;
+    "unlinkLinklist((uint256,uint256,bytes32))": FunctionFragment;
+    "unlinkNote((uint256,uint256,uint256,bytes32))": FunctionFragment;
+  };
 
   getFunction(
     nameOrSignatureOrTopic:
-      | 'approve'
-      | 'balanceOf'
-      | 'burn'
-      | 'canCreate'
-      | 'createCharacter'
-      | 'createThenLinkCharacter'
-      | 'deleteNote'
-      | 'getApproved'
-      | 'getCharacter'
-      | 'getCharacterByHandle'
-      | 'getCharacterUri'
-      | 'getHandle'
-      | 'getLinkModule4Address'
-      | 'getLinkModule4ERC721'
-      | 'getLinkModule4Linklist'
-      | 'getLinklistContract'
-      | 'getLinklistId'
-      | 'getLinklistType'
-      | 'getLinklistUri'
-      | 'getNote'
-      | 'getOperator'
-      | 'getPrimaryCharacterId'
-      | 'getRevision'
-      | 'initialize'
-      | 'isApprovedForAll'
-      | 'isPrimaryCharacter'
-      | 'linkAddress'
-      | 'linkAnyUri'
-      | 'linkCharacter'
-      | 'linkCharacterLink'
-      | 'linkERC721'
-      | 'linkLinklist'
-      | 'linkNote'
-      | 'lockNote'
-      | 'mintNote'
-      | 'name'
-      | 'ownerOf'
-      | 'postNote'
-      | 'postNote4Address'
-      | 'postNote4AnyUri'
-      | 'postNote4Character'
-      | 'postNote4ERC721'
-      | 'postNote4Linklist'
-      | 'postNote4Note'
-      | 'resolver'
-      | 'safeTransferFrom(address,address,uint256)'
-      | 'safeTransferFrom(address,address,uint256,bytes)'
-      | 'setApprovalForAll'
-      | 'setCharacterUri'
-      | 'setHandle'
-      | 'setLinkModule4Address'
-      | 'setLinkModule4Character'
-      | 'setLinkModule4ERC721'
-      | 'setLinkModule4Linklist'
-      | 'setLinkModule4Note'
-      | 'setLinklistUri'
-      | 'setMintModule4Note'
-      | 'setNoteUri'
-      | 'setOperator'
-      | 'setPrimaryCharacterId'
-      | 'setSocialToken'
-      | 'supportsInterface'
-      | 'symbol'
-      | 'tokenByIndex'
-      | 'tokenOfOwnerByIndex'
-      | 'tokenURI'
-      | 'totalSupply'
-      | 'transferFrom'
-      | 'unlinkAddress'
-      | 'unlinkAnyUri'
-      | 'unlinkCharacter'
-      | 'unlinkCharacterLink'
-      | 'unlinkERC721'
-      | 'unlinkLinklist'
-      | 'unlinkNote',
-  ): FunctionFragment
+      | "approve"
+      | "balanceOf"
+      | "burn"
+      | "canCreate"
+      | "createCharacter"
+      | "createThenLinkCharacter"
+      | "deleteNote"
+      | "getApproved"
+      | "getCharacter"
+      | "getCharacterByHandle"
+      | "getCharacterUri"
+      | "getHandle"
+      | "getLinkModule4Address"
+      | "getLinkModule4ERC721"
+      | "getLinkModule4Linklist"
+      | "getLinklistContract"
+      | "getLinklistId"
+      | "getLinklistType"
+      | "getLinklistUri"
+      | "getNote"
+      | "getOperator"
+      | "getPrimaryCharacterId"
+      | "getRevision"
+      | "initialize"
+      | "isApprovedForAll"
+      | "isPrimaryCharacter"
+      | "linkAddress"
+      | "linkAnyUri"
+      | "linkCharacter"
+      | "linkCharacterLink"
+      | "linkERC721"
+      | "linkLinklist"
+      | "linkNote"
+      | "lockNote"
+      | "mintNote"
+      | "name"
+      | "ownerOf"
+      | "postNote"
+      | "postNote4Address"
+      | "postNote4AnyUri"
+      | "postNote4Character"
+      | "postNote4ERC721"
+      | "postNote4Linklist"
+      | "postNote4Note"
+      | "resolver"
+      | "safeTransferFrom(address,address,uint256)"
+      | "safeTransferFrom(address,address,uint256,bytes)"
+      | "setApprovalForAll"
+      | "setCharacterUri"
+      | "setHandle"
+      | "setLinkModule4Address"
+      | "setLinkModule4Character"
+      | "setLinkModule4ERC721"
+      | "setLinkModule4Linklist"
+      | "setLinkModule4Note"
+      | "setLinklistUri"
+      | "setMintModule4Note"
+      | "setNoteUri"
+      | "setOperator"
+      | "setPrimaryCharacterId"
+      | "setSocialToken"
+      | "supportsInterface"
+      | "symbol"
+      | "tokenByIndex"
+      | "tokenOfOwnerByIndex"
+      | "tokenURI"
+      | "totalSupply"
+      | "transferFrom"
+      | "unlinkAddress"
+      | "unlinkAnyUri"
+      | "unlinkCharacter"
+      | "unlinkCharacterLink"
+      | "unlinkERC721"
+      | "unlinkLinklist"
+      | "unlinkNote"
+  ): FunctionFragment;
 
   encodeFunctionData(
-    functionFragment: 'approve',
-    values: [PromiseOrValue<string>, PromiseOrValue<BigNumberish>],
-  ): string
+    functionFragment: "approve",
+    values: [PromiseOrValue<string>, PromiseOrValue<BigNumberish>]
+  ): string;
   encodeFunctionData(
-    functionFragment: 'balanceOf',
-    values: [PromiseOrValue<string>],
-  ): string
+    functionFragment: "balanceOf",
+    values: [PromiseOrValue<string>]
+  ): string;
   encodeFunctionData(
-    functionFragment: 'burn',
-    values: [PromiseOrValue<BigNumberish>],
-  ): string
+    functionFragment: "burn",
+    values: [PromiseOrValue<BigNumberish>]
+  ): string;
   encodeFunctionData(
-    functionFragment: 'canCreate',
-    values: [PromiseOrValue<string>, PromiseOrValue<string>],
-  ): string
+    functionFragment: "canCreate",
+    values: [PromiseOrValue<string>, PromiseOrValue<string>]
+  ): string;
   encodeFunctionData(
-    functionFragment: 'createCharacter',
-    values: [DataTypes.CreateCharacterDataStruct],
-  ): string
+    functionFragment: "createCharacter",
+    values: [DataTypes.CreateCharacterDataStruct]
+  ): string;
   encodeFunctionData(
-    functionFragment: 'createThenLinkCharacter',
-    values: [DataTypes.CreateThenLinkCharacterDataStruct],
-  ): string
+    functionFragment: "createThenLinkCharacter",
+    values: [DataTypes.CreateThenLinkCharacterDataStruct]
+  ): string;
   encodeFunctionData(
-    functionFragment: 'deleteNote',
-    values: [PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>],
-  ): string
+    functionFragment: "deleteNote",
+    values: [PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>]
+  ): string;
   encodeFunctionData(
-    functionFragment: 'getApproved',
-    values: [PromiseOrValue<BigNumberish>],
-  ): string
+    functionFragment: "getApproved",
+    values: [PromiseOrValue<BigNumberish>]
+  ): string;
   encodeFunctionData(
-    functionFragment: 'getCharacter',
-    values: [PromiseOrValue<BigNumberish>],
-  ): string
+    functionFragment: "getCharacter",
+    values: [PromiseOrValue<BigNumberish>]
+  ): string;
   encodeFunctionData(
-    functionFragment: 'getCharacterByHandle',
-    values: [PromiseOrValue<string>],
-  ): string
+    functionFragment: "getCharacterByHandle",
+    values: [PromiseOrValue<string>]
+  ): string;
   encodeFunctionData(
-    functionFragment: 'getCharacterUri',
-    values: [PromiseOrValue<BigNumberish>],
-  ): string
+    functionFragment: "getCharacterUri",
+    values: [PromiseOrValue<BigNumberish>]
+  ): string;
   encodeFunctionData(
-    functionFragment: 'getHandle',
-    values: [PromiseOrValue<BigNumberish>],
-  ): string
+    functionFragment: "getHandle",
+    values: [PromiseOrValue<BigNumberish>]
+  ): string;
   encodeFunctionData(
-    functionFragment: 'getLinkModule4Address',
-    values: [PromiseOrValue<string>],
-  ): string
+    functionFragment: "getLinkModule4Address",
+    values: [PromiseOrValue<string>]
+  ): string;
   encodeFunctionData(
-    functionFragment: 'getLinkModule4ERC721',
-    values: [PromiseOrValue<string>, PromiseOrValue<BigNumberish>],
-  ): string
+    functionFragment: "getLinkModule4ERC721",
+    values: [PromiseOrValue<string>, PromiseOrValue<BigNumberish>]
+  ): string;
   encodeFunctionData(
-    functionFragment: 'getLinkModule4Linklist',
-    values: [PromiseOrValue<BigNumberish>],
-  ): string
+    functionFragment: "getLinkModule4Linklist",
+    values: [PromiseOrValue<BigNumberish>]
+  ): string;
   encodeFunctionData(
-    functionFragment: 'getLinklistContract',
-    values?: undefined,
-  ): string
+    functionFragment: "getLinklistContract",
+    values?: undefined
+  ): string;
   encodeFunctionData(
-    functionFragment: 'getLinklistId',
-    values: [PromiseOrValue<BigNumberish>, PromiseOrValue<BytesLike>],
-  ): string
+    functionFragment: "getLinklistId",
+    values: [PromiseOrValue<BigNumberish>, PromiseOrValue<BytesLike>]
+  ): string;
   encodeFunctionData(
-    functionFragment: 'getLinklistType',
-    values: [PromiseOrValue<BigNumberish>],
-  ): string
+    functionFragment: "getLinklistType",
+    values: [PromiseOrValue<BigNumberish>]
+  ): string;
   encodeFunctionData(
-    functionFragment: 'getLinklistUri',
-    values: [PromiseOrValue<BigNumberish>],
-  ): string
+    functionFragment: "getLinklistUri",
+    values: [PromiseOrValue<BigNumberish>]
+  ): string;
   encodeFunctionData(
-    functionFragment: 'getNote',
-    values: [PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>],
-  ): string
+    functionFragment: "getNote",
+    values: [PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>]
+  ): string;
   encodeFunctionData(
-    functionFragment: 'getOperator',
-    values: [PromiseOrValue<BigNumberish>],
-  ): string
+    functionFragment: "getOperator",
+    values: [PromiseOrValue<BigNumberish>]
+  ): string;
   encodeFunctionData(
-    functionFragment: 'getPrimaryCharacterId',
-    values: [PromiseOrValue<string>],
-  ): string
+    functionFragment: "getPrimaryCharacterId",
+    values: [PromiseOrValue<string>]
+  ): string;
   encodeFunctionData(
-    functionFragment: 'getRevision',
-    values?: undefined,
-  ): string
+    functionFragment: "getRevision",
+    values?: undefined
+  ): string;
   encodeFunctionData(
-    functionFragment: 'initialize',
+    functionFragment: "initialize",
     values: [
       PromiseOrValue<string>,
       PromiseOrValue<string>,
       PromiseOrValue<string>,
       PromiseOrValue<string>,
       PromiseOrValue<string>,
-      PromiseOrValue<string>,
-    ],
-  ): string
+      PromiseOrValue<string>
+    ]
+  ): string;
   encodeFunctionData(
-    functionFragment: 'isApprovedForAll',
-    values: [PromiseOrValue<string>, PromiseOrValue<string>],
-  ): string
+    functionFragment: "isApprovedForAll",
+    values: [PromiseOrValue<string>, PromiseOrValue<string>]
+  ): string;
   encodeFunctionData(
-    functionFragment: 'isPrimaryCharacter',
-    values: [PromiseOrValue<BigNumberish>],
-  ): string
+    functionFragment: "isPrimaryCharacter",
+    values: [PromiseOrValue<BigNumberish>]
+  ): string;
   encodeFunctionData(
-    functionFragment: 'linkAddress',
-    values: [DataTypes.LinkAddressDataStruct],
-  ): string
+    functionFragment: "linkAddress",
+    values: [DataTypes.LinkAddressDataStruct]
+  ): string;
   encodeFunctionData(
-    functionFragment: 'linkAnyUri',
-    values: [DataTypes.LinkAnyUriDataStruct],
-  ): string
+    functionFragment: "linkAnyUri",
+    values: [DataTypes.LinkAnyUriDataStruct]
+  ): string;
   encodeFunctionData(
-    functionFragment: 'linkCharacter',
-    values: [DataTypes.LinkCharacterDataStruct],
-  ): string
+    functionFragment: "linkCharacter",
+    values: [DataTypes.LinkCharacterDataStruct]
+  ): string;
   encodeFunctionData(
-    functionFragment: 'linkCharacterLink',
+    functionFragment: "linkCharacterLink",
     values: [
       PromiseOrValue<BigNumberish>,
       DataTypes.CharacterLinkStructStruct,
-      PromiseOrValue<BytesLike>,
-    ],
-  ): string
+      PromiseOrValue<BytesLike>
+    ]
+  ): string;
   encodeFunctionData(
-    functionFragment: 'linkERC721',
-    values: [DataTypes.LinkERC721DataStruct],
-  ): string
+    functionFragment: "linkERC721",
+    values: [DataTypes.LinkERC721DataStruct]
+  ): string;
   encodeFunctionData(
-    functionFragment: 'linkLinklist',
-    values: [DataTypes.LinkLinklistDataStruct],
-  ): string
+    functionFragment: "linkLinklist",
+    values: [DataTypes.LinkLinklistDataStruct]
+  ): string;
   encodeFunctionData(
-    functionFragment: 'linkNote',
-    values: [DataTypes.LinkNoteDataStruct],
-  ): string
+    functionFragment: "linkNote",
+    values: [DataTypes.LinkNoteDataStruct]
+  ): string;
   encodeFunctionData(
-    functionFragment: 'lockNote',
-    values: [PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>],
-  ): string
+    functionFragment: "lockNote",
+    values: [PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>]
+  ): string;
   encodeFunctionData(
-    functionFragment: 'mintNote',
-    values: [DataTypes.MintNoteDataStruct],
-  ): string
-  encodeFunctionData(functionFragment: 'name', values?: undefined): string
+    functionFragment: "mintNote",
+    values: [DataTypes.MintNoteDataStruct]
+  ): string;
+  encodeFunctionData(functionFragment: "name", values?: undefined): string;
   encodeFunctionData(
-    functionFragment: 'ownerOf',
-    values: [PromiseOrValue<BigNumberish>],
-  ): string
+    functionFragment: "ownerOf",
+    values: [PromiseOrValue<BigNumberish>]
+  ): string;
   encodeFunctionData(
-    functionFragment: 'postNote',
-    values: [DataTypes.PostNoteDataStruct],
-  ): string
+    functionFragment: "postNote",
+    values: [DataTypes.PostNoteDataStruct]
+  ): string;
   encodeFunctionData(
-    functionFragment: 'postNote4Address',
-    values: [DataTypes.PostNoteDataStruct, PromiseOrValue<string>],
-  ): string
+    functionFragment: "postNote4Address",
+    values: [DataTypes.PostNoteDataStruct, PromiseOrValue<string>]
+  ): string;
   encodeFunctionData(
-    functionFragment: 'postNote4AnyUri',
-    values: [DataTypes.PostNoteDataStruct, PromiseOrValue<string>],
-  ): string
+    functionFragment: "postNote4AnyUri",
+    values: [DataTypes.PostNoteDataStruct, PromiseOrValue<string>]
+  ): string;
   encodeFunctionData(
-    functionFragment: 'postNote4Character',
-    values: [DataTypes.PostNoteDataStruct, PromiseOrValue<BigNumberish>],
-  ): string
+    functionFragment: "postNote4Character",
+    values: [DataTypes.PostNoteDataStruct, PromiseOrValue<BigNumberish>]
+  ): string;
   encodeFunctionData(
-    functionFragment: 'postNote4ERC721',
-    values: [DataTypes.PostNoteDataStruct, DataTypes.ERC721StructStruct],
-  ): string
+    functionFragment: "postNote4ERC721",
+    values: [DataTypes.PostNoteDataStruct, DataTypes.ERC721StructStruct]
+  ): string;
   encodeFunctionData(
-    functionFragment: 'postNote4Linklist',
-    values: [DataTypes.PostNoteDataStruct, PromiseOrValue<BigNumberish>],
-  ): string
+    functionFragment: "postNote4Linklist",
+    values: [DataTypes.PostNoteDataStruct, PromiseOrValue<BigNumberish>]
+  ): string;
   encodeFunctionData(
-    functionFragment: 'postNote4Note',
-    values: [DataTypes.PostNoteDataStruct, DataTypes.NoteStructStruct],
-  ): string
-  encodeFunctionData(functionFragment: 'resolver', values?: undefined): string
+    functionFragment: "postNote4Note",
+    values: [DataTypes.PostNoteDataStruct, DataTypes.NoteStructStruct]
+  ): string;
+  encodeFunctionData(functionFragment: "resolver", values?: undefined): string;
   encodeFunctionData(
-    functionFragment: 'safeTransferFrom(address,address,uint256)',
+    functionFragment: "safeTransferFrom(address,address,uint256)",
+    values: [
+      PromiseOrValue<string>,
+      PromiseOrValue<string>,
+      PromiseOrValue<BigNumberish>
+    ]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "safeTransferFrom(address,address,uint256,bytes)",
     values: [
       PromiseOrValue<string>,
       PromiseOrValue<string>,
       PromiseOrValue<BigNumberish>,
-    ],
-  ): string
+      PromiseOrValue<BytesLike>
+    ]
+  ): string;
   encodeFunctionData(
-    functionFragment: 'safeTransferFrom(address,address,uint256,bytes)',
-    values: [
-      PromiseOrValue<string>,
-      PromiseOrValue<string>,
-      PromiseOrValue<BigNumberish>,
-      PromiseOrValue<BytesLike>,
-    ],
-  ): string
+    functionFragment: "setApprovalForAll",
+    values: [PromiseOrValue<string>, PromiseOrValue<boolean>]
+  ): string;
   encodeFunctionData(
-    functionFragment: 'setApprovalForAll',
-    values: [PromiseOrValue<string>, PromiseOrValue<boolean>],
-  ): string
+    functionFragment: "setCharacterUri",
+    values: [PromiseOrValue<BigNumberish>, PromiseOrValue<string>]
+  ): string;
   encodeFunctionData(
-    functionFragment: 'setCharacterUri',
-    values: [PromiseOrValue<BigNumberish>, PromiseOrValue<string>],
-  ): string
+    functionFragment: "setHandle",
+    values: [PromiseOrValue<BigNumberish>, PromiseOrValue<string>]
+  ): string;
   encodeFunctionData(
-    functionFragment: 'setHandle',
-    values: [PromiseOrValue<BigNumberish>, PromiseOrValue<string>],
-  ): string
+    functionFragment: "setLinkModule4Address",
+    values: [DataTypes.SetLinkModule4AddressDataStruct]
+  ): string;
   encodeFunctionData(
-    functionFragment: 'setLinkModule4Address',
-    values: [DataTypes.SetLinkModule4AddressDataStruct],
-  ): string
+    functionFragment: "setLinkModule4Character",
+    values: [DataTypes.SetLinkModule4CharacterDataStruct]
+  ): string;
   encodeFunctionData(
-    functionFragment: 'setLinkModule4Character',
-    values: [DataTypes.SetLinkModule4CharacterDataStruct],
-  ): string
+    functionFragment: "setLinkModule4ERC721",
+    values: [DataTypes.SetLinkModule4ERC721DataStruct]
+  ): string;
   encodeFunctionData(
-    functionFragment: 'setLinkModule4ERC721',
-    values: [DataTypes.SetLinkModule4ERC721DataStruct],
-  ): string
+    functionFragment: "setLinkModule4Linklist",
+    values: [DataTypes.SetLinkModule4LinklistDataStruct]
+  ): string;
   encodeFunctionData(
-    functionFragment: 'setLinkModule4Linklist',
-    values: [DataTypes.SetLinkModule4LinklistDataStruct],
-  ): string
+    functionFragment: "setLinkModule4Note",
+    values: [DataTypes.SetLinkModule4NoteDataStruct]
+  ): string;
   encodeFunctionData(
-    functionFragment: 'setLinkModule4Note',
-    values: [DataTypes.SetLinkModule4NoteDataStruct],
-  ): string
+    functionFragment: "setLinklistUri",
+    values: [PromiseOrValue<BigNumberish>, PromiseOrValue<string>]
+  ): string;
   encodeFunctionData(
-    functionFragment: 'setLinklistUri',
-    values: [PromiseOrValue<BigNumberish>, PromiseOrValue<string>],
-  ): string
+    functionFragment: "setMintModule4Note",
+    values: [DataTypes.SetMintModule4NoteDataStruct]
+  ): string;
   encodeFunctionData(
-    functionFragment: 'setMintModule4Note',
-    values: [DataTypes.SetMintModule4NoteDataStruct],
-  ): string
-  encodeFunctionData(
-    functionFragment: 'setNoteUri',
+    functionFragment: "setNoteUri",
     values: [
       PromiseOrValue<BigNumberish>,
       PromiseOrValue<BigNumberish>,
-      PromiseOrValue<string>,
-    ],
-  ): string
+      PromiseOrValue<string>
+    ]
+  ): string;
   encodeFunctionData(
-    functionFragment: 'setOperator',
-    values: [PromiseOrValue<BigNumberish>, PromiseOrValue<string>],
-  ): string
+    functionFragment: "setOperator",
+    values: [PromiseOrValue<BigNumberish>, PromiseOrValue<string>]
+  ): string;
   encodeFunctionData(
-    functionFragment: 'setPrimaryCharacterId',
-    values: [PromiseOrValue<BigNumberish>],
-  ): string
+    functionFragment: "setPrimaryCharacterId",
+    values: [PromiseOrValue<BigNumberish>]
+  ): string;
   encodeFunctionData(
-    functionFragment: 'setSocialToken',
-    values: [PromiseOrValue<BigNumberish>, PromiseOrValue<string>],
-  ): string
+    functionFragment: "setSocialToken",
+    values: [PromiseOrValue<BigNumberish>, PromiseOrValue<string>]
+  ): string;
   encodeFunctionData(
-    functionFragment: 'supportsInterface',
-    values: [PromiseOrValue<BytesLike>],
-  ): string
-  encodeFunctionData(functionFragment: 'symbol', values?: undefined): string
+    functionFragment: "supportsInterface",
+    values: [PromiseOrValue<BytesLike>]
+  ): string;
+  encodeFunctionData(functionFragment: "symbol", values?: undefined): string;
   encodeFunctionData(
-    functionFragment: 'tokenByIndex',
-    values: [PromiseOrValue<BigNumberish>],
-  ): string
+    functionFragment: "tokenByIndex",
+    values: [PromiseOrValue<BigNumberish>]
+  ): string;
   encodeFunctionData(
-    functionFragment: 'tokenOfOwnerByIndex',
-    values: [PromiseOrValue<string>, PromiseOrValue<BigNumberish>],
-  ): string
+    functionFragment: "tokenOfOwnerByIndex",
+    values: [PromiseOrValue<string>, PromiseOrValue<BigNumberish>]
+  ): string;
   encodeFunctionData(
-    functionFragment: 'tokenURI',
-    values: [PromiseOrValue<BigNumberish>],
-  ): string
+    functionFragment: "tokenURI",
+    values: [PromiseOrValue<BigNumberish>]
+  ): string;
   encodeFunctionData(
-    functionFragment: 'totalSupply',
-    values?: undefined,
-  ): string
+    functionFragment: "totalSupply",
+    values?: undefined
+  ): string;
   encodeFunctionData(
-    functionFragment: 'transferFrom',
+    functionFragment: "transferFrom",
     values: [
       PromiseOrValue<string>,
       PromiseOrValue<string>,
-      PromiseOrValue<BigNumberish>,
-    ],
-  ): string
+      PromiseOrValue<BigNumberish>
+    ]
+  ): string;
   encodeFunctionData(
-    functionFragment: 'unlinkAddress',
-    values: [DataTypes.UnlinkAddressDataStruct],
-  ): string
+    functionFragment: "unlinkAddress",
+    values: [DataTypes.UnlinkAddressDataStruct]
+  ): string;
   encodeFunctionData(
-    functionFragment: 'unlinkAnyUri',
-    values: [DataTypes.UnlinkAnyUriDataStruct],
-  ): string
+    functionFragment: "unlinkAnyUri",
+    values: [DataTypes.UnlinkAnyUriDataStruct]
+  ): string;
   encodeFunctionData(
-    functionFragment: 'unlinkCharacter',
-    values: [DataTypes.UnlinkCharacterDataStruct],
-  ): string
+    functionFragment: "unlinkCharacter",
+    values: [DataTypes.UnlinkCharacterDataStruct]
+  ): string;
   encodeFunctionData(
-    functionFragment: 'unlinkCharacterLink',
+    functionFragment: "unlinkCharacterLink",
     values: [
       PromiseOrValue<BigNumberish>,
       DataTypes.CharacterLinkStructStruct,
-      PromiseOrValue<BytesLike>,
-    ],
-  ): string
+      PromiseOrValue<BytesLike>
+    ]
+  ): string;
   encodeFunctionData(
-    functionFragment: 'unlinkERC721',
-    values: [DataTypes.UnlinkERC721DataStruct],
-  ): string
+    functionFragment: "unlinkERC721",
+    values: [DataTypes.UnlinkERC721DataStruct]
+  ): string;
   encodeFunctionData(
-    functionFragment: 'unlinkLinklist',
-    values: [DataTypes.UnlinkLinklistDataStruct],
-  ): string
+    functionFragment: "unlinkLinklist",
+    values: [DataTypes.UnlinkLinklistDataStruct]
+  ): string;
   encodeFunctionData(
-    functionFragment: 'unlinkNote',
-    values: [DataTypes.UnlinkNoteDataStruct],
-  ): string
+    functionFragment: "unlinkNote",
+    values: [DataTypes.UnlinkNoteDataStruct]
+  ): string;
 
-  decodeFunctionResult(functionFragment: 'approve', data: BytesLike): Result
-  decodeFunctionResult(functionFragment: 'balanceOf', data: BytesLike): Result
-  decodeFunctionResult(functionFragment: 'burn', data: BytesLike): Result
-  decodeFunctionResult(functionFragment: 'canCreate', data: BytesLike): Result
+  decodeFunctionResult(functionFragment: "approve", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "balanceOf", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "burn", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "canCreate", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: 'createCharacter',
-    data: BytesLike,
-  ): Result
+    functionFragment: "createCharacter",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
-    functionFragment: 'createThenLinkCharacter',
-    data: BytesLike,
-  ): Result
-  decodeFunctionResult(functionFragment: 'deleteNote', data: BytesLike): Result
-  decodeFunctionResult(functionFragment: 'getApproved', data: BytesLike): Result
+    functionFragment: "createThenLinkCharacter",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "deleteNote", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: 'getCharacter',
-    data: BytesLike,
-  ): Result
+    functionFragment: "getApproved",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
-    functionFragment: 'getCharacterByHandle',
-    data: BytesLike,
-  ): Result
+    functionFragment: "getCharacter",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
-    functionFragment: 'getCharacterUri',
-    data: BytesLike,
-  ): Result
-  decodeFunctionResult(functionFragment: 'getHandle', data: BytesLike): Result
+    functionFragment: "getCharacterByHandle",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
-    functionFragment: 'getLinkModule4Address',
-    data: BytesLike,
-  ): Result
+    functionFragment: "getCharacterUri",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "getHandle", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: 'getLinkModule4ERC721',
-    data: BytesLike,
-  ): Result
+    functionFragment: "getLinkModule4Address",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
-    functionFragment: 'getLinkModule4Linklist',
-    data: BytesLike,
-  ): Result
+    functionFragment: "getLinkModule4ERC721",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
-    functionFragment: 'getLinklistContract',
-    data: BytesLike,
-  ): Result
+    functionFragment: "getLinkModule4Linklist",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
-    functionFragment: 'getLinklistId',
-    data: BytesLike,
-  ): Result
+    functionFragment: "getLinklistContract",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
-    functionFragment: 'getLinklistType',
-    data: BytesLike,
-  ): Result
+    functionFragment: "getLinklistId",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
-    functionFragment: 'getLinklistUri',
-    data: BytesLike,
-  ): Result
-  decodeFunctionResult(functionFragment: 'getNote', data: BytesLike): Result
-  decodeFunctionResult(functionFragment: 'getOperator', data: BytesLike): Result
+    functionFragment: "getLinklistType",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
-    functionFragment: 'getPrimaryCharacterId',
-    data: BytesLike,
-  ): Result
-  decodeFunctionResult(functionFragment: 'getRevision', data: BytesLike): Result
-  decodeFunctionResult(functionFragment: 'initialize', data: BytesLike): Result
+    functionFragment: "getLinklistUri",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "getNote", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: 'isApprovedForAll',
-    data: BytesLike,
-  ): Result
+    functionFragment: "getOperator",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
-    functionFragment: 'isPrimaryCharacter',
-    data: BytesLike,
-  ): Result
-  decodeFunctionResult(functionFragment: 'linkAddress', data: BytesLike): Result
-  decodeFunctionResult(functionFragment: 'linkAnyUri', data: BytesLike): Result
+    functionFragment: "getPrimaryCharacterId",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
-    functionFragment: 'linkCharacter',
-    data: BytesLike,
-  ): Result
+    functionFragment: "getRevision",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "initialize", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: 'linkCharacterLink',
-    data: BytesLike,
-  ): Result
-  decodeFunctionResult(functionFragment: 'linkERC721', data: BytesLike): Result
+    functionFragment: "isApprovedForAll",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
-    functionFragment: 'linkLinklist',
-    data: BytesLike,
-  ): Result
-  decodeFunctionResult(functionFragment: 'linkNote', data: BytesLike): Result
-  decodeFunctionResult(functionFragment: 'lockNote', data: BytesLike): Result
-  decodeFunctionResult(functionFragment: 'mintNote', data: BytesLike): Result
-  decodeFunctionResult(functionFragment: 'name', data: BytesLike): Result
-  decodeFunctionResult(functionFragment: 'ownerOf', data: BytesLike): Result
-  decodeFunctionResult(functionFragment: 'postNote', data: BytesLike): Result
+    functionFragment: "isPrimaryCharacter",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
-    functionFragment: 'postNote4Address',
-    data: BytesLike,
-  ): Result
+    functionFragment: "linkAddress",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "linkAnyUri", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: 'postNote4AnyUri',
-    data: BytesLike,
-  ): Result
+    functionFragment: "linkCharacter",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
-    functionFragment: 'postNote4Character',
-    data: BytesLike,
-  ): Result
+    functionFragment: "linkCharacterLink",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "linkERC721", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: 'postNote4ERC721',
-    data: BytesLike,
-  ): Result
+    functionFragment: "linkLinklist",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "linkNote", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "lockNote", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "mintNote", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "name", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "ownerOf", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "postNote", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: 'postNote4Linklist',
-    data: BytesLike,
-  ): Result
+    functionFragment: "postNote4Address",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
-    functionFragment: 'postNote4Note',
-    data: BytesLike,
-  ): Result
-  decodeFunctionResult(functionFragment: 'resolver', data: BytesLike): Result
+    functionFragment: "postNote4AnyUri",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
-    functionFragment: 'safeTransferFrom(address,address,uint256)',
-    data: BytesLike,
-  ): Result
+    functionFragment: "postNote4Character",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
-    functionFragment: 'safeTransferFrom(address,address,uint256,bytes)',
-    data: BytesLike,
-  ): Result
+    functionFragment: "postNote4ERC721",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
-    functionFragment: 'setApprovalForAll',
-    data: BytesLike,
-  ): Result
+    functionFragment: "postNote4Linklist",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
-    functionFragment: 'setCharacterUri',
-    data: BytesLike,
-  ): Result
-  decodeFunctionResult(functionFragment: 'setHandle', data: BytesLike): Result
+    functionFragment: "postNote4Note",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "resolver", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: 'setLinkModule4Address',
-    data: BytesLike,
-  ): Result
+    functionFragment: "safeTransferFrom(address,address,uint256)",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
-    functionFragment: 'setLinkModule4Character',
-    data: BytesLike,
-  ): Result
+    functionFragment: "safeTransferFrom(address,address,uint256,bytes)",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
-    functionFragment: 'setLinkModule4ERC721',
-    data: BytesLike,
-  ): Result
+    functionFragment: "setApprovalForAll",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
-    functionFragment: 'setLinkModule4Linklist',
-    data: BytesLike,
-  ): Result
+    functionFragment: "setCharacterUri",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "setHandle", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: 'setLinkModule4Note',
-    data: BytesLike,
-  ): Result
+    functionFragment: "setLinkModule4Address",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
-    functionFragment: 'setLinklistUri',
-    data: BytesLike,
-  ): Result
+    functionFragment: "setLinkModule4Character",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
-    functionFragment: 'setMintModule4Note',
-    data: BytesLike,
-  ): Result
-  decodeFunctionResult(functionFragment: 'setNoteUri', data: BytesLike): Result
-  decodeFunctionResult(functionFragment: 'setOperator', data: BytesLike): Result
+    functionFragment: "setLinkModule4ERC721",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
-    functionFragment: 'setPrimaryCharacterId',
-    data: BytesLike,
-  ): Result
+    functionFragment: "setLinkModule4Linklist",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
-    functionFragment: 'setSocialToken',
-    data: BytesLike,
-  ): Result
+    functionFragment: "setLinkModule4Note",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
-    functionFragment: 'supportsInterface',
-    data: BytesLike,
-  ): Result
-  decodeFunctionResult(functionFragment: 'symbol', data: BytesLike): Result
+    functionFragment: "setLinklistUri",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
-    functionFragment: 'tokenByIndex',
-    data: BytesLike,
-  ): Result
+    functionFragment: "setMintModule4Note",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "setNoteUri", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: 'tokenOfOwnerByIndex',
-    data: BytesLike,
-  ): Result
-  decodeFunctionResult(functionFragment: 'tokenURI', data: BytesLike): Result
-  decodeFunctionResult(functionFragment: 'totalSupply', data: BytesLike): Result
+    functionFragment: "setOperator",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
-    functionFragment: 'transferFrom',
-    data: BytesLike,
-  ): Result
+    functionFragment: "setPrimaryCharacterId",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
-    functionFragment: 'unlinkAddress',
-    data: BytesLike,
-  ): Result
+    functionFragment: "setSocialToken",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
-    functionFragment: 'unlinkAnyUri',
-    data: BytesLike,
-  ): Result
+    functionFragment: "supportsInterface",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "symbol", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: 'unlinkCharacter',
-    data: BytesLike,
-  ): Result
+    functionFragment: "tokenByIndex",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
-    functionFragment: 'unlinkCharacterLink',
-    data: BytesLike,
-  ): Result
+    functionFragment: "tokenOfOwnerByIndex",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "tokenURI", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: 'unlinkERC721',
-    data: BytesLike,
-  ): Result
+    functionFragment: "totalSupply",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
-    functionFragment: 'unlinkLinklist',
-    data: BytesLike,
-  ): Result
-  decodeFunctionResult(functionFragment: 'unlinkNote', data: BytesLike): Result
+    functionFragment: "transferFrom",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "unlinkAddress",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "unlinkAnyUri",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "unlinkCharacter",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "unlinkCharacterLink",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "unlinkERC721",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "unlinkLinklist",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "unlinkNote", data: BytesLike): Result;
 
   events: {
-    'Approval(address,address,uint256)': EventFragment
-    'ApprovalForAll(address,address,bool)': EventFragment
-    'Transfer(address,address,uint256)': EventFragment
-    'AttachLinklist(uint256,uint256,bytes32)': EventFragment
-    'BaseInitialized(string,string,uint256)': EventFragment
-    'CharacterCreated(uint256,address,address,string,uint256)': EventFragment
-    'DeleteNote(uint256,uint256)': EventFragment
-    'DetachLinklist(uint256,uint256,bytes32)': EventFragment
-    'LinkAddress(uint256,address,bytes32,uint256)': EventFragment
-    'LinkAnyUri(uint256,string,bytes32,uint256)': EventFragment
-    'LinkCharacter(address,uint256,uint256,bytes32,uint256)': EventFragment
-    'LinkCharacterLink(uint256,bytes32,uint256,uint256,bytes32)': EventFragment
-    'LinkERC721(uint256,address,uint256,bytes32,uint256)': EventFragment
-    'LinkLinklist(uint256,uint256,bytes32,uint256)': EventFragment
-    'LinkNote(uint256,uint256,uint256,bytes32,uint256)': EventFragment
-    'LinklistNFTInitialized(uint256)': EventFragment
-    'LockNote(uint256,uint256)': EventFragment
-    'MintNFTInitialized(uint256,uint256,uint256)': EventFragment
-    'MintNote(address,uint256,uint256,address,uint256)': EventFragment
-    'PostNote(uint256,uint256,bytes32,bytes32,bytes)': EventFragment
-    'SetCharacterUri(uint256,string)': EventFragment
-    'SetHandle(address,uint256,string)': EventFragment
-    'SetLinkModule4Address(address,address,bytes,uint256)': EventFragment
-    'SetLinkModule4Character(uint256,address,bytes,uint256)': EventFragment
-    'SetLinkModule4ERC721(address,uint256,address,bytes,uint256)': EventFragment
-    'SetLinkModule4Linklist(uint256,address,bytes,uint256)': EventFragment
-    'SetLinkModule4Note(uint256,uint256,address,bytes,uint256)': EventFragment
-    'SetMintModule4Note(uint256,uint256,address,bytes,uint256)': EventFragment
-    'SetNoteUri(uint256,uint256,string)': EventFragment
-    'SetOperator(uint256,address,uint256)': EventFragment
-    'SetPrimaryCharacterId(address,uint256,uint256)': EventFragment
-    'SetSocialToken(address,uint256,address)': EventFragment
-    'UnlinkAddress(uint256,address,bytes32)': EventFragment
-    'UnlinkAnyUri(uint256,string,bytes32)': EventFragment
-    'UnlinkCharacter(address,uint256,uint256,bytes32)': EventFragment
-    'UnlinkCharacterLink(uint256,bytes32,uint256,uint256,bytes32)': EventFragment
-    'UnlinkERC721(uint256,address,uint256,bytes32,uint256)': EventFragment
-    'UnlinkLinklist(uint256,uint256,bytes32,uint256)': EventFragment
-    'UnlinkNote(uint256,uint256,uint256,bytes32,uint256)': EventFragment
-    'Web3EntryInitialized(uint256)': EventFragment
-  }
+    "Approval(address,address,uint256)": EventFragment;
+    "ApprovalForAll(address,address,bool)": EventFragment;
+    "Transfer(address,address,uint256)": EventFragment;
+    "AttachLinklist(uint256,uint256,bytes32)": EventFragment;
+    "BaseInitialized(string,string,uint256)": EventFragment;
+    "CharacterCreated(uint256,address,address,string,uint256)": EventFragment;
+    "DeleteNote(uint256,uint256)": EventFragment;
+    "DetachLinklist(uint256,uint256,bytes32)": EventFragment;
+    "LinkAddress(uint256,address,bytes32,uint256)": EventFragment;
+    "LinkAnyUri(uint256,string,bytes32,uint256)": EventFragment;
+    "LinkCharacter(address,uint256,uint256,bytes32,uint256)": EventFragment;
+    "LinkCharacterLink(uint256,bytes32,uint256,uint256,bytes32)": EventFragment;
+    "LinkERC721(uint256,address,uint256,bytes32,uint256)": EventFragment;
+    "LinkLinklist(uint256,uint256,bytes32,uint256)": EventFragment;
+    "LinkNote(uint256,uint256,uint256,bytes32,uint256)": EventFragment;
+    "LinklistNFTInitialized(uint256)": EventFragment;
+    "LockNote(uint256,uint256)": EventFragment;
+    "MintNFTInitialized(uint256,uint256,uint256)": EventFragment;
+    "MintNote(address,uint256,uint256,address,uint256)": EventFragment;
+    "PostNote(uint256,uint256,bytes32,bytes32,bytes)": EventFragment;
+    "SetCharacterUri(uint256,string)": EventFragment;
+    "SetHandle(address,uint256,string)": EventFragment;
+    "SetLinkModule4Address(address,address,bytes,uint256)": EventFragment;
+    "SetLinkModule4Character(uint256,address,bytes,uint256)": EventFragment;
+    "SetLinkModule4ERC721(address,uint256,address,bytes,uint256)": EventFragment;
+    "SetLinkModule4Linklist(uint256,address,bytes,uint256)": EventFragment;
+    "SetLinkModule4Note(uint256,uint256,address,bytes,uint256)": EventFragment;
+    "SetMintModule4Note(uint256,uint256,address,bytes,uint256)": EventFragment;
+    "SetNoteUri(uint256,uint256,string)": EventFragment;
+    "SetOperator(uint256,address,uint256)": EventFragment;
+    "SetPrimaryCharacterId(address,uint256,uint256)": EventFragment;
+    "SetSocialToken(address,uint256,address)": EventFragment;
+    "UnlinkAddress(uint256,address,bytes32)": EventFragment;
+    "UnlinkAnyUri(uint256,string,bytes32)": EventFragment;
+    "UnlinkCharacter(address,uint256,uint256,bytes32)": EventFragment;
+    "UnlinkCharacterLink(uint256,bytes32,uint256,uint256,bytes32)": EventFragment;
+    "UnlinkERC721(uint256,address,uint256,bytes32,uint256)": EventFragment;
+    "UnlinkLinklist(uint256,uint256,bytes32,uint256)": EventFragment;
+    "UnlinkNote(uint256,uint256,uint256,bytes32,uint256)": EventFragment;
+    "Web3EntryInitialized(uint256)": EventFragment;
+  };
 
-  getEvent(nameOrSignatureOrTopic: 'Approval'): EventFragment
-  getEvent(nameOrSignatureOrTopic: 'ApprovalForAll'): EventFragment
-  getEvent(nameOrSignatureOrTopic: 'Transfer'): EventFragment
-  getEvent(nameOrSignatureOrTopic: 'AttachLinklist'): EventFragment
-  getEvent(nameOrSignatureOrTopic: 'BaseInitialized'): EventFragment
-  getEvent(nameOrSignatureOrTopic: 'CharacterCreated'): EventFragment
-  getEvent(nameOrSignatureOrTopic: 'DeleteNote'): EventFragment
-  getEvent(nameOrSignatureOrTopic: 'DetachLinklist'): EventFragment
-  getEvent(nameOrSignatureOrTopic: 'LinkAddress'): EventFragment
-  getEvent(nameOrSignatureOrTopic: 'LinkAnyUri'): EventFragment
-  getEvent(nameOrSignatureOrTopic: 'LinkCharacter'): EventFragment
-  getEvent(nameOrSignatureOrTopic: 'LinkCharacterLink'): EventFragment
-  getEvent(nameOrSignatureOrTopic: 'LinkERC721'): EventFragment
-  getEvent(nameOrSignatureOrTopic: 'LinkLinklist'): EventFragment
-  getEvent(nameOrSignatureOrTopic: 'LinkNote'): EventFragment
-  getEvent(nameOrSignatureOrTopic: 'LinklistNFTInitialized'): EventFragment
-  getEvent(nameOrSignatureOrTopic: 'LockNote'): EventFragment
-  getEvent(nameOrSignatureOrTopic: 'MintNFTInitialized'): EventFragment
-  getEvent(nameOrSignatureOrTopic: 'MintNote'): EventFragment
-  getEvent(nameOrSignatureOrTopic: 'PostNote'): EventFragment
-  getEvent(nameOrSignatureOrTopic: 'SetCharacterUri'): EventFragment
-  getEvent(nameOrSignatureOrTopic: 'SetHandle'): EventFragment
-  getEvent(nameOrSignatureOrTopic: 'SetLinkModule4Address'): EventFragment
-  getEvent(nameOrSignatureOrTopic: 'SetLinkModule4Character'): EventFragment
-  getEvent(nameOrSignatureOrTopic: 'SetLinkModule4ERC721'): EventFragment
-  getEvent(nameOrSignatureOrTopic: 'SetLinkModule4Linklist'): EventFragment
-  getEvent(nameOrSignatureOrTopic: 'SetLinkModule4Note'): EventFragment
-  getEvent(nameOrSignatureOrTopic: 'SetMintModule4Note'): EventFragment
-  getEvent(nameOrSignatureOrTopic: 'SetNoteUri'): EventFragment
-  getEvent(nameOrSignatureOrTopic: 'SetOperator'): EventFragment
-  getEvent(nameOrSignatureOrTopic: 'SetPrimaryCharacterId'): EventFragment
-  getEvent(nameOrSignatureOrTopic: 'SetSocialToken'): EventFragment
-  getEvent(nameOrSignatureOrTopic: 'UnlinkAddress'): EventFragment
-  getEvent(nameOrSignatureOrTopic: 'UnlinkAnyUri'): EventFragment
-  getEvent(nameOrSignatureOrTopic: 'UnlinkCharacter'): EventFragment
-  getEvent(nameOrSignatureOrTopic: 'UnlinkCharacterLink'): EventFragment
-  getEvent(nameOrSignatureOrTopic: 'UnlinkERC721'): EventFragment
-  getEvent(nameOrSignatureOrTopic: 'UnlinkLinklist'): EventFragment
-  getEvent(nameOrSignatureOrTopic: 'UnlinkNote'): EventFragment
-  getEvent(nameOrSignatureOrTopic: 'Web3EntryInitialized'): EventFragment
+  getEvent(nameOrSignatureOrTopic: "Approval"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "ApprovalForAll"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "Transfer"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "AttachLinklist"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "BaseInitialized"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "CharacterCreated"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "DeleteNote"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "DetachLinklist"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "LinkAddress"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "LinkAnyUri"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "LinkCharacter"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "LinkCharacterLink"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "LinkERC721"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "LinkLinklist"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "LinkNote"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "LinklistNFTInitialized"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "LockNote"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "MintNFTInitialized"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "MintNote"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "PostNote"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "SetCharacterUri"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "SetHandle"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "SetLinkModule4Address"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "SetLinkModule4Character"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "SetLinkModule4ERC721"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "SetLinkModule4Linklist"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "SetLinkModule4Note"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "SetMintModule4Note"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "SetNoteUri"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "SetOperator"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "SetPrimaryCharacterId"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "SetSocialToken"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "UnlinkAddress"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "UnlinkAnyUri"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "UnlinkCharacter"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "UnlinkCharacterLink"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "UnlinkERC721"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "UnlinkLinklist"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "UnlinkNote"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "Web3EntryInitialized"): EventFragment;
 }
 
 export interface ApprovalEventObject {
-  owner: string
-  approved: string
-  tokenId: BigNumber
+  owner: string;
+  approved: string;
+  tokenId: BigNumber;
 }
 export type ApprovalEvent = TypedEvent<
   [string, string, BigNumber],
   ApprovalEventObject
->
+>;
 
-export type ApprovalEventFilter = TypedEventFilter<ApprovalEvent>
+export type ApprovalEventFilter = TypedEventFilter<ApprovalEvent>;
 
 export interface ApprovalForAllEventObject {
-  owner: string
-  operator: string
-  approved: boolean
+  owner: string;
+  operator: string;
+  approved: boolean;
 }
 export type ApprovalForAllEvent = TypedEvent<
   [string, string, boolean],
   ApprovalForAllEventObject
->
+>;
 
-export type ApprovalForAllEventFilter = TypedEventFilter<ApprovalForAllEvent>
+export type ApprovalForAllEventFilter = TypedEventFilter<ApprovalForAllEvent>;
 
 export interface TransferEventObject {
-  from: string
-  to: string
-  tokenId: BigNumber
+  from: string;
+  to: string;
+  tokenId: BigNumber;
 }
 export type TransferEvent = TypedEvent<
   [string, string, BigNumber],
   TransferEventObject
->
+>;
 
-export type TransferEventFilter = TypedEventFilter<TransferEvent>
+export type TransferEventFilter = TypedEventFilter<TransferEvent>;
 
 export interface AttachLinklistEventObject {
-  linklistId: BigNumber
-  characterId: BigNumber
-  linkType: string
+  linklistId: BigNumber;
+  characterId: BigNumber;
+  linkType: string;
 }
 export type AttachLinklistEvent = TypedEvent<
   [BigNumber, BigNumber, string],
   AttachLinklistEventObject
->
+>;
 
-export type AttachLinklistEventFilter = TypedEventFilter<AttachLinklistEvent>
+export type AttachLinklistEventFilter = TypedEventFilter<AttachLinklistEvent>;
 
 export interface BaseInitializedEventObject {
-  name: string
-  symbol: string
-  timestamp: BigNumber
+  name: string;
+  symbol: string;
+  timestamp: BigNumber;
 }
 export type BaseInitializedEvent = TypedEvent<
   [string, string, BigNumber],
   BaseInitializedEventObject
->
+>;
 
-export type BaseInitializedEventFilter = TypedEventFilter<BaseInitializedEvent>
+export type BaseInitializedEventFilter = TypedEventFilter<BaseInitializedEvent>;
 
 export interface CharacterCreatedEventObject {
-  characterId: BigNumber
-  creator: string
-  to: string
-  handle: string
-  timestamp: BigNumber
+  characterId: BigNumber;
+  creator: string;
+  to: string;
+  handle: string;
+  timestamp: BigNumber;
 }
 export type CharacterCreatedEvent = TypedEvent<
   [BigNumber, string, string, string, BigNumber],
   CharacterCreatedEventObject
->
+>;
 
 export type CharacterCreatedEventFilter =
-  TypedEventFilter<CharacterCreatedEvent>
+  TypedEventFilter<CharacterCreatedEvent>;
 
 export interface DeleteNoteEventObject {
-  characterId: BigNumber
-  noteId: BigNumber
+  characterId: BigNumber;
+  noteId: BigNumber;
 }
 export type DeleteNoteEvent = TypedEvent<
   [BigNumber, BigNumber],
   DeleteNoteEventObject
->
+>;
 
-export type DeleteNoteEventFilter = TypedEventFilter<DeleteNoteEvent>
+export type DeleteNoteEventFilter = TypedEventFilter<DeleteNoteEvent>;
 
 export interface DetachLinklistEventObject {
-  linklistId: BigNumber
-  characterId: BigNumber
-  linkType: string
+  linklistId: BigNumber;
+  characterId: BigNumber;
+  linkType: string;
 }
 export type DetachLinklistEvent = TypedEvent<
   [BigNumber, BigNumber, string],
   DetachLinklistEventObject
->
+>;
 
-export type DetachLinklistEventFilter = TypedEventFilter<DetachLinklistEvent>
+export type DetachLinklistEventFilter = TypedEventFilter<DetachLinklistEvent>;
 
 export interface LinkAddressEventObject {
-  fromCharacterId: BigNumber
-  ethAddress: string
-  linkType: string
-  linklistId: BigNumber
+  fromCharacterId: BigNumber;
+  ethAddress: string;
+  linkType: string;
+  linklistId: BigNumber;
 }
 export type LinkAddressEvent = TypedEvent<
   [BigNumber, string, string, BigNumber],
   LinkAddressEventObject
->
+>;
 
-export type LinkAddressEventFilter = TypedEventFilter<LinkAddressEvent>
+export type LinkAddressEventFilter = TypedEventFilter<LinkAddressEvent>;
 
 export interface LinkAnyUriEventObject {
-  fromCharacterId: BigNumber
-  toUri: string
-  linkType: string
-  linklistId: BigNumber
+  fromCharacterId: BigNumber;
+  toUri: string;
+  linkType: string;
+  linklistId: BigNumber;
 }
 export type LinkAnyUriEvent = TypedEvent<
   [BigNumber, string, string, BigNumber],
   LinkAnyUriEventObject
->
+>;
 
-export type LinkAnyUriEventFilter = TypedEventFilter<LinkAnyUriEvent>
+export type LinkAnyUriEventFilter = TypedEventFilter<LinkAnyUriEvent>;
 
 export interface LinkCharacterEventObject {
-  account: string
-  fromCharacterId: BigNumber
-  toCharacterId: BigNumber
-  linkType: string
-  linklistId: BigNumber
+  account: string;
+  fromCharacterId: BigNumber;
+  toCharacterId: BigNumber;
+  linkType: string;
+  linklistId: BigNumber;
 }
 export type LinkCharacterEvent = TypedEvent<
   [string, BigNumber, BigNumber, string, BigNumber],
   LinkCharacterEventObject
->
+>;
 
-export type LinkCharacterEventFilter = TypedEventFilter<LinkCharacterEvent>
+export type LinkCharacterEventFilter = TypedEventFilter<LinkCharacterEvent>;
 
 export interface LinkCharacterLinkEventObject {
-  fromCharacterId: BigNumber
-  linkType: string
-  clFromCharacterId: BigNumber
-  clToCharacterId: BigNumber
-  clLinkType: string
+  fromCharacterId: BigNumber;
+  linkType: string;
+  clFromCharacterId: BigNumber;
+  clToCharacterId: BigNumber;
+  clLinkType: string;
 }
 export type LinkCharacterLinkEvent = TypedEvent<
   [BigNumber, string, BigNumber, BigNumber, string],
   LinkCharacterLinkEventObject
->
+>;
 
 export type LinkCharacterLinkEventFilter =
-  TypedEventFilter<LinkCharacterLinkEvent>
+  TypedEventFilter<LinkCharacterLinkEvent>;
 
 export interface LinkERC721EventObject {
-  fromCharacterId: BigNumber
-  tokenAddress: string
-  toNoteId: BigNumber
-  linkType: string
-  linklistId: BigNumber
+  fromCharacterId: BigNumber;
+  tokenAddress: string;
+  toNoteId: BigNumber;
+  linkType: string;
+  linklistId: BigNumber;
 }
 export type LinkERC721Event = TypedEvent<
   [BigNumber, string, BigNumber, string, BigNumber],
   LinkERC721EventObject
->
+>;
 
-export type LinkERC721EventFilter = TypedEventFilter<LinkERC721Event>
+export type LinkERC721EventFilter = TypedEventFilter<LinkERC721Event>;
 
 export interface LinkLinklistEventObject {
-  fromCharacterId: BigNumber
-  toLinklistId: BigNumber
-  linkType: string
-  linklistId: BigNumber
+  fromCharacterId: BigNumber;
+  toLinklistId: BigNumber;
+  linkType: string;
+  linklistId: BigNumber;
 }
 export type LinkLinklistEvent = TypedEvent<
   [BigNumber, BigNumber, string, BigNumber],
   LinkLinklistEventObject
->
+>;
 
-export type LinkLinklistEventFilter = TypedEventFilter<LinkLinklistEvent>
+export type LinkLinklistEventFilter = TypedEventFilter<LinkLinklistEvent>;
 
 export interface LinkNoteEventObject {
-  fromCharacterId: BigNumber
-  toCharacterId: BigNumber
-  toNoteId: BigNumber
-  linkType: string
-  linklistId: BigNumber
+  fromCharacterId: BigNumber;
+  toCharacterId: BigNumber;
+  toNoteId: BigNumber;
+  linkType: string;
+  linklistId: BigNumber;
 }
 export type LinkNoteEvent = TypedEvent<
   [BigNumber, BigNumber, BigNumber, string, BigNumber],
   LinkNoteEventObject
->
+>;
 
-export type LinkNoteEventFilter = TypedEventFilter<LinkNoteEvent>
+export type LinkNoteEventFilter = TypedEventFilter<LinkNoteEvent>;
 
 export interface LinklistNFTInitializedEventObject {
-  timestamp: BigNumber
+  timestamp: BigNumber;
 }
 export type LinklistNFTInitializedEvent = TypedEvent<
   [BigNumber],
   LinklistNFTInitializedEventObject
->
+>;
 
 export type LinklistNFTInitializedEventFilter =
-  TypedEventFilter<LinklistNFTInitializedEvent>
+  TypedEventFilter<LinklistNFTInitializedEvent>;
 
 export interface LockNoteEventObject {
-  characterId: BigNumber
-  noteId: BigNumber
+  characterId: BigNumber;
+  noteId: BigNumber;
 }
 export type LockNoteEvent = TypedEvent<
   [BigNumber, BigNumber],
   LockNoteEventObject
->
+>;
 
-export type LockNoteEventFilter = TypedEventFilter<LockNoteEvent>
+export type LockNoteEventFilter = TypedEventFilter<LockNoteEvent>;
 
 export interface MintNFTInitializedEventObject {
-  characterId: BigNumber
-  noteId: BigNumber
-  timestamp: BigNumber
+  characterId: BigNumber;
+  noteId: BigNumber;
+  timestamp: BigNumber;
 }
 export type MintNFTInitializedEvent = TypedEvent<
   [BigNumber, BigNumber, BigNumber],
   MintNFTInitializedEventObject
->
+>;
 
 export type MintNFTInitializedEventFilter =
-  TypedEventFilter<MintNFTInitializedEvent>
+  TypedEventFilter<MintNFTInitializedEvent>;
 
 export interface MintNoteEventObject {
-  to: string
-  characterId: BigNumber
-  noteId: BigNumber
-  tokenAddress: string
-  tokenId: BigNumber
+  to: string;
+  characterId: BigNumber;
+  noteId: BigNumber;
+  tokenAddress: string;
+  tokenId: BigNumber;
 }
 export type MintNoteEvent = TypedEvent<
   [string, BigNumber, BigNumber, string, BigNumber],
   MintNoteEventObject
->
+>;
 
-export type MintNoteEventFilter = TypedEventFilter<MintNoteEvent>
+export type MintNoteEventFilter = TypedEventFilter<MintNoteEvent>;
 
 export interface PostNoteEventObject {
-  characterId: BigNumber
-  noteId: BigNumber
-  linkKey: string
-  linkItemType: string
-  data: string
+  characterId: BigNumber;
+  noteId: BigNumber;
+  linkKey: string;
+  linkItemType: string;
+  data: string;
 }
 export type PostNoteEvent = TypedEvent<
   [BigNumber, BigNumber, string, string, string],
   PostNoteEventObject
->
+>;
 
-export type PostNoteEventFilter = TypedEventFilter<PostNoteEvent>
+export type PostNoteEventFilter = TypedEventFilter<PostNoteEvent>;
 
 export interface SetCharacterUriEventObject {
-  characterId: BigNumber
-  newUri: string
+  characterId: BigNumber;
+  newUri: string;
 }
 export type SetCharacterUriEvent = TypedEvent<
   [BigNumber, string],
   SetCharacterUriEventObject
->
+>;
 
-export type SetCharacterUriEventFilter = TypedEventFilter<SetCharacterUriEvent>
+export type SetCharacterUriEventFilter = TypedEventFilter<SetCharacterUriEvent>;
 
 export interface SetHandleEventObject {
-  account: string
-  characterId: BigNumber
-  newHandle: string
+  account: string;
+  characterId: BigNumber;
+  newHandle: string;
 }
 export type SetHandleEvent = TypedEvent<
   [string, BigNumber, string],
   SetHandleEventObject
->
+>;
 
-export type SetHandleEventFilter = TypedEventFilter<SetHandleEvent>
+export type SetHandleEventFilter = TypedEventFilter<SetHandleEvent>;
 
 export interface SetLinkModule4AddressEventObject {
-  account: string
-  linkModule: string
-  returnData: string
-  timestamp: BigNumber
+  account: string;
+  linkModule: string;
+  returnData: string;
+  timestamp: BigNumber;
 }
 export type SetLinkModule4AddressEvent = TypedEvent<
   [string, string, string, BigNumber],
   SetLinkModule4AddressEventObject
->
+>;
 
 export type SetLinkModule4AddressEventFilter =
-  TypedEventFilter<SetLinkModule4AddressEvent>
+  TypedEventFilter<SetLinkModule4AddressEvent>;
 
 export interface SetLinkModule4CharacterEventObject {
-  characterId: BigNumber
-  linkModule: string
-  returnData: string
-  timestamp: BigNumber
+  characterId: BigNumber;
+  linkModule: string;
+  returnData: string;
+  timestamp: BigNumber;
 }
 export type SetLinkModule4CharacterEvent = TypedEvent<
   [BigNumber, string, string, BigNumber],
   SetLinkModule4CharacterEventObject
->
+>;
 
 export type SetLinkModule4CharacterEventFilter =
-  TypedEventFilter<SetLinkModule4CharacterEvent>
+  TypedEventFilter<SetLinkModule4CharacterEvent>;
 
 export interface SetLinkModule4ERC721EventObject {
-  tokenAddress: string
-  tokenId: BigNumber
-  linkModule: string
-  returnData: string
-  timestamp: BigNumber
+  tokenAddress: string;
+  tokenId: BigNumber;
+  linkModule: string;
+  returnData: string;
+  timestamp: BigNumber;
 }
 export type SetLinkModule4ERC721Event = TypedEvent<
   [string, BigNumber, string, string, BigNumber],
   SetLinkModule4ERC721EventObject
->
+>;
 
 export type SetLinkModule4ERC721EventFilter =
-  TypedEventFilter<SetLinkModule4ERC721Event>
+  TypedEventFilter<SetLinkModule4ERC721Event>;
 
 export interface SetLinkModule4LinklistEventObject {
-  linklistId: BigNumber
-  linkModule: string
-  returnData: string
-  timestamp: BigNumber
+  linklistId: BigNumber;
+  linkModule: string;
+  returnData: string;
+  timestamp: BigNumber;
 }
 export type SetLinkModule4LinklistEvent = TypedEvent<
   [BigNumber, string, string, BigNumber],
   SetLinkModule4LinklistEventObject
->
+>;
 
 export type SetLinkModule4LinklistEventFilter =
-  TypedEventFilter<SetLinkModule4LinklistEvent>
+  TypedEventFilter<SetLinkModule4LinklistEvent>;
 
 export interface SetLinkModule4NoteEventObject {
-  characterId: BigNumber
-  noteId: BigNumber
-  linkModule: string
-  returnData: string
-  timestamp: BigNumber
+  characterId: BigNumber;
+  noteId: BigNumber;
+  linkModule: string;
+  returnData: string;
+  timestamp: BigNumber;
 }
 export type SetLinkModule4NoteEvent = TypedEvent<
   [BigNumber, BigNumber, string, string, BigNumber],
   SetLinkModule4NoteEventObject
->
+>;
 
 export type SetLinkModule4NoteEventFilter =
-  TypedEventFilter<SetLinkModule4NoteEvent>
+  TypedEventFilter<SetLinkModule4NoteEvent>;
 
 export interface SetMintModule4NoteEventObject {
-  characterId: BigNumber
-  noteId: BigNumber
-  mintModule: string
-  returnData: string
-  timestamp: BigNumber
+  characterId: BigNumber;
+  noteId: BigNumber;
+  mintModule: string;
+  returnData: string;
+  timestamp: BigNumber;
 }
 export type SetMintModule4NoteEvent = TypedEvent<
   [BigNumber, BigNumber, string, string, BigNumber],
   SetMintModule4NoteEventObject
->
+>;
 
 export type SetMintModule4NoteEventFilter =
-  TypedEventFilter<SetMintModule4NoteEvent>
+  TypedEventFilter<SetMintModule4NoteEvent>;
 
 export interface SetNoteUriEventObject {
-  characterId: BigNumber
-  noteId: BigNumber
-  newUri: string
+  characterId: BigNumber;
+  noteId: BigNumber;
+  newUri: string;
 }
 export type SetNoteUriEvent = TypedEvent<
   [BigNumber, BigNumber, string],
   SetNoteUriEventObject
->
+>;
 
-export type SetNoteUriEventFilter = TypedEventFilter<SetNoteUriEvent>
+export type SetNoteUriEventFilter = TypedEventFilter<SetNoteUriEvent>;
 
 export interface SetOperatorEventObject {
-  characterId: BigNumber
-  operator: string
-  timestamp: BigNumber
+  characterId: BigNumber;
+  operator: string;
+  timestamp: BigNumber;
 }
 export type SetOperatorEvent = TypedEvent<
   [BigNumber, string, BigNumber],
   SetOperatorEventObject
->
+>;
 
-export type SetOperatorEventFilter = TypedEventFilter<SetOperatorEvent>
+export type SetOperatorEventFilter = TypedEventFilter<SetOperatorEvent>;
 
 export interface SetPrimaryCharacterIdEventObject {
-  account: string
-  characterId: BigNumber
-  oldCharacterId: BigNumber
+  account: string;
+  characterId: BigNumber;
+  oldCharacterId: BigNumber;
 }
 export type SetPrimaryCharacterIdEvent = TypedEvent<
   [string, BigNumber, BigNumber],
   SetPrimaryCharacterIdEventObject
->
+>;
 
 export type SetPrimaryCharacterIdEventFilter =
-  TypedEventFilter<SetPrimaryCharacterIdEvent>
+  TypedEventFilter<SetPrimaryCharacterIdEvent>;
 
 export interface SetSocialTokenEventObject {
-  account: string
-  characterId: BigNumber
-  tokenAddress: string
+  account: string;
+  characterId: BigNumber;
+  tokenAddress: string;
 }
 export type SetSocialTokenEvent = TypedEvent<
   [string, BigNumber, string],
   SetSocialTokenEventObject
->
+>;
 
-export type SetSocialTokenEventFilter = TypedEventFilter<SetSocialTokenEvent>
+export type SetSocialTokenEventFilter = TypedEventFilter<SetSocialTokenEvent>;
 
 export interface UnlinkAddressEventObject {
-  fromCharacterId: BigNumber
-  ethAddress: string
-  linkType: string
+  fromCharacterId: BigNumber;
+  ethAddress: string;
+  linkType: string;
 }
 export type UnlinkAddressEvent = TypedEvent<
   [BigNumber, string, string],
   UnlinkAddressEventObject
->
+>;
 
-export type UnlinkAddressEventFilter = TypedEventFilter<UnlinkAddressEvent>
+export type UnlinkAddressEventFilter = TypedEventFilter<UnlinkAddressEvent>;
 
 export interface UnlinkAnyUriEventObject {
-  fromCharacterId: BigNumber
-  toUri: string
-  linkType: string
+  fromCharacterId: BigNumber;
+  toUri: string;
+  linkType: string;
 }
 export type UnlinkAnyUriEvent = TypedEvent<
   [BigNumber, string, string],
   UnlinkAnyUriEventObject
->
+>;
 
-export type UnlinkAnyUriEventFilter = TypedEventFilter<UnlinkAnyUriEvent>
+export type UnlinkAnyUriEventFilter = TypedEventFilter<UnlinkAnyUriEvent>;
 
 export interface UnlinkCharacterEventObject {
-  account: string
-  fromCharacterId: BigNumber
-  toCharacterId: BigNumber
-  linkType: string
+  account: string;
+  fromCharacterId: BigNumber;
+  toCharacterId: BigNumber;
+  linkType: string;
 }
 export type UnlinkCharacterEvent = TypedEvent<
   [string, BigNumber, BigNumber, string],
   UnlinkCharacterEventObject
->
+>;
 
-export type UnlinkCharacterEventFilter = TypedEventFilter<UnlinkCharacterEvent>
+export type UnlinkCharacterEventFilter = TypedEventFilter<UnlinkCharacterEvent>;
 
 export interface UnlinkCharacterLinkEventObject {
-  fromCharacterId: BigNumber
-  linkType: string
-  clFromCharactereId: BigNumber
-  clToCharacterId: BigNumber
-  clLinkType: string
+  fromCharacterId: BigNumber;
+  linkType: string;
+  clFromCharactereId: BigNumber;
+  clToCharacterId: BigNumber;
+  clLinkType: string;
 }
 export type UnlinkCharacterLinkEvent = TypedEvent<
   [BigNumber, string, BigNumber, BigNumber, string],
   UnlinkCharacterLinkEventObject
->
+>;
 
 export type UnlinkCharacterLinkEventFilter =
-  TypedEventFilter<UnlinkCharacterLinkEvent>
+  TypedEventFilter<UnlinkCharacterLinkEvent>;
 
 export interface UnlinkERC721EventObject {
-  fromCharacterId: BigNumber
-  tokenAddress: string
-  toNoteId: BigNumber
-  linkType: string
-  linklistId: BigNumber
+  fromCharacterId: BigNumber;
+  tokenAddress: string;
+  toNoteId: BigNumber;
+  linkType: string;
+  linklistId: BigNumber;
 }
 export type UnlinkERC721Event = TypedEvent<
   [BigNumber, string, BigNumber, string, BigNumber],
   UnlinkERC721EventObject
->
+>;
 
-export type UnlinkERC721EventFilter = TypedEventFilter<UnlinkERC721Event>
+export type UnlinkERC721EventFilter = TypedEventFilter<UnlinkERC721Event>;
 
 export interface UnlinkLinklistEventObject {
-  fromCharacterId: BigNumber
-  toLinklistId: BigNumber
-  linkType: string
-  linklistId: BigNumber
+  fromCharacterId: BigNumber;
+  toLinklistId: BigNumber;
+  linkType: string;
+  linklistId: BigNumber;
 }
 export type UnlinkLinklistEvent = TypedEvent<
   [BigNumber, BigNumber, string, BigNumber],
   UnlinkLinklistEventObject
->
+>;
 
-export type UnlinkLinklistEventFilter = TypedEventFilter<UnlinkLinklistEvent>
+export type UnlinkLinklistEventFilter = TypedEventFilter<UnlinkLinklistEvent>;
 
 export interface UnlinkNoteEventObject {
-  fromCharacterId: BigNumber
-  toCharacterId: BigNumber
-  toNoteId: BigNumber
-  linkType: string
-  linklistId: BigNumber
+  fromCharacterId: BigNumber;
+  toCharacterId: BigNumber;
+  toNoteId: BigNumber;
+  linkType: string;
+  linklistId: BigNumber;
 }
 export type UnlinkNoteEvent = TypedEvent<
   [BigNumber, BigNumber, BigNumber, string, BigNumber],
   UnlinkNoteEventObject
->
+>;
 
-export type UnlinkNoteEventFilter = TypedEventFilter<UnlinkNoteEvent>
+export type UnlinkNoteEventFilter = TypedEventFilter<UnlinkNoteEvent>;
 
 export interface Web3EntryInitializedEventObject {
-  timestamp: BigNumber
+  timestamp: BigNumber;
 }
 export type Web3EntryInitializedEvent = TypedEvent<
   [BigNumber],
   Web3EntryInitializedEventObject
->
+>;
 
 export type Web3EntryInitializedEventFilter =
-  TypedEventFilter<Web3EntryInitializedEvent>
+  TypedEventFilter<Web3EntryInitializedEvent>;
 
 export interface Abi extends BaseContract {
-  connect(signerOrProvider: Signer | Provider | string): this
-  attach(addressOrName: string): this
-  deployed(): Promise<this>
+  connect(signerOrProvider: Signer | Provider | string): this;
+  attach(addressOrName: string): this;
+  deployed(): Promise<this>;
 
-  interface: AbiInterface
+  interface: AbiInterface;
 
   queryFilter<TEvent extends TypedEvent>(
     event: TypedEventFilter<TEvent>,
     fromBlockOrBlockhash?: string | number | undefined,
-    toBlock?: string | number | undefined,
-  ): Promise<Array<TEvent>>
+    toBlock?: string | number | undefined
+  ): Promise<Array<TEvent>>;
 
   listeners<TEvent extends TypedEvent>(
-    eventFilter?: TypedEventFilter<TEvent>,
-  ): Array<TypedListener<TEvent>>
-  listeners(eventName?: string): Array<Listener>
+    eventFilter?: TypedEventFilter<TEvent>
+  ): Array<TypedListener<TEvent>>;
+  listeners(eventName?: string): Array<Listener>;
   removeAllListeners<TEvent extends TypedEvent>(
-    eventFilter: TypedEventFilter<TEvent>,
-  ): this
-  removeAllListeners(eventName?: string): this
-  off: OnEvent<this>
-  on: OnEvent<this>
-  once: OnEvent<this>
-  removeListener: OnEvent<this>
+    eventFilter: TypedEventFilter<TEvent>
+  ): this;
+  removeAllListeners(eventName?: string): this;
+  off: OnEvent<this>;
+  on: OnEvent<this>;
+  once: OnEvent<this>;
+  removeListener: OnEvent<this>;
 
   functions: {
     approve(
       to: PromiseOrValue<string>,
       tokenId: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<ContractTransaction>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
 
     balanceOf(
       owner: PromiseOrValue<string>,
-      overrides?: CallOverrides,
-    ): Promise<[BigNumber]>
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
 
     burn(
       tokenId: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<ContractTransaction>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
 
     canCreate(
       handle: PromiseOrValue<string>,
       account: PromiseOrValue<string>,
-      overrides?: CallOverrides,
-    ): Promise<[boolean]>
+      overrides?: CallOverrides
+    ): Promise<[boolean]>;
 
     createCharacter(
       vars: DataTypes.CreateCharacterDataStruct,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<ContractTransaction>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
 
     createThenLinkCharacter(
       vars: DataTypes.CreateThenLinkCharacterDataStruct,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<ContractTransaction>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
 
     deleteNote(
       characterId: PromiseOrValue<BigNumberish>,
       noteId: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<ContractTransaction>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
 
     getApproved(
       tokenId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides,
-    ): Promise<[string]>
+      overrides?: CallOverrides
+    ): Promise<[string]>;
 
     getCharacter(
       characterId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides,
-    ): Promise<[DataTypes.CharacterStructOutput]>
+      overrides?: CallOverrides
+    ): Promise<[DataTypes.CharacterStructOutput]>;
 
     getCharacterByHandle(
       handle: PromiseOrValue<string>,
-      overrides?: CallOverrides,
-    ): Promise<[DataTypes.CharacterStructOutput]>
+      overrides?: CallOverrides
+    ): Promise<[DataTypes.CharacterStructOutput]>;
 
     getCharacterUri(
       characterId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides,
-    ): Promise<[string]>
+      overrides?: CallOverrides
+    ): Promise<[string]>;
 
     getHandle(
       characterId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides,
-    ): Promise<[string]>
+      overrides?: CallOverrides
+    ): Promise<[string]>;
 
     getLinkModule4Address(
       account: PromiseOrValue<string>,
-      overrides?: CallOverrides,
-    ): Promise<[string]>
+      overrides?: CallOverrides
+    ): Promise<[string]>;
 
     getLinkModule4ERC721(
       tokenAddress: PromiseOrValue<string>,
       tokenId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides,
-    ): Promise<[string]>
+      overrides?: CallOverrides
+    ): Promise<[string]>;
 
     getLinkModule4Linklist(
       tokenId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides,
-    ): Promise<[string]>
+      overrides?: CallOverrides
+    ): Promise<[string]>;
 
-    getLinklistContract(overrides?: CallOverrides): Promise<[string]>
+    getLinklistContract(overrides?: CallOverrides): Promise<[string]>;
 
     getLinklistId(
       characterId: PromiseOrValue<BigNumberish>,
       linkType: PromiseOrValue<BytesLike>,
-      overrides?: CallOverrides,
-    ): Promise<[BigNumber]>
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
 
     getLinklistType(
       linkListId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides,
-    ): Promise<[string]>
+      overrides?: CallOverrides
+    ): Promise<[string]>;
 
     getLinklistUri(
       tokenId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides,
-    ): Promise<[string]>
+      overrides?: CallOverrides
+    ): Promise<[string]>;
 
     getNote(
       characterId: PromiseOrValue<BigNumberish>,
       noteId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides,
-    ): Promise<[DataTypes.NoteStructOutput]>
+      overrides?: CallOverrides
+    ): Promise<[DataTypes.NoteStructOutput]>;
 
     getOperator(
       characterId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides,
-    ): Promise<[string]>
+      overrides?: CallOverrides
+    ): Promise<[string]>;
 
     getPrimaryCharacterId(
       account: PromiseOrValue<string>,
-      overrides?: CallOverrides,
-    ): Promise<[BigNumber]>
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
 
-    getRevision(overrides?: CallOverrides): Promise<[BigNumber]>
+    getRevision(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     initialize(
       _name: PromiseOrValue<string>,
@@ -1962,395 +1980,395 @@ export interface Abi extends BaseContract {
       _mintNFTImpl: PromiseOrValue<string>,
       _periphery: PromiseOrValue<string>,
       _resolver: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<ContractTransaction>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
 
     isApprovedForAll(
       owner: PromiseOrValue<string>,
       operator: PromiseOrValue<string>,
-      overrides?: CallOverrides,
-    ): Promise<[boolean]>
+      overrides?: CallOverrides
+    ): Promise<[boolean]>;
 
     isPrimaryCharacter(
       characterId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides,
-    ): Promise<[boolean]>
+      overrides?: CallOverrides
+    ): Promise<[boolean]>;
 
     linkAddress(
       vars: DataTypes.LinkAddressDataStruct,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<ContractTransaction>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
 
     linkAnyUri(
       vars: DataTypes.LinkAnyUriDataStruct,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<ContractTransaction>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
 
     linkCharacter(
       vars: DataTypes.LinkCharacterDataStruct,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<ContractTransaction>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
 
     linkCharacterLink(
       fromCharacterId: PromiseOrValue<BigNumberish>,
       linkData: DataTypes.CharacterLinkStructStruct,
       linkType: PromiseOrValue<BytesLike>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<ContractTransaction>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
 
     linkERC721(
       vars: DataTypes.LinkERC721DataStruct,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<ContractTransaction>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
 
     linkLinklist(
       vars: DataTypes.LinkLinklistDataStruct,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<ContractTransaction>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
 
     linkNote(
       vars: DataTypes.LinkNoteDataStruct,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<ContractTransaction>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
 
     lockNote(
       characterId: PromiseOrValue<BigNumberish>,
       noteId: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<ContractTransaction>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
 
     mintNote(
       vars: DataTypes.MintNoteDataStruct,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<ContractTransaction>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
 
-    name(overrides?: CallOverrides): Promise<[string]>
+    name(overrides?: CallOverrides): Promise<[string]>;
 
     ownerOf(
       tokenId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides,
-    ): Promise<[string]>
+      overrides?: CallOverrides
+    ): Promise<[string]>;
 
     postNote(
       vars: DataTypes.PostNoteDataStruct,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<ContractTransaction>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
 
     postNote4Address(
       noteData: DataTypes.PostNoteDataStruct,
       ethAddress: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<ContractTransaction>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
 
     postNote4AnyUri(
       postNoteData: DataTypes.PostNoteDataStruct,
       uri: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<ContractTransaction>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
 
     postNote4Character(
       postNoteData: DataTypes.PostNoteDataStruct,
       toCharacterId: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<ContractTransaction>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
 
     postNote4ERC721(
       postNoteData: DataTypes.PostNoteDataStruct,
       erc721: DataTypes.ERC721StructStruct,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<ContractTransaction>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
 
     postNote4Linklist(
       noteData: DataTypes.PostNoteDataStruct,
       toLinklistId: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<ContractTransaction>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
 
     postNote4Note(
       postNoteData: DataTypes.PostNoteDataStruct,
       note: DataTypes.NoteStructStruct,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<ContractTransaction>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
 
-    resolver(overrides?: CallOverrides): Promise<[string]>
+    resolver(overrides?: CallOverrides): Promise<[string]>;
 
-    'safeTransferFrom(address,address,uint256)'(
+    "safeTransferFrom(address,address,uint256)"(
       from: PromiseOrValue<string>,
       to: PromiseOrValue<string>,
       tokenId: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<ContractTransaction>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
 
-    'safeTransferFrom(address,address,uint256,bytes)'(
+    "safeTransferFrom(address,address,uint256,bytes)"(
       from: PromiseOrValue<string>,
       to: PromiseOrValue<string>,
       tokenId: PromiseOrValue<BigNumberish>,
       _data: PromiseOrValue<BytesLike>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<ContractTransaction>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
 
     setApprovalForAll(
       operator: PromiseOrValue<string>,
       approved: PromiseOrValue<boolean>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<ContractTransaction>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
 
     setCharacterUri(
       characterId: PromiseOrValue<BigNumberish>,
       newUri: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<ContractTransaction>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
 
     setHandle(
       characterId: PromiseOrValue<BigNumberish>,
       newHandle: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<ContractTransaction>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
 
     setLinkModule4Address(
       vars: DataTypes.SetLinkModule4AddressDataStruct,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<ContractTransaction>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
 
     setLinkModule4Character(
       vars: DataTypes.SetLinkModule4CharacterDataStruct,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<ContractTransaction>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
 
     setLinkModule4ERC721(
       vars: DataTypes.SetLinkModule4ERC721DataStruct,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<ContractTransaction>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
 
     setLinkModule4Linklist(
       vars: DataTypes.SetLinkModule4LinklistDataStruct,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<ContractTransaction>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
 
     setLinkModule4Note(
       vars: DataTypes.SetLinkModule4NoteDataStruct,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<ContractTransaction>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
 
     setLinklistUri(
       linklistId: PromiseOrValue<BigNumberish>,
       uri: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<ContractTransaction>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
 
     setMintModule4Note(
       vars: DataTypes.SetMintModule4NoteDataStruct,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<ContractTransaction>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
 
     setNoteUri(
       characterId: PromiseOrValue<BigNumberish>,
       noteId: PromiseOrValue<BigNumberish>,
       newUri: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<ContractTransaction>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
 
     setOperator(
       characterId: PromiseOrValue<BigNumberish>,
       operator: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<ContractTransaction>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
 
     setPrimaryCharacterId(
       characterId: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<ContractTransaction>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
 
     setSocialToken(
       characterId: PromiseOrValue<BigNumberish>,
       tokenAddress: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<ContractTransaction>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
 
     supportsInterface(
       interfaceId: PromiseOrValue<BytesLike>,
-      overrides?: CallOverrides,
-    ): Promise<[boolean]>
+      overrides?: CallOverrides
+    ): Promise<[boolean]>;
 
-    symbol(overrides?: CallOverrides): Promise<[string]>
+    symbol(overrides?: CallOverrides): Promise<[string]>;
 
     tokenByIndex(
       index: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides,
-    ): Promise<[BigNumber]>
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
 
     tokenOfOwnerByIndex(
       owner: PromiseOrValue<string>,
       index: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides,
-    ): Promise<[BigNumber]>
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
 
     tokenURI(
       characterId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides,
-    ): Promise<[string]>
+      overrides?: CallOverrides
+    ): Promise<[string]>;
 
-    totalSupply(overrides?: CallOverrides): Promise<[BigNumber]>
+    totalSupply(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     transferFrom(
       from: PromiseOrValue<string>,
       to: PromiseOrValue<string>,
       tokenId: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<ContractTransaction>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
 
     unlinkAddress(
       vars: DataTypes.UnlinkAddressDataStruct,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<ContractTransaction>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
 
     unlinkAnyUri(
       vars: DataTypes.UnlinkAnyUriDataStruct,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<ContractTransaction>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
 
     unlinkCharacter(
       vars: DataTypes.UnlinkCharacterDataStruct,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<ContractTransaction>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
 
     unlinkCharacterLink(
       fromCharacterId: PromiseOrValue<BigNumberish>,
       linkData: DataTypes.CharacterLinkStructStruct,
       linkType: PromiseOrValue<BytesLike>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<ContractTransaction>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
 
     unlinkERC721(
       vars: DataTypes.UnlinkERC721DataStruct,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<ContractTransaction>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
 
     unlinkLinklist(
       vars: DataTypes.UnlinkLinklistDataStruct,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<ContractTransaction>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
 
     unlinkNote(
       vars: DataTypes.UnlinkNoteDataStruct,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<ContractTransaction>
-  }
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+  };
 
   approve(
     to: PromiseOrValue<string>,
     tokenId: PromiseOrValue<BigNumberish>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> },
-  ): Promise<ContractTransaction>
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
 
   balanceOf(
     owner: PromiseOrValue<string>,
-    overrides?: CallOverrides,
-  ): Promise<BigNumber>
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
 
   burn(
     tokenId: PromiseOrValue<BigNumberish>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> },
-  ): Promise<ContractTransaction>
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
 
   canCreate(
     handle: PromiseOrValue<string>,
     account: PromiseOrValue<string>,
-    overrides?: CallOverrides,
-  ): Promise<boolean>
+    overrides?: CallOverrides
+  ): Promise<boolean>;
 
   createCharacter(
     vars: DataTypes.CreateCharacterDataStruct,
-    overrides?: Overrides & { from?: PromiseOrValue<string> },
-  ): Promise<ContractTransaction>
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
 
   createThenLinkCharacter(
     vars: DataTypes.CreateThenLinkCharacterDataStruct,
-    overrides?: Overrides & { from?: PromiseOrValue<string> },
-  ): Promise<ContractTransaction>
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
 
   deleteNote(
     characterId: PromiseOrValue<BigNumberish>,
     noteId: PromiseOrValue<BigNumberish>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> },
-  ): Promise<ContractTransaction>
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
 
   getApproved(
     tokenId: PromiseOrValue<BigNumberish>,
-    overrides?: CallOverrides,
-  ): Promise<string>
+    overrides?: CallOverrides
+  ): Promise<string>;
 
   getCharacter(
     characterId: PromiseOrValue<BigNumberish>,
-    overrides?: CallOverrides,
-  ): Promise<DataTypes.CharacterStructOutput>
+    overrides?: CallOverrides
+  ): Promise<DataTypes.CharacterStructOutput>;
 
   getCharacterByHandle(
     handle: PromiseOrValue<string>,
-    overrides?: CallOverrides,
-  ): Promise<DataTypes.CharacterStructOutput>
+    overrides?: CallOverrides
+  ): Promise<DataTypes.CharacterStructOutput>;
 
   getCharacterUri(
     characterId: PromiseOrValue<BigNumberish>,
-    overrides?: CallOverrides,
-  ): Promise<string>
+    overrides?: CallOverrides
+  ): Promise<string>;
 
   getHandle(
     characterId: PromiseOrValue<BigNumberish>,
-    overrides?: CallOverrides,
-  ): Promise<string>
+    overrides?: CallOverrides
+  ): Promise<string>;
 
   getLinkModule4Address(
     account: PromiseOrValue<string>,
-    overrides?: CallOverrides,
-  ): Promise<string>
+    overrides?: CallOverrides
+  ): Promise<string>;
 
   getLinkModule4ERC721(
     tokenAddress: PromiseOrValue<string>,
     tokenId: PromiseOrValue<BigNumberish>,
-    overrides?: CallOverrides,
-  ): Promise<string>
+    overrides?: CallOverrides
+  ): Promise<string>;
 
   getLinkModule4Linklist(
     tokenId: PromiseOrValue<BigNumberish>,
-    overrides?: CallOverrides,
-  ): Promise<string>
+    overrides?: CallOverrides
+  ): Promise<string>;
 
-  getLinklistContract(overrides?: CallOverrides): Promise<string>
+  getLinklistContract(overrides?: CallOverrides): Promise<string>;
 
   getLinklistId(
     characterId: PromiseOrValue<BigNumberish>,
     linkType: PromiseOrValue<BytesLike>,
-    overrides?: CallOverrides,
-  ): Promise<BigNumber>
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
 
   getLinklistType(
     linkListId: PromiseOrValue<BigNumberish>,
-    overrides?: CallOverrides,
-  ): Promise<string>
+    overrides?: CallOverrides
+  ): Promise<string>;
 
   getLinklistUri(
     tokenId: PromiseOrValue<BigNumberish>,
-    overrides?: CallOverrides,
-  ): Promise<string>
+    overrides?: CallOverrides
+  ): Promise<string>;
 
   getNote(
     characterId: PromiseOrValue<BigNumberish>,
     noteId: PromiseOrValue<BigNumberish>,
-    overrides?: CallOverrides,
-  ): Promise<DataTypes.NoteStructOutput>
+    overrides?: CallOverrides
+  ): Promise<DataTypes.NoteStructOutput>;
 
   getOperator(
     characterId: PromiseOrValue<BigNumberish>,
-    overrides?: CallOverrides,
-  ): Promise<string>
+    overrides?: CallOverrides
+  ): Promise<string>;
 
   getPrimaryCharacterId(
     account: PromiseOrValue<string>,
-    overrides?: CallOverrides,
-  ): Promise<BigNumber>
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
 
-  getRevision(overrides?: CallOverrides): Promise<BigNumber>
+  getRevision(overrides?: CallOverrides): Promise<BigNumber>;
 
   initialize(
     _name: PromiseOrValue<string>,
@@ -2359,395 +2377,395 @@ export interface Abi extends BaseContract {
     _mintNFTImpl: PromiseOrValue<string>,
     _periphery: PromiseOrValue<string>,
     _resolver: PromiseOrValue<string>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> },
-  ): Promise<ContractTransaction>
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
 
   isApprovedForAll(
     owner: PromiseOrValue<string>,
     operator: PromiseOrValue<string>,
-    overrides?: CallOverrides,
-  ): Promise<boolean>
+    overrides?: CallOverrides
+  ): Promise<boolean>;
 
   isPrimaryCharacter(
     characterId: PromiseOrValue<BigNumberish>,
-    overrides?: CallOverrides,
-  ): Promise<boolean>
+    overrides?: CallOverrides
+  ): Promise<boolean>;
 
   linkAddress(
     vars: DataTypes.LinkAddressDataStruct,
-    overrides?: Overrides & { from?: PromiseOrValue<string> },
-  ): Promise<ContractTransaction>
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
 
   linkAnyUri(
     vars: DataTypes.LinkAnyUriDataStruct,
-    overrides?: Overrides & { from?: PromiseOrValue<string> },
-  ): Promise<ContractTransaction>
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
 
   linkCharacter(
     vars: DataTypes.LinkCharacterDataStruct,
-    overrides?: Overrides & { from?: PromiseOrValue<string> },
-  ): Promise<ContractTransaction>
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
 
   linkCharacterLink(
     fromCharacterId: PromiseOrValue<BigNumberish>,
     linkData: DataTypes.CharacterLinkStructStruct,
     linkType: PromiseOrValue<BytesLike>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> },
-  ): Promise<ContractTransaction>
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
 
   linkERC721(
     vars: DataTypes.LinkERC721DataStruct,
-    overrides?: Overrides & { from?: PromiseOrValue<string> },
-  ): Promise<ContractTransaction>
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
 
   linkLinklist(
     vars: DataTypes.LinkLinklistDataStruct,
-    overrides?: Overrides & { from?: PromiseOrValue<string> },
-  ): Promise<ContractTransaction>
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
 
   linkNote(
     vars: DataTypes.LinkNoteDataStruct,
-    overrides?: Overrides & { from?: PromiseOrValue<string> },
-  ): Promise<ContractTransaction>
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
 
   lockNote(
     characterId: PromiseOrValue<BigNumberish>,
     noteId: PromiseOrValue<BigNumberish>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> },
-  ): Promise<ContractTransaction>
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
 
   mintNote(
     vars: DataTypes.MintNoteDataStruct,
-    overrides?: Overrides & { from?: PromiseOrValue<string> },
-  ): Promise<ContractTransaction>
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
 
-  name(overrides?: CallOverrides): Promise<string>
+  name(overrides?: CallOverrides): Promise<string>;
 
   ownerOf(
     tokenId: PromiseOrValue<BigNumberish>,
-    overrides?: CallOverrides,
-  ): Promise<string>
+    overrides?: CallOverrides
+  ): Promise<string>;
 
   postNote(
     vars: DataTypes.PostNoteDataStruct,
-    overrides?: Overrides & { from?: PromiseOrValue<string> },
-  ): Promise<ContractTransaction>
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
 
   postNote4Address(
     noteData: DataTypes.PostNoteDataStruct,
     ethAddress: PromiseOrValue<string>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> },
-  ): Promise<ContractTransaction>
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
 
   postNote4AnyUri(
     postNoteData: DataTypes.PostNoteDataStruct,
     uri: PromiseOrValue<string>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> },
-  ): Promise<ContractTransaction>
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
 
   postNote4Character(
     postNoteData: DataTypes.PostNoteDataStruct,
     toCharacterId: PromiseOrValue<BigNumberish>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> },
-  ): Promise<ContractTransaction>
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
 
   postNote4ERC721(
     postNoteData: DataTypes.PostNoteDataStruct,
     erc721: DataTypes.ERC721StructStruct,
-    overrides?: Overrides & { from?: PromiseOrValue<string> },
-  ): Promise<ContractTransaction>
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
 
   postNote4Linklist(
     noteData: DataTypes.PostNoteDataStruct,
     toLinklistId: PromiseOrValue<BigNumberish>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> },
-  ): Promise<ContractTransaction>
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
 
   postNote4Note(
     postNoteData: DataTypes.PostNoteDataStruct,
     note: DataTypes.NoteStructStruct,
-    overrides?: Overrides & { from?: PromiseOrValue<string> },
-  ): Promise<ContractTransaction>
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
 
-  resolver(overrides?: CallOverrides): Promise<string>
+  resolver(overrides?: CallOverrides): Promise<string>;
 
-  'safeTransferFrom(address,address,uint256)'(
+  "safeTransferFrom(address,address,uint256)"(
     from: PromiseOrValue<string>,
     to: PromiseOrValue<string>,
     tokenId: PromiseOrValue<BigNumberish>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> },
-  ): Promise<ContractTransaction>
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
 
-  'safeTransferFrom(address,address,uint256,bytes)'(
+  "safeTransferFrom(address,address,uint256,bytes)"(
     from: PromiseOrValue<string>,
     to: PromiseOrValue<string>,
     tokenId: PromiseOrValue<BigNumberish>,
     _data: PromiseOrValue<BytesLike>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> },
-  ): Promise<ContractTransaction>
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
 
   setApprovalForAll(
     operator: PromiseOrValue<string>,
     approved: PromiseOrValue<boolean>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> },
-  ): Promise<ContractTransaction>
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
 
   setCharacterUri(
     characterId: PromiseOrValue<BigNumberish>,
     newUri: PromiseOrValue<string>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> },
-  ): Promise<ContractTransaction>
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
 
   setHandle(
     characterId: PromiseOrValue<BigNumberish>,
     newHandle: PromiseOrValue<string>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> },
-  ): Promise<ContractTransaction>
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
 
   setLinkModule4Address(
     vars: DataTypes.SetLinkModule4AddressDataStruct,
-    overrides?: Overrides & { from?: PromiseOrValue<string> },
-  ): Promise<ContractTransaction>
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
 
   setLinkModule4Character(
     vars: DataTypes.SetLinkModule4CharacterDataStruct,
-    overrides?: Overrides & { from?: PromiseOrValue<string> },
-  ): Promise<ContractTransaction>
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
 
   setLinkModule4ERC721(
     vars: DataTypes.SetLinkModule4ERC721DataStruct,
-    overrides?: Overrides & { from?: PromiseOrValue<string> },
-  ): Promise<ContractTransaction>
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
 
   setLinkModule4Linklist(
     vars: DataTypes.SetLinkModule4LinklistDataStruct,
-    overrides?: Overrides & { from?: PromiseOrValue<string> },
-  ): Promise<ContractTransaction>
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
 
   setLinkModule4Note(
     vars: DataTypes.SetLinkModule4NoteDataStruct,
-    overrides?: Overrides & { from?: PromiseOrValue<string> },
-  ): Promise<ContractTransaction>
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
 
   setLinklistUri(
     linklistId: PromiseOrValue<BigNumberish>,
     uri: PromiseOrValue<string>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> },
-  ): Promise<ContractTransaction>
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
 
   setMintModule4Note(
     vars: DataTypes.SetMintModule4NoteDataStruct,
-    overrides?: Overrides & { from?: PromiseOrValue<string> },
-  ): Promise<ContractTransaction>
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
 
   setNoteUri(
     characterId: PromiseOrValue<BigNumberish>,
     noteId: PromiseOrValue<BigNumberish>,
     newUri: PromiseOrValue<string>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> },
-  ): Promise<ContractTransaction>
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
 
   setOperator(
     characterId: PromiseOrValue<BigNumberish>,
     operator: PromiseOrValue<string>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> },
-  ): Promise<ContractTransaction>
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
 
   setPrimaryCharacterId(
     characterId: PromiseOrValue<BigNumberish>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> },
-  ): Promise<ContractTransaction>
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
 
   setSocialToken(
     characterId: PromiseOrValue<BigNumberish>,
     tokenAddress: PromiseOrValue<string>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> },
-  ): Promise<ContractTransaction>
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
 
   supportsInterface(
     interfaceId: PromiseOrValue<BytesLike>,
-    overrides?: CallOverrides,
-  ): Promise<boolean>
+    overrides?: CallOverrides
+  ): Promise<boolean>;
 
-  symbol(overrides?: CallOverrides): Promise<string>
+  symbol(overrides?: CallOverrides): Promise<string>;
 
   tokenByIndex(
     index: PromiseOrValue<BigNumberish>,
-    overrides?: CallOverrides,
-  ): Promise<BigNumber>
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
 
   tokenOfOwnerByIndex(
     owner: PromiseOrValue<string>,
     index: PromiseOrValue<BigNumberish>,
-    overrides?: CallOverrides,
-  ): Promise<BigNumber>
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
 
   tokenURI(
     characterId: PromiseOrValue<BigNumberish>,
-    overrides?: CallOverrides,
-  ): Promise<string>
+    overrides?: CallOverrides
+  ): Promise<string>;
 
-  totalSupply(overrides?: CallOverrides): Promise<BigNumber>
+  totalSupply(overrides?: CallOverrides): Promise<BigNumber>;
 
   transferFrom(
     from: PromiseOrValue<string>,
     to: PromiseOrValue<string>,
     tokenId: PromiseOrValue<BigNumberish>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> },
-  ): Promise<ContractTransaction>
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
 
   unlinkAddress(
     vars: DataTypes.UnlinkAddressDataStruct,
-    overrides?: Overrides & { from?: PromiseOrValue<string> },
-  ): Promise<ContractTransaction>
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
 
   unlinkAnyUri(
     vars: DataTypes.UnlinkAnyUriDataStruct,
-    overrides?: Overrides & { from?: PromiseOrValue<string> },
-  ): Promise<ContractTransaction>
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
 
   unlinkCharacter(
     vars: DataTypes.UnlinkCharacterDataStruct,
-    overrides?: Overrides & { from?: PromiseOrValue<string> },
-  ): Promise<ContractTransaction>
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
 
   unlinkCharacterLink(
     fromCharacterId: PromiseOrValue<BigNumberish>,
     linkData: DataTypes.CharacterLinkStructStruct,
     linkType: PromiseOrValue<BytesLike>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> },
-  ): Promise<ContractTransaction>
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
 
   unlinkERC721(
     vars: DataTypes.UnlinkERC721DataStruct,
-    overrides?: Overrides & { from?: PromiseOrValue<string> },
-  ): Promise<ContractTransaction>
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
 
   unlinkLinklist(
     vars: DataTypes.UnlinkLinklistDataStruct,
-    overrides?: Overrides & { from?: PromiseOrValue<string> },
-  ): Promise<ContractTransaction>
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
 
   unlinkNote(
     vars: DataTypes.UnlinkNoteDataStruct,
-    overrides?: Overrides & { from?: PromiseOrValue<string> },
-  ): Promise<ContractTransaction>
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
 
   callStatic: {
     approve(
       to: PromiseOrValue<string>,
       tokenId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides,
-    ): Promise<void>
+      overrides?: CallOverrides
+    ): Promise<void>;
 
     balanceOf(
       owner: PromiseOrValue<string>,
-      overrides?: CallOverrides,
-    ): Promise<BigNumber>
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
     burn(
       tokenId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides,
-    ): Promise<void>
+      overrides?: CallOverrides
+    ): Promise<void>;
 
     canCreate(
       handle: PromiseOrValue<string>,
       account: PromiseOrValue<string>,
-      overrides?: CallOverrides,
-    ): Promise<boolean>
+      overrides?: CallOverrides
+    ): Promise<boolean>;
 
     createCharacter(
       vars: DataTypes.CreateCharacterDataStruct,
-      overrides?: CallOverrides,
-    ): Promise<void>
+      overrides?: CallOverrides
+    ): Promise<void>;
 
     createThenLinkCharacter(
       vars: DataTypes.CreateThenLinkCharacterDataStruct,
-      overrides?: CallOverrides,
-    ): Promise<void>
+      overrides?: CallOverrides
+    ): Promise<void>;
 
     deleteNote(
       characterId: PromiseOrValue<BigNumberish>,
       noteId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides,
-    ): Promise<void>
+      overrides?: CallOverrides
+    ): Promise<void>;
 
     getApproved(
       tokenId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides,
-    ): Promise<string>
+      overrides?: CallOverrides
+    ): Promise<string>;
 
     getCharacter(
       characterId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides,
-    ): Promise<DataTypes.CharacterStructOutput>
+      overrides?: CallOverrides
+    ): Promise<DataTypes.CharacterStructOutput>;
 
     getCharacterByHandle(
       handle: PromiseOrValue<string>,
-      overrides?: CallOverrides,
-    ): Promise<DataTypes.CharacterStructOutput>
+      overrides?: CallOverrides
+    ): Promise<DataTypes.CharacterStructOutput>;
 
     getCharacterUri(
       characterId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides,
-    ): Promise<string>
+      overrides?: CallOverrides
+    ): Promise<string>;
 
     getHandle(
       characterId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides,
-    ): Promise<string>
+      overrides?: CallOverrides
+    ): Promise<string>;
 
     getLinkModule4Address(
       account: PromiseOrValue<string>,
-      overrides?: CallOverrides,
-    ): Promise<string>
+      overrides?: CallOverrides
+    ): Promise<string>;
 
     getLinkModule4ERC721(
       tokenAddress: PromiseOrValue<string>,
       tokenId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides,
-    ): Promise<string>
+      overrides?: CallOverrides
+    ): Promise<string>;
 
     getLinkModule4Linklist(
       tokenId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides,
-    ): Promise<string>
+      overrides?: CallOverrides
+    ): Promise<string>;
 
-    getLinklistContract(overrides?: CallOverrides): Promise<string>
+    getLinklistContract(overrides?: CallOverrides): Promise<string>;
 
     getLinklistId(
       characterId: PromiseOrValue<BigNumberish>,
       linkType: PromiseOrValue<BytesLike>,
-      overrides?: CallOverrides,
-    ): Promise<BigNumber>
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
     getLinklistType(
       linkListId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides,
-    ): Promise<string>
+      overrides?: CallOverrides
+    ): Promise<string>;
 
     getLinklistUri(
       tokenId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides,
-    ): Promise<string>
+      overrides?: CallOverrides
+    ): Promise<string>;
 
     getNote(
       characterId: PromiseOrValue<BigNumberish>,
       noteId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides,
-    ): Promise<DataTypes.NoteStructOutput>
+      overrides?: CallOverrides
+    ): Promise<DataTypes.NoteStructOutput>;
 
     getOperator(
       characterId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides,
-    ): Promise<string>
+      overrides?: CallOverrides
+    ): Promise<string>;
 
     getPrimaryCharacterId(
       account: PromiseOrValue<string>,
-      overrides?: CallOverrides,
-    ): Promise<BigNumber>
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
-    getRevision(overrides?: CallOverrides): Promise<BigNumber>
+    getRevision(overrides?: CallOverrides): Promise<BigNumber>;
 
     initialize(
       _name: PromiseOrValue<string>,
@@ -2756,888 +2774,888 @@ export interface Abi extends BaseContract {
       _mintNFTImpl: PromiseOrValue<string>,
       _periphery: PromiseOrValue<string>,
       _resolver: PromiseOrValue<string>,
-      overrides?: CallOverrides,
-    ): Promise<void>
+      overrides?: CallOverrides
+    ): Promise<void>;
 
     isApprovedForAll(
       owner: PromiseOrValue<string>,
       operator: PromiseOrValue<string>,
-      overrides?: CallOverrides,
-    ): Promise<boolean>
+      overrides?: CallOverrides
+    ): Promise<boolean>;
 
     isPrimaryCharacter(
       characterId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides,
-    ): Promise<boolean>
+      overrides?: CallOverrides
+    ): Promise<boolean>;
 
     linkAddress(
       vars: DataTypes.LinkAddressDataStruct,
-      overrides?: CallOverrides,
-    ): Promise<void>
+      overrides?: CallOverrides
+    ): Promise<void>;
 
     linkAnyUri(
       vars: DataTypes.LinkAnyUriDataStruct,
-      overrides?: CallOverrides,
-    ): Promise<void>
+      overrides?: CallOverrides
+    ): Promise<void>;
 
     linkCharacter(
       vars: DataTypes.LinkCharacterDataStruct,
-      overrides?: CallOverrides,
-    ): Promise<void>
+      overrides?: CallOverrides
+    ): Promise<void>;
 
     linkCharacterLink(
       fromCharacterId: PromiseOrValue<BigNumberish>,
       linkData: DataTypes.CharacterLinkStructStruct,
       linkType: PromiseOrValue<BytesLike>,
-      overrides?: CallOverrides,
-    ): Promise<void>
+      overrides?: CallOverrides
+    ): Promise<void>;
 
     linkERC721(
       vars: DataTypes.LinkERC721DataStruct,
-      overrides?: CallOverrides,
-    ): Promise<void>
+      overrides?: CallOverrides
+    ): Promise<void>;
 
     linkLinklist(
       vars: DataTypes.LinkLinklistDataStruct,
-      overrides?: CallOverrides,
-    ): Promise<void>
+      overrides?: CallOverrides
+    ): Promise<void>;
 
     linkNote(
       vars: DataTypes.LinkNoteDataStruct,
-      overrides?: CallOverrides,
-    ): Promise<void>
+      overrides?: CallOverrides
+    ): Promise<void>;
 
     lockNote(
       characterId: PromiseOrValue<BigNumberish>,
       noteId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides,
-    ): Promise<void>
+      overrides?: CallOverrides
+    ): Promise<void>;
 
     mintNote(
       vars: DataTypes.MintNoteDataStruct,
-      overrides?: CallOverrides,
-    ): Promise<BigNumber>
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
-    name(overrides?: CallOverrides): Promise<string>
+    name(overrides?: CallOverrides): Promise<string>;
 
     ownerOf(
       tokenId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides,
-    ): Promise<string>
+      overrides?: CallOverrides
+    ): Promise<string>;
 
     postNote(
       vars: DataTypes.PostNoteDataStruct,
-      overrides?: CallOverrides,
-    ): Promise<BigNumber>
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
     postNote4Address(
       noteData: DataTypes.PostNoteDataStruct,
       ethAddress: PromiseOrValue<string>,
-      overrides?: CallOverrides,
-    ): Promise<BigNumber>
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
     postNote4AnyUri(
       postNoteData: DataTypes.PostNoteDataStruct,
       uri: PromiseOrValue<string>,
-      overrides?: CallOverrides,
-    ): Promise<BigNumber>
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
     postNote4Character(
       postNoteData: DataTypes.PostNoteDataStruct,
       toCharacterId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides,
-    ): Promise<BigNumber>
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
     postNote4ERC721(
       postNoteData: DataTypes.PostNoteDataStruct,
       erc721: DataTypes.ERC721StructStruct,
-      overrides?: CallOverrides,
-    ): Promise<BigNumber>
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
     postNote4Linklist(
       noteData: DataTypes.PostNoteDataStruct,
       toLinklistId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides,
-    ): Promise<BigNumber>
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
     postNote4Note(
       postNoteData: DataTypes.PostNoteDataStruct,
       note: DataTypes.NoteStructStruct,
-      overrides?: CallOverrides,
-    ): Promise<BigNumber>
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
-    resolver(overrides?: CallOverrides): Promise<string>
+    resolver(overrides?: CallOverrides): Promise<string>;
 
-    'safeTransferFrom(address,address,uint256)'(
+    "safeTransferFrom(address,address,uint256)"(
       from: PromiseOrValue<string>,
       to: PromiseOrValue<string>,
       tokenId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides,
-    ): Promise<void>
+      overrides?: CallOverrides
+    ): Promise<void>;
 
-    'safeTransferFrom(address,address,uint256,bytes)'(
+    "safeTransferFrom(address,address,uint256,bytes)"(
       from: PromiseOrValue<string>,
       to: PromiseOrValue<string>,
       tokenId: PromiseOrValue<BigNumberish>,
       _data: PromiseOrValue<BytesLike>,
-      overrides?: CallOverrides,
-    ): Promise<void>
+      overrides?: CallOverrides
+    ): Promise<void>;
 
     setApprovalForAll(
       operator: PromiseOrValue<string>,
       approved: PromiseOrValue<boolean>,
-      overrides?: CallOverrides,
-    ): Promise<void>
+      overrides?: CallOverrides
+    ): Promise<void>;
 
     setCharacterUri(
       characterId: PromiseOrValue<BigNumberish>,
       newUri: PromiseOrValue<string>,
-      overrides?: CallOverrides,
-    ): Promise<void>
+      overrides?: CallOverrides
+    ): Promise<void>;
 
     setHandle(
       characterId: PromiseOrValue<BigNumberish>,
       newHandle: PromiseOrValue<string>,
-      overrides?: CallOverrides,
-    ): Promise<void>
+      overrides?: CallOverrides
+    ): Promise<void>;
 
     setLinkModule4Address(
       vars: DataTypes.SetLinkModule4AddressDataStruct,
-      overrides?: CallOverrides,
-    ): Promise<void>
+      overrides?: CallOverrides
+    ): Promise<void>;
 
     setLinkModule4Character(
       vars: DataTypes.SetLinkModule4CharacterDataStruct,
-      overrides?: CallOverrides,
-    ): Promise<void>
+      overrides?: CallOverrides
+    ): Promise<void>;
 
     setLinkModule4ERC721(
       vars: DataTypes.SetLinkModule4ERC721DataStruct,
-      overrides?: CallOverrides,
-    ): Promise<void>
+      overrides?: CallOverrides
+    ): Promise<void>;
 
     setLinkModule4Linklist(
       vars: DataTypes.SetLinkModule4LinklistDataStruct,
-      overrides?: CallOverrides,
-    ): Promise<void>
+      overrides?: CallOverrides
+    ): Promise<void>;
 
     setLinkModule4Note(
       vars: DataTypes.SetLinkModule4NoteDataStruct,
-      overrides?: CallOverrides,
-    ): Promise<void>
+      overrides?: CallOverrides
+    ): Promise<void>;
 
     setLinklistUri(
       linklistId: PromiseOrValue<BigNumberish>,
       uri: PromiseOrValue<string>,
-      overrides?: CallOverrides,
-    ): Promise<void>
+      overrides?: CallOverrides
+    ): Promise<void>;
 
     setMintModule4Note(
       vars: DataTypes.SetMintModule4NoteDataStruct,
-      overrides?: CallOverrides,
-    ): Promise<void>
+      overrides?: CallOverrides
+    ): Promise<void>;
 
     setNoteUri(
       characterId: PromiseOrValue<BigNumberish>,
       noteId: PromiseOrValue<BigNumberish>,
       newUri: PromiseOrValue<string>,
-      overrides?: CallOverrides,
-    ): Promise<void>
+      overrides?: CallOverrides
+    ): Promise<void>;
 
     setOperator(
       characterId: PromiseOrValue<BigNumberish>,
       operator: PromiseOrValue<string>,
-      overrides?: CallOverrides,
-    ): Promise<void>
+      overrides?: CallOverrides
+    ): Promise<void>;
 
     setPrimaryCharacterId(
       characterId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides,
-    ): Promise<void>
+      overrides?: CallOverrides
+    ): Promise<void>;
 
     setSocialToken(
       characterId: PromiseOrValue<BigNumberish>,
       tokenAddress: PromiseOrValue<string>,
-      overrides?: CallOverrides,
-    ): Promise<void>
+      overrides?: CallOverrides
+    ): Promise<void>;
 
     supportsInterface(
       interfaceId: PromiseOrValue<BytesLike>,
-      overrides?: CallOverrides,
-    ): Promise<boolean>
+      overrides?: CallOverrides
+    ): Promise<boolean>;
 
-    symbol(overrides?: CallOverrides): Promise<string>
+    symbol(overrides?: CallOverrides): Promise<string>;
 
     tokenByIndex(
       index: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides,
-    ): Promise<BigNumber>
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
     tokenOfOwnerByIndex(
       owner: PromiseOrValue<string>,
       index: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides,
-    ): Promise<BigNumber>
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
     tokenURI(
       characterId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides,
-    ): Promise<string>
+      overrides?: CallOverrides
+    ): Promise<string>;
 
-    totalSupply(overrides?: CallOverrides): Promise<BigNumber>
+    totalSupply(overrides?: CallOverrides): Promise<BigNumber>;
 
     transferFrom(
       from: PromiseOrValue<string>,
       to: PromiseOrValue<string>,
       tokenId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides,
-    ): Promise<void>
+      overrides?: CallOverrides
+    ): Promise<void>;
 
     unlinkAddress(
       vars: DataTypes.UnlinkAddressDataStruct,
-      overrides?: CallOverrides,
-    ): Promise<void>
+      overrides?: CallOverrides
+    ): Promise<void>;
 
     unlinkAnyUri(
       vars: DataTypes.UnlinkAnyUriDataStruct,
-      overrides?: CallOverrides,
-    ): Promise<void>
+      overrides?: CallOverrides
+    ): Promise<void>;
 
     unlinkCharacter(
       vars: DataTypes.UnlinkCharacterDataStruct,
-      overrides?: CallOverrides,
-    ): Promise<void>
+      overrides?: CallOverrides
+    ): Promise<void>;
 
     unlinkCharacterLink(
       fromCharacterId: PromiseOrValue<BigNumberish>,
       linkData: DataTypes.CharacterLinkStructStruct,
       linkType: PromiseOrValue<BytesLike>,
-      overrides?: CallOverrides,
-    ): Promise<void>
+      overrides?: CallOverrides
+    ): Promise<void>;
 
     unlinkERC721(
       vars: DataTypes.UnlinkERC721DataStruct,
-      overrides?: CallOverrides,
-    ): Promise<void>
+      overrides?: CallOverrides
+    ): Promise<void>;
 
     unlinkLinklist(
       vars: DataTypes.UnlinkLinklistDataStruct,
-      overrides?: CallOverrides,
-    ): Promise<void>
+      overrides?: CallOverrides
+    ): Promise<void>;
 
     unlinkNote(
       vars: DataTypes.UnlinkNoteDataStruct,
-      overrides?: CallOverrides,
-    ): Promise<void>
-  }
+      overrides?: CallOverrides
+    ): Promise<void>;
+  };
 
   filters: {
-    'Approval(address,address,uint256)'(
+    "Approval(address,address,uint256)"(
       owner?: PromiseOrValue<string> | null,
       approved?: PromiseOrValue<string> | null,
-      tokenId?: PromiseOrValue<BigNumberish> | null,
-    ): ApprovalEventFilter
+      tokenId?: PromiseOrValue<BigNumberish> | null
+    ): ApprovalEventFilter;
     Approval(
       owner?: PromiseOrValue<string> | null,
       approved?: PromiseOrValue<string> | null,
-      tokenId?: PromiseOrValue<BigNumberish> | null,
-    ): ApprovalEventFilter
+      tokenId?: PromiseOrValue<BigNumberish> | null
+    ): ApprovalEventFilter;
 
-    'ApprovalForAll(address,address,bool)'(
+    "ApprovalForAll(address,address,bool)"(
       owner?: PromiseOrValue<string> | null,
       operator?: PromiseOrValue<string> | null,
-      approved?: null,
-    ): ApprovalForAllEventFilter
+      approved?: null
+    ): ApprovalForAllEventFilter;
     ApprovalForAll(
       owner?: PromiseOrValue<string> | null,
       operator?: PromiseOrValue<string> | null,
-      approved?: null,
-    ): ApprovalForAllEventFilter
+      approved?: null
+    ): ApprovalForAllEventFilter;
 
-    'Transfer(address,address,uint256)'(
+    "Transfer(address,address,uint256)"(
       from?: PromiseOrValue<string> | null,
       to?: PromiseOrValue<string> | null,
-      tokenId?: PromiseOrValue<BigNumberish> | null,
-    ): TransferEventFilter
+      tokenId?: PromiseOrValue<BigNumberish> | null
+    ): TransferEventFilter;
     Transfer(
       from?: PromiseOrValue<string> | null,
       to?: PromiseOrValue<string> | null,
-      tokenId?: PromiseOrValue<BigNumberish> | null,
-    ): TransferEventFilter
+      tokenId?: PromiseOrValue<BigNumberish> | null
+    ): TransferEventFilter;
 
-    'AttachLinklist(uint256,uint256,bytes32)'(
+    "AttachLinklist(uint256,uint256,bytes32)"(
       linklistId?: PromiseOrValue<BigNumberish> | null,
       characterId?: PromiseOrValue<BigNumberish> | null,
-      linkType?: PromiseOrValue<BytesLike> | null,
-    ): AttachLinklistEventFilter
+      linkType?: PromiseOrValue<BytesLike> | null
+    ): AttachLinklistEventFilter;
     AttachLinklist(
       linklistId?: PromiseOrValue<BigNumberish> | null,
       characterId?: PromiseOrValue<BigNumberish> | null,
-      linkType?: PromiseOrValue<BytesLike> | null,
-    ): AttachLinklistEventFilter
+      linkType?: PromiseOrValue<BytesLike> | null
+    ): AttachLinklistEventFilter;
 
-    'BaseInitialized(string,string,uint256)'(
+    "BaseInitialized(string,string,uint256)"(
       name?: null,
       symbol?: null,
-      timestamp?: null,
-    ): BaseInitializedEventFilter
+      timestamp?: null
+    ): BaseInitializedEventFilter;
     BaseInitialized(
       name?: null,
       symbol?: null,
-      timestamp?: null,
-    ): BaseInitializedEventFilter
+      timestamp?: null
+    ): BaseInitializedEventFilter;
 
-    'CharacterCreated(uint256,address,address,string,uint256)'(
+    "CharacterCreated(uint256,address,address,string,uint256)"(
       characterId?: PromiseOrValue<BigNumberish> | null,
       creator?: PromiseOrValue<string> | null,
       to?: PromiseOrValue<string> | null,
       handle?: null,
-      timestamp?: null,
-    ): CharacterCreatedEventFilter
+      timestamp?: null
+    ): CharacterCreatedEventFilter;
     CharacterCreated(
       characterId?: PromiseOrValue<BigNumberish> | null,
       creator?: PromiseOrValue<string> | null,
       to?: PromiseOrValue<string> | null,
       handle?: null,
-      timestamp?: null,
-    ): CharacterCreatedEventFilter
+      timestamp?: null
+    ): CharacterCreatedEventFilter;
 
-    'DeleteNote(uint256,uint256)'(
+    "DeleteNote(uint256,uint256)"(
       characterId?: PromiseOrValue<BigNumberish> | null,
-      noteId?: null,
-    ): DeleteNoteEventFilter
+      noteId?: null
+    ): DeleteNoteEventFilter;
     DeleteNote(
       characterId?: PromiseOrValue<BigNumberish> | null,
-      noteId?: null,
-    ): DeleteNoteEventFilter
+      noteId?: null
+    ): DeleteNoteEventFilter;
 
-    'DetachLinklist(uint256,uint256,bytes32)'(
+    "DetachLinklist(uint256,uint256,bytes32)"(
       linklistId?: PromiseOrValue<BigNumberish> | null,
       characterId?: PromiseOrValue<BigNumberish> | null,
-      linkType?: PromiseOrValue<BytesLike> | null,
-    ): DetachLinklistEventFilter
+      linkType?: PromiseOrValue<BytesLike> | null
+    ): DetachLinklistEventFilter;
     DetachLinklist(
       linklistId?: PromiseOrValue<BigNumberish> | null,
       characterId?: PromiseOrValue<BigNumberish> | null,
-      linkType?: PromiseOrValue<BytesLike> | null,
-    ): DetachLinklistEventFilter
+      linkType?: PromiseOrValue<BytesLike> | null
+    ): DetachLinklistEventFilter;
 
-    'LinkAddress(uint256,address,bytes32,uint256)'(
+    "LinkAddress(uint256,address,bytes32,uint256)"(
       fromCharacterId?: PromiseOrValue<BigNumberish> | null,
       ethAddress?: PromiseOrValue<string> | null,
       linkType?: null,
-      linklistId?: null,
-    ): LinkAddressEventFilter
+      linklistId?: null
+    ): LinkAddressEventFilter;
     LinkAddress(
       fromCharacterId?: PromiseOrValue<BigNumberish> | null,
       ethAddress?: PromiseOrValue<string> | null,
       linkType?: null,
-      linklistId?: null,
-    ): LinkAddressEventFilter
+      linklistId?: null
+    ): LinkAddressEventFilter;
 
-    'LinkAnyUri(uint256,string,bytes32,uint256)'(
+    "LinkAnyUri(uint256,string,bytes32,uint256)"(
       fromCharacterId?: PromiseOrValue<BigNumberish> | null,
       toUri?: null,
       linkType?: null,
-      linklistId?: null,
-    ): LinkAnyUriEventFilter
+      linklistId?: null
+    ): LinkAnyUriEventFilter;
     LinkAnyUri(
       fromCharacterId?: PromiseOrValue<BigNumberish> | null,
       toUri?: null,
       linkType?: null,
-      linklistId?: null,
-    ): LinkAnyUriEventFilter
+      linklistId?: null
+    ): LinkAnyUriEventFilter;
 
-    'LinkCharacter(address,uint256,uint256,bytes32,uint256)'(
+    "LinkCharacter(address,uint256,uint256,bytes32,uint256)"(
       account?: PromiseOrValue<string> | null,
       fromCharacterId?: PromiseOrValue<BigNumberish> | null,
       toCharacterId?: PromiseOrValue<BigNumberish> | null,
       linkType?: null,
-      linklistId?: null,
-    ): LinkCharacterEventFilter
+      linklistId?: null
+    ): LinkCharacterEventFilter;
     LinkCharacter(
       account?: PromiseOrValue<string> | null,
       fromCharacterId?: PromiseOrValue<BigNumberish> | null,
       toCharacterId?: PromiseOrValue<BigNumberish> | null,
       linkType?: null,
-      linklistId?: null,
-    ): LinkCharacterEventFilter
+      linklistId?: null
+    ): LinkCharacterEventFilter;
 
-    'LinkCharacterLink(uint256,bytes32,uint256,uint256,bytes32)'(
+    "LinkCharacterLink(uint256,bytes32,uint256,uint256,bytes32)"(
       fromCharacterId?: PromiseOrValue<BigNumberish> | null,
       linkType?: PromiseOrValue<BytesLike> | null,
       clFromCharacterId?: null,
       clToCharacterId?: null,
-      clLinkType?: null,
-    ): LinkCharacterLinkEventFilter
+      clLinkType?: null
+    ): LinkCharacterLinkEventFilter;
     LinkCharacterLink(
       fromCharacterId?: PromiseOrValue<BigNumberish> | null,
       linkType?: PromiseOrValue<BytesLike> | null,
       clFromCharacterId?: null,
       clToCharacterId?: null,
-      clLinkType?: null,
-    ): LinkCharacterLinkEventFilter
+      clLinkType?: null
+    ): LinkCharacterLinkEventFilter;
 
-    'LinkERC721(uint256,address,uint256,bytes32,uint256)'(
+    "LinkERC721(uint256,address,uint256,bytes32,uint256)"(
       fromCharacterId?: PromiseOrValue<BigNumberish> | null,
       tokenAddress?: PromiseOrValue<string> | null,
       toNoteId?: PromiseOrValue<BigNumberish> | null,
       linkType?: null,
-      linklistId?: null,
-    ): LinkERC721EventFilter
+      linklistId?: null
+    ): LinkERC721EventFilter;
     LinkERC721(
       fromCharacterId?: PromiseOrValue<BigNumberish> | null,
       tokenAddress?: PromiseOrValue<string> | null,
       toNoteId?: PromiseOrValue<BigNumberish> | null,
       linkType?: null,
-      linklistId?: null,
-    ): LinkERC721EventFilter
+      linklistId?: null
+    ): LinkERC721EventFilter;
 
-    'LinkLinklist(uint256,uint256,bytes32,uint256)'(
+    "LinkLinklist(uint256,uint256,bytes32,uint256)"(
       fromCharacterId?: PromiseOrValue<BigNumberish> | null,
       toLinklistId?: PromiseOrValue<BigNumberish> | null,
       linkType?: null,
-      linklistId?: PromiseOrValue<BigNumberish> | null,
-    ): LinkLinklistEventFilter
+      linklistId?: PromiseOrValue<BigNumberish> | null
+    ): LinkLinklistEventFilter;
     LinkLinklist(
       fromCharacterId?: PromiseOrValue<BigNumberish> | null,
       toLinklistId?: PromiseOrValue<BigNumberish> | null,
       linkType?: null,
-      linklistId?: PromiseOrValue<BigNumberish> | null,
-    ): LinkLinklistEventFilter
+      linklistId?: PromiseOrValue<BigNumberish> | null
+    ): LinkLinklistEventFilter;
 
-    'LinkNote(uint256,uint256,uint256,bytes32,uint256)'(
+    "LinkNote(uint256,uint256,uint256,bytes32,uint256)"(
       fromCharacterId?: PromiseOrValue<BigNumberish> | null,
       toCharacterId?: PromiseOrValue<BigNumberish> | null,
       toNoteId?: PromiseOrValue<BigNumberish> | null,
       linkType?: null,
-      linklistId?: null,
-    ): LinkNoteEventFilter
+      linklistId?: null
+    ): LinkNoteEventFilter;
     LinkNote(
       fromCharacterId?: PromiseOrValue<BigNumberish> | null,
       toCharacterId?: PromiseOrValue<BigNumberish> | null,
       toNoteId?: PromiseOrValue<BigNumberish> | null,
       linkType?: null,
-      linklistId?: null,
-    ): LinkNoteEventFilter
+      linklistId?: null
+    ): LinkNoteEventFilter;
 
-    'LinklistNFTInitialized(uint256)'(
-      timestamp?: null,
-    ): LinklistNFTInitializedEventFilter
-    LinklistNFTInitialized(timestamp?: null): LinklistNFTInitializedEventFilter
+    "LinklistNFTInitialized(uint256)"(
+      timestamp?: null
+    ): LinklistNFTInitializedEventFilter;
+    LinklistNFTInitialized(timestamp?: null): LinklistNFTInitializedEventFilter;
 
-    'LockNote(uint256,uint256)'(
+    "LockNote(uint256,uint256)"(
       characterId?: PromiseOrValue<BigNumberish> | null,
-      noteId?: null,
-    ): LockNoteEventFilter
+      noteId?: null
+    ): LockNoteEventFilter;
     LockNote(
       characterId?: PromiseOrValue<BigNumberish> | null,
-      noteId?: null,
-    ): LockNoteEventFilter
+      noteId?: null
+    ): LockNoteEventFilter;
 
-    'MintNFTInitialized(uint256,uint256,uint256)'(
+    "MintNFTInitialized(uint256,uint256,uint256)"(
       characterId?: null,
       noteId?: null,
-      timestamp?: null,
-    ): MintNFTInitializedEventFilter
+      timestamp?: null
+    ): MintNFTInitializedEventFilter;
     MintNFTInitialized(
       characterId?: null,
       noteId?: null,
-      timestamp?: null,
-    ): MintNFTInitializedEventFilter
+      timestamp?: null
+    ): MintNFTInitializedEventFilter;
 
-    'MintNote(address,uint256,uint256,address,uint256)'(
+    "MintNote(address,uint256,uint256,address,uint256)"(
       to?: PromiseOrValue<string> | null,
       characterId?: PromiseOrValue<BigNumberish> | null,
       noteId?: PromiseOrValue<BigNumberish> | null,
       tokenAddress?: null,
-      tokenId?: null,
-    ): MintNoteEventFilter
+      tokenId?: null
+    ): MintNoteEventFilter;
     MintNote(
       to?: PromiseOrValue<string> | null,
       characterId?: PromiseOrValue<BigNumberish> | null,
       noteId?: PromiseOrValue<BigNumberish> | null,
       tokenAddress?: null,
-      tokenId?: null,
-    ): MintNoteEventFilter
+      tokenId?: null
+    ): MintNoteEventFilter;
 
-    'PostNote(uint256,uint256,bytes32,bytes32,bytes)'(
+    "PostNote(uint256,uint256,bytes32,bytes32,bytes)"(
       characterId?: PromiseOrValue<BigNumberish> | null,
       noteId?: PromiseOrValue<BigNumberish> | null,
       linkKey?: PromiseOrValue<BytesLike> | null,
       linkItemType?: null,
-      data?: null,
-    ): PostNoteEventFilter
+      data?: null
+    ): PostNoteEventFilter;
     PostNote(
       characterId?: PromiseOrValue<BigNumberish> | null,
       noteId?: PromiseOrValue<BigNumberish> | null,
       linkKey?: PromiseOrValue<BytesLike> | null,
       linkItemType?: null,
-      data?: null,
-    ): PostNoteEventFilter
+      data?: null
+    ): PostNoteEventFilter;
 
-    'SetCharacterUri(uint256,string)'(
+    "SetCharacterUri(uint256,string)"(
       characterId?: PromiseOrValue<BigNumberish> | null,
-      newUri?: null,
-    ): SetCharacterUriEventFilter
+      newUri?: null
+    ): SetCharacterUriEventFilter;
     SetCharacterUri(
       characterId?: PromiseOrValue<BigNumberish> | null,
-      newUri?: null,
-    ): SetCharacterUriEventFilter
+      newUri?: null
+    ): SetCharacterUriEventFilter;
 
-    'SetHandle(address,uint256,string)'(
+    "SetHandle(address,uint256,string)"(
       account?: PromiseOrValue<string> | null,
       characterId?: PromiseOrValue<BigNumberish> | null,
-      newHandle?: null,
-    ): SetHandleEventFilter
+      newHandle?: null
+    ): SetHandleEventFilter;
     SetHandle(
       account?: PromiseOrValue<string> | null,
       characterId?: PromiseOrValue<BigNumberish> | null,
-      newHandle?: null,
-    ): SetHandleEventFilter
+      newHandle?: null
+    ): SetHandleEventFilter;
 
-    'SetLinkModule4Address(address,address,bytes,uint256)'(
+    "SetLinkModule4Address(address,address,bytes,uint256)"(
       account?: PromiseOrValue<string> | null,
       linkModule?: PromiseOrValue<string> | null,
       returnData?: null,
-      timestamp?: null,
-    ): SetLinkModule4AddressEventFilter
+      timestamp?: null
+    ): SetLinkModule4AddressEventFilter;
     SetLinkModule4Address(
       account?: PromiseOrValue<string> | null,
       linkModule?: PromiseOrValue<string> | null,
       returnData?: null,
-      timestamp?: null,
-    ): SetLinkModule4AddressEventFilter
+      timestamp?: null
+    ): SetLinkModule4AddressEventFilter;
 
-    'SetLinkModule4Character(uint256,address,bytes,uint256)'(
+    "SetLinkModule4Character(uint256,address,bytes,uint256)"(
       characterId?: PromiseOrValue<BigNumberish> | null,
       linkModule?: PromiseOrValue<string> | null,
       returnData?: null,
-      timestamp?: null,
-    ): SetLinkModule4CharacterEventFilter
+      timestamp?: null
+    ): SetLinkModule4CharacterEventFilter;
     SetLinkModule4Character(
       characterId?: PromiseOrValue<BigNumberish> | null,
       linkModule?: PromiseOrValue<string> | null,
       returnData?: null,
-      timestamp?: null,
-    ): SetLinkModule4CharacterEventFilter
+      timestamp?: null
+    ): SetLinkModule4CharacterEventFilter;
 
-    'SetLinkModule4ERC721(address,uint256,address,bytes,uint256)'(
+    "SetLinkModule4ERC721(address,uint256,address,bytes,uint256)"(
       tokenAddress?: PromiseOrValue<string> | null,
       tokenId?: PromiseOrValue<BigNumberish> | null,
       linkModule?: PromiseOrValue<string> | null,
       returnData?: null,
-      timestamp?: null,
-    ): SetLinkModule4ERC721EventFilter
+      timestamp?: null
+    ): SetLinkModule4ERC721EventFilter;
     SetLinkModule4ERC721(
       tokenAddress?: PromiseOrValue<string> | null,
       tokenId?: PromiseOrValue<BigNumberish> | null,
       linkModule?: PromiseOrValue<string> | null,
       returnData?: null,
-      timestamp?: null,
-    ): SetLinkModule4ERC721EventFilter
+      timestamp?: null
+    ): SetLinkModule4ERC721EventFilter;
 
-    'SetLinkModule4Linklist(uint256,address,bytes,uint256)'(
+    "SetLinkModule4Linklist(uint256,address,bytes,uint256)"(
       linklistId?: PromiseOrValue<BigNumberish> | null,
       linkModule?: PromiseOrValue<string> | null,
       returnData?: null,
-      timestamp?: null,
-    ): SetLinkModule4LinklistEventFilter
+      timestamp?: null
+    ): SetLinkModule4LinklistEventFilter;
     SetLinkModule4Linklist(
       linklistId?: PromiseOrValue<BigNumberish> | null,
       linkModule?: PromiseOrValue<string> | null,
       returnData?: null,
-      timestamp?: null,
-    ): SetLinkModule4LinklistEventFilter
+      timestamp?: null
+    ): SetLinkModule4LinklistEventFilter;
 
-    'SetLinkModule4Note(uint256,uint256,address,bytes,uint256)'(
+    "SetLinkModule4Note(uint256,uint256,address,bytes,uint256)"(
       characterId?: PromiseOrValue<BigNumberish> | null,
       noteId?: PromiseOrValue<BigNumberish> | null,
       linkModule?: PromiseOrValue<string> | null,
       returnData?: null,
-      timestamp?: null,
-    ): SetLinkModule4NoteEventFilter
+      timestamp?: null
+    ): SetLinkModule4NoteEventFilter;
     SetLinkModule4Note(
       characterId?: PromiseOrValue<BigNumberish> | null,
       noteId?: PromiseOrValue<BigNumberish> | null,
       linkModule?: PromiseOrValue<string> | null,
       returnData?: null,
-      timestamp?: null,
-    ): SetLinkModule4NoteEventFilter
+      timestamp?: null
+    ): SetLinkModule4NoteEventFilter;
 
-    'SetMintModule4Note(uint256,uint256,address,bytes,uint256)'(
+    "SetMintModule4Note(uint256,uint256,address,bytes,uint256)"(
       characterId?: PromiseOrValue<BigNumberish> | null,
       noteId?: PromiseOrValue<BigNumberish> | null,
       mintModule?: PromiseOrValue<string> | null,
       returnData?: null,
-      timestamp?: null,
-    ): SetMintModule4NoteEventFilter
+      timestamp?: null
+    ): SetMintModule4NoteEventFilter;
     SetMintModule4Note(
       characterId?: PromiseOrValue<BigNumberish> | null,
       noteId?: PromiseOrValue<BigNumberish> | null,
       mintModule?: PromiseOrValue<string> | null,
       returnData?: null,
-      timestamp?: null,
-    ): SetMintModule4NoteEventFilter
+      timestamp?: null
+    ): SetMintModule4NoteEventFilter;
 
-    'SetNoteUri(uint256,uint256,string)'(
+    "SetNoteUri(uint256,uint256,string)"(
       characterId?: PromiseOrValue<BigNumberish> | null,
       noteId?: null,
-      newUri?: null,
-    ): SetNoteUriEventFilter
+      newUri?: null
+    ): SetNoteUriEventFilter;
     SetNoteUri(
       characterId?: PromiseOrValue<BigNumberish> | null,
       noteId?: null,
-      newUri?: null,
-    ): SetNoteUriEventFilter
+      newUri?: null
+    ): SetNoteUriEventFilter;
 
-    'SetOperator(uint256,address,uint256)'(
+    "SetOperator(uint256,address,uint256)"(
       characterId?: PromiseOrValue<BigNumberish> | null,
       operator?: PromiseOrValue<string> | null,
-      timestamp?: null,
-    ): SetOperatorEventFilter
+      timestamp?: null
+    ): SetOperatorEventFilter;
     SetOperator(
       characterId?: PromiseOrValue<BigNumberish> | null,
       operator?: PromiseOrValue<string> | null,
-      timestamp?: null,
-    ): SetOperatorEventFilter
+      timestamp?: null
+    ): SetOperatorEventFilter;
 
-    'SetPrimaryCharacterId(address,uint256,uint256)'(
+    "SetPrimaryCharacterId(address,uint256,uint256)"(
       account?: PromiseOrValue<string> | null,
       characterId?: PromiseOrValue<BigNumberish> | null,
-      oldCharacterId?: PromiseOrValue<BigNumberish> | null,
-    ): SetPrimaryCharacterIdEventFilter
+      oldCharacterId?: PromiseOrValue<BigNumberish> | null
+    ): SetPrimaryCharacterIdEventFilter;
     SetPrimaryCharacterId(
       account?: PromiseOrValue<string> | null,
       characterId?: PromiseOrValue<BigNumberish> | null,
-      oldCharacterId?: PromiseOrValue<BigNumberish> | null,
-    ): SetPrimaryCharacterIdEventFilter
+      oldCharacterId?: PromiseOrValue<BigNumberish> | null
+    ): SetPrimaryCharacterIdEventFilter;
 
-    'SetSocialToken(address,uint256,address)'(
+    "SetSocialToken(address,uint256,address)"(
       account?: PromiseOrValue<string> | null,
       characterId?: PromiseOrValue<BigNumberish> | null,
-      tokenAddress?: PromiseOrValue<string> | null,
-    ): SetSocialTokenEventFilter
+      tokenAddress?: PromiseOrValue<string> | null
+    ): SetSocialTokenEventFilter;
     SetSocialToken(
       account?: PromiseOrValue<string> | null,
       characterId?: PromiseOrValue<BigNumberish> | null,
-      tokenAddress?: PromiseOrValue<string> | null,
-    ): SetSocialTokenEventFilter
+      tokenAddress?: PromiseOrValue<string> | null
+    ): SetSocialTokenEventFilter;
 
-    'UnlinkAddress(uint256,address,bytes32)'(
+    "UnlinkAddress(uint256,address,bytes32)"(
       fromCharacterId?: PromiseOrValue<BigNumberish> | null,
       ethAddress?: PromiseOrValue<string> | null,
-      linkType?: null,
-    ): UnlinkAddressEventFilter
+      linkType?: null
+    ): UnlinkAddressEventFilter;
     UnlinkAddress(
       fromCharacterId?: PromiseOrValue<BigNumberish> | null,
       ethAddress?: PromiseOrValue<string> | null,
-      linkType?: null,
-    ): UnlinkAddressEventFilter
+      linkType?: null
+    ): UnlinkAddressEventFilter;
 
-    'UnlinkAnyUri(uint256,string,bytes32)'(
+    "UnlinkAnyUri(uint256,string,bytes32)"(
       fromCharacterId?: PromiseOrValue<BigNumberish> | null,
       toUri?: null,
-      linkType?: null,
-    ): UnlinkAnyUriEventFilter
+      linkType?: null
+    ): UnlinkAnyUriEventFilter;
     UnlinkAnyUri(
       fromCharacterId?: PromiseOrValue<BigNumberish> | null,
       toUri?: null,
-      linkType?: null,
-    ): UnlinkAnyUriEventFilter
+      linkType?: null
+    ): UnlinkAnyUriEventFilter;
 
-    'UnlinkCharacter(address,uint256,uint256,bytes32)'(
+    "UnlinkCharacter(address,uint256,uint256,bytes32)"(
       account?: PromiseOrValue<string> | null,
       fromCharacterId?: PromiseOrValue<BigNumberish> | null,
       toCharacterId?: PromiseOrValue<BigNumberish> | null,
-      linkType?: null,
-    ): UnlinkCharacterEventFilter
+      linkType?: null
+    ): UnlinkCharacterEventFilter;
     UnlinkCharacter(
       account?: PromiseOrValue<string> | null,
       fromCharacterId?: PromiseOrValue<BigNumberish> | null,
       toCharacterId?: PromiseOrValue<BigNumberish> | null,
-      linkType?: null,
-    ): UnlinkCharacterEventFilter
+      linkType?: null
+    ): UnlinkCharacterEventFilter;
 
-    'UnlinkCharacterLink(uint256,bytes32,uint256,uint256,bytes32)'(
+    "UnlinkCharacterLink(uint256,bytes32,uint256,uint256,bytes32)"(
       fromCharacterId?: PromiseOrValue<BigNumberish> | null,
       linkType?: PromiseOrValue<BytesLike> | null,
       clFromCharactereId?: null,
       clToCharacterId?: null,
-      clLinkType?: null,
-    ): UnlinkCharacterLinkEventFilter
+      clLinkType?: null
+    ): UnlinkCharacterLinkEventFilter;
     UnlinkCharacterLink(
       fromCharacterId?: PromiseOrValue<BigNumberish> | null,
       linkType?: PromiseOrValue<BytesLike> | null,
       clFromCharactereId?: null,
       clToCharacterId?: null,
-      clLinkType?: null,
-    ): UnlinkCharacterLinkEventFilter
+      clLinkType?: null
+    ): UnlinkCharacterLinkEventFilter;
 
-    'UnlinkERC721(uint256,address,uint256,bytes32,uint256)'(
+    "UnlinkERC721(uint256,address,uint256,bytes32,uint256)"(
       fromCharacterId?: PromiseOrValue<BigNumberish> | null,
       tokenAddress?: PromiseOrValue<string> | null,
       toNoteId?: PromiseOrValue<BigNumberish> | null,
       linkType?: null,
-      linklistId?: null,
-    ): UnlinkERC721EventFilter
+      linklistId?: null
+    ): UnlinkERC721EventFilter;
     UnlinkERC721(
       fromCharacterId?: PromiseOrValue<BigNumberish> | null,
       tokenAddress?: PromiseOrValue<string> | null,
       toNoteId?: PromiseOrValue<BigNumberish> | null,
       linkType?: null,
-      linklistId?: null,
-    ): UnlinkERC721EventFilter
+      linklistId?: null
+    ): UnlinkERC721EventFilter;
 
-    'UnlinkLinklist(uint256,uint256,bytes32,uint256)'(
+    "UnlinkLinklist(uint256,uint256,bytes32,uint256)"(
       fromCharacterId?: PromiseOrValue<BigNumberish> | null,
       toLinklistId?: PromiseOrValue<BigNumberish> | null,
       linkType?: null,
-      linklistId?: PromiseOrValue<BigNumberish> | null,
-    ): UnlinkLinklistEventFilter
+      linklistId?: PromiseOrValue<BigNumberish> | null
+    ): UnlinkLinklistEventFilter;
     UnlinkLinklist(
       fromCharacterId?: PromiseOrValue<BigNumberish> | null,
       toLinklistId?: PromiseOrValue<BigNumberish> | null,
       linkType?: null,
-      linklistId?: PromiseOrValue<BigNumberish> | null,
-    ): UnlinkLinklistEventFilter
+      linklistId?: PromiseOrValue<BigNumberish> | null
+    ): UnlinkLinklistEventFilter;
 
-    'UnlinkNote(uint256,uint256,uint256,bytes32,uint256)'(
+    "UnlinkNote(uint256,uint256,uint256,bytes32,uint256)"(
       fromCharacterId?: PromiseOrValue<BigNumberish> | null,
       toCharacterId?: PromiseOrValue<BigNumberish> | null,
       toNoteId?: PromiseOrValue<BigNumberish> | null,
       linkType?: null,
-      linklistId?: null,
-    ): UnlinkNoteEventFilter
+      linklistId?: null
+    ): UnlinkNoteEventFilter;
     UnlinkNote(
       fromCharacterId?: PromiseOrValue<BigNumberish> | null,
       toCharacterId?: PromiseOrValue<BigNumberish> | null,
       toNoteId?: PromiseOrValue<BigNumberish> | null,
       linkType?: null,
-      linklistId?: null,
-    ): UnlinkNoteEventFilter
+      linklistId?: null
+    ): UnlinkNoteEventFilter;
 
-    'Web3EntryInitialized(uint256)'(
-      timestamp?: null,
-    ): Web3EntryInitializedEventFilter
-    Web3EntryInitialized(timestamp?: null): Web3EntryInitializedEventFilter
-  }
+    "Web3EntryInitialized(uint256)"(
+      timestamp?: null
+    ): Web3EntryInitializedEventFilter;
+    Web3EntryInitialized(timestamp?: null): Web3EntryInitializedEventFilter;
+  };
 
   estimateGas: {
     approve(
       to: PromiseOrValue<string>,
       tokenId: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<BigNumber>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
 
     balanceOf(
       owner: PromiseOrValue<string>,
-      overrides?: CallOverrides,
-    ): Promise<BigNumber>
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
     burn(
       tokenId: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<BigNumber>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
 
     canCreate(
       handle: PromiseOrValue<string>,
       account: PromiseOrValue<string>,
-      overrides?: CallOverrides,
-    ): Promise<BigNumber>
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
     createCharacter(
       vars: DataTypes.CreateCharacterDataStruct,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<BigNumber>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
 
     createThenLinkCharacter(
       vars: DataTypes.CreateThenLinkCharacterDataStruct,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<BigNumber>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
 
     deleteNote(
       characterId: PromiseOrValue<BigNumberish>,
       noteId: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<BigNumber>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
 
     getApproved(
       tokenId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides,
-    ): Promise<BigNumber>
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
     getCharacter(
       characterId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides,
-    ): Promise<BigNumber>
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
     getCharacterByHandle(
       handle: PromiseOrValue<string>,
-      overrides?: CallOverrides,
-    ): Promise<BigNumber>
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
     getCharacterUri(
       characterId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides,
-    ): Promise<BigNumber>
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
     getHandle(
       characterId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides,
-    ): Promise<BigNumber>
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
     getLinkModule4Address(
       account: PromiseOrValue<string>,
-      overrides?: CallOverrides,
-    ): Promise<BigNumber>
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
     getLinkModule4ERC721(
       tokenAddress: PromiseOrValue<string>,
       tokenId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides,
-    ): Promise<BigNumber>
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
     getLinkModule4Linklist(
       tokenId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides,
-    ): Promise<BigNumber>
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
-    getLinklistContract(overrides?: CallOverrides): Promise<BigNumber>
+    getLinklistContract(overrides?: CallOverrides): Promise<BigNumber>;
 
     getLinklistId(
       characterId: PromiseOrValue<BigNumberish>,
       linkType: PromiseOrValue<BytesLike>,
-      overrides?: CallOverrides,
-    ): Promise<BigNumber>
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
     getLinklistType(
       linkListId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides,
-    ): Promise<BigNumber>
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
     getLinklistUri(
       tokenId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides,
-    ): Promise<BigNumber>
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
     getNote(
       characterId: PromiseOrValue<BigNumberish>,
       noteId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides,
-    ): Promise<BigNumber>
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
     getOperator(
       characterId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides,
-    ): Promise<BigNumber>
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
     getPrimaryCharacterId(
       account: PromiseOrValue<string>,
-      overrides?: CallOverrides,
-    ): Promise<BigNumber>
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
-    getRevision(overrides?: CallOverrides): Promise<BigNumber>
+    getRevision(overrides?: CallOverrides): Promise<BigNumber>;
 
     initialize(
       _name: PromiseOrValue<string>,
@@ -3646,398 +3664,398 @@ export interface Abi extends BaseContract {
       _mintNFTImpl: PromiseOrValue<string>,
       _periphery: PromiseOrValue<string>,
       _resolver: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<BigNumber>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
 
     isApprovedForAll(
       owner: PromiseOrValue<string>,
       operator: PromiseOrValue<string>,
-      overrides?: CallOverrides,
-    ): Promise<BigNumber>
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
     isPrimaryCharacter(
       characterId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides,
-    ): Promise<BigNumber>
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
     linkAddress(
       vars: DataTypes.LinkAddressDataStruct,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<BigNumber>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
 
     linkAnyUri(
       vars: DataTypes.LinkAnyUriDataStruct,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<BigNumber>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
 
     linkCharacter(
       vars: DataTypes.LinkCharacterDataStruct,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<BigNumber>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
 
     linkCharacterLink(
       fromCharacterId: PromiseOrValue<BigNumberish>,
       linkData: DataTypes.CharacterLinkStructStruct,
       linkType: PromiseOrValue<BytesLike>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<BigNumber>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
 
     linkERC721(
       vars: DataTypes.LinkERC721DataStruct,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<BigNumber>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
 
     linkLinklist(
       vars: DataTypes.LinkLinklistDataStruct,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<BigNumber>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
 
     linkNote(
       vars: DataTypes.LinkNoteDataStruct,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<BigNumber>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
 
     lockNote(
       characterId: PromiseOrValue<BigNumberish>,
       noteId: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<BigNumber>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
 
     mintNote(
       vars: DataTypes.MintNoteDataStruct,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<BigNumber>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
 
-    name(overrides?: CallOverrides): Promise<BigNumber>
+    name(overrides?: CallOverrides): Promise<BigNumber>;
 
     ownerOf(
       tokenId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides,
-    ): Promise<BigNumber>
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
     postNote(
       vars: DataTypes.PostNoteDataStruct,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<BigNumber>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
 
     postNote4Address(
       noteData: DataTypes.PostNoteDataStruct,
       ethAddress: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<BigNumber>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
 
     postNote4AnyUri(
       postNoteData: DataTypes.PostNoteDataStruct,
       uri: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<BigNumber>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
 
     postNote4Character(
       postNoteData: DataTypes.PostNoteDataStruct,
       toCharacterId: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<BigNumber>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
 
     postNote4ERC721(
       postNoteData: DataTypes.PostNoteDataStruct,
       erc721: DataTypes.ERC721StructStruct,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<BigNumber>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
 
     postNote4Linklist(
       noteData: DataTypes.PostNoteDataStruct,
       toLinklistId: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<BigNumber>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
 
     postNote4Note(
       postNoteData: DataTypes.PostNoteDataStruct,
       note: DataTypes.NoteStructStruct,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<BigNumber>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
 
-    resolver(overrides?: CallOverrides): Promise<BigNumber>
+    resolver(overrides?: CallOverrides): Promise<BigNumber>;
 
-    'safeTransferFrom(address,address,uint256)'(
+    "safeTransferFrom(address,address,uint256)"(
       from: PromiseOrValue<string>,
       to: PromiseOrValue<string>,
       tokenId: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<BigNumber>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
 
-    'safeTransferFrom(address,address,uint256,bytes)'(
+    "safeTransferFrom(address,address,uint256,bytes)"(
       from: PromiseOrValue<string>,
       to: PromiseOrValue<string>,
       tokenId: PromiseOrValue<BigNumberish>,
       _data: PromiseOrValue<BytesLike>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<BigNumber>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
 
     setApprovalForAll(
       operator: PromiseOrValue<string>,
       approved: PromiseOrValue<boolean>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<BigNumber>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
 
     setCharacterUri(
       characterId: PromiseOrValue<BigNumberish>,
       newUri: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<BigNumber>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
 
     setHandle(
       characterId: PromiseOrValue<BigNumberish>,
       newHandle: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<BigNumber>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
 
     setLinkModule4Address(
       vars: DataTypes.SetLinkModule4AddressDataStruct,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<BigNumber>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
 
     setLinkModule4Character(
       vars: DataTypes.SetLinkModule4CharacterDataStruct,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<BigNumber>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
 
     setLinkModule4ERC721(
       vars: DataTypes.SetLinkModule4ERC721DataStruct,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<BigNumber>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
 
     setLinkModule4Linklist(
       vars: DataTypes.SetLinkModule4LinklistDataStruct,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<BigNumber>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
 
     setLinkModule4Note(
       vars: DataTypes.SetLinkModule4NoteDataStruct,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<BigNumber>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
 
     setLinklistUri(
       linklistId: PromiseOrValue<BigNumberish>,
       uri: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<BigNumber>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
 
     setMintModule4Note(
       vars: DataTypes.SetMintModule4NoteDataStruct,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<BigNumber>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
 
     setNoteUri(
       characterId: PromiseOrValue<BigNumberish>,
       noteId: PromiseOrValue<BigNumberish>,
       newUri: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<BigNumber>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
 
     setOperator(
       characterId: PromiseOrValue<BigNumberish>,
       operator: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<BigNumber>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
 
     setPrimaryCharacterId(
       characterId: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<BigNumber>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
 
     setSocialToken(
       characterId: PromiseOrValue<BigNumberish>,
       tokenAddress: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<BigNumber>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
 
     supportsInterface(
       interfaceId: PromiseOrValue<BytesLike>,
-      overrides?: CallOverrides,
-    ): Promise<BigNumber>
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
-    symbol(overrides?: CallOverrides): Promise<BigNumber>
+    symbol(overrides?: CallOverrides): Promise<BigNumber>;
 
     tokenByIndex(
       index: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides,
-    ): Promise<BigNumber>
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
     tokenOfOwnerByIndex(
       owner: PromiseOrValue<string>,
       index: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides,
-    ): Promise<BigNumber>
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
     tokenURI(
       characterId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides,
-    ): Promise<BigNumber>
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
-    totalSupply(overrides?: CallOverrides): Promise<BigNumber>
+    totalSupply(overrides?: CallOverrides): Promise<BigNumber>;
 
     transferFrom(
       from: PromiseOrValue<string>,
       to: PromiseOrValue<string>,
       tokenId: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<BigNumber>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
 
     unlinkAddress(
       vars: DataTypes.UnlinkAddressDataStruct,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<BigNumber>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
 
     unlinkAnyUri(
       vars: DataTypes.UnlinkAnyUriDataStruct,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<BigNumber>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
 
     unlinkCharacter(
       vars: DataTypes.UnlinkCharacterDataStruct,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<BigNumber>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
 
     unlinkCharacterLink(
       fromCharacterId: PromiseOrValue<BigNumberish>,
       linkData: DataTypes.CharacterLinkStructStruct,
       linkType: PromiseOrValue<BytesLike>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<BigNumber>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
 
     unlinkERC721(
       vars: DataTypes.UnlinkERC721DataStruct,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<BigNumber>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
 
     unlinkLinklist(
       vars: DataTypes.UnlinkLinklistDataStruct,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<BigNumber>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
 
     unlinkNote(
       vars: DataTypes.UnlinkNoteDataStruct,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<BigNumber>
-  }
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+  };
 
   populateTransaction: {
     approve(
       to: PromiseOrValue<string>,
       tokenId: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<PopulatedTransaction>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
 
     balanceOf(
       owner: PromiseOrValue<string>,
-      overrides?: CallOverrides,
-    ): Promise<PopulatedTransaction>
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
 
     burn(
       tokenId: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<PopulatedTransaction>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
 
     canCreate(
       handle: PromiseOrValue<string>,
       account: PromiseOrValue<string>,
-      overrides?: CallOverrides,
-    ): Promise<PopulatedTransaction>
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
 
     createCharacter(
       vars: DataTypes.CreateCharacterDataStruct,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<PopulatedTransaction>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
 
     createThenLinkCharacter(
       vars: DataTypes.CreateThenLinkCharacterDataStruct,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<PopulatedTransaction>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
 
     deleteNote(
       characterId: PromiseOrValue<BigNumberish>,
       noteId: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<PopulatedTransaction>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
 
     getApproved(
       tokenId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides,
-    ): Promise<PopulatedTransaction>
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
 
     getCharacter(
       characterId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides,
-    ): Promise<PopulatedTransaction>
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
 
     getCharacterByHandle(
       handle: PromiseOrValue<string>,
-      overrides?: CallOverrides,
-    ): Promise<PopulatedTransaction>
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
 
     getCharacterUri(
       characterId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides,
-    ): Promise<PopulatedTransaction>
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
 
     getHandle(
       characterId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides,
-    ): Promise<PopulatedTransaction>
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
 
     getLinkModule4Address(
       account: PromiseOrValue<string>,
-      overrides?: CallOverrides,
-    ): Promise<PopulatedTransaction>
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
 
     getLinkModule4ERC721(
       tokenAddress: PromiseOrValue<string>,
       tokenId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides,
-    ): Promise<PopulatedTransaction>
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
 
     getLinkModule4Linklist(
       tokenId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides,
-    ): Promise<PopulatedTransaction>
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
 
     getLinklistContract(
-      overrides?: CallOverrides,
-    ): Promise<PopulatedTransaction>
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
 
     getLinklistId(
       characterId: PromiseOrValue<BigNumberish>,
       linkType: PromiseOrValue<BytesLike>,
-      overrides?: CallOverrides,
-    ): Promise<PopulatedTransaction>
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
 
     getLinklistType(
       linkListId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides,
-    ): Promise<PopulatedTransaction>
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
 
     getLinklistUri(
       tokenId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides,
-    ): Promise<PopulatedTransaction>
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
 
     getNote(
       characterId: PromiseOrValue<BigNumberish>,
       noteId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides,
-    ): Promise<PopulatedTransaction>
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
 
     getOperator(
       characterId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides,
-    ): Promise<PopulatedTransaction>
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
 
     getPrimaryCharacterId(
       account: PromiseOrValue<string>,
-      overrides?: CallOverrides,
-    ): Promise<PopulatedTransaction>
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
 
-    getRevision(overrides?: CallOverrides): Promise<PopulatedTransaction>
+    getRevision(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     initialize(
       _name: PromiseOrValue<string>,
@@ -4046,278 +4064,278 @@ export interface Abi extends BaseContract {
       _mintNFTImpl: PromiseOrValue<string>,
       _periphery: PromiseOrValue<string>,
       _resolver: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<PopulatedTransaction>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
 
     isApprovedForAll(
       owner: PromiseOrValue<string>,
       operator: PromiseOrValue<string>,
-      overrides?: CallOverrides,
-    ): Promise<PopulatedTransaction>
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
 
     isPrimaryCharacter(
       characterId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides,
-    ): Promise<PopulatedTransaction>
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
 
     linkAddress(
       vars: DataTypes.LinkAddressDataStruct,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<PopulatedTransaction>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
 
     linkAnyUri(
       vars: DataTypes.LinkAnyUriDataStruct,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<PopulatedTransaction>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
 
     linkCharacter(
       vars: DataTypes.LinkCharacterDataStruct,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<PopulatedTransaction>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
 
     linkCharacterLink(
       fromCharacterId: PromiseOrValue<BigNumberish>,
       linkData: DataTypes.CharacterLinkStructStruct,
       linkType: PromiseOrValue<BytesLike>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<PopulatedTransaction>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
 
     linkERC721(
       vars: DataTypes.LinkERC721DataStruct,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<PopulatedTransaction>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
 
     linkLinklist(
       vars: DataTypes.LinkLinklistDataStruct,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<PopulatedTransaction>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
 
     linkNote(
       vars: DataTypes.LinkNoteDataStruct,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<PopulatedTransaction>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
 
     lockNote(
       characterId: PromiseOrValue<BigNumberish>,
       noteId: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<PopulatedTransaction>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
 
     mintNote(
       vars: DataTypes.MintNoteDataStruct,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<PopulatedTransaction>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
 
-    name(overrides?: CallOverrides): Promise<PopulatedTransaction>
+    name(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     ownerOf(
       tokenId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides,
-    ): Promise<PopulatedTransaction>
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
 
     postNote(
       vars: DataTypes.PostNoteDataStruct,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<PopulatedTransaction>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
 
     postNote4Address(
       noteData: DataTypes.PostNoteDataStruct,
       ethAddress: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<PopulatedTransaction>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
 
     postNote4AnyUri(
       postNoteData: DataTypes.PostNoteDataStruct,
       uri: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<PopulatedTransaction>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
 
     postNote4Character(
       postNoteData: DataTypes.PostNoteDataStruct,
       toCharacterId: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<PopulatedTransaction>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
 
     postNote4ERC721(
       postNoteData: DataTypes.PostNoteDataStruct,
       erc721: DataTypes.ERC721StructStruct,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<PopulatedTransaction>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
 
     postNote4Linklist(
       noteData: DataTypes.PostNoteDataStruct,
       toLinklistId: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<PopulatedTransaction>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
 
     postNote4Note(
       postNoteData: DataTypes.PostNoteDataStruct,
       note: DataTypes.NoteStructStruct,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<PopulatedTransaction>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
 
-    resolver(overrides?: CallOverrides): Promise<PopulatedTransaction>
+    resolver(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    'safeTransferFrom(address,address,uint256)'(
+    "safeTransferFrom(address,address,uint256)"(
       from: PromiseOrValue<string>,
       to: PromiseOrValue<string>,
       tokenId: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<PopulatedTransaction>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
 
-    'safeTransferFrom(address,address,uint256,bytes)'(
+    "safeTransferFrom(address,address,uint256,bytes)"(
       from: PromiseOrValue<string>,
       to: PromiseOrValue<string>,
       tokenId: PromiseOrValue<BigNumberish>,
       _data: PromiseOrValue<BytesLike>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<PopulatedTransaction>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
 
     setApprovalForAll(
       operator: PromiseOrValue<string>,
       approved: PromiseOrValue<boolean>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<PopulatedTransaction>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
 
     setCharacterUri(
       characterId: PromiseOrValue<BigNumberish>,
       newUri: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<PopulatedTransaction>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
 
     setHandle(
       characterId: PromiseOrValue<BigNumberish>,
       newHandle: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<PopulatedTransaction>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
 
     setLinkModule4Address(
       vars: DataTypes.SetLinkModule4AddressDataStruct,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<PopulatedTransaction>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
 
     setLinkModule4Character(
       vars: DataTypes.SetLinkModule4CharacterDataStruct,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<PopulatedTransaction>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
 
     setLinkModule4ERC721(
       vars: DataTypes.SetLinkModule4ERC721DataStruct,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<PopulatedTransaction>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
 
     setLinkModule4Linklist(
       vars: DataTypes.SetLinkModule4LinklistDataStruct,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<PopulatedTransaction>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
 
     setLinkModule4Note(
       vars: DataTypes.SetLinkModule4NoteDataStruct,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<PopulatedTransaction>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
 
     setLinklistUri(
       linklistId: PromiseOrValue<BigNumberish>,
       uri: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<PopulatedTransaction>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
 
     setMintModule4Note(
       vars: DataTypes.SetMintModule4NoteDataStruct,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<PopulatedTransaction>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
 
     setNoteUri(
       characterId: PromiseOrValue<BigNumberish>,
       noteId: PromiseOrValue<BigNumberish>,
       newUri: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<PopulatedTransaction>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
 
     setOperator(
       characterId: PromiseOrValue<BigNumberish>,
       operator: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<PopulatedTransaction>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
 
     setPrimaryCharacterId(
       characterId: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<PopulatedTransaction>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
 
     setSocialToken(
       characterId: PromiseOrValue<BigNumberish>,
       tokenAddress: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<PopulatedTransaction>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
 
     supportsInterface(
       interfaceId: PromiseOrValue<BytesLike>,
-      overrides?: CallOverrides,
-    ): Promise<PopulatedTransaction>
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
 
-    symbol(overrides?: CallOverrides): Promise<PopulatedTransaction>
+    symbol(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     tokenByIndex(
       index: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides,
-    ): Promise<PopulatedTransaction>
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
 
     tokenOfOwnerByIndex(
       owner: PromiseOrValue<string>,
       index: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides,
-    ): Promise<PopulatedTransaction>
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
 
     tokenURI(
       characterId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides,
-    ): Promise<PopulatedTransaction>
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
 
-    totalSupply(overrides?: CallOverrides): Promise<PopulatedTransaction>
+    totalSupply(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     transferFrom(
       from: PromiseOrValue<string>,
       to: PromiseOrValue<string>,
       tokenId: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<PopulatedTransaction>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
 
     unlinkAddress(
       vars: DataTypes.UnlinkAddressDataStruct,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<PopulatedTransaction>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
 
     unlinkAnyUri(
       vars: DataTypes.UnlinkAnyUriDataStruct,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<PopulatedTransaction>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
 
     unlinkCharacter(
       vars: DataTypes.UnlinkCharacterDataStruct,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<PopulatedTransaction>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
 
     unlinkCharacterLink(
       fromCharacterId: PromiseOrValue<BigNumberish>,
       linkData: DataTypes.CharacterLinkStructStruct,
       linkType: PromiseOrValue<BytesLike>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<PopulatedTransaction>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
 
     unlinkERC721(
       vars: DataTypes.UnlinkERC721DataStruct,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<PopulatedTransaction>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
 
     unlinkLinklist(
       vars: DataTypes.UnlinkLinklistDataStruct,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<PopulatedTransaction>
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
 
     unlinkNote(
       vars: DataTypes.UnlinkNoteDataStruct,
-      overrides?: Overrides & { from?: PromiseOrValue<string> },
-    ): Promise<PopulatedTransaction>
-  }
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+  };
 }

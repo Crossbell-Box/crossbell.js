@@ -1,6 +1,7 @@
 import { BaseIndexer } from './base'
 import queryString from 'query-string'
 import type { ListResponse, CharacterEntity } from '../../types/indexer'
+import { type BigNumberish } from 'ethers'
 
 export class CharacterIndexer extends BaseIndexer {
   /**
@@ -52,7 +53,9 @@ export class CharacterIndexer extends BaseIndexer {
    * @param characterId - The id of the character.
    * @returns The character.
    */
-  async getCharacter(characterId: number): Promise<CharacterEntity | null> {
+  async getCharacter(
+    characterId: BigNumberish,
+  ): Promise<CharacterEntity | null> {
     let url = `${this.endpoint}/characters/${characterId}`
 
     const res = await fetch(url).then((res) => res.json())

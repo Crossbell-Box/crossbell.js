@@ -4,6 +4,7 @@ import { autoSwitchMainnet } from '../decorators'
 import type { Result, Character } from '../../types/contract'
 import { CharacterMetadata } from '../../types/metadata'
 import { Ipfs } from '../../ipfs'
+import { type BigNumberish } from 'ethers'
 
 export class CharacterContract extends BaseContract {
   /**
@@ -20,7 +21,7 @@ export class CharacterContract extends BaseContract {
     owner: string,
     handle: string,
     metadataOrUri: CharacterMetadata | string,
-  ): Promise<Result<string, true>> | never {
+  ): Promise<Result<number, true>> | never {
     this.validateHandleFormat(handle)
 
     const { uri } = await Ipfs.parseMetadataOrUri('character', metadataOrUri)
@@ -38,7 +39,7 @@ export class CharacterContract extends BaseContract {
     const parser = this.parseLog(receipt.logs, 'createCharacter')
 
     return {
-      data: parser.args.characterId.toString(),
+      data: parser.args.characterId.toNumber(),
       transactionHash: receipt.transactionHash,
     }
   }
@@ -52,7 +53,7 @@ export class CharacterContract extends BaseContract {
    */
   @autoSwitchMainnet()
   async setHandle(
-    characterId: string,
+    characterId: BigNumberish,
     handle: string,
   ): Promise<Result<undefined, true>> | never {
     this.validateHandleFormat(handle)
@@ -74,7 +75,7 @@ export class CharacterContract extends BaseContract {
    */
   @autoSwitchMainnet()
   async setCharacterUri(
-    characterId: string,
+    characterId: BigNumberish,
     metadataOrUri: CharacterMetadata | string,
   ):
     | Promise<Result<{ uri: string; metadata: CharacterMetadata }, true>>
@@ -101,7 +102,10 @@ export class CharacterContract extends BaseContract {
    * This is the same as {@link setCharacterUri}
    * @category Character
    */
-  async setCharacterMetadata(characterId: string, metadata: CharacterMetadata) {
+  async setCharacterMetadata(
+    characterId: BigNumberish,
+    metadata: CharacterMetadata,
+  ) {
     return this.setCharacterUri(characterId, metadata)
   }
 
@@ -143,7 +147,7 @@ export class CharacterContract extends BaseContract {
    */
   @autoSwitchMainnet()
   async changeCharacterMetadata(
-    characterId: string,
+    characterId: BigNumberish,
     modifier: (metadata?: CharacterMetadata) => CharacterMetadata,
   ) {
     const character = await this.getCharacter(characterId)
@@ -169,7 +173,7 @@ export class CharacterContract extends BaseContract {
    */
   @autoSwitchMainnet()
   async setSocialToken(
-    characterId: string,
+    characterId: BigNumberish,
     socialToken: string,
   ): Promise<Result<undefined, true>> | never {
     const tx = await this.contract.setSocialToken(characterId, socialToken)
@@ -188,7 +192,7 @@ export class CharacterContract extends BaseContract {
    */
   @autoSwitchMainnet()
   async setPrimaryCharacterId(
-    characterId: string,
+    characterId: BigNumberish,
   ): Promise<Result<undefined, true>> | never {
     const tx = await this.contract.setPrimaryCharacterId(characterId)
     const receipt = await tx.wait()
@@ -207,10 +211,10 @@ export class CharacterContract extends BaseContract {
   @autoSwitchMainnet()
   async getPrimaryCharacterId(
     address: string,
-  ): Promise<Result<string>> | never {
+  ): Promise<Result<number>> | never {
     const characterId = await this.contract.getPrimaryCharacterId(address)
     return {
-      data: characterId.toNumber().toString(),
+      data: characterId.toNumber(),
     }
   }
 
@@ -222,7 +226,7 @@ export class CharacterContract extends BaseContract {
    */
   @autoSwitchMainnet()
   async isPrimaryCharacterId(
-    characterId: string,
+    characterId: BigNumberish,
   ): Promise<Result<boolean>> | never {
     const isPrimary = await this.contract.isPrimaryCharacter(characterId)
     return {
@@ -250,7 +254,7 @@ export class CharacterContract extends BaseContract {
 
     return {
       data: {
-        characterId: character.characterId.toNumber().toString(),
+        characterId: character.characterId.toNumber(),
         handle: character.handle,
         uri: character.uri,
         metadata,
@@ -267,7 +271,9 @@ export class CharacterContract extends BaseContract {
    * @returns The character with the given characterId.
    */
   @autoSwitchMainnet()
-  async getCharacter(characterId: string): Promise<Result<Character>> | never {
+  async getCharacter(
+    characterId: BigNumberish,
+  ): Promise<Result<Character>> | never {
     const character = await this.contract.getCharacter(characterId)
 
     const { metadata } = await Ipfs.parseMetadataOrUri(
@@ -278,7 +284,7 @@ export class CharacterContract extends BaseContract {
 
     return {
       data: {
-        characterId: character.characterId.toNumber().toString(),
+        characterId: character.characterId.toNumber(),
         handle: character.handle,
         uri: character.uri,
         socialToken: character.socialToken,
@@ -295,7 +301,7 @@ export class CharacterContract extends BaseContract {
    * @returns The handle of the character.
    */
   @autoSwitchMainnet()
-  async getHandle(characterId: string): Promise<Result<string>> | never {
+  async getHandle(characterId: BigNumberish): Promise<Result<string>> | never {
     const handle = await this.contract.getHandle(characterId)
     return {
       data: handle,
@@ -309,7 +315,9 @@ export class CharacterContract extends BaseContract {
    * @returns The URI of the character.
    */
   @autoSwitchMainnet()
-  async getCharacterUri(characterId: string): Promise<Result<string>> | never {
+  async getCharacterUri(
+    characterId: BigNumberish,
+  ): Promise<Result<string>> | never {
     const uri = await this.contract.getCharacterUri(characterId)
     return {
       data: uri,
@@ -330,7 +338,7 @@ export class CharacterContract extends BaseContract {
 
     const parser = this.parseLog(receipt.logs, 'createCharacter')
 
-    const characterId = parser.args.characterId.toString()
+    const characterId = parser.args.characterId.toNumber()
     const result = await this.getCharacter(characterId)
 
     return result

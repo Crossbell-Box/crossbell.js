@@ -1,4 +1,4 @@
-import { ethers } from 'ethers'
+import { type BigNumberish, ethers } from 'ethers'
 import { BaseContract } from './base'
 import {
   Result,
@@ -27,10 +27,10 @@ export class NoteContract extends BaseContract {
    */
   @autoSwitchMainnet()
   async postNote(
-    characterId: string,
+    characterId: BigNumberish,
     metadataOrUri: NoteMetadata | string,
     { locked = false }: PostNoteOptions = {},
-  ): Promise<Result<{ noteId: string }, true>> | never {
+  ): Promise<Result<{ noteId: number }, true>> | never {
     const { uri } = await Ipfs.parseMetadataOrUri('note', metadataOrUri)
 
     const tx = await this.contract.postNote({
@@ -49,7 +49,7 @@ export class NoteContract extends BaseContract {
 
     return {
       data: {
-        noteId: log.args.noteId.toNumber().toString(),
+        noteId: log.args.noteId.toNumber(),
       },
       transactionHash: receipt.transactionHash,
     }
@@ -66,11 +66,11 @@ export class NoteContract extends BaseContract {
    */
   @autoSwitchMainnet()
   async postNoteForAnyUri(
-    characterId: string,
+    characterId: BigNumberish,
     metadataOrUri: NoteMetadata | string,
     targetUri: string,
     { locked = false }: PostNoteOptions = {},
-  ): Promise<Result<{ noteId: string }, true>> | never {
+  ): Promise<Result<{ noteId: number }, true>> | never {
     const { uri } = await Ipfs.parseMetadataOrUri('note', metadataOrUri)
 
     const tx = await this.contract.postNote4AnyUri(
@@ -92,7 +92,7 @@ export class NoteContract extends BaseContract {
 
     return {
       data: {
-        noteId: log.args.noteId.toNumber().toString(),
+        noteId: log.args.noteId.toNumber(),
       },
       transactionHash: receipt.transactionHash,
     }
@@ -108,8 +108,8 @@ export class NoteContract extends BaseContract {
    */
   @autoSwitchMainnet()
   async setNoteUri(
-    characterId: string,
-    noteId: string,
+    characterId: BigNumberish,
+    noteId: BigNumberish,
     metadataOrUri: NoteMetadata | string,
   ): Promise<Result<{ uri: string; metadata: NoteMetadata }, true>> | never {
     const { uri, metadata } = await Ipfs.parseMetadataOrUri(
@@ -170,8 +170,8 @@ export class NoteContract extends BaseContract {
    */
   @autoSwitchMainnet()
   async changeNoteMetadata(
-    characterId: string,
-    noteId: string,
+    characterId: BigNumberish,
+    noteId: BigNumberish,
     modifier: (metadata?: NoteMetadata) => NoteMetadata,
   ) {
     const note = await this.getNote(characterId, noteId)
@@ -193,8 +193,8 @@ export class NoteContract extends BaseContract {
    * @category Note
    */
   async setNoteMetadata(
-    characterId: string,
-    noteId: string,
+    characterId: BigNumberish,
+    noteId: BigNumberish,
     metadata: NoteMetadata,
   ) {
     return this.setNoteUri(characterId, noteId, metadata)
@@ -208,8 +208,8 @@ export class NoteContract extends BaseContract {
    * @returns The info of the note.
    */
   async getNote<T = undefined>(
-    characterId: string,
-    noteId: string,
+    characterId: BigNumberish,
+    noteId: BigNumberish,
   ): Promise<Result<Note<undefined>>> | never
   async getNote<T = LinkItemERC721>(
     characterId: string,
@@ -221,30 +221,30 @@ export class NoteContract extends BaseContract {
     noteId: string,
     linkItemType: 'AnyUri',
   ): Promise<Result<Note<LinkItemAnyUri>>> | never
-  async getNote<T = LinkItemAnyUri>(
+  async getNote<T = LinkItemCharacter>(
     characterId: string,
     noteId: string,
     linkItemType: 'Character',
   ): Promise<Result<Note<LinkItemCharacter>>> | never
-  async getNote<T = LinkItemAnyUri>(
+  async getNote<T = LinkItemAddress>(
     characterId: string,
     noteId: string,
     linkItemType: 'Address',
   ): Promise<Result<Note<LinkItemAddress>>> | never
-  async getNote<T = LinkItemAnyUri>(
+  async getNote<T = LinkItemNote>(
     characterId: string,
     noteId: string,
     linkItemType: 'Note',
   ): Promise<Result<Note<LinkItemNote>>> | never
-  async getNote<T = LinkItemAnyUri>(
+  async getNote<T = LinkItemLinklist>(
     characterId: string,
     noteId: string,
     linkItemType: 'Linklist',
   ): Promise<Result<Note<LinkItemLinklist>>> | never
   @autoSwitchMainnet()
   async getNote<T extends LinkItem>(
-    characterId: string,
-    noteId: string,
+    characterId: BigNumberish,
+    noteId: BigNumberish,
     linkItemType?: Note['linkItemTypeString'],
   ): Promise<Result<Note<T>>> | never {
     const data = await this.contract.getNote(characterId, noteId)
@@ -283,19 +283,20 @@ export class NoteContract extends BaseContract {
         data.linkKey,
       )
       linkItem = {
-        characterId: characterId.toString(),
+        characterId: characterId.toNumber(),
       } as T
     } else if (linkItemType === 'Note') {
-      const noteId = await this.peripheryContract.getLinkingNote(data.linkKey)
+      const ret = await this.peripheryContract.getLinkingNote(data.linkKey)
       linkItem = {
-        noteId: noteId.toString(),
+        characterId: ret.characterId.toNumber(),
+        noteId: ret.noteId.toNumber(),
       } as T
     } else if (linkItemType === 'Linklist') {
       const linklistId = await this.peripheryContract.getLinkingLinklistId(
         data.linkKey,
       )
       linkItem = {
-        linklistId: linklistId.toString(),
+        linklistId: linklistId.toNumber(),
       } as T
     } else {
       linkItem = undefined as unknown as T
@@ -303,8 +304,8 @@ export class NoteContract extends BaseContract {
 
     return {
       data: {
-        characterId: characterId,
-        noteId: noteId,
+        characterId: Number(characterId),
+        noteId: Number(noteId),
         contentUri: data.contentUri,
         metadata,
         linkItemType: data.linkItemType,
@@ -332,8 +333,8 @@ export class NoteContract extends BaseContract {
    */
   @autoSwitchMainnet()
   async deleteNote(
-    characterId: string,
-    noteId: string,
+    characterId: BigNumberish,
+    noteId: BigNumberish,
   ): Promise<Result<undefined, true>> | never {
     const tx = await this.contract.deleteNote(characterId, noteId)
 
@@ -360,8 +361,8 @@ export class NoteContract extends BaseContract {
    */
   @autoSwitchMainnet()
   async lockNote(
-    characterId: string,
-    noteId: string,
+    characterId: BigNumberish,
+    noteId: BigNumberish,
   ): Promise<Result<undefined, true>> | never {
     const tx = await this.contract.lockNote(characterId, noteId)
 
@@ -383,11 +384,11 @@ export class NoteContract extends BaseContract {
    */
   @autoSwitchMainnet()
   async mintNote(
-    characterId: string,
-    noteId: string,
+    characterId: BigNumberish,
+    noteId: BigNumberish,
     toAddress: string,
   ):
-    | Promise<Result<{ contractAddress: string; tokenId: string }, true>>
+    | Promise<Result<{ contractAddress: string; tokenId: number }, true>>
     | never {
     const tx = await this.contract.mintNote({
       characterId: characterId,
@@ -403,7 +404,7 @@ export class NoteContract extends BaseContract {
     return {
       data: {
         contractAddress: log.args.tokenAddress,
-        tokenId: log.args.tokenId.toNumber().toString(),
+        tokenId: log.args.tokenId.toNumber(),
       },
       transactionHash: receipt.transactionHash,
     }

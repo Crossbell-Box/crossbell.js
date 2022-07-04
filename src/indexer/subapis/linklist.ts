@@ -1,6 +1,7 @@
 import { BaseIndexer } from './base'
 import queryString from 'query-string'
 import type { LinklistEntity, ListResponse } from '../../types/indexer'
+import { type BigNumberish } from 'ethers'
 
 export class LinklistIndexer extends BaseIndexer {
   /**
@@ -44,7 +45,7 @@ export class LinklistIndexer extends BaseIndexer {
    * @returns The list of linklist.
    */
   async getLinklistsByCharacter(
-    characterId: string,
+    characterId: BigNumberish,
     {
       attached = false,
       linkType,
@@ -75,7 +76,7 @@ export class LinklistIndexer extends BaseIndexer {
    * @param linklistId - The id of the linklist.
    * @returns The character.
    */
-  async getLinklist(linklistId: string): Promise<LinklistEntity | null> {
+  async getLinklist(linklistId: BigNumberish): Promise<LinklistEntity | null> {
     let url = `${this.endpoint}/linklists/${linklistId}`
 
     const res = await fetch(url).then((res) => res.json())

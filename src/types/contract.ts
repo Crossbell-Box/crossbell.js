@@ -14,7 +14,7 @@ export type Result<T, HasTxHash extends boolean = false> = {
 
 export type Character = {
   /** The id of this character. */
-  characterId: string
+  characterId: number
   /** The handle of this character. */
   handle: string
   /** The metadata URI of this character. */
@@ -42,7 +42,7 @@ export type LinkItemType =
 // | 'AnyLink'
 
 export type LinkItemCharacter = {
-  characterId: string
+  characterId: number
 }
 
 export type LinkItemAddress = {
@@ -50,8 +50,8 @@ export type LinkItemAddress = {
 }
 
 export type LinkItemNote = {
-  characterId: string
-  noteId: string
+  characterId: number
+  noteId: number
 }
 
 export type LinkItemERC721 = {
@@ -60,7 +60,7 @@ export type LinkItemERC721 = {
 }
 
 export type LinkItemLinklist = {
-  linklistId: string
+  linklistId: number
 }
 
 export type LinkItemAnyUri = {
@@ -77,9 +77,9 @@ export type LinkItem =
 
 export type Note<T extends LinkItem | undefined = undefined> = {
   /** The character id of the address who owns the note.  */
-  characterId: string
+  characterId: number
   /** The id of this note. Each id is unique under one character. */
-  noteId: string
+  noteId: number
 
   /** The content URI of this note. */
   contentUri: string
