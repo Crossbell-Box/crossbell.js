@@ -1,4 +1,4 @@
-import { Wallet } from 'ethers'
+import { type BigNumberish, Wallet } from 'ethers'
 import { expect, describe, test, beforeAll } from 'vitest'
 import { Contract } from '../../src'
 import { mockUser, genRandomHandle, metadataUri } from '../mock'
@@ -11,8 +11,8 @@ describe('link characters and check', () => {
   })
 
   // create two characters first
-  let characterId1: string | null = null
-  let characterId2: string | null = null
+  let characterId1: BigNumberish | null = null
+  let characterId2: BigNumberish | null = null
   test('create two characters to link with', async () => {
     characterId1 = await contract
       .createCharacter(mockUser.address, genRandomHandle(), metadataUri)
@@ -26,7 +26,7 @@ describe('link characters and check', () => {
   })
 
   const linkType = 'follow'
-  let linklistId: string | null = null
+  let linklistId: BigNumberish | null = null
   test('linkCharacter', async () => {
     const result = await contract.linkCharacter(
       characterId1!,

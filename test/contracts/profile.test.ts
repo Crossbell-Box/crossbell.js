@@ -1,4 +1,4 @@
-import { Wallet } from 'ethers'
+import { type BigNumberish, Wallet } from 'ethers'
 import { expect, describe, test, beforeAll } from 'vitest'
 import { Contract } from '../../src'
 import {
@@ -12,7 +12,7 @@ import {
 
 const contract = new Contract(mockUser.privateKey)
 
-let characterId: string | null = null
+let characterId: BigNumberish | null = null
 
 describe('should fail if not connected', () => {
   test('should fail to createCharacter if not connected', () => {
