@@ -3,20 +3,20 @@ import queryString from 'query-string'
 import type {
   ListResponse,
   NoteEntity,
-  ProfileEntity,
+  CharacterEntity,
 } from '../../types/indexer'
 import type { LinkItemType } from '../../types/contract'
 
 export class SearchIndexer extends BaseIndexer {
   /**
-   * This searches for profiles on the crossbell contract.
+   * This searches for characters on the crossbell contract.
    *
    * @category Search
    * @param query - The query to send to the indexer.
    * @param options - The options to send to the indexer.
    * @returns
    */
-  async searchProfiles(
+  async searchCharacters(
     query: string,
     {
       limit = 20,
@@ -27,13 +27,13 @@ export class SearchIndexer extends BaseIndexer {
       /** Used for pagination. */
       cursor?: string
     },
-  ): Promise<ListResponse<ProfileEntity>> {
-    let url = `${this.endpoint}/profiles/search?`
+  ): Promise<ListResponse<CharacterEntity>> {
+    let url = `${this.endpoint}/characters/search?`
     url += queryString.stringify({ q: query, limit, cursor })
 
     const res = await fetch(url).then((res) => res.json())
 
-    return res as ListResponse<ProfileEntity>
+    return res as ListResponse<CharacterEntity>
   }
 
   /**
@@ -49,16 +49,16 @@ export class SearchIndexer extends BaseIndexer {
     {
       tags,
       linkItemType,
-      profileId,
+      characterId,
       limit = 20,
       cursor,
     }: {
       /** Notes with the given tags. */
       tags?: string[]
-      /** The link item type to filter by. e.g. 'Profile' */
+      /** The link item type to filter by. e.g. 'Character' */
       linkItemType?: LinkItemType
-      /** Note with the given profileId owner */
-      profileId?: string
+      /** Note with the given characterId owner */
+      characterId?: string
       /** Limit the count of items returned. */
       limit?: number
       /** Used for pagination. */
@@ -72,7 +72,7 @@ export class SearchIndexer extends BaseIndexer {
       cursor,
       tags,
       linkItemType,
-      profileId,
+      characterId,
     })
 
     const res = await fetch(url).then((res) => res.json())

@@ -2,11 +2,11 @@ import { Mixin } from 'ts-mixer'
 import { CsbContract } from './subcontracts/csb'
 import { LinkContract } from './subcontracts/link'
 import { NoteContract } from './subcontracts/note'
-import { ProfileContract } from './subcontracts/profile'
+import { CharacterContract } from './subcontracts/character'
 import { RevisionContract } from './subcontracts/revision'
 
 const Contracts = Mixin(
-  ProfileContract,
+  CharacterContract,
   LinkContract,
   NoteContract,
   CsbContract,
@@ -27,14 +27,14 @@ const Contracts = Mixin(
  * // Connect to the chain
  * await contract.connect()
  *
- * // Example API: Create a new profile for an address
+ * // Example API: Create a new character for an address
  * try {
- *   const result = await contract.createProfile(
+ *   const result = await contract.createCharacter(
  *     '0x1234567890123456789012345678901234567890',
  *     'Jason',
  *     'ipfs://xxxx/metadata.json',
  *   )
- *   console.log(result.data) // '42' (profileId)
+ *   console.log(result.data) // '42' (characterId)
  *   console.log(result.transactionHash) // '0xabcdef...'
  * } catch (e) {
  *   console.error(e.message) // e.g. "execution reverted: Web3Entry: HandleExists"

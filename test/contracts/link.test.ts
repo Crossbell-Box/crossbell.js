@@ -5,32 +5,32 @@ import { mockUser, genRandomHandle, metadataUri } from '../mock'
 
 const contract = new Contract(mockUser.privateKey)
 
-describe('link profiles and check', () => {
+describe('link characters and check', () => {
   beforeAll(async () => {
     await contract.connect()
   })
 
-  // create two profiles first
-  let profileId1: string | null = null
-  let profileId2: string | null = null
-  test('create two profiles to link with', async () => {
-    profileId1 = await contract
-      .createProfile(mockUser.address, genRandomHandle(), metadataUri)
+  // create two characters first
+  let characterId1: string | null = null
+  let characterId2: string | null = null
+  test('create two characters to link with', async () => {
+    characterId1 = await contract
+      .createCharacter(mockUser.address, genRandomHandle(), metadataUri)
       .then(({ data }) => data)
-    profileId2 = await contract
-      .createProfile(mockUser.address, genRandomHandle(), metadataUri)
+    characterId2 = await contract
+      .createCharacter(mockUser.address, genRandomHandle(), metadataUri)
       .then(({ data }) => data)
 
-    expect(profileId1).not.toBeNull()
-    expect(profileId2).not.toBeNull()
+    expect(characterId1).not.toBeNull()
+    expect(characterId2).not.toBeNull()
   })
 
   const linkType = 'follow'
   let linklistId: string | null = null
-  test('linkProfile', async () => {
-    const result = await contract.linkProfile(
-      profileId1!,
-      profileId2!,
+  test('linkCharacter', async () => {
+    const result = await contract.linkCharacter(
+      characterId1!,
+      characterId2!,
       linkType,
     )
     linklistId = result.data
@@ -42,10 +42,10 @@ describe('link profiles and check', () => {
     expect(linklist.data).toBe(linklistId)
   })
 
-  test('linkProfilesInBatch', async () => {
-    const result = await contract.linkProfilesInBatch(
-      profileId1!,
-      [profileId2!],
+  test('linkCharactersInBatch', async () => {
+    const result = await contract.linkCharactersInBatch(
+      characterId1!,
+      [characterId2!],
       [],
       linkType,
     )
@@ -53,45 +53,54 @@ describe('link profiles and check', () => {
     expect(result.data).toBe(linklistId)
   })
 
-  test('getLinkingProfileIds', async () => {
-    const { data } = await contract.getLinkingProfileIds(profileId1!, linkType)
-    expect(data).toContain(profileId2!)
+  test('getLinkingCharacterIds', async () => {
+    const { data } = await contract.getLinkingCharacterIds(
+      characterId1!,
+      linkType,
+    )
+    expect(data).toContain(characterId2!)
   })
 
-  test('unlinkProfile and check', async () => {
+  test('unlinkCharacter and check', async () => {
     await contract
-      .unlinkProfile(profileId1!, profileId2!, linkType)
+      .unlinkCharacter(characterId1!, characterId2!, linkType)
       .then(({ data }) => data)
 
-    const { data } = await contract.getLinkingProfileIds(profileId1!, linkType)
-    expect(data).not.toContain(profileId2!)
+    const { data } = await contract.getLinkingCharacterIds(
+      characterId1!,
+      linkType,
+    )
+    expect(data).not.toContain(characterId2!)
   })
 
-  test('createThenLinkProfile and check', async () => {
+  test('createThenLinkCharacter and check', async () => {
     const wallet = Wallet.createRandom()
     const randomAddress = wallet.address
 
-    const result = await contract.createThenLinkProfile(
-      profileId1!,
+    const result = await contract.createThenLinkCharacter(
+      characterId1!,
       randomAddress,
       linkType,
     )
 
-    expect(result.data.toProfileId).not.toBeNull()
+    expect(result.data.toCharacterId).not.toBeNull()
     expect(linklistId).not.toBeNull()
 
-    const { data } = await contract.getLinkingProfileIds(profileId1!, linkType)
-    expect(data).toContain(result.data.toProfileId!)
+    const { data } = await contract.getLinkingCharacterIds(
+      characterId1!,
+      linkType,
+    )
+    expect(data).toContain(result.data.toCharacterId!)
 
     const {
       data: { handle },
-    } = await contract.getProfileByHandle(randomAddress)
+    } = await contract.getCharacterByHandle(randomAddress)
     expect(handle).toBe(randomAddress.toLowerCase())
 
-    // should also able to get profile by transaction
-    const { data: profile } = await contract.getProfileByTransaction(
+    // should also able to get character by transaction
+    const { data: character } = await contract.getCharacterByTransaction(
       result.transactionHash,
     )
-    expect(profile.profileId).toBe(result.data.toProfileId)
+    expect(character.characterId).toBe(result.data.toCharacterId)
   })
 })

@@ -37,14 +37,14 @@ export class LinklistIndexer extends BaseIndexer {
   }
 
   /**
-   * This returns a list of linklists owned by a specific profile.
+   * This returns a list of linklists attached to a specific character.
    * @category Linklist
-   * @param profileId - The profileId of the linklists owner.
+   * @param characterId - The characterId of the linklists owner.
    * @param options - The options to send to the indexer.
    * @returns The list of linklist.
    */
-  async getLinklistsByProfile(
-    profileId: string,
+  async getLinklistsByCharacter(
+    characterId: string,
     {
       attached = false,
       linkType,
@@ -61,7 +61,7 @@ export class LinklistIndexer extends BaseIndexer {
       cursor?: string
     } = {},
   ): Promise<ListResponse<LinklistEntity>> {
-    let url = `${this.endpoint}/profiles/${profileId}/linklists?`
+    let url = `${this.endpoint}/characters/${characterId}/linklists?`
     url += queryString.stringify({ attached, linkType, limit, cursor })
 
     const res = await fetch(url).then((res) => res.json())
@@ -73,7 +73,7 @@ export class LinklistIndexer extends BaseIndexer {
    * This returns a linklist by id; null if none exists.
    * @category Linklist
    * @param linklistId - The id of the linklist.
-   * @returns The profile.
+   * @returns The character.
    */
   async getLinklist(linklistId: string): Promise<LinklistEntity | null> {
     let url = `${this.endpoint}/linklists/${linklistId}`

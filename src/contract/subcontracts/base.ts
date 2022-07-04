@@ -6,10 +6,10 @@ import {
   Abi__factory as EntryAbi__factory,
 } from '../abis/entry/types'
 import {
-  LinkProfileEvent,
+  LinkCharacterEvent,
   MintNoteEvent,
   PostNoteEvent,
-  ProfileCreatedEvent,
+  CharacterCreatedEvent,
 } from '../abis/entry/types/Abi'
 import {
   type Abi as PeripheryAbi,
@@ -17,11 +17,11 @@ import {
 } from '../abis/periphery/types'
 
 const logTopics: Record<
-  'createProfile' | 'linkProfile' | 'postNote' | 'mintNote',
+  'createCharacter' | 'linkCharacter' | 'postNote' | 'mintNote',
   keyof EntryAbi['filters']
 > = {
-  createProfile: 'ProfileCreated(uint256,address,address,string,uint256)',
-  linkProfile: 'LinkProfile(address,uint256,uint256,bytes32,uint256)',
+  createCharacter: 'CharacterCreated(uint256,address,address,string,uint256)',
+  linkCharacter: 'LinkCharacter(address,uint256,uint256,bytes32,uint256)',
   postNote: 'PostNote(uint256,uint256,bytes32,bytes32,bytes)',
   mintNote: 'MintNote(address,uint256,uint256,address,uint256)',
 } as const
@@ -154,13 +154,13 @@ export class BaseContract {
     logs: ethers.providers.Log[],
     filterTopic: 'mintNote',
   ): T
-  protected parseLog<T = ProfileCreatedEvent>(
+  protected parseLog<T = CharacterCreatedEvent>(
     logs: ethers.providers.Log[],
-    filterTopic: 'createProfile',
+    filterTopic: 'createCharacter',
   ): T
-  protected parseLog<T = LinkProfileEvent>(
+  protected parseLog<T = LinkCharacterEvent>(
     logs: ethers.providers.Log[],
-    filterTopic: 'linkProfile',
+    filterTopic: 'linkCharacter',
   ): T
   protected parseLog<T = PostNoteEvent>(
     logs: ethers.providers.Log[],

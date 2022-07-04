@@ -12,84 +12,48 @@ import type {
   PopulatedTransaction,
   Signer,
   utils,
-} from "ethers";
-import type { FunctionFragment, Result } from "@ethersproject/abi";
-import type { Listener, Provider } from "@ethersproject/providers";
+} from 'ethers'
+import type { FunctionFragment, Result } from '@ethersproject/abi'
+import type { Listener, Provider } from '@ethersproject/providers'
 import type {
   TypedEventFilter,
   TypedEvent,
   TypedListener,
   OnEvent,
-} from "./common";
+  PromiseOrValue,
+} from './common'
 
-export declare namespace DataTypes {
-  export type CreateProfileThenPostNoteDataStruct = {
-    handle: string;
-    uri: string;
-    profileLinkModule: string;
-    profileLinkModuleInitData: BytesLike;
-    contentUri: string;
-    noteLinkModule: string;
-    noteLinkModuleInitData: BytesLike;
-    mintModule: string;
-    mintModuleInitData: BytesLike;
-    locked: boolean;
-  };
-
-  export type CreateProfileThenPostNoteDataStructOutput = [
-    string,
-    string,
-    string,
-    string,
-    string,
-    string,
-    string,
-    string,
-    string,
-    boolean
-  ] & {
-    handle: string;
-    uri: string;
-    profileLinkModule: string;
-    profileLinkModuleInitData: string;
-    contentUri: string;
-    noteLinkModule: string;
-    noteLinkModuleInitData: string;
-    mintModule: string;
-    mintModuleInitData: string;
-    locked: boolean;
-  };
-
+declare namespace DataTypes {
   export type ERC721StructStruct = {
-    tokenAddress: string;
-    erc721TokenId: BigNumberish;
-  };
+    tokenAddress: PromiseOrValue<string>
+    erc721TokenId: PromiseOrValue<BigNumberish>
+  }
 
   export type ERC721StructStructOutput = [string, BigNumber] & {
-    tokenAddress: string;
-    erc721TokenId: BigNumber;
-  };
+    tokenAddress: string
+    erc721TokenId: BigNumber
+  }
 
   export type NoteStructStruct = {
-    profileId: BigNumberish;
-    noteId: BigNumberish;
-  };
+    characterId: PromiseOrValue<BigNumberish>
+    noteId: PromiseOrValue<BigNumberish>
+  }
 
   export type NoteStructStructOutput = [BigNumber, BigNumber] & {
-    profileId: BigNumber;
-    noteId: BigNumber;
-  };
+    characterId: BigNumber
+    noteId: BigNumber
+  }
 
   export type NoteStruct = {
-    linkItemType: BytesLike;
-    linkKey: BytesLike;
-    contentUri: string;
-    linkModule: string;
-    mintModule: string;
-    mintNFT: string;
-    deleted: boolean;
-    locked: boolean;
-  };
+    linkItemType: PromiseOrValue<BytesLike>
+    linkKey: PromiseOrValue<BytesLike>
+    contentUri: PromiseOrValue<string>
+    linkModule: PromiseOrValue<string>
+    mintModule: PromiseOrValue<string>
+    mintNFT: PromiseOrValue<string>
+    deleted: PromiseOrValue<boolean>
+    locked: PromiseOrValue<boolean>
+  }
 
   export type NoteStructOutput = [
     string,
@@ -99,725 +63,694 @@ export declare namespace DataTypes {
     string,
     string,
     boolean,
-    boolean
+    boolean,
   ] & {
-    linkItemType: string;
-    linkKey: string;
-    contentUri: string;
-    linkModule: string;
-    mintModule: string;
-    mintNFT: string;
-    deleted: boolean;
-    locked: boolean;
-  };
+    linkItemType: string
+    linkKey: string
+    contentUri: string
+    linkModule: string
+    mintModule: string
+    mintNFT: string
+    deleted: boolean
+    locked: boolean
+  }
 
-  export type LinkProfilesInBatchDataStruct = {
-    fromProfileId: BigNumberish;
-    toProfileIds: BigNumberish[];
-    data: BytesLike[];
-    toAddresses: string[];
-    linkType: BytesLike;
-  };
+  export type LinkCharactersInBatchDataStruct = {
+    fromCharacterId: PromiseOrValue<BigNumberish>
+    toCharacterIds: PromiseOrValue<BigNumberish>[]
+    data: PromiseOrValue<BytesLike>[]
+    toAddresses: PromiseOrValue<string>[]
+    linkType: PromiseOrValue<BytesLike>
+  }
 
-  export type LinkProfilesInBatchDataStructOutput = [
+  export type LinkCharactersInBatchDataStructOutput = [
     BigNumber,
     BigNumber[],
     string[],
     string[],
-    string
+    string,
   ] & {
-    fromProfileId: BigNumber;
-    toProfileIds: BigNumber[];
-    data: string[];
-    toAddresses: string[];
-    linkType: string;
-  };
+    fromCharacterId: BigNumber
+    toCharacterIds: BigNumber[]
+    data: string[]
+    toAddresses: string[]
+    linkType: string
+  }
 }
 
 export interface AbiInterface extends utils.Interface {
   functions: {
-    "createProfileThenPostNote((string,string,address,bytes,string,address,bytes,address,bytes,bool))": FunctionFragment;
-    "getLinkingAddress(bytes32)": FunctionFragment;
-    "getLinkingAddresses(uint256,bytes32)": FunctionFragment;
-    "getLinkingAnyUri(bytes32)": FunctionFragment;
-    "getLinkingAnyUris(uint256,bytes32)": FunctionFragment;
-    "getLinkingERC721(bytes32)": FunctionFragment;
-    "getLinkingERC721s(uint256,bytes32)": FunctionFragment;
-    "getLinkingLinklistId(bytes32)": FunctionFragment;
-    "getLinkingLinklistIds(uint256,bytes32)": FunctionFragment;
-    "getLinkingNote(bytes32)": FunctionFragment;
-    "getLinkingNotes(uint256,bytes32)": FunctionFragment;
-    "getLinkingProfileId(bytes32)": FunctionFragment;
-    "getLinkingProfileIds(uint256,bytes32)": FunctionFragment;
-    "getNotesByProfileId(uint256,uint256,uint256)": FunctionFragment;
-    "initialize(address,address)": FunctionFragment;
-    "linkProfilesInBatch((uint256,uint256[],bytes[],address[],bytes32))": FunctionFragment;
-    "linklist()": FunctionFragment;
-    "web3Entry()": FunctionFragment;
-  };
+    'getLinkingAddress(bytes32)': FunctionFragment
+    'getLinkingAddresses(uint256,bytes32)': FunctionFragment
+    'getLinkingAnyUri(bytes32)': FunctionFragment
+    'getLinkingAnyUris(uint256,bytes32)': FunctionFragment
+    'getLinkingCharacterId(bytes32)': FunctionFragment
+    'getLinkingCharacterIds(uint256,bytes32)': FunctionFragment
+    'getLinkingERC721(bytes32)': FunctionFragment
+    'getLinkingERC721s(uint256,bytes32)': FunctionFragment
+    'getLinkingLinklistId(bytes32)': FunctionFragment
+    'getLinkingLinklistIds(uint256,bytes32)': FunctionFragment
+    'getLinkingNote(bytes32)': FunctionFragment
+    'getLinkingNotes(uint256,bytes32)': FunctionFragment
+    'getNotesByCharacterId(uint256,uint256,uint256)': FunctionFragment
+    'initialize(address,address)': FunctionFragment
+    'linkCharactersInBatch((uint256,uint256[],bytes[],address[],bytes32))': FunctionFragment
+    'linklist()': FunctionFragment
+    'web3Entry()': FunctionFragment
+  }
 
   getFunction(
     nameOrSignatureOrTopic:
-      | "createProfileThenPostNote"
-      | "getLinkingAddress"
-      | "getLinkingAddresses"
-      | "getLinkingAnyUri"
-      | "getLinkingAnyUris"
-      | "getLinkingERC721"
-      | "getLinkingERC721s"
-      | "getLinkingLinklistId"
-      | "getLinkingLinklistIds"
-      | "getLinkingNote"
-      | "getLinkingNotes"
-      | "getLinkingProfileId"
-      | "getLinkingProfileIds"
-      | "getNotesByProfileId"
-      | "initialize"
-      | "linkProfilesInBatch"
-      | "linklist"
-      | "web3Entry"
-  ): FunctionFragment;
+      | 'getLinkingAddress'
+      | 'getLinkingAddresses'
+      | 'getLinkingAnyUri'
+      | 'getLinkingAnyUris'
+      | 'getLinkingCharacterId'
+      | 'getLinkingCharacterIds'
+      | 'getLinkingERC721'
+      | 'getLinkingERC721s'
+      | 'getLinkingLinklistId'
+      | 'getLinkingLinklistIds'
+      | 'getLinkingNote'
+      | 'getLinkingNotes'
+      | 'getNotesByCharacterId'
+      | 'initialize'
+      | 'linkCharactersInBatch'
+      | 'linklist'
+      | 'web3Entry',
+  ): FunctionFragment
 
   encodeFunctionData(
-    functionFragment: "createProfileThenPostNote",
-    values: [DataTypes.CreateProfileThenPostNoteDataStruct]
-  ): string;
+    functionFragment: 'getLinkingAddress',
+    values: [PromiseOrValue<BytesLike>],
+  ): string
   encodeFunctionData(
-    functionFragment: "getLinkingAddress",
-    values: [BytesLike]
-  ): string;
+    functionFragment: 'getLinkingAddresses',
+    values: [PromiseOrValue<BigNumberish>, PromiseOrValue<BytesLike>],
+  ): string
   encodeFunctionData(
-    functionFragment: "getLinkingAddresses",
-    values: [BigNumberish, BytesLike]
-  ): string;
+    functionFragment: 'getLinkingAnyUri',
+    values: [PromiseOrValue<BytesLike>],
+  ): string
   encodeFunctionData(
-    functionFragment: "getLinkingAnyUri",
-    values: [BytesLike]
-  ): string;
+    functionFragment: 'getLinkingAnyUris',
+    values: [PromiseOrValue<BigNumberish>, PromiseOrValue<BytesLike>],
+  ): string
   encodeFunctionData(
-    functionFragment: "getLinkingAnyUris",
-    values: [BigNumberish, BytesLike]
-  ): string;
+    functionFragment: 'getLinkingCharacterId',
+    values: [PromiseOrValue<BytesLike>],
+  ): string
   encodeFunctionData(
-    functionFragment: "getLinkingERC721",
-    values: [BytesLike]
-  ): string;
+    functionFragment: 'getLinkingCharacterIds',
+    values: [PromiseOrValue<BigNumberish>, PromiseOrValue<BytesLike>],
+  ): string
   encodeFunctionData(
-    functionFragment: "getLinkingERC721s",
-    values: [BigNumberish, BytesLike]
-  ): string;
+    functionFragment: 'getLinkingERC721',
+    values: [PromiseOrValue<BytesLike>],
+  ): string
   encodeFunctionData(
-    functionFragment: "getLinkingLinklistId",
-    values: [BytesLike]
-  ): string;
+    functionFragment: 'getLinkingERC721s',
+    values: [PromiseOrValue<BigNumberish>, PromiseOrValue<BytesLike>],
+  ): string
   encodeFunctionData(
-    functionFragment: "getLinkingLinklistIds",
-    values: [BigNumberish, BytesLike]
-  ): string;
+    functionFragment: 'getLinkingLinklistId',
+    values: [PromiseOrValue<BytesLike>],
+  ): string
   encodeFunctionData(
-    functionFragment: "getLinkingNote",
-    values: [BytesLike]
-  ): string;
+    functionFragment: 'getLinkingLinklistIds',
+    values: [PromiseOrValue<BigNumberish>, PromiseOrValue<BytesLike>],
+  ): string
   encodeFunctionData(
-    functionFragment: "getLinkingNotes",
-    values: [BigNumberish, BytesLike]
-  ): string;
+    functionFragment: 'getLinkingNote',
+    values: [PromiseOrValue<BytesLike>],
+  ): string
   encodeFunctionData(
-    functionFragment: "getLinkingProfileId",
-    values: [BytesLike]
-  ): string;
+    functionFragment: 'getLinkingNotes',
+    values: [PromiseOrValue<BigNumberish>, PromiseOrValue<BytesLike>],
+  ): string
   encodeFunctionData(
-    functionFragment: "getLinkingProfileIds",
-    values: [BigNumberish, BytesLike]
-  ): string;
+    functionFragment: 'getNotesByCharacterId',
+    values: [
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<BigNumberish>,
+    ],
+  ): string
   encodeFunctionData(
-    functionFragment: "getNotesByProfileId",
-    values: [BigNumberish, BigNumberish, BigNumberish]
-  ): string;
+    functionFragment: 'initialize',
+    values: [PromiseOrValue<string>, PromiseOrValue<string>],
+  ): string
   encodeFunctionData(
-    functionFragment: "initialize",
-    values: [string, string]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "linkProfilesInBatch",
-    values: [DataTypes.LinkProfilesInBatchDataStruct]
-  ): string;
-  encodeFunctionData(functionFragment: "linklist", values?: undefined): string;
-  encodeFunctionData(functionFragment: "web3Entry", values?: undefined): string;
+    functionFragment: 'linkCharactersInBatch',
+    values: [DataTypes.LinkCharactersInBatchDataStruct],
+  ): string
+  encodeFunctionData(functionFragment: 'linklist', values?: undefined): string
+  encodeFunctionData(functionFragment: 'web3Entry', values?: undefined): string
 
   decodeFunctionResult(
-    functionFragment: "createProfileThenPostNote",
-    data: BytesLike
-  ): Result;
+    functionFragment: 'getLinkingAddress',
+    data: BytesLike,
+  ): Result
   decodeFunctionResult(
-    functionFragment: "getLinkingAddress",
-    data: BytesLike
-  ): Result;
+    functionFragment: 'getLinkingAddresses',
+    data: BytesLike,
+  ): Result
   decodeFunctionResult(
-    functionFragment: "getLinkingAddresses",
-    data: BytesLike
-  ): Result;
+    functionFragment: 'getLinkingAnyUri',
+    data: BytesLike,
+  ): Result
   decodeFunctionResult(
-    functionFragment: "getLinkingAnyUri",
-    data: BytesLike
-  ): Result;
+    functionFragment: 'getLinkingAnyUris',
+    data: BytesLike,
+  ): Result
   decodeFunctionResult(
-    functionFragment: "getLinkingAnyUris",
-    data: BytesLike
-  ): Result;
+    functionFragment: 'getLinkingCharacterId',
+    data: BytesLike,
+  ): Result
   decodeFunctionResult(
-    functionFragment: "getLinkingERC721",
-    data: BytesLike
-  ): Result;
+    functionFragment: 'getLinkingCharacterIds',
+    data: BytesLike,
+  ): Result
   decodeFunctionResult(
-    functionFragment: "getLinkingERC721s",
-    data: BytesLike
-  ): Result;
+    functionFragment: 'getLinkingERC721',
+    data: BytesLike,
+  ): Result
   decodeFunctionResult(
-    functionFragment: "getLinkingLinklistId",
-    data: BytesLike
-  ): Result;
+    functionFragment: 'getLinkingERC721s',
+    data: BytesLike,
+  ): Result
   decodeFunctionResult(
-    functionFragment: "getLinkingLinklistIds",
-    data: BytesLike
-  ): Result;
+    functionFragment: 'getLinkingLinklistId',
+    data: BytesLike,
+  ): Result
   decodeFunctionResult(
-    functionFragment: "getLinkingNote",
-    data: BytesLike
-  ): Result;
+    functionFragment: 'getLinkingLinklistIds',
+    data: BytesLike,
+  ): Result
   decodeFunctionResult(
-    functionFragment: "getLinkingNotes",
-    data: BytesLike
-  ): Result;
+    functionFragment: 'getLinkingNote',
+    data: BytesLike,
+  ): Result
   decodeFunctionResult(
-    functionFragment: "getLinkingProfileId",
-    data: BytesLike
-  ): Result;
+    functionFragment: 'getLinkingNotes',
+    data: BytesLike,
+  ): Result
   decodeFunctionResult(
-    functionFragment: "getLinkingProfileIds",
-    data: BytesLike
-  ): Result;
+    functionFragment: 'getNotesByCharacterId',
+    data: BytesLike,
+  ): Result
+  decodeFunctionResult(functionFragment: 'initialize', data: BytesLike): Result
   decodeFunctionResult(
-    functionFragment: "getNotesByProfileId",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(functionFragment: "initialize", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "linkProfilesInBatch",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(functionFragment: "linklist", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "web3Entry", data: BytesLike): Result;
+    functionFragment: 'linkCharactersInBatch',
+    data: BytesLike,
+  ): Result
+  decodeFunctionResult(functionFragment: 'linklist', data: BytesLike): Result
+  decodeFunctionResult(functionFragment: 'web3Entry', data: BytesLike): Result
 
-  events: {};
+  events: {}
 }
 
 export interface Abi extends BaseContract {
-  connect(signerOrProvider: Signer | Provider | string): this;
-  attach(addressOrName: string): this;
-  deployed(): Promise<this>;
+  connect(signerOrProvider: Signer | Provider | string): this
+  attach(addressOrName: string): this
+  deployed(): Promise<this>
 
-  interface: AbiInterface;
+  interface: AbiInterface
 
   queryFilter<TEvent extends TypedEvent>(
     event: TypedEventFilter<TEvent>,
     fromBlockOrBlockhash?: string | number | undefined,
-    toBlock?: string | number | undefined
-  ): Promise<Array<TEvent>>;
+    toBlock?: string | number | undefined,
+  ): Promise<Array<TEvent>>
 
   listeners<TEvent extends TypedEvent>(
-    eventFilter?: TypedEventFilter<TEvent>
-  ): Array<TypedListener<TEvent>>;
-  listeners(eventName?: string): Array<Listener>;
+    eventFilter?: TypedEventFilter<TEvent>,
+  ): Array<TypedListener<TEvent>>
+  listeners(eventName?: string): Array<Listener>
   removeAllListeners<TEvent extends TypedEvent>(
-    eventFilter: TypedEventFilter<TEvent>
-  ): this;
-  removeAllListeners(eventName?: string): this;
-  off: OnEvent<this>;
-  on: OnEvent<this>;
-  once: OnEvent<this>;
-  removeListener: OnEvent<this>;
+    eventFilter: TypedEventFilter<TEvent>,
+  ): this
+  removeAllListeners(eventName?: string): this
+  off: OnEvent<this>
+  on: OnEvent<this>
+  once: OnEvent<this>
+  removeListener: OnEvent<this>
 
   functions: {
-    createProfileThenPostNote(
-      vars: DataTypes.CreateProfileThenPostNoteDataStruct,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
-
     getLinkingAddress(
-      linkKey: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<[string]>;
+      linkKey: PromiseOrValue<BytesLike>,
+      overrides?: CallOverrides,
+    ): Promise<[string]>
 
     getLinkingAddresses(
-      fromProfileId: BigNumberish,
-      linkType: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<[string[]]>;
+      fromCharacterId: PromiseOrValue<BigNumberish>,
+      linkType: PromiseOrValue<BytesLike>,
+      overrides?: CallOverrides,
+    ): Promise<[string[]]>
 
     getLinkingAnyUri(
-      linkKey: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<[string]>;
+      linkKey: PromiseOrValue<BytesLike>,
+      overrides?: CallOverrides,
+    ): Promise<[string]>
 
     getLinkingAnyUris(
-      fromProfileId: BigNumberish,
-      linkType: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<[string[]] & { results: string[] }>;
+      fromCharacterId: PromiseOrValue<BigNumberish>,
+      linkType: PromiseOrValue<BytesLike>,
+      overrides?: CallOverrides,
+    ): Promise<[string[]] & { results: string[] }>
+
+    getLinkingCharacterId(
+      linkKey: PromiseOrValue<BytesLike>,
+      overrides?: CallOverrides,
+    ): Promise<[BigNumber] & { characterId: BigNumber }>
+
+    getLinkingCharacterIds(
+      fromCharacterId: PromiseOrValue<BigNumberish>,
+      linkType: PromiseOrValue<BytesLike>,
+      overrides?: CallOverrides,
+    ): Promise<[BigNumber[]] & { results: BigNumber[] }>
 
     getLinkingERC721(
-      linkKey: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<[DataTypes.ERC721StructStructOutput]>;
+      linkKey: PromiseOrValue<BytesLike>,
+      overrides?: CallOverrides,
+    ): Promise<[DataTypes.ERC721StructStructOutput]>
 
     getLinkingERC721s(
-      fromProfileId: BigNumberish,
-      linkType: BytesLike,
-      overrides?: CallOverrides
+      fromCharacterId: PromiseOrValue<BigNumberish>,
+      linkType: PromiseOrValue<BytesLike>,
+      overrides?: CallOverrides,
     ): Promise<
       [DataTypes.ERC721StructStructOutput[]] & {
-        results: DataTypes.ERC721StructStructOutput[];
+        results: DataTypes.ERC721StructStructOutput[]
       }
-    >;
+    >
 
     getLinkingLinklistId(
-      linkKey: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<[BigNumber] & { linklistId: BigNumber }>;
+      linkKey: PromiseOrValue<BytesLike>,
+      overrides?: CallOverrides,
+    ): Promise<[BigNumber] & { linklistId: BigNumber }>
 
     getLinkingLinklistIds(
-      fromProfileId: BigNumberish,
-      linkType: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<[BigNumber[]] & { linklistIds: BigNumber[] }>;
+      fromCharacterId: PromiseOrValue<BigNumberish>,
+      linkType: PromiseOrValue<BytesLike>,
+      overrides?: CallOverrides,
+    ): Promise<[BigNumber[]] & { linklistIds: BigNumber[] }>
 
     getLinkingNote(
-      linkKey: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<[DataTypes.NoteStructStructOutput]>;
+      linkKey: PromiseOrValue<BytesLike>,
+      overrides?: CallOverrides,
+    ): Promise<[DataTypes.NoteStructStructOutput]>
 
     getLinkingNotes(
-      fromProfileId: BigNumberish,
-      linkType: BytesLike,
-      overrides?: CallOverrides
+      fromCharacterId: PromiseOrValue<BigNumberish>,
+      linkType: PromiseOrValue<BytesLike>,
+      overrides?: CallOverrides,
     ): Promise<
       [DataTypes.NoteStructOutput[]] & { results: DataTypes.NoteStructOutput[] }
-    >;
+    >
 
-    getLinkingProfileId(
-      linkKey: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<[BigNumber] & { profileId: BigNumber }>;
-
-    getLinkingProfileIds(
-      fromProfileId: BigNumberish,
-      linkType: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<[BigNumber[]] & { results: BigNumber[] }>;
-
-    getNotesByProfileId(
-      profileId: BigNumberish,
-      offset: BigNumberish,
-      limit: BigNumberish,
-      overrides?: CallOverrides
+    getNotesByCharacterId(
+      characterId: PromiseOrValue<BigNumberish>,
+      offset: PromiseOrValue<BigNumberish>,
+      limit: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides,
     ): Promise<
       [DataTypes.NoteStructOutput[]] & { results: DataTypes.NoteStructOutput[] }
-    >;
+    >
 
     initialize(
-      _web3Entry: string,
-      _linklist: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
+      _web3Entry: PromiseOrValue<string>,
+      _linklist: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> },
+    ): Promise<ContractTransaction>
 
-    linkProfilesInBatch(
-      vars: DataTypes.LinkProfilesInBatchDataStruct,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
+    linkCharactersInBatch(
+      vars: DataTypes.LinkCharactersInBatchDataStruct,
+      overrides?: Overrides & { from?: PromiseOrValue<string> },
+    ): Promise<ContractTransaction>
 
-    linklist(overrides?: CallOverrides): Promise<[string]>;
+    linklist(overrides?: CallOverrides): Promise<[string]>
 
-    web3Entry(overrides?: CallOverrides): Promise<[string]>;
-  };
-
-  createProfileThenPostNote(
-    vars: DataTypes.CreateProfileThenPostNoteDataStruct,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
+    web3Entry(overrides?: CallOverrides): Promise<[string]>
+  }
 
   getLinkingAddress(
-    linkKey: BytesLike,
-    overrides?: CallOverrides
-  ): Promise<string>;
+    linkKey: PromiseOrValue<BytesLike>,
+    overrides?: CallOverrides,
+  ): Promise<string>
 
   getLinkingAddresses(
-    fromProfileId: BigNumberish,
-    linkType: BytesLike,
-    overrides?: CallOverrides
-  ): Promise<string[]>;
+    fromCharacterId: PromiseOrValue<BigNumberish>,
+    linkType: PromiseOrValue<BytesLike>,
+    overrides?: CallOverrides,
+  ): Promise<string[]>
 
   getLinkingAnyUri(
-    linkKey: BytesLike,
-    overrides?: CallOverrides
-  ): Promise<string>;
+    linkKey: PromiseOrValue<BytesLike>,
+    overrides?: CallOverrides,
+  ): Promise<string>
 
   getLinkingAnyUris(
-    fromProfileId: BigNumberish,
-    linkType: BytesLike,
-    overrides?: CallOverrides
-  ): Promise<string[]>;
+    fromCharacterId: PromiseOrValue<BigNumberish>,
+    linkType: PromiseOrValue<BytesLike>,
+    overrides?: CallOverrides,
+  ): Promise<string[]>
+
+  getLinkingCharacterId(
+    linkKey: PromiseOrValue<BytesLike>,
+    overrides?: CallOverrides,
+  ): Promise<BigNumber>
+
+  getLinkingCharacterIds(
+    fromCharacterId: PromiseOrValue<BigNumberish>,
+    linkType: PromiseOrValue<BytesLike>,
+    overrides?: CallOverrides,
+  ): Promise<BigNumber[]>
 
   getLinkingERC721(
-    linkKey: BytesLike,
-    overrides?: CallOverrides
-  ): Promise<DataTypes.ERC721StructStructOutput>;
+    linkKey: PromiseOrValue<BytesLike>,
+    overrides?: CallOverrides,
+  ): Promise<DataTypes.ERC721StructStructOutput>
 
   getLinkingERC721s(
-    fromProfileId: BigNumberish,
-    linkType: BytesLike,
-    overrides?: CallOverrides
-  ): Promise<DataTypes.ERC721StructStructOutput[]>;
+    fromCharacterId: PromiseOrValue<BigNumberish>,
+    linkType: PromiseOrValue<BytesLike>,
+    overrides?: CallOverrides,
+  ): Promise<DataTypes.ERC721StructStructOutput[]>
 
   getLinkingLinklistId(
-    linkKey: BytesLike,
-    overrides?: CallOverrides
-  ): Promise<BigNumber>;
+    linkKey: PromiseOrValue<BytesLike>,
+    overrides?: CallOverrides,
+  ): Promise<BigNumber>
 
   getLinkingLinklistIds(
-    fromProfileId: BigNumberish,
-    linkType: BytesLike,
-    overrides?: CallOverrides
-  ): Promise<BigNumber[]>;
+    fromCharacterId: PromiseOrValue<BigNumberish>,
+    linkType: PromiseOrValue<BytesLike>,
+    overrides?: CallOverrides,
+  ): Promise<BigNumber[]>
 
   getLinkingNote(
-    linkKey: BytesLike,
-    overrides?: CallOverrides
-  ): Promise<DataTypes.NoteStructStructOutput>;
+    linkKey: PromiseOrValue<BytesLike>,
+    overrides?: CallOverrides,
+  ): Promise<DataTypes.NoteStructStructOutput>
 
   getLinkingNotes(
-    fromProfileId: BigNumberish,
-    linkType: BytesLike,
-    overrides?: CallOverrides
-  ): Promise<DataTypes.NoteStructOutput[]>;
+    fromCharacterId: PromiseOrValue<BigNumberish>,
+    linkType: PromiseOrValue<BytesLike>,
+    overrides?: CallOverrides,
+  ): Promise<DataTypes.NoteStructOutput[]>
 
-  getLinkingProfileId(
-    linkKey: BytesLike,
-    overrides?: CallOverrides
-  ): Promise<BigNumber>;
-
-  getLinkingProfileIds(
-    fromProfileId: BigNumberish,
-    linkType: BytesLike,
-    overrides?: CallOverrides
-  ): Promise<BigNumber[]>;
-
-  getNotesByProfileId(
-    profileId: BigNumberish,
-    offset: BigNumberish,
-    limit: BigNumberish,
-    overrides?: CallOverrides
-  ): Promise<DataTypes.NoteStructOutput[]>;
+  getNotesByCharacterId(
+    characterId: PromiseOrValue<BigNumberish>,
+    offset: PromiseOrValue<BigNumberish>,
+    limit: PromiseOrValue<BigNumberish>,
+    overrides?: CallOverrides,
+  ): Promise<DataTypes.NoteStructOutput[]>
 
   initialize(
-    _web3Entry: string,
-    _linklist: string,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
+    _web3Entry: PromiseOrValue<string>,
+    _linklist: PromiseOrValue<string>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> },
+  ): Promise<ContractTransaction>
 
-  linkProfilesInBatch(
-    vars: DataTypes.LinkProfilesInBatchDataStruct,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
+  linkCharactersInBatch(
+    vars: DataTypes.LinkCharactersInBatchDataStruct,
+    overrides?: Overrides & { from?: PromiseOrValue<string> },
+  ): Promise<ContractTransaction>
 
-  linklist(overrides?: CallOverrides): Promise<string>;
+  linklist(overrides?: CallOverrides): Promise<string>
 
-  web3Entry(overrides?: CallOverrides): Promise<string>;
+  web3Entry(overrides?: CallOverrides): Promise<string>
 
   callStatic: {
-    createProfileThenPostNote(
-      vars: DataTypes.CreateProfileThenPostNoteDataStruct,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
     getLinkingAddress(
-      linkKey: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<string>;
+      linkKey: PromiseOrValue<BytesLike>,
+      overrides?: CallOverrides,
+    ): Promise<string>
 
     getLinkingAddresses(
-      fromProfileId: BigNumberish,
-      linkType: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<string[]>;
+      fromCharacterId: PromiseOrValue<BigNumberish>,
+      linkType: PromiseOrValue<BytesLike>,
+      overrides?: CallOverrides,
+    ): Promise<string[]>
 
     getLinkingAnyUri(
-      linkKey: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<string>;
+      linkKey: PromiseOrValue<BytesLike>,
+      overrides?: CallOverrides,
+    ): Promise<string>
 
     getLinkingAnyUris(
-      fromProfileId: BigNumberish,
-      linkType: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<string[]>;
+      fromCharacterId: PromiseOrValue<BigNumberish>,
+      linkType: PromiseOrValue<BytesLike>,
+      overrides?: CallOverrides,
+    ): Promise<string[]>
+
+    getLinkingCharacterId(
+      linkKey: PromiseOrValue<BytesLike>,
+      overrides?: CallOverrides,
+    ): Promise<BigNumber>
+
+    getLinkingCharacterIds(
+      fromCharacterId: PromiseOrValue<BigNumberish>,
+      linkType: PromiseOrValue<BytesLike>,
+      overrides?: CallOverrides,
+    ): Promise<BigNumber[]>
 
     getLinkingERC721(
-      linkKey: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<DataTypes.ERC721StructStructOutput>;
+      linkKey: PromiseOrValue<BytesLike>,
+      overrides?: CallOverrides,
+    ): Promise<DataTypes.ERC721StructStructOutput>
 
     getLinkingERC721s(
-      fromProfileId: BigNumberish,
-      linkType: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<DataTypes.ERC721StructStructOutput[]>;
+      fromCharacterId: PromiseOrValue<BigNumberish>,
+      linkType: PromiseOrValue<BytesLike>,
+      overrides?: CallOverrides,
+    ): Promise<DataTypes.ERC721StructStructOutput[]>
 
     getLinkingLinklistId(
-      linkKey: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
+      linkKey: PromiseOrValue<BytesLike>,
+      overrides?: CallOverrides,
+    ): Promise<BigNumber>
 
     getLinkingLinklistIds(
-      fromProfileId: BigNumberish,
-      linkType: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<BigNumber[]>;
+      fromCharacterId: PromiseOrValue<BigNumberish>,
+      linkType: PromiseOrValue<BytesLike>,
+      overrides?: CallOverrides,
+    ): Promise<BigNumber[]>
 
     getLinkingNote(
-      linkKey: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<DataTypes.NoteStructStructOutput>;
+      linkKey: PromiseOrValue<BytesLike>,
+      overrides?: CallOverrides,
+    ): Promise<DataTypes.NoteStructStructOutput>
 
     getLinkingNotes(
-      fromProfileId: BigNumberish,
-      linkType: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<DataTypes.NoteStructOutput[]>;
+      fromCharacterId: PromiseOrValue<BigNumberish>,
+      linkType: PromiseOrValue<BytesLike>,
+      overrides?: CallOverrides,
+    ): Promise<DataTypes.NoteStructOutput[]>
 
-    getLinkingProfileId(
-      linkKey: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    getLinkingProfileIds(
-      fromProfileId: BigNumberish,
-      linkType: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<BigNumber[]>;
-
-    getNotesByProfileId(
-      profileId: BigNumberish,
-      offset: BigNumberish,
-      limit: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<DataTypes.NoteStructOutput[]>;
+    getNotesByCharacterId(
+      characterId: PromiseOrValue<BigNumberish>,
+      offset: PromiseOrValue<BigNumberish>,
+      limit: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides,
+    ): Promise<DataTypes.NoteStructOutput[]>
 
     initialize(
-      _web3Entry: string,
-      _linklist: string,
-      overrides?: CallOverrides
-    ): Promise<void>;
+      _web3Entry: PromiseOrValue<string>,
+      _linklist: PromiseOrValue<string>,
+      overrides?: CallOverrides,
+    ): Promise<void>
 
-    linkProfilesInBatch(
-      vars: DataTypes.LinkProfilesInBatchDataStruct,
-      overrides?: CallOverrides
-    ): Promise<void>;
+    linkCharactersInBatch(
+      vars: DataTypes.LinkCharactersInBatchDataStruct,
+      overrides?: CallOverrides,
+    ): Promise<void>
 
-    linklist(overrides?: CallOverrides): Promise<string>;
+    linklist(overrides?: CallOverrides): Promise<string>
 
-    web3Entry(overrides?: CallOverrides): Promise<string>;
-  };
+    web3Entry(overrides?: CallOverrides): Promise<string>
+  }
 
-  filters: {};
+  filters: {}
 
   estimateGas: {
-    createProfileThenPostNote(
-      vars: DataTypes.CreateProfileThenPostNoteDataStruct,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
     getLinkingAddress(
-      linkKey: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
+      linkKey: PromiseOrValue<BytesLike>,
+      overrides?: CallOverrides,
+    ): Promise<BigNumber>
 
     getLinkingAddresses(
-      fromProfileId: BigNumberish,
-      linkType: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
+      fromCharacterId: PromiseOrValue<BigNumberish>,
+      linkType: PromiseOrValue<BytesLike>,
+      overrides?: CallOverrides,
+    ): Promise<BigNumber>
 
     getLinkingAnyUri(
-      linkKey: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
+      linkKey: PromiseOrValue<BytesLike>,
+      overrides?: CallOverrides,
+    ): Promise<BigNumber>
 
     getLinkingAnyUris(
-      fromProfileId: BigNumberish,
-      linkType: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
+      fromCharacterId: PromiseOrValue<BigNumberish>,
+      linkType: PromiseOrValue<BytesLike>,
+      overrides?: CallOverrides,
+    ): Promise<BigNumber>
+
+    getLinkingCharacterId(
+      linkKey: PromiseOrValue<BytesLike>,
+      overrides?: CallOverrides,
+    ): Promise<BigNumber>
+
+    getLinkingCharacterIds(
+      fromCharacterId: PromiseOrValue<BigNumberish>,
+      linkType: PromiseOrValue<BytesLike>,
+      overrides?: CallOverrides,
+    ): Promise<BigNumber>
 
     getLinkingERC721(
-      linkKey: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
+      linkKey: PromiseOrValue<BytesLike>,
+      overrides?: CallOverrides,
+    ): Promise<BigNumber>
 
     getLinkingERC721s(
-      fromProfileId: BigNumberish,
-      linkType: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
+      fromCharacterId: PromiseOrValue<BigNumberish>,
+      linkType: PromiseOrValue<BytesLike>,
+      overrides?: CallOverrides,
+    ): Promise<BigNumber>
 
     getLinkingLinklistId(
-      linkKey: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
+      linkKey: PromiseOrValue<BytesLike>,
+      overrides?: CallOverrides,
+    ): Promise<BigNumber>
 
     getLinkingLinklistIds(
-      fromProfileId: BigNumberish,
-      linkType: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
+      fromCharacterId: PromiseOrValue<BigNumberish>,
+      linkType: PromiseOrValue<BytesLike>,
+      overrides?: CallOverrides,
+    ): Promise<BigNumber>
 
     getLinkingNote(
-      linkKey: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
+      linkKey: PromiseOrValue<BytesLike>,
+      overrides?: CallOverrides,
+    ): Promise<BigNumber>
 
     getLinkingNotes(
-      fromProfileId: BigNumberish,
-      linkType: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
+      fromCharacterId: PromiseOrValue<BigNumberish>,
+      linkType: PromiseOrValue<BytesLike>,
+      overrides?: CallOverrides,
+    ): Promise<BigNumber>
 
-    getLinkingProfileId(
-      linkKey: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    getLinkingProfileIds(
-      fromProfileId: BigNumberish,
-      linkType: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    getNotesByProfileId(
-      profileId: BigNumberish,
-      offset: BigNumberish,
-      limit: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
+    getNotesByCharacterId(
+      characterId: PromiseOrValue<BigNumberish>,
+      offset: PromiseOrValue<BigNumberish>,
+      limit: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides,
+    ): Promise<BigNumber>
 
     initialize(
-      _web3Entry: string,
-      _linklist: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
+      _web3Entry: PromiseOrValue<string>,
+      _linklist: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> },
+    ): Promise<BigNumber>
 
-    linkProfilesInBatch(
-      vars: DataTypes.LinkProfilesInBatchDataStruct,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
+    linkCharactersInBatch(
+      vars: DataTypes.LinkCharactersInBatchDataStruct,
+      overrides?: Overrides & { from?: PromiseOrValue<string> },
+    ): Promise<BigNumber>
 
-    linklist(overrides?: CallOverrides): Promise<BigNumber>;
+    linklist(overrides?: CallOverrides): Promise<BigNumber>
 
-    web3Entry(overrides?: CallOverrides): Promise<BigNumber>;
-  };
+    web3Entry(overrides?: CallOverrides): Promise<BigNumber>
+  }
 
   populateTransaction: {
-    createProfileThenPostNote(
-      vars: DataTypes.CreateProfileThenPostNoteDataStruct,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
     getLinkingAddress(
-      linkKey: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
+      linkKey: PromiseOrValue<BytesLike>,
+      overrides?: CallOverrides,
+    ): Promise<PopulatedTransaction>
 
     getLinkingAddresses(
-      fromProfileId: BigNumberish,
-      linkType: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
+      fromCharacterId: PromiseOrValue<BigNumberish>,
+      linkType: PromiseOrValue<BytesLike>,
+      overrides?: CallOverrides,
+    ): Promise<PopulatedTransaction>
 
     getLinkingAnyUri(
-      linkKey: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
+      linkKey: PromiseOrValue<BytesLike>,
+      overrides?: CallOverrides,
+    ): Promise<PopulatedTransaction>
 
     getLinkingAnyUris(
-      fromProfileId: BigNumberish,
-      linkType: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
+      fromCharacterId: PromiseOrValue<BigNumberish>,
+      linkType: PromiseOrValue<BytesLike>,
+      overrides?: CallOverrides,
+    ): Promise<PopulatedTransaction>
+
+    getLinkingCharacterId(
+      linkKey: PromiseOrValue<BytesLike>,
+      overrides?: CallOverrides,
+    ): Promise<PopulatedTransaction>
+
+    getLinkingCharacterIds(
+      fromCharacterId: PromiseOrValue<BigNumberish>,
+      linkType: PromiseOrValue<BytesLike>,
+      overrides?: CallOverrides,
+    ): Promise<PopulatedTransaction>
 
     getLinkingERC721(
-      linkKey: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
+      linkKey: PromiseOrValue<BytesLike>,
+      overrides?: CallOverrides,
+    ): Promise<PopulatedTransaction>
 
     getLinkingERC721s(
-      fromProfileId: BigNumberish,
-      linkType: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
+      fromCharacterId: PromiseOrValue<BigNumberish>,
+      linkType: PromiseOrValue<BytesLike>,
+      overrides?: CallOverrides,
+    ): Promise<PopulatedTransaction>
 
     getLinkingLinklistId(
-      linkKey: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
+      linkKey: PromiseOrValue<BytesLike>,
+      overrides?: CallOverrides,
+    ): Promise<PopulatedTransaction>
 
     getLinkingLinklistIds(
-      fromProfileId: BigNumberish,
-      linkType: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
+      fromCharacterId: PromiseOrValue<BigNumberish>,
+      linkType: PromiseOrValue<BytesLike>,
+      overrides?: CallOverrides,
+    ): Promise<PopulatedTransaction>
 
     getLinkingNote(
-      linkKey: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
+      linkKey: PromiseOrValue<BytesLike>,
+      overrides?: CallOverrides,
+    ): Promise<PopulatedTransaction>
 
     getLinkingNotes(
-      fromProfileId: BigNumberish,
-      linkType: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
+      fromCharacterId: PromiseOrValue<BigNumberish>,
+      linkType: PromiseOrValue<BytesLike>,
+      overrides?: CallOverrides,
+    ): Promise<PopulatedTransaction>
 
-    getLinkingProfileId(
-      linkKey: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    getLinkingProfileIds(
-      fromProfileId: BigNumberish,
-      linkType: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    getNotesByProfileId(
-      profileId: BigNumberish,
-      offset: BigNumberish,
-      limit: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
+    getNotesByCharacterId(
+      characterId: PromiseOrValue<BigNumberish>,
+      offset: PromiseOrValue<BigNumberish>,
+      limit: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides,
+    ): Promise<PopulatedTransaction>
 
     initialize(
-      _web3Entry: string,
-      _linklist: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
+      _web3Entry: PromiseOrValue<string>,
+      _linklist: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> },
+    ): Promise<PopulatedTransaction>
 
-    linkProfilesInBatch(
-      vars: DataTypes.LinkProfilesInBatchDataStruct,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
+    linkCharactersInBatch(
+      vars: DataTypes.LinkCharactersInBatchDataStruct,
+      overrides?: Overrides & { from?: PromiseOrValue<string> },
+    ): Promise<PopulatedTransaction>
 
-    linklist(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    linklist(overrides?: CallOverrides): Promise<PopulatedTransaction>
 
-    web3Entry(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-  };
+    web3Entry(overrides?: CallOverrides): Promise<PopulatedTransaction>
+  }
 }

@@ -1,33 +1,33 @@
 export interface BaseMetadata {
   // version: '1' // TODO: do we need this?
 
-  type?: 'profile' | 'note' | 'linklist'
+  type?: 'character' | 'note' | 'linklist'
 }
 
-export interface ProfileMetadata extends BaseMetadata {
-  /** The name of this profile. */
+export interface CharacterMetadata extends BaseMetadata {
+  /** The name of this character. */
   name?: string
 
   /**
-   * The avatars of this profile.
+   * The avatars of this character.
    * The first avatar is the primary avatar.
    * @example
    * ['ipfs://Qm...', 'ipfs://Qm...']
    **/
   avatars?: string[]
 
-  /** The bio of this profile. */
+  /** The bio of this character. */
   bio?: string
 
   /**
-   * The websites of this profile.
+   * The websites of this character.
    * @example
    * ['https://example.com', 'https://example.org']
    */
   websites?: string[]
 
   /**
-   * The social links of this profile. It should follow the csb:// scheme.
+   * The social links of this character. It should follow the csb:// scheme.
    *
    * The format is `csb://account:<identity>@<platform>`.
    *
@@ -37,7 +37,7 @@ export interface ProfileMetadata extends BaseMetadata {
   connected_accounts?: string[]
 
   /**
-   * The special connected avatars of this profile. it should follow the csb:// scheme.
+   * The special connected avatars of this character. it should follow the csb:// scheme.
    *
    * Use case: use an NFT as avatar.
    *
@@ -118,4 +118,4 @@ export interface NoteMetadata extends BaseMetadata {
       )[]
 }
 
-export type Metadata = ProfileMetadata | NoteMetadata
+export type Metadata = CharacterMetadata | NoteMetadata

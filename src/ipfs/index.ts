@@ -3,7 +3,7 @@ import type {
   BaseMetadata,
   Metadata,
   NoteMetadata,
-  ProfileMetadata,
+  CharacterMetadata,
 } from '../types/metadata'
 import { IpfsResponse } from '../types/ipfs'
 import { Network } from '../network'
@@ -56,16 +56,16 @@ export class Ipfs {
     metadataOrUri: NoteMetadata | string,
     retrieveMetadataIfNeeded: true,
   ): Promise<{ metadata: NoteMetadata; uri: string }>
-  static async parseMetadataOrUri<T = ProfileMetadata>(
-    type: 'profile',
-    metadataOrUri: ProfileMetadata | string,
+  static async parseMetadataOrUri<T = CharacterMetadata>(
+    type: 'character',
+    metadataOrUri: CharacterMetadata | string,
     retrieveMetadataIfNeeded?: false,
   ): Promise<{ uri: string }>
-  static async parseMetadataOrUri<T = ProfileMetadata>(
-    type: 'profile',
-    metadataOrUri: ProfileMetadata | string,
+  static async parseMetadataOrUri<T = CharacterMetadata>(
+    type: 'character',
+    metadataOrUri: CharacterMetadata | string,
     retrieveMetadataIfNeeded: true,
-  ): Promise<{ metadata: ProfileMetadata; uri: string }>
+  ): Promise<{ metadata: CharacterMetadata; uri: string }>
   static async parseMetadataOrUri<T extends Metadata>(
     type: BaseMetadata['type'],
     metadataOrUri: T | string,

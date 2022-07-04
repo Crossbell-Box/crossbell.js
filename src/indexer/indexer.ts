@@ -2,11 +2,11 @@ import { Mixin } from 'ts-mixer'
 import { LinkIndexer } from './subapis/link'
 import { LinklistIndexer } from './subapis/linklist'
 import { NoteIndexer } from './subapis/note'
-import { ProfileIndexer } from './subapis/profile'
+import { CharacterIndexer } from './subapis/character'
 import { SearchIndexer } from './subapis/search'
 
 const Indexers = Mixin(
-  ProfileIndexer,
+  CharacterIndexer,
   LinklistIndexer,
   LinkIndexer,
   NoteIndexer,
@@ -14,14 +14,14 @@ const Indexers = Mixin(
 )
 
 /**
- * This class is used to fetch data like profiles, links from the indexer.
+ * This class is used to fetch data like characters, links from the indexer.
  *
  * @example
  * ```js
  * import { Indexer } from 'crossbell.js'
  *
  * const indexer = new Indexer()
- * const res = await indexer.getProfiles('0x...')
+ * const res = await indexer.getCharacters('0x...')
  * console.log(res.list)
  * ```
  *

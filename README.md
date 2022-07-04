@@ -26,14 +26,14 @@ const contract = new Contract(provider)
 // Connect to the chain
 await contract.connect()
 
-// Example API: Create a new profile for an address
+// Example API: Create a new character for an address
 try {
-  const result = await contract.createProfile(
+  const result = await contract.createCharacter(
     '0x1234567890123456789012345678901234567890',
     'Jason',
     'ipfs://xxxx/metadata.json',
   )
-  console.log(result.data) // '42' (profileId)
+  console.log(result.data) // '42' (characterId)
   console.log(result.transactionHash) // '0xabcdef...'
 } catch (e) {
   console.error(e.message) // e.g. "execution reverted: Web3Entry: HandleExists"
@@ -57,7 +57,7 @@ await contract.connect()
 
 #### Connect with Read-Only
 
-You can also connect with a read-only provider. Note that in this case, you can't do write operations like `createProfile`.
+You can also connect with a read-only provider. Note that in this case, you can't do write operations like `createCharacter`.
 
 ```typescript
 import { Contract } from 'crossbell.js'
@@ -79,8 +79,8 @@ import { Indexer } from 'crossbell.js'
 
 const indexer = new Indexer()
 
-// get a list of profiles owned by a specific address
-const res = await indexer.getProfiles(
+// get a list of characters owned by a specific address
+const res = await indexer.getCharacters(
   '0x1234567890123456789012345678901234567890',
 )
 console.log(res.list)
