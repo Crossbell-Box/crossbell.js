@@ -14,7 +14,7 @@ export class CharacterIndexer extends BaseIndexer {
   async getCharacters(
     address: string,
     {
-      primary = false,
+      primary = undefined,
       limit = 20,
       cursor,
     }: {
