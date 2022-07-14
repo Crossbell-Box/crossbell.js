@@ -8,21 +8,22 @@ export class FeedIndexer extends BaseIndexer {
    * This returns a list of feeds.
    *
    * @category Feed
+   * @param characterId - The characterId of the feed owner.
    * @param options - The options to send to the indexer.
    * @returns The list of feeds.
    */
-  async getFeeds({
-    characterId,
-    limit,
-    cursor,
-  }: {
-    /** The characterId of the feed owner. */
-    characterId?: BigNumberish
-    /** Limit the count of items returned. */
-    limit?: number
-    /** Used for pagination. */
-    cursor?: string
-  } = {}): Promise<ListResponse<FeedEntity>> {
+  async getFeedsOfCharacter(
+    characterId: BigNumberish,
+    {
+      limit,
+      cursor,
+    }: {
+      /** Limit the count of items returned. */
+      limit?: number
+      /** Used for pagination. */
+      cursor?: string
+    } = {},
+  ): Promise<ListResponse<FeedEntity>> {
     let url = `${this.endpoint}/characters/${characterId}/feed?`
     url += queryString.stringify({
       limit,
@@ -38,21 +39,22 @@ export class FeedIndexer extends BaseIndexer {
    * This returns a list of following's feeds.
    *
    * @category Feed
+   * @param characterId - The characterId of the feed owner.
    * @param options - The options to send to the indexer.
    * @returns The list of feeds.
    */
-  async getFollowingFeeds({
-    characterId,
-    limit,
-    cursor,
-  }: {
-    /** The characterId of the follower. */
-    characterId?: BigNumberish
-    /** Limit the count of items returned. */
-    limit?: number
-    /** Used for pagination. */
-    cursor?: string
-  } = {}): Promise<ListResponse<FeedEntity>> {
+  async getFollowingFeedsOfCharacter(
+    characterId: BigNumberish,
+    {
+      limit,
+      cursor,
+    }: {
+      /** Limit the count of items returned. */
+      limit?: number
+      /** Used for pagination. */
+      cursor?: string
+    } = {},
+  ): Promise<ListResponse<FeedEntity>> {
     let url = `${this.endpoint}/characters/${characterId}/feed/follow?`
     url += queryString.stringify({
       limit,
