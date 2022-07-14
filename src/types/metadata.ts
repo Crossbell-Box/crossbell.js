@@ -79,6 +79,8 @@ export interface NoteMetadata extends BaseMetadata {
              */
             name?: string
 
+            address?: never
+
             /**
              * The plain content of this attachment.
              */
@@ -104,6 +106,8 @@ export interface NoteMetadata extends BaseMetadata {
              * The address (url) of this attachment.
              */
             address?: string
+
+            content?: never
 
             /**
              * The mime type of the content of `address`.
