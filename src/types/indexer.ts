@@ -61,7 +61,7 @@ export type LinklistEntity = {
 }
 
 export type NoteEntity = {
-  characterId: number | null
+  characterId: number
   noteId: number
   linkItemType: LinkItemType | null
   linkKey: string
@@ -85,6 +85,26 @@ export type NoteEntity = {
   createdAt: string
   updatedAt: string
   deletedAt: string | null
+  transactionHash: string
+  blockNumber: number
+  logIndex: number
+  updatedTransactionHash: string
+  updatedBlockNumber: number
+  updatedLogIndex: number
+}
+
+export type MintedNoteEntity = {
+  noteCharacterId: number
+  noteCharacter?: CharacterEntity
+  noteId: number
+  note?: NoteEntity | null
+  contractAddress: string
+  tokenId: number
+  operator: string
+  owner: string
+  fromAddress: string
+  createdAt: string
+  updatedAt: string
   transactionHash: string
   blockNumber: number
   logIndex: number
@@ -122,4 +142,43 @@ export type LinkEntity = {
   updatedTransactionHash: string
   updatedBlockNumber: number
   updatedLogIndex: number
+}
+
+export type FeedType =
+  | 'CREATE_CHARACTER'
+  | 'UPDATE_CHARACTER_HANDLE'
+  | 'UPDATE_CHARACTER_METADATA'
+  | 'UPDATE_PRIMARY_CHARACTER'
+  | 'TRANSFER_CHARACTER'
+  | 'CREATE_LINKLIST'
+  | 'UPDATE_LINKLIST'
+  | 'TRANSFER_LINKLIST'
+  | 'LINK'
+  | 'UNLINK'
+  | 'POST_NOTE'
+  | 'UPDATE_NOTE'
+  | 'LOCK_NOTE'
+  | 'DELETE_NOTE'
+  | 'MINT_NOTE'
+  | 'TRANSFER_MINTED_NOTE'
+
+export type FeedEntity = {
+  type: FeedType
+  character?: CharacterEntity | null
+  characterId: number | null
+  linklist?: LinklistEntity | null
+  linklistId: number | null
+  link?: LinkEntity | null
+  linkValue: string | null
+  note?: NoteEntity | null
+  noteId: number | null
+  mintedNote?: MintedNoteEntity | null
+  contractAddress: string | null
+  tokenId: number | null
+  owner: string
+  createdAt: Date
+  updatedAt: Date
+  transactionHash: string | null
+  blockNumber: number
+  logIndex: number
 }

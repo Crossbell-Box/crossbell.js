@@ -99,6 +99,53 @@ export class NoteContract extends BaseContract {
   }
 
   /**
+   * This creates a new note for a note.
+   * @category Note
+   * @param characterId - The character ID of the owner who post this note. Must be your own character, otherwise it will be rejected.
+   * @param metadataOrUri - The metadata or URI of the content you want to post.
+   * @param targetUri - The target uri of the note.
+   * @param options - Options for the note.
+   * @returns The id of the new note.
+   */
+  @autoSwitchMainnet()
+  async postNoteForNote(
+    characterId: BigNumberish,
+    metadataOrUri: NoteMetadata | string,
+    targetCharacterId: BigNumberish,
+    targetNoteId: BigNumberish,
+    { locked = false }: PostNoteOptions = {},
+  ): Promise<Result<{ noteId: number }, true>> | never {
+    const { uri } = await Ipfs.parseMetadataOrUri('note', metadataOrUri)
+
+    const tx = await this.contract.postNote4Note(
+      {
+        characterId: characterId,
+        contentUri: uri,
+        linkModule: NIL_ADDRESS, // TODO:
+        linkModuleInitData: NIL_ADDRESS,
+        mintModule: NIL_ADDRESS,
+        mintModuleInitData: NIL_ADDRESS,
+        locked: locked,
+      },
+      {
+        characterId: targetCharacterId,
+        noteId: targetNoteId,
+      },
+    )
+
+    const receipt = await tx.wait()
+
+    const log = this.parseLog(receipt.logs, 'postNote')
+
+    return {
+      data: {
+        noteId: log.args.noteId.toNumber(),
+      },
+      transactionHash: receipt.transactionHash,
+    }
+  }
+
+  /**
    * This sets a note's metadata (URI).
    * @category Note
    * @param characterId - The character ID of the owner who post this note. Must be your own character, otherwise it will be rejected.

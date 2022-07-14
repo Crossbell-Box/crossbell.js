@@ -10,7 +10,7 @@ export class NoteIndexer extends BaseIndexer {
    *
    * @category Note
    * @param options - The options to send to the indexer.
-   * @returns The list of linklist.
+   * @returns The list of notes.
    */
   async getNotes({
     characterId,
