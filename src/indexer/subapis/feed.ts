@@ -1,6 +1,6 @@
 import { BaseIndexer } from './base'
 import queryString from 'query-string'
-import type { FeedEntity, ListResponse } from '../../types/indexer'
+import type { FeedEntity, FeedType, ListResponse } from '../../types/indexer'
 import { type BigNumberish } from 'ethers'
 
 export class FeedIndexer extends BaseIndexer {
@@ -15,9 +15,12 @@ export class FeedIndexer extends BaseIndexer {
   async getFeedsOfCharacter(
     characterId: BigNumberish,
     {
+      type,
       limit,
       cursor,
     }: {
+      /** The type of feed */
+      type?: FeedType | FeedType[]
       /** Limit the count of items returned. */
       limit?: number
       /** Used for pagination. */
@@ -26,6 +29,7 @@ export class FeedIndexer extends BaseIndexer {
   ): Promise<ListResponse<FeedEntity>> {
     let url = `${this.endpoint}/characters/${characterId}/feed?`
     url += queryString.stringify({
+      type,
       limit,
       cursor,
     })
@@ -46,9 +50,12 @@ export class FeedIndexer extends BaseIndexer {
   async getFollowingFeedsOfCharacter(
     characterId: BigNumberish,
     {
+      type,
       limit,
       cursor,
     }: {
+      /** The type of feed */
+      type?: FeedType | FeedType[]
       /** Limit the count of items returned. */
       limit?: number
       /** Used for pagination. */
@@ -57,6 +64,7 @@ export class FeedIndexer extends BaseIndexer {
   ): Promise<ListResponse<FeedEntity>> {
     let url = `${this.endpoint}/characters/${characterId}/feed/follow?`
     url += queryString.stringify({
+      type,
       limit,
       cursor,
     })
