@@ -4,13 +4,17 @@ import { LinklistIndexer } from './subapis/linklist'
 import { NoteIndexer } from './subapis/note'
 import { CharacterIndexer } from './subapis/character'
 import { SearchIndexer } from './subapis/search'
+import { FeedIndexer } from './subapis/feed'
+import { MintedNoteIndexer } from './subapis/minted_note'
 
 const Indexers = Mixin(
   CharacterIndexer,
   LinklistIndexer,
   LinkIndexer,
   NoteIndexer,
+  MintedNoteIndexer,
   SearchIndexer,
+  FeedIndexer,
 )
 
 /**
