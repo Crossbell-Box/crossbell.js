@@ -296,19 +296,70 @@ export class LinkContract extends BaseContract {
   // }
 
   /** link note */
-  // TODO: next version
-  // async linkNote(
-  //   fromCharacterId: string,
-  //   toNoteId: string,
-  //   linkType: string,
-  // ): Promise<Result<undefined>> | never {
-  //   const tx = await this.contract.linkNote(fromCharacterId, toNoteId, linkType)
-  //   const receipt = await tx.wait()
-  //   return {
-  //     data: undefined,
-  //     transactionHash: receipt.transactionHash,
-  //   }
-  // }
+  /**
+   * This links a character to another note with a given link type.
+   * @category Link
+   * @param fromCharacterId - The character ID of the character that is linking to another note. Must be your own character, otherwise it will be rejected.
+   * @param toCharacterId - The character ID of the character you want to link to.
+   * @param toNoteId - The note ID of the note you want to link to.
+   * @param linkType - The type of link.
+   * @param data - The data to be passed to the link module if the character has one.
+   * @returns The linklist id and the transaction hash of the transaction that was sent to the blockchain.
+   */
+  @autoSwitchMainnet()
+  async linkNote(
+    fromCharacterId: BigNumberish,
+    toCharacterId: BigNumberish,
+    toNoteId: BigNumberish,
+    linkType: string,
+    data?: string,
+  ): Promise<Result<number, true>> | never {
+    const tx = await this.contract.linkNote({
+      fromCharacterId: fromCharacterId,
+      toCharacterId: toCharacterId,
+      toNoteId: toNoteId,
+      linkType: ethers.utils.formatBytes32String(linkType),
+      data: data ?? NIL_ADDRESS,
+    })
+
+    const receipt = await tx.wait()
+
+    const parser = this.parseLog(receipt.logs, 'linkCharacter')
+
+    return {
+      data: parser.args.linklistId.toNumber(),
+      transactionHash: receipt.transactionHash,
+    }
+  }
+
+  /**
+   * This removes a link from a character to another note.
+   * @category Link
+   * @param fromCharacterId - The character ID of the character that is linking to another note.
+   * @param toCharacterId - The character you want to unlink to.
+   * @param toNoteId - The note ID of the note you want to unlink to.
+   * @param linkType - The type of link.
+   * @returns The transaction hash of the transaction that was sent to the blockchain.
+   */
+  @autoSwitchMainnet()
+  async unlinkNote(
+    fromCharacterId: BigNumberish,
+    toCharacterId: BigNumberish,
+    toNoteId: BigNumberish,
+    linkType: string,
+  ): Promise<Result<undefined, true>> | never {
+    const tx = await this.contract.unlinkNote({
+      fromCharacterId: fromCharacterId,
+      toCharacterId: toCharacterId,
+      toNoteId: toNoteId,
+      linkType: ethers.utils.formatBytes32String(linkType),
+    })
+    const receipt = await tx.wait()
+    return {
+      data: undefined,
+      transactionHash: receipt.transactionHash,
+    }
+  }
 
   /** link link */
 

@@ -10,6 +10,7 @@ import {
   MintNoteEvent,
   PostNoteEvent,
   CharacterCreatedEvent,
+  LinkNoteEvent,
 } from '../abis/entry/types/Abi'
 import {
   type Abi as PeripheryAbi,
@@ -17,11 +18,12 @@ import {
 } from '../abis/periphery/types'
 
 const logTopics: Record<
-  'createCharacter' | 'linkCharacter' | 'postNote' | 'mintNote',
+  'createCharacter' | 'linkCharacter' | 'postNote' | 'mintNote' | 'linkNote',
   keyof EntryAbi['filters']
 > = {
   createCharacter: 'CharacterCreated(uint256,address,address,string,uint256)',
   linkCharacter: 'LinkCharacter(address,uint256,uint256,bytes32,uint256)',
+  linkNote: 'LinkNote(uint256,uint256,uint256,bytes32,uint256)',
   postNote: 'PostNote(uint256,uint256,bytes32,bytes32,bytes)',
   mintNote: 'MintNote(address,uint256,uint256,address,uint256)',
 } as const
@@ -176,6 +178,10 @@ export class BaseContract {
   protected parseLog<T = LinkCharacterEvent>(
     logs: ethers.providers.Log[],
     filterTopic: 'linkCharacter',
+  ): T
+  protected parseLog<T = LinkNoteEvent>(
+    logs: ethers.providers.Log[],
+    filterTopic: 'linkNote',
   ): T
   protected parseLog<T = PostNoteEvent>(
     logs: ethers.providers.Log[],

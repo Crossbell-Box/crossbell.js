@@ -103,4 +103,27 @@ describe('link characters and check', () => {
     )
     expect(character.characterId).toBe(result.data.toCharacterId)
   })
+
+  // link note
+  test('create a note and link it', async () => {
+    const note = await contract.postNote(characterId1!, { content: 'test' })
+
+    // like this note
+    const result1 = await contract.linkNote(
+      characterId1!,
+      characterId1!,
+      note.data.noteId,
+      'like',
+    )
+    expect(result1.data).not.toBeNull()
+
+    // unlike this note
+    const result2 = await contract.unlinkNote(
+      characterId1!,
+      characterId1!,
+      note.data.noteId,
+      'like',
+    )
+    expect(result2.data).not.toBeNull()
+  })
 })
