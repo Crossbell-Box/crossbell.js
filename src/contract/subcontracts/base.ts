@@ -150,6 +150,21 @@ export class BaseContract {
     this._hasConnected = true
   }
 
+  connectWithExistedProvider(provider: ethers.providers.Provider) {
+    this._signerOrProvider = provider
+    this.contract = EntryAbi__factory.connect(
+      Network.getContractAddress(),
+      this._signerOrProvider,
+    )
+
+    this.peripheryContract = PeripheryAbi__factory.connect(
+      Network.getPeripheryContractAddress(),
+      this._signerOrProvider,
+    )
+
+    this._hasConnected = true
+  }
+
   protected parseLog<T = MintNoteEvent>(
     logs: ethers.providers.Log[],
     filterTopic: 'mintNote',
