@@ -324,7 +324,7 @@ export class LinkContract extends BaseContract {
 
     const receipt = await tx.wait()
 
-    const parser = this.parseLog(receipt.logs, 'linkCharacter')
+    const parser = this.parseLog(receipt.logs, 'linkNote')
 
     return {
       data: parser.args.linklistId.toNumber(),

@@ -5,7 +5,7 @@ import { mockUser, genRandomHandle, metadataUri } from '../mock'
 
 const contract = new Contract(mockUser.privateKey)
 
-describe('link characters and check', () => {
+describe('link and check', () => {
   beforeAll(async () => {
     await contract.connect()
   })
