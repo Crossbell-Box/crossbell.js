@@ -120,6 +120,14 @@ export interface NoteMetadata extends BaseMetadata {
             size_in_bytes?: number
           }
       )[]
+
+  /**
+   * The source of this note. I.e. where it was originally created.
+   * For example, it could be your app's name so that you could filtering the notes by the source in your app.
+   * @example
+   * ['crossbell.io']
+   */
+  sources?: string[]
 }
 
 export type Metadata = CharacterMetadata | NoteMetadata
