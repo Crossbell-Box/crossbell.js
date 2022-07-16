@@ -486,6 +486,46 @@ const _abi = [
     type: "function",
   },
   {
+    inputs: [
+      {
+        components: [
+          {
+            internalType: "address",
+            name: "account",
+            type: "address",
+          },
+          {
+            internalType: "string",
+            name: "handle",
+            type: "string",
+          },
+          {
+            internalType: "string",
+            name: "uri",
+            type: "string",
+          },
+          {
+            internalType: "address[]",
+            name: "toAddresses",
+            type: "address[]",
+          },
+          {
+            internalType: "bytes32",
+            name: "linkType",
+            type: "bytes32",
+          },
+        ],
+        internalType: "struct DataTypes.MigrateData",
+        name: "vars",
+        type: "tuple",
+      },
+    ],
+    name: "migrate",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
     inputs: [],
     name: "web3Entry",
     outputs: [

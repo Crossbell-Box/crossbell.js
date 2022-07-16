@@ -175,22 +175,6 @@ export declare namespace DataTypes {
     data: string;
   };
 
-  export type CharacterLinkStructStruct = {
-    fromCharacterId: PromiseOrValue<BigNumberish>;
-    toCharacterId: PromiseOrValue<BigNumberish>;
-    linkType: PromiseOrValue<BytesLike>;
-  };
-
-  export type CharacterLinkStructStructOutput = [
-    BigNumber,
-    BigNumber,
-    string
-  ] & {
-    fromCharacterId: BigNumber;
-    toCharacterId: BigNumber;
-    linkType: string;
-  };
-
   export type LinkERC721DataStruct = {
     fromCharacterId: PromiseOrValue<BigNumberish>;
     tokenAddress: PromiseOrValue<string>;
@@ -516,6 +500,7 @@ export interface AbiInterface extends utils.Interface {
     "burn(uint256)": FunctionFragment;
     "canCreate(string,address)": FunctionFragment;
     "createCharacter((address,string,string,address,bytes))": FunctionFragment;
+    "createProfile((address,string,string,address,bytes))": FunctionFragment;
     "createThenLinkCharacter((uint256,address,bytes32))": FunctionFragment;
     "deleteNote(uint256,uint256)": FunctionFragment;
     "getApproved(uint256)": FunctionFragment;
@@ -540,11 +525,11 @@ export interface AbiInterface extends utils.Interface {
     "linkAddress((uint256,address,bytes32,bytes))": FunctionFragment;
     "linkAnyUri((uint256,string,bytes32,bytes))": FunctionFragment;
     "linkCharacter((uint256,uint256,bytes32,bytes))": FunctionFragment;
-    "linkCharacterLink(uint256,(uint256,uint256,bytes32),bytes32)": FunctionFragment;
     "linkERC721((uint256,address,uint256,bytes32,bytes))": FunctionFragment;
     "linkLinklist((uint256,uint256,bytes32,bytes))": FunctionFragment;
     "linkNote((uint256,uint256,uint256,bytes32,bytes))": FunctionFragment;
     "lockNote(uint256,uint256)": FunctionFragment;
+    "migrateNote(uint256)": FunctionFragment;
     "mintNote((uint256,uint256,address,bytes))": FunctionFragment;
     "name()": FunctionFragment;
     "ownerOf(uint256)": FunctionFragment;
@@ -571,6 +556,7 @@ export interface AbiInterface extends utils.Interface {
     "setNoteUri(uint256,uint256,string)": FunctionFragment;
     "setOperator(uint256,address)": FunctionFragment;
     "setPrimaryCharacterId(uint256)": FunctionFragment;
+    "setProfileUri(uint256,string)": FunctionFragment;
     "setSocialToken(uint256,address)": FunctionFragment;
     "supportsInterface(bytes4)": FunctionFragment;
     "symbol()": FunctionFragment;
@@ -582,7 +568,6 @@ export interface AbiInterface extends utils.Interface {
     "unlinkAddress((uint256,address,bytes32))": FunctionFragment;
     "unlinkAnyUri((uint256,string,bytes32))": FunctionFragment;
     "unlinkCharacter((uint256,uint256,bytes32))": FunctionFragment;
-    "unlinkCharacterLink(uint256,(uint256,uint256,bytes32),bytes32)": FunctionFragment;
     "unlinkERC721((uint256,address,uint256,bytes32))": FunctionFragment;
     "unlinkLinklist((uint256,uint256,bytes32))": FunctionFragment;
     "unlinkNote((uint256,uint256,uint256,bytes32))": FunctionFragment;
@@ -595,6 +580,7 @@ export interface AbiInterface extends utils.Interface {
       | "burn"
       | "canCreate"
       | "createCharacter"
+      | "createProfile"
       | "createThenLinkCharacter"
       | "deleteNote"
       | "getApproved"
@@ -619,11 +605,11 @@ export interface AbiInterface extends utils.Interface {
       | "linkAddress"
       | "linkAnyUri"
       | "linkCharacter"
-      | "linkCharacterLink"
       | "linkERC721"
       | "linkLinklist"
       | "linkNote"
       | "lockNote"
+      | "migrateNote"
       | "mintNote"
       | "name"
       | "ownerOf"
@@ -650,6 +636,7 @@ export interface AbiInterface extends utils.Interface {
       | "setNoteUri"
       | "setOperator"
       | "setPrimaryCharacterId"
+      | "setProfileUri"
       | "setSocialToken"
       | "supportsInterface"
       | "symbol"
@@ -661,7 +648,6 @@ export interface AbiInterface extends utils.Interface {
       | "unlinkAddress"
       | "unlinkAnyUri"
       | "unlinkCharacter"
-      | "unlinkCharacterLink"
       | "unlinkERC721"
       | "unlinkLinklist"
       | "unlinkNote"
@@ -685,6 +671,10 @@ export interface AbiInterface extends utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "createCharacter",
+    values: [DataTypes.CreateCharacterDataStruct]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "createProfile",
     values: [DataTypes.CreateCharacterDataStruct]
   ): string;
   encodeFunctionData(
@@ -791,14 +781,6 @@ export interface AbiInterface extends utils.Interface {
     values: [DataTypes.LinkCharacterDataStruct]
   ): string;
   encodeFunctionData(
-    functionFragment: "linkCharacterLink",
-    values: [
-      PromiseOrValue<BigNumberish>,
-      DataTypes.CharacterLinkStructStruct,
-      PromiseOrValue<BytesLike>
-    ]
-  ): string;
-  encodeFunctionData(
     functionFragment: "linkERC721",
     values: [DataTypes.LinkERC721DataStruct]
   ): string;
@@ -813,6 +795,10 @@ export interface AbiInterface extends utils.Interface {
   encodeFunctionData(
     functionFragment: "lockNote",
     values: [PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "migrateNote",
+    values: [PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
     functionFragment: "mintNote",
@@ -926,6 +912,10 @@ export interface AbiInterface extends utils.Interface {
     values: [PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
+    functionFragment: "setProfileUri",
+    values: [PromiseOrValue<BigNumberish>, PromiseOrValue<string>]
+  ): string;
+  encodeFunctionData(
     functionFragment: "setSocialToken",
     values: [PromiseOrValue<BigNumberish>, PromiseOrValue<string>]
   ): string;
@@ -971,14 +961,6 @@ export interface AbiInterface extends utils.Interface {
     values: [DataTypes.UnlinkCharacterDataStruct]
   ): string;
   encodeFunctionData(
-    functionFragment: "unlinkCharacterLink",
-    values: [
-      PromiseOrValue<BigNumberish>,
-      DataTypes.CharacterLinkStructStruct,
-      PromiseOrValue<BytesLike>
-    ]
-  ): string;
-  encodeFunctionData(
     functionFragment: "unlinkERC721",
     values: [DataTypes.UnlinkERC721DataStruct]
   ): string;
@@ -997,6 +979,10 @@ export interface AbiInterface extends utils.Interface {
   decodeFunctionResult(functionFragment: "canCreate", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "createCharacter",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "createProfile",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -1080,10 +1066,6 @@ export interface AbiInterface extends utils.Interface {
     functionFragment: "linkCharacter",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(
-    functionFragment: "linkCharacterLink",
-    data: BytesLike
-  ): Result;
   decodeFunctionResult(functionFragment: "linkERC721", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "linkLinklist",
@@ -1091,6 +1073,10 @@ export interface AbiInterface extends utils.Interface {
   ): Result;
   decodeFunctionResult(functionFragment: "linkNote", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "lockNote", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "migrateNote",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "mintNote", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "name", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "ownerOf", data: BytesLike): Result;
@@ -1175,6 +1161,10 @@ export interface AbiInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
+    functionFragment: "setProfileUri",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "setSocialToken",
     data: BytesLike
   ): Result;
@@ -1210,10 +1200,6 @@ export interface AbiInterface extends utils.Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "unlinkCharacter",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "unlinkCharacterLink",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -1885,6 +1871,11 @@ export interface Abi extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
+    createProfile(
+      vars: DataTypes.CreateCharacterDataStruct,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
     createThenLinkCharacter(
       vars: DataTypes.CreateThenLinkCharacterDataStruct,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -2009,13 +2000,6 @@ export interface Abi extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
-    linkCharacterLink(
-      fromCharacterId: PromiseOrValue<BigNumberish>,
-      linkData: DataTypes.CharacterLinkStructStruct,
-      linkType: PromiseOrValue<BytesLike>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
-
     linkERC721(
       vars: DataTypes.LinkERC721DataStruct,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -2034,6 +2018,11 @@ export interface Abi extends BaseContract {
     lockNote(
       characterId: PromiseOrValue<BigNumberish>,
       noteId: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
+    migrateNote(
+      characterId: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
@@ -2179,6 +2168,12 @@ export interface Abi extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
+    setProfileUri(
+      profileId: PromiseOrValue<BigNumberish>,
+      newUri: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
     setSocialToken(
       characterId: PromiseOrValue<BigNumberish>,
       tokenAddress: PromiseOrValue<string>,
@@ -2232,13 +2227,6 @@ export interface Abi extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
-    unlinkCharacterLink(
-      fromCharacterId: PromiseOrValue<BigNumberish>,
-      linkData: DataTypes.CharacterLinkStructStruct,
-      linkType: PromiseOrValue<BytesLike>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
-
     unlinkERC721(
       vars: DataTypes.UnlinkERC721DataStruct,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -2278,6 +2266,11 @@ export interface Abi extends BaseContract {
   ): Promise<boolean>;
 
   createCharacter(
+    vars: DataTypes.CreateCharacterDataStruct,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  createProfile(
     vars: DataTypes.CreateCharacterDataStruct,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
@@ -2406,13 +2399,6 @@ export interface Abi extends BaseContract {
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
-  linkCharacterLink(
-    fromCharacterId: PromiseOrValue<BigNumberish>,
-    linkData: DataTypes.CharacterLinkStructStruct,
-    linkType: PromiseOrValue<BytesLike>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
-
   linkERC721(
     vars: DataTypes.LinkERC721DataStruct,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -2431,6 +2417,11 @@ export interface Abi extends BaseContract {
   lockNote(
     characterId: PromiseOrValue<BigNumberish>,
     noteId: PromiseOrValue<BigNumberish>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  migrateNote(
+    characterId: PromiseOrValue<BigNumberish>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
@@ -2576,6 +2567,12 @@ export interface Abi extends BaseContract {
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
+  setProfileUri(
+    profileId: PromiseOrValue<BigNumberish>,
+    newUri: PromiseOrValue<string>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
   setSocialToken(
     characterId: PromiseOrValue<BigNumberish>,
     tokenAddress: PromiseOrValue<string>,
@@ -2629,13 +2626,6 @@ export interface Abi extends BaseContract {
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
-  unlinkCharacterLink(
-    fromCharacterId: PromiseOrValue<BigNumberish>,
-    linkData: DataTypes.CharacterLinkStructStruct,
-    linkType: PromiseOrValue<BytesLike>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
-
   unlinkERC721(
     vars: DataTypes.UnlinkERC721DataStruct,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -2675,6 +2665,11 @@ export interface Abi extends BaseContract {
     ): Promise<boolean>;
 
     createCharacter(
+      vars: DataTypes.CreateCharacterDataStruct,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    createProfile(
       vars: DataTypes.CreateCharacterDataStruct,
       overrides?: CallOverrides
     ): Promise<void>;
@@ -2803,13 +2798,6 @@ export interface Abi extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
-    linkCharacterLink(
-      fromCharacterId: PromiseOrValue<BigNumberish>,
-      linkData: DataTypes.CharacterLinkStructStruct,
-      linkType: PromiseOrValue<BytesLike>,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
     linkERC721(
       vars: DataTypes.LinkERC721DataStruct,
       overrides?: CallOverrides
@@ -2828,6 +2816,11 @@ export interface Abi extends BaseContract {
     lockNote(
       characterId: PromiseOrValue<BigNumberish>,
       noteId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    migrateNote(
+      characterId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -2973,6 +2966,12 @@ export interface Abi extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
+    setProfileUri(
+      profileId: PromiseOrValue<BigNumberish>,
+      newUri: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
     setSocialToken(
       characterId: PromiseOrValue<BigNumberish>,
       tokenAddress: PromiseOrValue<string>,
@@ -3023,13 +3022,6 @@ export interface Abi extends BaseContract {
 
     unlinkCharacter(
       vars: DataTypes.UnlinkCharacterDataStruct,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    unlinkCharacterLink(
-      fromCharacterId: PromiseOrValue<BigNumberish>,
-      linkData: DataTypes.CharacterLinkStructStruct,
-      linkType: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -3569,6 +3561,11 @@ export interface Abi extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
+    createProfile(
+      vars: DataTypes.CreateCharacterDataStruct,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
     createThenLinkCharacter(
       vars: DataTypes.CreateThenLinkCharacterDataStruct,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -3693,13 +3690,6 @@ export interface Abi extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
-    linkCharacterLink(
-      fromCharacterId: PromiseOrValue<BigNumberish>,
-      linkData: DataTypes.CharacterLinkStructStruct,
-      linkType: PromiseOrValue<BytesLike>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
-
     linkERC721(
       vars: DataTypes.LinkERC721DataStruct,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -3718,6 +3708,11 @@ export interface Abi extends BaseContract {
     lockNote(
       characterId: PromiseOrValue<BigNumberish>,
       noteId: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    migrateNote(
+      characterId: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
@@ -3863,6 +3858,12 @@ export interface Abi extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
+    setProfileUri(
+      profileId: PromiseOrValue<BigNumberish>,
+      newUri: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
     setSocialToken(
       characterId: PromiseOrValue<BigNumberish>,
       tokenAddress: PromiseOrValue<string>,
@@ -3916,13 +3917,6 @@ export interface Abi extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
-    unlinkCharacterLink(
-      fromCharacterId: PromiseOrValue<BigNumberish>,
-      linkData: DataTypes.CharacterLinkStructStruct,
-      linkType: PromiseOrValue<BytesLike>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
-
     unlinkERC721(
       vars: DataTypes.UnlinkERC721DataStruct,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -3963,6 +3957,11 @@ export interface Abi extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     createCharacter(
+      vars: DataTypes.CreateCharacterDataStruct,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    createProfile(
       vars: DataTypes.CreateCharacterDataStruct,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
@@ -4093,13 +4092,6 @@ export interface Abi extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
-    linkCharacterLink(
-      fromCharacterId: PromiseOrValue<BigNumberish>,
-      linkData: DataTypes.CharacterLinkStructStruct,
-      linkType: PromiseOrValue<BytesLike>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
-
     linkERC721(
       vars: DataTypes.LinkERC721DataStruct,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -4118,6 +4110,11 @@ export interface Abi extends BaseContract {
     lockNote(
       characterId: PromiseOrValue<BigNumberish>,
       noteId: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    migrateNote(
+      characterId: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -4263,6 +4260,12 @@ export interface Abi extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
+    setProfileUri(
+      profileId: PromiseOrValue<BigNumberish>,
+      newUri: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
     setSocialToken(
       characterId: PromiseOrValue<BigNumberish>,
       tokenAddress: PromiseOrValue<string>,
@@ -4313,13 +4316,6 @@ export interface Abi extends BaseContract {
 
     unlinkCharacter(
       vars: DataTypes.UnlinkCharacterDataStruct,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
-
-    unlinkCharacterLink(
-      fromCharacterId: PromiseOrValue<BigNumberish>,
-      linkData: DataTypes.CharacterLinkStructStruct,
-      linkType: PromiseOrValue<BytesLike>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 

@@ -9,16 +9,13 @@ const { fetch } = require('undici')
   const [{ abi: abi1 }, { abi: abi2 }, { abi: periphery_abi }] =
     await Promise.all([
       fetch(
-        'https://raw.githubusercontent.com/Crossbell-Box/Crossbell-Contracts/feature/character-2/build-info/Web3Entry.json',
-        // 'https://raw.githubusercontent.com/Crossbell-Box/Crossbell-Contracts/main/build-info/Web3Entry.json',
+        'https://raw.githubusercontent.com/Crossbell-Box/Crossbell-Contracts/main/build-info/Web3Entry.json',
       ).then((res) => res.json()),
       fetch(
-        'https://raw.githubusercontent.com/Crossbell-Box/Crossbell-Contracts/feature/character-2/build-info/Events.json',
-        // 'https://raw.githubusercontent.com/Crossbell-Box/Crossbell-Contracts/main/build-info/Events.json',
+        'https://raw.githubusercontent.com/Crossbell-Box/Crossbell-Contracts/main/build-info/Events.json',
       ).then((res) => res.json()),
       fetch(
-        'https://raw.githubusercontent.com/Crossbell-Box/Crossbell-Contracts/feature/character-2/build-info/Periphery.json',
-        // 'https://raw.githubusercontent.com/Crossbell-Box/Crossbell-Contracts/main/build-info/Periphery.json',
+        'https://raw.githubusercontent.com/Crossbell-Box/Crossbell-Contracts/main/build-info/Periphery.json',
       ).then((res) => res.json()),
     ])
 
