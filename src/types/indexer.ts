@@ -10,13 +10,15 @@ export type ListResponse<T> = {
 export type MetadataType = 'CHARACTER' | 'NOTE' | 'LINKLIST'
 
 export type MetadataEntity<T extends MetadataType> = {
-  uri: string
-  type: MetadataType | null
-  content: T extends 'CHARACTER'
-    ? CharacterMetadata
-    : T extends 'NOTE'
-    ? NoteMetadata
-    : object
+  uri?: string
+  type?: MetadataType | null
+  content?:
+    | (T extends 'CHARACTER'
+        ? CharacterMetadata
+        : T extends 'NOTE'
+        ? NoteMetadata
+        : object)
+    | null
 }
 
 export type CharacterEntity = {
