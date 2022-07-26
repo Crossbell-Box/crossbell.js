@@ -15,9 +15,15 @@ export class MintedNoteIndexer extends BaseIndexer {
   async getMintedNotesOfAddress(
     address: string,
     {
+      noteCharacterId,
+      noteId,
       limit,
       cursor,
     }: {
+      /** The character ID of the note */
+      noteCharacterId?: BigNumberish
+      /** THe note id */
+      noteId?: BigNumberish
       /** Limit the count of items returned. */
       limit?: number
       /** Used for pagination. */
@@ -26,6 +32,8 @@ export class MintedNoteIndexer extends BaseIndexer {
   ): Promise<ListResponse<MintedNoteEntity>> {
     let url = `${this.endpoint}/addresses/${address}/minted/notes?`
     url += queryString.stringify({
+      noteCharacterId,
+      noteId,
       limit,
       cursor,
     })
@@ -48,9 +56,12 @@ export class MintedNoteIndexer extends BaseIndexer {
     characterId: BigNumberish,
     noteId: BigNumberish,
     {
+      owner,
       limit,
       cursor,
     }: {
+      /** The address of the owner */
+      owner?: string
       /** Limit the count of items returned. */
       limit?: number
       /** Used for pagination. */
@@ -59,6 +70,7 @@ export class MintedNoteIndexer extends BaseIndexer {
   ): Promise<ListResponse<MintedNoteEntity>> {
     let url = `${this.endpoint}/notes/${characterId}/${noteId}/minted?`
     url += queryString.stringify({
+      owner,
       limit,
       cursor,
     })
@@ -77,7 +89,7 @@ export class MintedNoteIndexer extends BaseIndexer {
    * @returns The minted note.
    */
   async getMintedNote(
-    contractAddress: BigNumberish,
+    contractAddress: string,
     tokenId: BigNumberish,
   ): Promise<MintedNoteEntity | null> {
     const url = `${this.endpoint}/minted/notes/${contractAddress}/${tokenId}`
