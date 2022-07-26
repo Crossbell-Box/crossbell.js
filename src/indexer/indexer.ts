@@ -6,6 +6,7 @@ import { CharacterIndexer } from './subapis/character'
 import { SearchIndexer } from './subapis/search'
 import { FeedIndexer } from './subapis/feed'
 import { MintedNoteIndexer } from './subapis/minted_note'
+import { MetadataIndexer } from './subapis/metadata'
 
 const Indexers = Mixin(
   CharacterIndexer,
@@ -15,6 +16,7 @@ const Indexers = Mixin(
   MintedNoteIndexer,
   SearchIndexer,
   FeedIndexer,
+  MetadataIndexer,
 )
 
 /**
