@@ -142,7 +142,7 @@ export interface NoteMetadata extends BaseMetadata {
    * For example, it could be your app's name so that you could filtering the notes by the source in your app.
    *
    * @example
-   * ['crossbell.io']
+   * ['xlog']
    */
   sources?: string[]
 
@@ -152,7 +152,7 @@ export interface NoteMetadata extends BaseMetadata {
    * @example
    * ['https://twitter.com/_Crossbell/status/1555900801058488322']
    */
-  external_url?: string
+  external_urls?: string[]
 
   /**
    * A content warning for this note. On the client side, this will be displayed as a warning.
