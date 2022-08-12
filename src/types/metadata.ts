@@ -129,7 +129,7 @@ export interface NoteMetadata extends BaseMetadata {
    * Custom attributes.
    *
    * @example
-   * [{ value: "post", trait_type: "type" }, { value: "https://example.com", trait_type: "url" }]
+   * [{ value: "post", trait_type: "type" }, { value: "https://example.com", trait_type: "URL" }, { value: 1546360800, trait_type: 'Birthday', "display_type": "date" }]
    */
   attributes?: {
     value: string | number | boolean | null
@@ -153,6 +153,20 @@ export interface NoteMetadata extends BaseMetadata {
    * ['https://twitter.com/_Crossbell/status/1555900801058488322']
    */
   external_urls?: string[]
+
+  /**
+   * The date this content was published, following the ISO 8601 format.
+   *
+   * Example case: a blog post was originally published on a website at time A,
+   * then was synced to the blockchain at time B.
+   * The `date_published` of the note is time A.
+   * The date of the blockchain sync is time B (shown as the `createdAt` field
+   * in the indexer's response).
+   *
+   * @example
+   * '2022-01-01T00:00:00Z'
+   */
+  date_published?: string
 
   /**
    * A content warning for this note. On the client side, this will be displayed as a warning.
