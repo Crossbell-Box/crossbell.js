@@ -49,6 +49,51 @@ export interface CharacterMetadata extends BaseMetadata {
   connected_avatars?: string[]
 }
 
+export interface NoteMetadataAttachmentBase<
+  ContentType extends 'address' | 'content',
+> {
+  /**
+   * The name of this attachment.
+   */
+  name?: string
+
+  /**
+   * The address (url) of this attachment.
+   */
+  address?: ContentType extends 'address' ? string : never
+
+  /**
+   * The plain content of this attachment.
+   */
+  content?: ContentType extends 'content' ? string : never
+
+  /**
+   * The mime type of the `content`.
+   */
+  mime_type?: string
+
+  /**
+   * The size of the `content` in bytes.
+   */
+  size_in_bytes?: number
+
+  /**
+   * The alternate text (description) of this attachment.
+   * This is used for accessibility or is displayed when the source is not available.
+   */
+  alt?: string
+
+  /**
+   * The width of this attachment, in pixels.
+   */
+  width?: number
+
+  /**
+   * The height of this attachment, in pixels.
+   */
+  height?: number
+}
+
 export interface NoteMetadata extends BaseMetadata {
   /**
    * The tags of this note.
@@ -71,63 +116,51 @@ export interface NoteMetadata extends BaseMetadata {
    */
   content?: string
 
+  /**
+   * The attachments of this note.
+   */
   attachments?:
     | (
-        | {
-            /**
-             * The name of this attachment.
-             */
-            name?: string
-
-            address?: never
-
-            /**
-             * The plain content of this attachment.
-             */
-            content?: string
-
-            /**
-             * The mime type of the `content`.
-             */
-            mime_type?: string
-
-            /**
-             * The size of the `content` in bytes.
-             */
-            size_in_bytes?: number
-          }
-        | {
-            /**
-             * The name of this attachment.
-             */
-            name?: string
-
-            /**
-             * The address (url) of this attachment.
-             */
-            address?: string
-
-            content?: never
-
-            /**
-             * The mime type of the content of `address`.
-             */
-            mime_type?: string
-
-            /**
-             * The size of the content of `address` in bytes.
-             */
-            size_in_bytes?: number
-          }
+        | NoteMetadataAttachmentBase<'address'>
+        | NoteMetadataAttachmentBase<'content'>
       )[]
+
+  /**
+   * Custom attributes.
+   *
+   * @example
+   * [{ value: "post", trait_type: "type" }, { value: "https://example.com", trait_type: "url" }]
+   */
+  attributes?: {
+    value: string | number | boolean | null
+    trait_type?: string
+    display_type?: 'string' | 'number' | 'date' | 'boolean'
+  }[]
 
   /**
    * The source of this note. I.e. where it was originally created.
    * For example, it could be your app's name so that you could filtering the notes by the source in your app.
+   *
    * @example
    * ['crossbell.io']
    */
   sources?: string[]
+
+  /**
+   * Where this note was created. User can view this note on this location.
+   *
+   * @example
+   * ['https://twitter.com/_Crossbell/status/1555900801058488322']
+   */
+  external_url?: string
+
+  /**
+   * A content warning for this note. On the client side, this will be displayed as a warning.
+   *
+   * @example
+   * 'nsfw'
+   */
+  content_warning?: 'nsfw' | 'sensitive' | 'spoiler'
 }
 
 export type Metadata = CharacterMetadata | NoteMetadata
