@@ -16,6 +16,7 @@ import {
   type Abi as PeripheryAbi,
   Abi__factory as PeripheryAbi__factory,
 } from '../abis/periphery/types'
+import { validateIsInSdn } from '../../utils/sdn'
 
 const logTopics: Record<
   'createCharacter' | 'linkCharacter' | 'postNote' | 'mintNote' | 'linkNote',
@@ -270,5 +271,9 @@ export class BaseContract {
     //     )
     //   }
     // }
+  }
+
+  protected validateAddress(address: string) {
+    validateIsInSdn(address)
   }
 }
