@@ -437,6 +437,8 @@ export class NoteContract extends BaseContract {
   ):
     | Promise<Result<{ contractAddress: string; tokenId: number }, true>>
     | never {
+    this.validateAddress(toAddress)
+
     const tx = await this.contract.mintNote({
       characterId: characterId,
       noteId: noteId,
@@ -477,6 +479,8 @@ export class NoteContract extends BaseContract {
    * @returns The linkKey of the note.
    */
   getLinkKeyForAddress(toAddress: string): string {
+    this.validateAddress(toAddress)
+
     return ethers.utils.solidityKeccak256(
       ['string', 'address'],
       ['Address', toAddress],

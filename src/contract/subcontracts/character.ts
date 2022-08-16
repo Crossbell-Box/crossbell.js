@@ -22,6 +22,7 @@ export class CharacterContract extends BaseContract {
     handle: string,
     metadataOrUri: CharacterMetadata | string,
   ): Promise<Result<number, true>> | never {
+    this.validateAddress(owner)
     this.validateHandleFormat(handle)
 
     const { uri } = await Ipfs.parseMetadataOrUri('character', metadataOrUri)
@@ -212,6 +213,7 @@ export class CharacterContract extends BaseContract {
   async getPrimaryCharacterId(
     address: string,
   ): Promise<Result<number>> | never {
+    this.validateAddress(address)
     const characterId = await this.contract.getPrimaryCharacterId(address)
     return {
       data: characterId.toNumber(),
@@ -354,6 +356,7 @@ export class CharacterContract extends BaseContract {
   async existsCharacterForAddress(
     address: string,
   ): Promise<Result<boolean>> | never {
+    this.validateAddress(address)
     const characterId = await this.contract.getPrimaryCharacterId(address)
     const exists = characterId.toString() !== '0'
     return {

@@ -59,6 +59,10 @@ export class LinkContract extends BaseContract {
     linkType: string,
     data?: string[],
   ): Promise<Result<number, true>> | never {
+    toAddresses.forEach((address) => {
+      this.validateAddress(address)
+    })
+
     const tx = await this.peripheryContract.linkCharactersInBatch({
       fromCharacterId: fromCharacterId,
       toCharacterIds,
@@ -119,6 +123,8 @@ export class LinkContract extends BaseContract {
   ):
     | Promise<Result<{ toCharacterId: number; linklistId: number }, true>>
     | never {
+    this.validateAddress(toAddress)
+
     const tx = await this.contract.createThenLinkCharacter({
       fromCharacterId: fromCharacterId,
       to: toAddress,
