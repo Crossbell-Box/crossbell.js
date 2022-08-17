@@ -24,6 +24,8 @@ export class NoteIndexer extends BaseIndexer {
     toUri,
     locked,
     includeDeleted,
+    tags,
+    externalUrls,
     limit = 20,
     cursor,
   }: {
@@ -49,6 +51,10 @@ export class NoteIndexer extends BaseIndexer {
     locked?: boolean
     /** Also returns deleted notes or not */
     includeDeleted?: boolean
+    /** The `metadata.content.tags` to filter by. */
+    tags?: string | string[]
+    /** The `metadata.content.external_urls` to filter by. */
+    externalUrls?: string | string[]
     /** Limit the count of items returned. */
     limit?: number
     /** Used for pagination. */
@@ -69,6 +75,8 @@ export class NoteIndexer extends BaseIndexer {
       toUri,
       locked,
       includeDeleted,
+      tags,
+      externalUrls,
     })
 
     const res = await fetch(url).then((res) => res.json())
