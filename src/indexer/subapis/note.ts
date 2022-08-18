@@ -25,6 +25,7 @@ export class NoteIndexer extends BaseIndexer {
     locked,
     includeDeleted,
     tags,
+    sources,
     externalUrls,
     limit = 20,
     cursor,
@@ -53,6 +54,8 @@ export class NoteIndexer extends BaseIndexer {
     includeDeleted?: boolean
     /** The `metadata.content.tags` to filter by. */
     tags?: string | string[]
+    /** The `metadata.content.sources` to filter by. */
+    sources?: string | string[]
     /** The `metadata.content.external_urls` to filter by. */
     externalUrls?: string | string[]
     /** Limit the count of items returned. */
@@ -76,6 +79,7 @@ export class NoteIndexer extends BaseIndexer {
       locked,
       includeDeleted,
       tags,
+      sources,
       externalUrls,
     })
 
