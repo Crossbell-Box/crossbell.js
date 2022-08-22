@@ -12,7 +12,7 @@ export class Network {
 
   static readonly #availableNetworks: IAvailableNetwork[] = ['crossbell']
   static #currentNetwork: IAvailableNetwork = 'crossbell'
-  static #ipfsGateway = 'https://gateway.ipfs.io/ipfs/'
+  static #ipfsGateway = 'https://w3s.link/ipfs/'
   static jsonRpcAddress =
     globalThis.process?.env.CROSSBELL_RPC_ADDRESS ?? 'https://rpc.crossbell.io'
 
@@ -63,7 +63,7 @@ export class Network {
 
   /**
    * This returns the IPFS gateway used for the metadata requests.
-   * @default 'https://gateway.ipfs.io/ipfs/'
+   * @default 'https://w3s.link/ipfs/'
    * @returns The IPFS gateway.
    */
   static getIpfsGateway() {
@@ -72,7 +72,7 @@ export class Network {
 
   /**
    * This sets the IPFS gateway used for the metadata requests.
-   * @default 'https://gateway.ipfs.io/ipfs/'
+   * @default 'https://w3s.link/ipfs/'
    * @param gateway - The IPFS gateway to use for the metadata requests.
    */
   static setIpfsGateway(gateway: string) {
