@@ -29,6 +29,7 @@ export class NoteIndexer extends BaseIndexer {
     externalUrls,
     limit = 20,
     cursor,
+    includeEmptyMetadata,
   }: {
     /** The owner of this note */
     characterId?: BigNumberish
@@ -62,6 +63,8 @@ export class NoteIndexer extends BaseIndexer {
     limit?: number
     /** Used for pagination. */
     cursor?: string
+    /** Whether to include notes whose metadata content are empty even though the `tags`, `sources` or `external_urls` fields are specified. */
+    includeEmptyMetadata?: boolean
   } = {}): Promise<ListResponse<NoteEntity>> {
     let url = `${this.endpoint}/notes?`
     url += queryString.stringify({
@@ -81,6 +84,7 @@ export class NoteIndexer extends BaseIndexer {
       tags,
       sources,
       externalUrls,
+      includeEmptyMetadata,
     })
 
     const res = await fetch(url).then((res) => res.json())
