@@ -11,6 +11,7 @@ import {
   PostNoteEvent,
   CharacterCreatedEvent,
   LinkNoteEvent,
+  SetOperatorEvent,
 } from '../abis/entry/types/Abi'
 import {
   type Abi as PeripheryAbi,
@@ -19,7 +20,12 @@ import {
 import { validateIsInSdn } from '../../utils/sdn'
 
 const logTopics: Record<
-  'createCharacter' | 'linkCharacter' | 'postNote' | 'mintNote' | 'linkNote',
+  | 'createCharacter'
+  | 'linkCharacter'
+  | 'postNote'
+  | 'mintNote'
+  | 'linkNote'
+  | 'setOperator',
   keyof EntryAbi['filters']
 > = {
   createCharacter: 'CharacterCreated(uint256,address,address,string,uint256)',
@@ -27,6 +33,7 @@ const logTopics: Record<
   linkNote: 'LinkNote(uint256,uint256,uint256,bytes32,uint256)',
   postNote: 'PostNote(uint256,uint256,bytes32,bytes32,bytes)',
   mintNote: 'MintNote(address,uint256,uint256,address,uint256)',
+  setOperator: 'SetOperator(uint256,address,uint256)',
 } as const
 
 export class BaseContract {
@@ -168,6 +175,10 @@ export class BaseContract {
     this._hasConnected = true
   }
 
+  protected parseLog<T = SetOperatorEvent>(
+    logs: ethers.providers.Log[],
+    filterTopic: 'setOperator',
+  ): T
   protected parseLog<T = MintNoteEvent>(
     logs: ethers.providers.Log[],
     filterTopic: 'mintNote',

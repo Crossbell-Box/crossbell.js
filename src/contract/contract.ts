@@ -4,11 +4,13 @@ import { LinkContract } from './subcontracts/link'
 import { NoteContract } from './subcontracts/note'
 import { CharacterContract } from './subcontracts/character'
 import { RevisionContract } from './subcontracts/revision'
+import { OperatorContract } from './subcontracts/operator'
 
 const Contracts = Mixin(
   CharacterContract,
   LinkContract,
   NoteContract,
+  OperatorContract,
   CsbContract,
   RevisionContract,
 )
