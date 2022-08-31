@@ -25,6 +25,24 @@ export class Ipfs {
     )
   }
 
+  static uploadFile(file: File | Blob): Promise<IpfsResponse> {
+    return retry(
+      async () => {
+        const formData = new FormData()
+
+        formData.append("file", file)
+
+        const res = await fetch("https://ipfs-relay.crossbell.io/upload", {
+          method: 'post',
+          body: formData,
+        })
+
+        return await res.json()
+      },
+      { retries: 3 },
+    )
+  }
+
   static async metadataToUri(metadata: Metadata) {
     const res = await this.uploadJson(metadata)
 
