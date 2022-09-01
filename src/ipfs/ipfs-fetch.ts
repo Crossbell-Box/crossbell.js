@@ -56,10 +56,11 @@ export function ipfsFetch(
             .catch(() => NEVER)
         )
       }),
-    ).then((res) => {
-      resolve(res)
-      clearTimeout(timeoutId)
-      cancelRequests()
-    })
+    )
+      .then(resolve)
+      .finally(() => {
+        clearTimeout(timeoutId)
+        cancelRequests()
+      })
   })
 }
