@@ -30,9 +30,9 @@ export class Ipfs {
       async () => {
         const formData = new FormData()
 
-        formData.append("file", file)
+        formData.append('file', file)
 
-        const res = await fetch("https://ipfs-relay.crossbell.io/upload", {
+        const res = await fetch('https://ipfs-relay.crossbell.io/upload', {
           method: 'post',
           body: formData,
         })
