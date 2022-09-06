@@ -1,6 +1,5 @@
 import isIpfs from 'is-ipfs'
 import retry from 'async-retry'
-
 import '../utils/fetch'
 import type {
   BaseMetadata,
@@ -10,8 +9,6 @@ import type {
 } from '../types/metadata'
 import { IpfsResponse } from '../types/ipfs'
 import { Network } from '../network'
-
-import { ipfsFetch } from './ipfs-fetch'
 
 export class Ipfs {
   static async uploadJson(json: any) {
@@ -33,9 +30,9 @@ export class Ipfs {
       async () => {
         const formData = new FormData()
 
-        formData.append('file', file)
+        formData.append("file", file)
 
-        const res = await fetch('https://ipfs-relay.crossbell.io/upload', {
+        const res = await fetch("https://ipfs-relay.crossbell.io/upload", {
           method: 'post',
           body: formData,
         })
@@ -45,8 +42,6 @@ export class Ipfs {
       { retries: 3 },
     )
   }
-
-  static fetch = ipfsFetch
 
   static async metadataToUri(metadata: Metadata) {
     const res = await this.uploadJson(metadata)
