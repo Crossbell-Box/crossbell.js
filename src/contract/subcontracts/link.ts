@@ -360,7 +360,9 @@ export class LinkContract extends BaseContract {
       toNoteId: toNoteId,
       linkType: ethers.utils.formatBytes32String(linkType),
     })
+
     const receipt = await tx.wait()
+
     return {
       data: undefined,
       transactionHash: receipt.transactionHash,

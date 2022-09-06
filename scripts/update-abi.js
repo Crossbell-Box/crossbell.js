@@ -1,22 +1,31 @@
 #!/usr/bin/env node
 
-const { execSync } = require('child_process')
+const { exec } = require('child_process')
+const { promisify } = require('util')
+const execAsync = promisify(exec)
 const { writeFile } = require('fs/promises')
 const { resolve } = require('path')
 const { fetch } = require('undici')
 
-;(async () => {
+const getAbi = (name) =>
+  fetch(
+    `https://raw.githubusercontent.com/Crossbell-Box/Crossbell-Contracts/develop/build-info/${name}.json`,
+  ).then((res) => res.json())
+
+const writeJson = (dir, abi) =>
+  writeFile(`${dir}/abi.json`, JSON.stringify(abi, null, 2))
+
+const genTypes = (dir) =>
+  execAsync(
+    `npx typechain --target ethers-v5 --out-dir ${dir}/types ${dir}/abi.json`,
+  )
+
+const main = async () => {
   const [{ abi: abi1 }, { abi: abi2 }, { abi: periphery_abi }] =
     await Promise.all([
-      fetch(
-        'https://raw.githubusercontent.com/Crossbell-Box/Crossbell-Contracts/main/build-info/Web3Entry.json',
-      ).then((res) => res.json()),
-      fetch(
-        'https://raw.githubusercontent.com/Crossbell-Box/Crossbell-Contracts/main/build-info/Events.json',
-      ).then((res) => res.json()),
-      fetch(
-        'https://raw.githubusercontent.com/Crossbell-Box/Crossbell-Contracts/main/build-info/Periphery.json',
-      ).then((res) => res.json()),
+      getAbi('Web3Entry'),
+      getAbi('Events'),
+      getAbi('Periphery'),
     ])
 
   const abi = [...abi1, ...abi2]
@@ -24,20 +33,17 @@ const { fetch } = require('undici')
   const entryDir = resolve(__dirname, '../src/contract/abis/entry')
   const peripheryDir = resolve(__dirname, '../src/contract/abis/periphery')
 
-  await writeFile(`${entryDir}/abi.json`, JSON.stringify(abi, null, 2))
+  await Promise.all([
+    writeJson(entryDir, abi),
+    writeJson(peripheryDir, periphery_abi),
+  ])
 
-  await writeFile(
-    `${peripheryDir}/abi.json`,
-    JSON.stringify(periphery_abi, null, 2),
-  )
-
-  execSync(
-    `npx typechain --target ethers-v5 --out-dir ${entryDir}/types ${entryDir}/abi.json`,
-  )
-
-  execSync(
-    `npx typechain --target ethers-v5 --out-dir ${peripheryDir}/types ${peripheryDir}/abi.json`,
-  )
+  await Promise.all([genTypes(entryDir), genTypes(peripheryDir)])
 
   console.log('done')
-})()
+}
+
+main().catch((err) => {
+  console.error(err)
+  process.exit(1)
+})

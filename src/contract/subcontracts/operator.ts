@@ -33,6 +33,8 @@ export class OperatorContract extends BaseContract {
 
   /**
    * This returns the operator of the character.
+   * 
+   * @category Operator
    * @param characterId The id of the character.
    * @returns The operator of the character.
    * @default '0x0000000000000000000000000000000000000000'
