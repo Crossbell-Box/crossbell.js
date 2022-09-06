@@ -21,24 +21,35 @@ const genTypes = (dir) =>
   )
 
 const main = async () => {
-  const [{ abi: abi1 }, { abi: abi2 }, { abi: periphery_abi }] =
-    await Promise.all([
-      getAbi('Web3Entry'),
-      getAbi('Events'),
-      getAbi('Periphery'),
-    ])
+  const [
+    { abi: abi1 },
+    { abi: abi2 },
+    { abi: periphery_abi },
+    { abi: cbt_abi },
+  ] = await Promise.all([
+    getAbi('Web3Entry'),
+    getAbi('Events'),
+    getAbi('Periphery'),
+    getAbi('CharacterBoundToken'),
+  ])
 
   const abi = [...abi1, ...abi2]
 
   const entryDir = resolve(__dirname, '../src/contract/abis/entry')
   const peripheryDir = resolve(__dirname, '../src/contract/abis/periphery')
+  const cbtDir = resolve(__dirname, '../src/contract/abis/cbt')
 
   await Promise.all([
     writeJson(entryDir, abi),
     writeJson(peripheryDir, periphery_abi),
+    writeJson(cbtDir, cbt_abi),
   ])
 
-  await Promise.all([genTypes(entryDir), genTypes(peripheryDir)])
+  await Promise.all([
+    genTypes(entryDir),
+    genTypes(peripheryDir),
+    genTypes(cbtDir),
+  ])
 
   console.log('done')
 }

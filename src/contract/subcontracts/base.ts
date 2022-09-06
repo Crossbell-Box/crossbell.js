@@ -5,7 +5,7 @@ import {
   type Abi as EntryAbi,
   Abi__factory as EntryAbi__factory,
 } from '../abis/entry/types'
-import {
+import type {
   LinkCharacterEvent,
   MintNoteEvent,
   PostNoteEvent,
@@ -17,16 +17,26 @@ import {
   type Abi as PeripheryAbi,
   Abi__factory as PeripheryAbi__factory,
 } from '../abis/periphery/types'
+import {
+  type Abi as CbtAbi,
+  Abi__factory as CbtAbi__factory,
+} from '../abis/cbt/types'
+import type { MintEvent } from '../abis/cbt/types/Abi'
 import { validateIsInSdn } from '../../utils/sdn'
 
 const logTopics: Record<
+  // keys
   | 'createCharacter'
   | 'linkCharacter'
   | 'postNote'
   | 'mintNote'
   | 'linkNote'
-  | 'setOperator',
-  keyof EntryAbi['filters']
+  | 'setOperator'
+  | 'mint',
+  // values
+  | keyof EntryAbi['filters']
+  | keyof PeripheryAbi['filters']
+  | keyof CbtAbi['filters']
 > = {
   createCharacter: 'CharacterCreated(uint256,address,address,string,uint256)',
   linkCharacter: 'LinkCharacter(address,uint256,uint256,bytes32,uint256)',
@@ -34,7 +44,14 @@ const logTopics: Record<
   postNote: 'PostNote(uint256,uint256,bytes32,bytes32,bytes)',
   mintNote: 'MintNote(address,uint256,uint256,address,uint256)',
   setOperator: 'SetOperator(uint256,address,uint256)',
+  mint: 'Mint(uint256,uint256,uint256)',
 } as const
+
+type ContractOptions = {
+  entryContractAddress?: string
+  peripheryContractAddress?: string
+  cbtContractAddress?: string
+}
 
 export class BaseContract {
   private _providerOrPrivateKey?:
@@ -45,8 +62,11 @@ export class BaseContract {
 
   private _contract!: EntryAbi
   private _peripheryContract!: PeripheryAbi
+  private _cbtContract!: CbtAbi
 
   private _hasConnected: boolean = false
+
+  private options: ContractOptions
 
   /**
    * Returns the internal contract.
@@ -74,6 +94,20 @@ export class BaseContract {
 
   set peripheryContract(contract: PeripheryAbi) {
     this._peripheryContract = contract
+  }
+
+  /**
+   * Returns the internal cbt contract.
+   * @category Internal Contract
+   */
+  get cbtContract(): CbtAbi {
+    this.checkConnection()
+
+    return this._cbtContract
+  }
+
+  set cbtContract(contract: CbtAbi) {
+    this._cbtContract = contract
   }
 
   /**
@@ -106,8 +140,10 @@ export class BaseContract {
       | ethers.providers.ExternalProvider
       | ethers.providers.JsonRpcFetchFunc
       | string,
+    options?: ContractOptions,
   ) {
     this._providerOrPrivateKey = providerOrPrivateKey
+    this.options = options ?? {}
   }
 
   /**
@@ -148,29 +184,22 @@ export class BaseContract {
     }
 
     this.contract = EntryAbi__factory.connect(
-      Network.getContractAddress(),
+      this.options.entryContractAddress ?? Network.getContractAddress(),
       this._signerOrProvider,
     )
 
     this.peripheryContract = PeripheryAbi__factory.connect(
-      Network.getPeripheryContractAddress(),
+      this.options.peripheryContractAddress ??
+        Network.getPeripheryContractAddress(),
       this._signerOrProvider,
     )
 
-    this._hasConnected = true
-  }
-
-  connectWithExistedProvider(provider: ethers.providers.Provider) {
-    this._signerOrProvider = provider
-    this.contract = EntryAbi__factory.connect(
-      Network.getContractAddress(),
-      this._signerOrProvider,
-    )
-
-    this.peripheryContract = PeripheryAbi__factory.connect(
-      Network.getPeripheryContractAddress(),
-      this._signerOrProvider,
-    )
+    if (this.options.cbtContractAddress) {
+      this.cbtContract = CbtAbi__factory.connect(
+        this.options.cbtContractAddress,
+        this._signerOrProvider,
+      )
+    }
 
     this._hasConnected = true
   }
@@ -198,6 +227,10 @@ export class BaseContract {
   protected parseLog<T = PostNoteEvent>(
     logs: ethers.providers.Log[],
     filterTopic: 'postNote',
+  ): T
+  protected parseLog<T = MintEvent>(
+    logs: ethers.providers.Log[],
+    filterTopic: 'mint',
   ): T
   protected parseLog<T>(
     logs: ethers.providers.Log[],
