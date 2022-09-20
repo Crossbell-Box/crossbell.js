@@ -302,7 +302,7 @@ export type BurnEventFilter = TypedEventFilter<BurnEvent>;
 export interface MintEventObject {
   to: BigNumber;
   tokenId: BigNumber;
-  amount: BigNumber;
+  tokenNumber: BigNumber;
 }
 export type MintEvent = TypedEvent<
   [BigNumber, BigNumber, BigNumber],
@@ -809,12 +809,12 @@ export interface Abi extends BaseContract {
     "Mint(uint256,uint256,uint256)"(
       to?: PromiseOrValue<BigNumberish> | null,
       tokenId?: PromiseOrValue<BigNumberish> | null,
-      amount?: PromiseOrValue<BigNumberish> | null
+      tokenNumber?: PromiseOrValue<BigNumberish> | null
     ): MintEventFilter;
     Mint(
       to?: PromiseOrValue<BigNumberish> | null,
       tokenId?: PromiseOrValue<BigNumberish> | null,
-      amount?: PromiseOrValue<BigNumberish> | null
+      tokenNumber?: PromiseOrValue<BigNumberish> | null
     ): MintEventFilter;
 
     "RoleAdminChanged(bytes32,bytes32,bytes32)"(

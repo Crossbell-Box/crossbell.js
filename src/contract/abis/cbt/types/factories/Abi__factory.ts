@@ -86,7 +86,7 @@ const _abi = [
       {
         indexed: true,
         internalType: "uint256",
-        name: "amount",
+        name: "tokenNumber",
         type: "uint256",
       },
     ],
