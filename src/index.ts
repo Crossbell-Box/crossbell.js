@@ -13,3 +13,4 @@ export * as utils from './utils'
 
 export * as EntryTypes from './contract/abis/entry/types/Abi'
 export * as PeripheryTypes from './contract/abis/periphery/types/Abi'
+export * as CbtTypes from './contract/abis/cbt/types/Abi'
