@@ -26,6 +26,18 @@ export interface CharacterMetadata extends BaseMetadata {
    */
   websites?: string[]
 
+  banners?: {
+    /**
+     * The address (url) of this banner.
+     */
+    address: string
+
+    /**
+     * The mime type of this banner file.
+     */
+    mime_type: string
+  }[]
+
   /**
    * The social links of this character. It should follow the csb:// scheme.
    *
