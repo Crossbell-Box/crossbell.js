@@ -1,5 +1,5 @@
-import { LinkItemType } from './contract'
-import { NoteMetadata, CharacterMetadata } from './metadata'
+import { LinkItemType } from './../contract'
+import { NoteMetadata, CharacterMetadata } from './../metadata'
 
 export type ListResponse<T> = {
   cursor: string | null
@@ -190,3 +190,5 @@ export type FeedEntity = {
   blockNumber: number
   logIndex: number
 }
+
+export * from './achievement'
