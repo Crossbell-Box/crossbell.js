@@ -21,6 +21,9 @@ export type AchievementItem = {
   createdAt: Date
   updatedAt: Date
   info: AchievementInfo
+  stat: {
+    mintedCount: number
+  }
 }
 
 type AchievementItemGroup = {
