@@ -18,8 +18,9 @@ export type AchievementItem = {
   status: 'INACTIVE' | 'MINTABLE' | 'MINTED'
   tokenNumber: number
   currentValue: number
-  createdAt: Date
-  updatedAt: Date
+  createdAt: string
+  updatedAt: string
+  mintedAt: string | null
   info: AchievementInfo
   stat: {
     mintedCount: number
