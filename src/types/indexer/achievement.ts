@@ -21,6 +21,7 @@ export type AchievementItem = {
   createdAt: string
   updatedAt: string
   mintedAt: string | null
+  transactionHash: string | null
   info: AchievementInfo
   stat: {
     mintedCount: number
