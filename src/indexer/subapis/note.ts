@@ -113,4 +113,31 @@ export class NoteIndexer extends BaseIndexer {
 
     return res as NoteEntity
   }
+
+  /**
+   * This returns all distinct tags of notes owned by a character.
+   *
+   * @category Note
+   * @param characterId - The characterId of the notes owner.
+   * @param options - The options to send to the indexer.
+   * @returns The list of tags.
+   */
+  async getDistinctNoteTagsOfCharacter(
+    characterId: BigNumberish,
+    {
+      sources,
+    }: {
+      /** The `metadata.content.sources` to filter by. */
+      sources?: string | string[]
+    } = {},
+  ): Promise<ListResponse<string>> {
+    let url = `${this.endpoint}/characters/${characterId}/notes/tags?`
+    url += queryString.stringify({
+      sources,
+    })
+
+    const res = await fetch(url).then((res) => res.json())
+
+    return res as ListResponse<string>
+  }
 }
