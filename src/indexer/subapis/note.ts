@@ -68,7 +68,15 @@ export class NoteIndexer extends BaseIndexer {
     includeEmptyMetadata?: boolean
     /** Whether to include the character data in the response. */
     includeCharacter?: boolean
-  } = {}): Promise<ListResponse<NoteEntity>> {
+    /** Whether to include nested notes */
+    includeNestedNotes?: boolean
+    /** How many levels of nested notes to include */
+    nestedNotesDepth?: 1 | 2 | 3
+    /** How many nested notes to include per note */
+    nestedNotesLimit?: number
+  } = {}): Promise<
+    ListResponse<NoteEntity & { fromNotes: ListResponse<NoteEntity> }>
+  > {
     let url = `${this.endpoint}/notes?`
     url += queryString.stringify({
       characterId,
@@ -93,7 +101,9 @@ export class NoteIndexer extends BaseIndexer {
 
     const res = await fetch(url).then((res) => res.json())
 
-    return res as ListResponse<NoteEntity>
+    return res as ListResponse<
+      NoteEntity & { fromNotes: ListResponse<NoteEntity> }
+    >
   }
 
   /**
