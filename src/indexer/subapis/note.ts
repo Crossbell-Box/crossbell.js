@@ -31,6 +31,9 @@ export class NoteIndexer extends BaseIndexer {
     cursor,
     includeEmptyMetadata,
     includeCharacter,
+    includeNestedNotes,
+    nestedNotesDepth,
+    nestedNotesLimit,
   }: {
     /** The owner of this note */
     characterId?: BigNumberish
@@ -97,6 +100,9 @@ export class NoteIndexer extends BaseIndexer {
       externalUrls,
       includeEmptyMetadata,
       includeCharacter,
+      includeNestedNotes,
+      nestedNotesDepth,
+      nestedNotesLimit,
     })
 
     const res = await fetch(url).then((res) => res.json())
