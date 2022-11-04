@@ -61,6 +61,19 @@ const _abi = [
     anonymous: false,
     inputs: [
       {
+        indexed: false,
+        internalType: "uint8",
+        name: "version",
+        type: "uint8",
+      },
+    ],
+    name: "Initialized",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
         indexed: true,
         internalType: "address",
         name: "from",
@@ -135,30 +148,6 @@ const _abi = [
   {
     inputs: [
       {
-        internalType: "string",
-        name: "handle",
-        type: "string",
-      },
-      {
-        internalType: "address",
-        name: "account",
-        type: "address",
-      },
-    ],
-    name: "canCreate",
-    outputs: [
-      {
-        internalType: "bool",
-        name: "",
-        type: "bool",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
         components: [
           {
             internalType: "address",
@@ -192,46 +181,6 @@ const _abi = [
       },
     ],
     name: "createCharacter",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        components: [
-          {
-            internalType: "address",
-            name: "to",
-            type: "address",
-          },
-          {
-            internalType: "string",
-            name: "handle",
-            type: "string",
-          },
-          {
-            internalType: "string",
-            name: "uri",
-            type: "string",
-          },
-          {
-            internalType: "address",
-            name: "linkModule",
-            type: "address",
-          },
-          {
-            internalType: "bytes",
-            name: "linkModuleInitData",
-            type: "bytes",
-          },
-        ],
-        internalType: "struct DataTypes.CreateCharacterData",
-        name: "vars",
-        type: "tuple",
-      },
-    ],
-    name: "createProfile",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
@@ -1012,19 +961,6 @@ const _abi = [
       },
     ],
     name: "lockNote",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "characterId",
-        type: "uint256",
-      },
-    ],
-    name: "migrateNote",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
@@ -1929,24 +1865,6 @@ const _abi = [
       },
     ],
     name: "setPrimaryCharacterId",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "profileId",
-        type: "uint256",
-      },
-      {
-        internalType: "string",
-        name: "newUri",
-        type: "string",
-      },
-    ],
-    name: "setProfileUri",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",

@@ -9,8 +9,13 @@ const { fetch } = require('undici')
 
 const getAbi = (name) =>
   fetch(
-    `https://raw.githubusercontent.com/Crossbell-Box/Crossbell-Contracts/develop/build-info/${name}.json`,
-  ).then((res) => res.json())
+    `https://raw.githubusercontent.com/Crossbell-Box/Crossbell-Contracts/main/build-info/${name}.json`,
+  )
+    .then((res) => res.json())
+    .catch((e) => {
+      console.error(`Error while fetching ${name}`)
+      throw e
+    })
 
 const writeJson = (dir, abi) =>
   writeFile(`${dir}/abi.json`, JSON.stringify(abi, null, 2))

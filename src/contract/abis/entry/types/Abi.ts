@@ -498,9 +498,7 @@ export interface AbiInterface extends utils.Interface {
     "approve(address,uint256)": FunctionFragment;
     "balanceOf(address)": FunctionFragment;
     "burn(uint256)": FunctionFragment;
-    "canCreate(string,address)": FunctionFragment;
     "createCharacter((address,string,string,address,bytes))": FunctionFragment;
-    "createProfile((address,string,string,address,bytes))": FunctionFragment;
     "createThenLinkCharacter((uint256,address,bytes32))": FunctionFragment;
     "deleteNote(uint256,uint256)": FunctionFragment;
     "getApproved(uint256)": FunctionFragment;
@@ -529,7 +527,6 @@ export interface AbiInterface extends utils.Interface {
     "linkLinklist((uint256,uint256,bytes32,bytes))": FunctionFragment;
     "linkNote((uint256,uint256,uint256,bytes32,bytes))": FunctionFragment;
     "lockNote(uint256,uint256)": FunctionFragment;
-    "migrateNote(uint256)": FunctionFragment;
     "mintNote((uint256,uint256,address,bytes))": FunctionFragment;
     "name()": FunctionFragment;
     "ownerOf(uint256)": FunctionFragment;
@@ -556,7 +553,6 @@ export interface AbiInterface extends utils.Interface {
     "setNoteUri(uint256,uint256,string)": FunctionFragment;
     "setOperator(uint256,address)": FunctionFragment;
     "setPrimaryCharacterId(uint256)": FunctionFragment;
-    "setProfileUri(uint256,string)": FunctionFragment;
     "setSocialToken(uint256,address)": FunctionFragment;
     "supportsInterface(bytes4)": FunctionFragment;
     "symbol()": FunctionFragment;
@@ -578,9 +574,7 @@ export interface AbiInterface extends utils.Interface {
       | "approve"
       | "balanceOf"
       | "burn"
-      | "canCreate"
       | "createCharacter"
-      | "createProfile"
       | "createThenLinkCharacter"
       | "deleteNote"
       | "getApproved"
@@ -609,7 +603,6 @@ export interface AbiInterface extends utils.Interface {
       | "linkLinklist"
       | "linkNote"
       | "lockNote"
-      | "migrateNote"
       | "mintNote"
       | "name"
       | "ownerOf"
@@ -636,7 +629,6 @@ export interface AbiInterface extends utils.Interface {
       | "setNoteUri"
       | "setOperator"
       | "setPrimaryCharacterId"
-      | "setProfileUri"
       | "setSocialToken"
       | "supportsInterface"
       | "symbol"
@@ -666,15 +658,7 @@ export interface AbiInterface extends utils.Interface {
     values: [PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
-    functionFragment: "canCreate",
-    values: [PromiseOrValue<string>, PromiseOrValue<string>]
-  ): string;
-  encodeFunctionData(
     functionFragment: "createCharacter",
-    values: [DataTypes.CreateCharacterDataStruct]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "createProfile",
     values: [DataTypes.CreateCharacterDataStruct]
   ): string;
   encodeFunctionData(
@@ -797,10 +781,6 @@ export interface AbiInterface extends utils.Interface {
     values: [PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
-    functionFragment: "migrateNote",
-    values: [PromiseOrValue<BigNumberish>]
-  ): string;
-  encodeFunctionData(
     functionFragment: "mintNote",
     values: [DataTypes.MintNoteDataStruct]
   ): string;
@@ -912,10 +892,6 @@ export interface AbiInterface extends utils.Interface {
     values: [PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
-    functionFragment: "setProfileUri",
-    values: [PromiseOrValue<BigNumberish>, PromiseOrValue<string>]
-  ): string;
-  encodeFunctionData(
     functionFragment: "setSocialToken",
     values: [PromiseOrValue<BigNumberish>, PromiseOrValue<string>]
   ): string;
@@ -976,13 +952,8 @@ export interface AbiInterface extends utils.Interface {
   decodeFunctionResult(functionFragment: "approve", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "balanceOf", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "burn", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "canCreate", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "createCharacter",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "createProfile",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -1073,10 +1044,6 @@ export interface AbiInterface extends utils.Interface {
   ): Result;
   decodeFunctionResult(functionFragment: "linkNote", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "lockNote", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "migrateNote",
-    data: BytesLike
-  ): Result;
   decodeFunctionResult(functionFragment: "mintNote", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "name", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "ownerOf", data: BytesLike): Result;
@@ -1161,10 +1128,6 @@ export interface AbiInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "setProfileUri",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
     functionFragment: "setSocialToken",
     data: BytesLike
   ): Result;
@@ -1215,6 +1178,7 @@ export interface AbiInterface extends utils.Interface {
   events: {
     "Approval(address,address,uint256)": EventFragment;
     "ApprovalForAll(address,address,bool)": EventFragment;
+    "Initialized(uint8)": EventFragment;
     "Transfer(address,address,uint256)": EventFragment;
     "AttachLinklist(uint256,uint256,bytes32)": EventFragment;
     "BaseInitialized(string,string,uint256)": EventFragment;
@@ -1257,6 +1221,7 @@ export interface AbiInterface extends utils.Interface {
 
   getEvent(nameOrSignatureOrTopic: "Approval"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "ApprovalForAll"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "Initialized"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Transfer"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "AttachLinklist"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "BaseInitialized"): EventFragment;
@@ -1320,6 +1285,13 @@ export type ApprovalForAllEvent = TypedEvent<
 >;
 
 export type ApprovalForAllEventFilter = TypedEventFilter<ApprovalForAllEvent>;
+
+export interface InitializedEventObject {
+  version: number;
+}
+export type InitializedEvent = TypedEvent<[number], InitializedEventObject>;
+
+export type InitializedEventFilter = TypedEventFilter<InitializedEvent>;
 
 export interface TransferEventObject {
   from: string;
@@ -1860,18 +1832,7 @@ export interface Abi extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
-    canCreate(
-      handle: PromiseOrValue<string>,
-      account: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<[boolean]>;
-
     createCharacter(
-      vars: DataTypes.CreateCharacterDataStruct,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
-
-    createProfile(
       vars: DataTypes.CreateCharacterDataStruct,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
@@ -2021,11 +1982,6 @@ export interface Abi extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
-    migrateNote(
-      characterId: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
-
     mintNote(
       vars: DataTypes.MintNoteDataStruct,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -2168,12 +2124,6 @@ export interface Abi extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
-    setProfileUri(
-      profileId: PromiseOrValue<BigNumberish>,
-      newUri: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
-
     setSocialToken(
       characterId: PromiseOrValue<BigNumberish>,
       tokenAddress: PromiseOrValue<string>,
@@ -2259,18 +2209,7 @@ export interface Abi extends BaseContract {
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
-  canCreate(
-    handle: PromiseOrValue<string>,
-    account: PromiseOrValue<string>,
-    overrides?: CallOverrides
-  ): Promise<boolean>;
-
   createCharacter(
-    vars: DataTypes.CreateCharacterDataStruct,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
-
-  createProfile(
     vars: DataTypes.CreateCharacterDataStruct,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
@@ -2420,11 +2359,6 @@ export interface Abi extends BaseContract {
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
-  migrateNote(
-    characterId: PromiseOrValue<BigNumberish>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
-
   mintNote(
     vars: DataTypes.MintNoteDataStruct,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -2567,12 +2501,6 @@ export interface Abi extends BaseContract {
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
-  setProfileUri(
-    profileId: PromiseOrValue<BigNumberish>,
-    newUri: PromiseOrValue<string>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
-
   setSocialToken(
     characterId: PromiseOrValue<BigNumberish>,
     tokenAddress: PromiseOrValue<string>,
@@ -2658,18 +2586,7 @@ export interface Abi extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
-    canCreate(
-      handle: PromiseOrValue<string>,
-      account: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<boolean>;
-
     createCharacter(
-      vars: DataTypes.CreateCharacterDataStruct,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    createProfile(
       vars: DataTypes.CreateCharacterDataStruct,
       overrides?: CallOverrides
     ): Promise<void>;
@@ -2819,11 +2736,6 @@ export interface Abi extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
-    migrateNote(
-      characterId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
     mintNote(
       vars: DataTypes.MintNoteDataStruct,
       overrides?: CallOverrides
@@ -2966,12 +2878,6 @@ export interface Abi extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
-    setProfileUri(
-      profileId: PromiseOrValue<BigNumberish>,
-      newUri: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
     setSocialToken(
       characterId: PromiseOrValue<BigNumberish>,
       tokenAddress: PromiseOrValue<string>,
@@ -3063,6 +2969,9 @@ export interface Abi extends BaseContract {
       operator?: PromiseOrValue<string> | null,
       approved?: null
     ): ApprovalForAllEventFilter;
+
+    "Initialized(uint8)"(version?: null): InitializedEventFilter;
+    Initialized(version?: null): InitializedEventFilter;
 
     "Transfer(address,address,uint256)"(
       from?: PromiseOrValue<string> | null,
@@ -3550,18 +3459,7 @@ export interface Abi extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
-    canCreate(
-      handle: PromiseOrValue<string>,
-      account: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
     createCharacter(
-      vars: DataTypes.CreateCharacterDataStruct,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
-
-    createProfile(
       vars: DataTypes.CreateCharacterDataStruct,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
@@ -3711,11 +3609,6 @@ export interface Abi extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
-    migrateNote(
-      characterId: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
-
     mintNote(
       vars: DataTypes.MintNoteDataStruct,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -3858,12 +3751,6 @@ export interface Abi extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
-    setProfileUri(
-      profileId: PromiseOrValue<BigNumberish>,
-      newUri: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
-
     setSocialToken(
       characterId: PromiseOrValue<BigNumberish>,
       tokenAddress: PromiseOrValue<string>,
@@ -3950,18 +3837,7 @@ export interface Abi extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
-    canCreate(
-      handle: PromiseOrValue<string>,
-      account: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
     createCharacter(
-      vars: DataTypes.CreateCharacterDataStruct,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
-
-    createProfile(
       vars: DataTypes.CreateCharacterDataStruct,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
@@ -4113,11 +3989,6 @@ export interface Abi extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
-    migrateNote(
-      characterId: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
-
     mintNote(
       vars: DataTypes.MintNoteDataStruct,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -4257,12 +4128,6 @@ export interface Abi extends BaseContract {
 
     setPrimaryCharacterId(
       characterId: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
-
-    setProfileUri(
-      profileId: PromiseOrValue<BigNumberish>,
-      newUri: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
