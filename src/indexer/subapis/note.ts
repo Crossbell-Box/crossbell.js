@@ -34,6 +34,7 @@ export class NoteIndexer extends BaseIndexer {
     includeNestedNotes,
     nestedNotesDepth,
     nestedNotesLimit,
+    orderBy,
   }: {
     /** The owner of this note */
     characterId?: BigNumberish
@@ -77,6 +78,8 @@ export class NoteIndexer extends BaseIndexer {
     nestedNotesDepth?: 1 | 2 | 3
     /** How many nested notes to include per note */
     nestedNotesLimit?: number
+    /** The order of the returned list. */
+    orderBy?: 'createdAt' | 'updatedAt' | 'publishedAt'
   } = {}): Promise<
     ListResponse<NoteEntity & { fromNotes: ListResponse<NoteEntity> }>
   > {
@@ -103,6 +106,7 @@ export class NoteIndexer extends BaseIndexer {
       includeNestedNotes,
       nestedNotesDepth,
       nestedNotesLimit,
+      orderBy,
     })
 
     const res = await fetch(url).then((res) => res.json())

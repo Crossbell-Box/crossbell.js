@@ -1,6 +1,6 @@
 {
   "name": "crossbell.js",
-  "version": "0.10.38",
+  "version": "0.10.39",
   "description": "JavaScript SDK to interact with Crossbell",
   "keywords": [
     "crossbell",
@@ -38,23 +38,23 @@
   },
   "dependencies": {
     "async-retry": "^1.3.3",
-    "ethers": "^5.7.1",
+    "ethers": "^5.7.2",
     "fetch-undici": "^3.0.1",
     "is-ipfs": "^6.0.2",
     "query-string": "^7.1.1",
-    "ts-mixer": "^6.0.1",
-    "web3-providers-ws": "^1.8.0"
+    "ts-mixer": "^6.0.2",
+    "web3-providers-ws": "^1.8.1"
   },
   "devDependencies": {
-    "@typechain/ethers-v5": "^10.1.0",
+    "@typechain/ethers-v5": "^10.1.1",
     "@types/async-retry": "^1.4.5",
-    "@types/node": "^18.11.2",
+    "@types/node": "^18.11.9",
     "prettier": "^2.7.1",
-    "tsup": "^6.3.0",
-    "typechain": "^8.1.0",
-    "typedoc": "^0.23.17",
+    "tsup": "^6.5.0",
+    "typechain": "^8.1.1",
+    "typedoc": "^0.23.21",
     "typescript": "^4.8.4",
-    "vitest": "^0.24.3"
+    "vitest": "^0.24.5"
   },
   "publishConfig": {
     "access": "public"
