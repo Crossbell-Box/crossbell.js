@@ -192,3 +192,4 @@ export type FeedEntity = {
 }
 
 export * from './achievement'
+export * from './stat'
