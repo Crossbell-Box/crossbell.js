@@ -120,7 +120,9 @@ export class OperatorContract extends BaseContract {
    * @param characterId - The id of the character.
    * @returns The operators of the character.
    */
-  async getOperators(characterId: number): Promise<Result<{}, false>> | never {
+  async getOperators(
+    characterId: number,
+  ): Promise<Result<string[], false>> | never {
     const operators = await this.contract.getOperators(characterId)
 
     return {
@@ -134,12 +136,12 @@ export class OperatorContract extends BaseContract {
    * @category Operator
    * @param characterId - The id of the character.
    * @param operator - The address of the operator.
-   * @returns The operators of the character.
+   * @returns True if the address is an operator of the character; otherwise, false.
    */
   async isOperator(
     characterId: number,
     operator: string,
-  ): Promise<Result<{}, false>> | never {
+  ): Promise<Result<boolean, false>> | never {
     const is = await this.contract.isOperator(characterId, operator)
 
     return {
