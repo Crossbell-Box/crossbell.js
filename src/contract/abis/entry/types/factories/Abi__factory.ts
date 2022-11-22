@@ -98,6 +98,24 @@ const _abi = [
   {
     inputs: [
       {
+        internalType: "uint256",
+        name: "characterId",
+        type: "uint256",
+      },
+      {
+        internalType: "address",
+        name: "operator",
+        type: "address",
+      },
+    ],
+    name: "addOperator",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
         internalType: "address",
         name: "to",
         type: "address",
@@ -617,6 +635,25 @@ const _abi = [
   {
     inputs: [
       {
+        internalType: "uint256",
+        name: "characterId",
+        type: "uint256",
+      },
+    ],
+    name: "getOperators",
+    outputs: [
+      {
+        internalType: "address[]",
+        name: "",
+        type: "address[]",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
         internalType: "address",
         name: "account",
         type: "address",
@@ -698,6 +735,30 @@ const _abi = [
       },
     ],
     name: "isApprovedForAll",
+    outputs: [
+      {
+        internalType: "bool",
+        name: "",
+        type: "bool",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "characterId",
+        type: "uint256",
+      },
+      {
+        internalType: "address",
+        name: "operator",
+        type: "address",
+      },
+    ],
+    name: "isOperator",
     outputs: [
       {
         internalType: "bool",
@@ -1485,6 +1546,24 @@ const _abi = [
     type: "function",
   },
   {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "characterId",
+        type: "uint256",
+      },
+      {
+        internalType: "address",
+        name: "operator",
+        type: "address",
+      },
+    ],
+    name: "removeOperator",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
     inputs: [],
     name: "resolver",
     outputs: [
@@ -2213,6 +2292,31 @@ const _abi = [
       {
         indexed: true,
         internalType: "uint256",
+        name: "characterId",
+        type: "uint256",
+      },
+      {
+        indexed: true,
+        internalType: "address",
+        name: "operator",
+        type: "address",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "timestamp",
+        type: "uint256",
+      },
+    ],
+    name: "AddOperator",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "uint256",
         name: "linklistId",
         type: "uint256",
       },
@@ -2708,6 +2812,31 @@ const _abi = [
       },
     ],
     name: "PostNote",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "uint256",
+        name: "characterId",
+        type: "uint256",
+      },
+      {
+        indexed: true,
+        internalType: "address",
+        name: "operator",
+        type: "address",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "timestamp",
+        type: "uint256",
+      },
+    ],
+    name: "RemoveOperator",
     type: "event",
   },
   {
