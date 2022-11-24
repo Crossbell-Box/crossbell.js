@@ -8,6 +8,7 @@ import { FeedIndexer } from './subapis/feed'
 import { MintedNoteIndexer } from './subapis/minted_note'
 import { MetadataIndexer } from './subapis/metadata'
 import { AchievementIndexer } from './subapis/achievement'
+import { NotificationIndexer } from './subapis/notification'
 
 const Indexers = Mixin(
   CharacterIndexer,
@@ -19,6 +20,7 @@ const Indexers = Mixin(
   FeedIndexer,
   MetadataIndexer,
   AchievementIndexer,
+  NotificationIndexer,
 )
 
 /**
