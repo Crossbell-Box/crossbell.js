@@ -30,6 +30,7 @@ export type CharacterEntity = {
   socialToken: string | null
   operator: string
   owner: string
+  operators: string[]
   fromAddress: string
   createdAt: string
   updatedAt: string
@@ -72,6 +73,10 @@ export type NoteEntity = {
   toAddress: string | null
   toNoteId: number | null
   toNote?: NoteEntity | null
+  toHeadCharacterId: number | null
+  toHeadCharacter?: CharacterEntity | null
+  toHeadNoteId: number | null
+  toHeadNote?: NoteEntity | null
   toContractAddress: string | null
   toTokenId: number | null
   toLinklistId: number | null
