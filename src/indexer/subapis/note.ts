@@ -31,6 +31,8 @@ export class NoteIndexer extends BaseIndexer {
     cursor,
     includeEmptyMetadata,
     includeCharacter,
+    includeHeadCharacter,
+    includeHeadNote,
     includeNestedNotes,
     nestedNotesDepth,
     nestedNotesLimit,
@@ -72,6 +74,10 @@ export class NoteIndexer extends BaseIndexer {
     includeEmptyMetadata?: boolean
     /** Whether to include the character data in the response. */
     includeCharacter?: boolean
+    /** Whether to include the head character data in the response. */
+    includeHeadCharacter?: boolean
+    /** Whether to include the head note data in the response. */
+    includeHeadNote?: boolean
     /** Whether to include nested notes */
     includeNestedNotes?: boolean
     /** How many levels of nested notes to include */
@@ -103,6 +109,8 @@ export class NoteIndexer extends BaseIndexer {
       externalUrls,
       includeEmptyMetadata,
       includeCharacter,
+      includeHeadCharacter,
+      includeHeadNote,
       includeNestedNotes,
       nestedNotesDepth,
       nestedNotesLimit,
