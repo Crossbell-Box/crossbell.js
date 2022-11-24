@@ -78,8 +78,8 @@ export class FeedIndexer extends BaseIndexer {
    * This returns a specific feed.
    *
    * @category Feed
-   * @param contractAddress - The contractAddress of the feed.
-   * @param tokenId - The tokenId of the feed.
+   * @param transactionHash - The transactionHash of the feed.
+   * @param logIndex - The logIndex of the feed.
    * @returns The feed.
    */
   async getFeed(
