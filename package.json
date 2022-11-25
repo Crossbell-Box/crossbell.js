@@ -1,6 +1,6 @@
 {
   "name": "crossbell.js",
-  "version": "0.11.3",
+  "version": "0.11.4",
   "description": "JavaScript SDK to interact with Crossbell",
   "keywords": [
     "crossbell",
@@ -17,8 +17,14 @@
   },
   "license": "MIT",
   "exports": {
-    "import": "./dist/index.mjs",
-    "require": "./dist/index.js"
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    },
+    "./dist": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    }
   },
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
