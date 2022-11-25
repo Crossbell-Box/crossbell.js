@@ -32,7 +32,7 @@ export class SearchIndexer extends BaseIndexer {
     let url = `${this.endpoint}/characters/search?`
     url += queryString.stringify({ q: query, limit, cursor })
 
-    const res = await fetch(url).then((res) => res.json())
+    const res = await this.fetch(url).then((res) => res.json())
 
     return res as ListResponse<CharacterEntity>
   }
@@ -76,7 +76,7 @@ export class SearchIndexer extends BaseIndexer {
       characterId,
     })
 
-    const res = await fetch(url).then((res) => res.json())
+    const res = await this.fetch(url).then((res) => res.json())
 
     return res as ListResponse<NoteEntity>
   }

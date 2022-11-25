@@ -23,7 +23,7 @@ export class AchievementIndexer extends BaseIndexer {
 
     url += queryString.stringify({ status })
 
-    const res = await fetch(url).then((res) => res.json())
+    const res = await this.fetch(url).then((res) => res.json())
 
     return res as ListResponse<AchievementSection>
   }
@@ -41,7 +41,9 @@ export class AchievementIndexer extends BaseIndexer {
   ): Promise<AchievementItem> | never {
     let url = `${this.endpoint}/characters/${characterId}/achievements/${achievementId}`
 
-    const res = await fetch(url, { method: 'POST' }).then((res) => res.json())
+    const res = await this.fetch(url, { method: 'POST' }).then((res) =>
+      res.json(),
+    )
 
     return res as AchievementItem
   }

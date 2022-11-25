@@ -34,7 +34,7 @@ export class FeedIndexer extends BaseIndexer {
       cursor,
     })
 
-    const res = await fetch(url).then((res) => res.json())
+    const res = await this.fetch(url).then((res) => res.json())
 
     return res as ListResponse<FeedEntity>
   }
@@ -69,7 +69,7 @@ export class FeedIndexer extends BaseIndexer {
       cursor,
     })
 
-    const res = await fetch(url).then((res) => res.json())
+    const res = await this.fetch(url).then((res) => res.json())
 
     return res as ListResponse<FeedEntity>
   }
@@ -87,7 +87,7 @@ export class FeedIndexer extends BaseIndexer {
     logIndex: BigNumberish,
   ): Promise<FeedEntity | null> {
     const url = `${this.endpoint}/feed/${transactionHash}/${logIndex}`
-    const res = await fetch(url).then((res) => res.json())
+    const res = await this.fetch(url).then((res) => res.json())
 
     return res as FeedEntity
   }

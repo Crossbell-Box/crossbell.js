@@ -73,7 +73,7 @@ export class LinkIndexer extends BaseIndexer {
       toUri,
     })
 
-    const res = await fetch(url).then((res) => res.json())
+    const res = await this.fetch(url).then((res) => res.json())
 
     return res as ListResponse<LinkEntity>
   }
@@ -104,7 +104,7 @@ export class LinkIndexer extends BaseIndexer {
     let url = `${this.endpoint}/characters/${characterId}/backlinks?`
     url += queryString.stringify({ limit, cursor, linkType })
 
-    const res = await fetch(url).then((res) => res.json())
+    const res = await this.fetch(url).then((res) => res.json())
 
     return res as ListResponse<LinkEntity>
   }
@@ -135,7 +135,7 @@ export class LinkIndexer extends BaseIndexer {
     let url = `${this.endpoint}/addresses/${address}/backlinks?`
     url += queryString.stringify({ limit, cursor, linkType })
 
-    const res = await fetch(url).then((res) => res.json())
+    const res = await this.fetch(url).then((res) => res.json())
 
     return res as ListResponse<LinkEntity>
   }
@@ -168,7 +168,7 @@ export class LinkIndexer extends BaseIndexer {
     let url = `${this.endpoint}/notes/${characterId}/${noteId}/backlinks?`
     url += queryString.stringify({ limit, cursor, linkType })
 
-    const res = await fetch(url).then((res) => res.json())
+    const res = await this.fetch(url).then((res) => res.json())
 
     return res as ListResponse<LinkEntity>
   }
@@ -201,7 +201,7 @@ export class LinkIndexer extends BaseIndexer {
     let url = `${this.endpoint}/erc721s/${contractAddress}/${tokenId}/backlinks?`
     url += queryString.stringify({ limit, cursor, linkType })
 
-    const res = await fetch(url).then((res) => res.json())
+    const res = await this.fetch(url).then((res) => res.json())
 
     return res as ListResponse<LinkEntity>
   }
@@ -232,7 +232,7 @@ export class LinkIndexer extends BaseIndexer {
     let url = `${this.endpoint}/linklists/${linklistId}/backlinks?`
     url += queryString.stringify({ limit, cursor, linkType })
 
-    const res = await fetch(url).then((res) => res.json())
+    const res = await this.fetch(url).then((res) => res.json())
 
     return res as ListResponse<LinkEntity>
   }
@@ -263,7 +263,7 @@ export class LinkIndexer extends BaseIndexer {
     let url = `${this.endpoint}/anyuris/${uri}/backlinks?`
     url += queryString.stringify({ limit, cursor, linkType })
 
-    const res = await fetch(url).then((res) => res.json())
+    const res = await this.fetch(url).then((res) => res.json())
 
     return res as ListResponse<LinkEntity>
   }

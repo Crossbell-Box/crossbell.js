@@ -42,7 +42,7 @@ export class NotificationIndexer extends BaseIndexer {
       cursor,
     })
 
-    const res = await fetch(url).then((res) => res.json())
+    const res = await this.fetch(url).then((res) => res.json())
 
     return res as ListResponse<NotificationEntity>
   }
@@ -72,7 +72,7 @@ export class NotificationIndexer extends BaseIndexer {
       includeCharacterMetadata,
     })
 
-    const res = await fetch(url).then((res) => res.json())
+    const res = await this.fetch(url).then((res) => res.json())
 
     return res as NotificationEntity
   }

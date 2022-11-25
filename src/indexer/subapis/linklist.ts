@@ -32,7 +32,7 @@ export class LinklistIndexer extends BaseIndexer {
     let url = `${this.endpoint}/addresses/${address}/linklists?`
     url += queryString.stringify({ attached, linkType, limit, cursor })
 
-    const res = await fetch(url).then((res) => res.json())
+    const res = await this.fetch(url).then((res) => res.json())
 
     return res as ListResponse<LinklistEntity>
   }
@@ -65,7 +65,7 @@ export class LinklistIndexer extends BaseIndexer {
     let url = `${this.endpoint}/characters/${characterId}/linklists?`
     url += queryString.stringify({ attached, linkType, limit, cursor })
 
-    const res = await fetch(url).then((res) => res.json())
+    const res = await this.fetch(url).then((res) => res.json())
 
     return res as ListResponse<LinklistEntity>
   }
@@ -79,7 +79,7 @@ export class LinklistIndexer extends BaseIndexer {
   async getLinklist(linklistId: BigNumberish): Promise<LinklistEntity | null> {
     let url = `${this.endpoint}/linklists/${linklistId}`
 
-    const res = await fetch(url).then((res) => res.json())
+    const res = await this.fetch(url).then((res) => res.json())
 
     return res as LinklistEntity
   }

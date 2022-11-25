@@ -117,7 +117,7 @@ export class NoteIndexer extends BaseIndexer {
       orderBy,
     })
 
-    const res = await fetch(url).then((res) => res.json())
+    const res = await this.fetch(url).then((res) => res.json())
 
     return res as ListResponse<
       NoteEntity & { fromNotes: ListResponse<NoteEntity> }
@@ -137,7 +137,7 @@ export class NoteIndexer extends BaseIndexer {
     noteId: BigNumberish,
   ): Promise<NoteEntity | null> {
     const url = `${this.endpoint}/characters/${characterId}/notes/${noteId}`
-    const res = await fetch(url).then((res) => res.json())
+    const res = await this.fetch(url).then((res) => res.json())
 
     return res as NoteEntity
   }
@@ -164,7 +164,7 @@ export class NoteIndexer extends BaseIndexer {
       sources,
     })
 
-    const res = await fetch(url).then((res) => res.json())
+    const res = await this.fetch(url).then((res) => res.json())
 
     return res as ListResponse<string>
   }

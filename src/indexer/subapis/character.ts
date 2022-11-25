@@ -29,7 +29,7 @@ export class CharacterIndexer extends BaseIndexer {
     let url = `${this.endpoint}/addresses/${address}/characters?`
     url += queryString.stringify({ primary, limit, cursor })
 
-    const res = await fetch(url).then((res) => res.json())
+    const res = await this.fetch(url).then((res) => res.json())
 
     return res as ListResponse<CharacterEntity>
   }
@@ -58,7 +58,7 @@ export class CharacterIndexer extends BaseIndexer {
   ): Promise<CharacterEntity | null> {
     let url = `${this.endpoint}/characters/${characterId}`
 
-    const res = await fetch(url).then((res) => res.json())
+    const res = await this.fetch(url).then((res) => res.json())
 
     return res as CharacterEntity
   }
@@ -72,7 +72,7 @@ export class CharacterIndexer extends BaseIndexer {
   async getCharacterByHandle(handle: string): Promise<CharacterEntity | null> {
     let url = `${this.endpoint}/handles/${handle}/character`
 
-    const res = await fetch(url).then((res) => res.json())
+    const res = await this.fetch(url).then((res) => res.json())
 
     return res as CharacterEntity
   }

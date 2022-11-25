@@ -38,7 +38,7 @@ export class MintedNoteIndexer extends BaseIndexer {
       cursor,
     })
 
-    const res = await fetch(url).then((res) => res.json())
+    const res = await this.fetch(url).then((res) => res.json())
 
     return res as ListResponse<MintedNoteEntity>
   }
@@ -75,7 +75,7 @@ export class MintedNoteIndexer extends BaseIndexer {
       cursor,
     })
 
-    const res = await fetch(url).then((res) => res.json())
+    const res = await this.fetch(url).then((res) => res.json())
 
     return res as ListResponse<MintedNoteEntity>
   }
@@ -93,7 +93,7 @@ export class MintedNoteIndexer extends BaseIndexer {
     tokenId: BigNumberish,
   ): Promise<MintedNoteEntity | null> {
     const url = `${this.endpoint}/minted/notes/${contractAddress}/${tokenId}`
-    const res = await fetch(url).then((res) => res.json())
+    const res = await this.fetch(url).then((res) => res.json())
 
     return res as MintedNoteEntity
   }

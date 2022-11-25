@@ -14,7 +14,7 @@ export class StatIndexer extends BaseIndexer {
   ): Promise<CharacterStatEntity> {
     let url = `${this.endpoint}/stat/characters/${characterId}?`
 
-    const res = await fetch(url).then((res) => res.json())
+    const res = await this.fetch(url).then((res) => res.json())
 
     return res as CharacterStatEntity
   }
@@ -32,7 +32,7 @@ export class StatIndexer extends BaseIndexer {
   ): Promise<NoteStatEntity> {
     let url = `${this.endpoint}/stat/notes/${characterId}/${noteId}?`
 
-    const res = await fetch(url).then((res) => res.json())
+    const res = await this.fetch(url).then((res) => res.json())
 
     return res as NoteStatEntity
   }

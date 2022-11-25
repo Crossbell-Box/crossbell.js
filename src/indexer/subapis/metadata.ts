@@ -13,7 +13,7 @@ export class MetadataIndexer extends BaseIndexer {
   ): Promise<CharacterMetadata | never> {
     let url = `${this.endpoint}/characters/${characterId}/metadata/sync`
 
-    const res = await fetch(url).then((res) => res.json())
+    const res = await this.fetch(url).then((res) => res.json())
 
     return res as CharacterMetadata
   }
@@ -30,7 +30,7 @@ export class MetadataIndexer extends BaseIndexer {
   ): Promise<NoteMetadata | never> {
     let url = `${this.endpoint}/notes/${characterId}/${noteId}/metadata/sync`
 
-    const res = await fetch(url).then((res) => res.json())
+    const res = await this.fetch(url).then((res) => res.json())
 
     return res as NoteMetadata
   }
