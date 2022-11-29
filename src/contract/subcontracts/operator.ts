@@ -1,6 +1,7 @@
 import { BaseContract } from './base'
 import { autoSwitchMainnet } from '../decorators'
-import type { Result } from '../../types/contract'
+import type { Overrides, Result } from '../../types/contract'
+import { CallOverrides } from 'ethers'
 
 export class OperatorContract extends BaseContract {
   /**
@@ -21,13 +22,14 @@ export class OperatorContract extends BaseContract {
   async setOperator(
     characterId: number,
     operator: string,
+    overrides?: Overrides,
   ): Promise<Result<{}, true>> | never {
     throw new Error(
       "Method 'setOperator' is deprecated. Please use 'addOperator' instead.",
     )
 
     this.validateAddress(operator)
-    const tx = await this.contract.setOperator(characterId, operator)
+    const tx = await this.contract.setOperator(characterId, operator, overrides)
 
     const receipt = await tx.wait()
 
@@ -49,12 +51,13 @@ export class OperatorContract extends BaseContract {
    */
   async getOperator(
     characterId: number,
+    overrides?: CallOverrides,
   ): Promise<Result<string, false>> | never {
     throw new Error(
       "Method 'getOperator' is deprecated. Please use 'getOperators' instead.",
     )
 
-    const operator = await this.contract.getOperator(characterId)
+    const operator = await this.contract.getOperator(characterId, overrides)
 
     return {
       data: operator,
@@ -77,9 +80,10 @@ export class OperatorContract extends BaseContract {
   async addOperator(
     characterId: number,
     operator: string,
+    overrides?: Overrides,
   ): Promise<Result<{}, true>> | never {
     this.validateAddress(operator)
-    const tx = await this.contract.addOperator(characterId, operator)
+    const tx = await this.contract.addOperator(characterId, operator, overrides)
 
     const receipt = await tx.wait()
 
@@ -101,9 +105,14 @@ export class OperatorContract extends BaseContract {
   async removeOperator(
     characterId: number,
     operator: string,
+    overrides?: Overrides,
   ): Promise<Result<{}, true>> | never {
     this.validateAddress(operator)
-    const tx = await this.contract.removeOperator(characterId, operator)
+    const tx = await this.contract.removeOperator(
+      characterId,
+      operator,
+      overrides,
+    )
 
     const receipt = await tx.wait()
 
@@ -122,8 +131,9 @@ export class OperatorContract extends BaseContract {
    */
   async getOperators(
     characterId: number,
+    overrides?: CallOverrides,
   ): Promise<Result<string[], false>> | never {
-    const operators = await this.contract.getOperators(characterId)
+    const operators = await this.contract.getOperators(characterId, overrides)
 
     return {
       data: operators,
@@ -141,8 +151,9 @@ export class OperatorContract extends BaseContract {
   async isOperator(
     characterId: number,
     operator: string,
+    overrides?: CallOverrides,
   ): Promise<Result<boolean, false>> | never {
-    const is = await this.contract.isOperator(characterId, operator)
+    const is = await this.contract.isOperator(characterId, operator, overrides)
 
     return {
       data: is,

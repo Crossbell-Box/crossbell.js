@@ -1,5 +1,5 @@
 import { autoSwitchMainnet } from '../decorators'
-import type { Result } from '../../types/contract'
+import type { Overrides, Result } from '../../types/contract'
 import { BaseContract } from './base'
 import { type BigNumberish } from 'ethers'
 
@@ -16,8 +16,9 @@ export class CbtContract extends BaseContract {
   async mintCbt(
     characterId: BigNumberish,
     tokenId: BigNumberish,
+    overrides?: Overrides,
   ): Promise<Result<undefined, true>> | never {
-    const tx = await this.cbtContract.mint(characterId, tokenId)
+    const tx = await this.cbtContract.mint(characterId, tokenId, overrides)
 
     const receipt = await tx.wait()
 

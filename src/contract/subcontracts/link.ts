@@ -2,7 +2,12 @@ import { type BigNumberish, ethers } from 'ethers'
 import { BaseContract } from './base'
 import { autoSwitchMainnet } from '../decorators'
 import { NIL_ADDRESS } from '../utils'
-import type { Character, Result } from '../../types/contract'
+import type {
+  CallOverrides,
+  Character,
+  Overrides,
+  Result,
+} from '../../types/contract'
 
 export class LinkContract extends BaseContract {
   /**
@@ -20,13 +25,17 @@ export class LinkContract extends BaseContract {
     toCharacterId: BigNumberish,
     linkType: string,
     data?: string,
+    overrides?: Overrides,
   ): Promise<Result<number, true>> | never {
-    const tx = await this.contract.linkCharacter({
-      fromCharacterId: fromCharacterId,
-      toCharacterId: toCharacterId,
-      linkType: ethers.utils.formatBytes32String(linkType),
-      data: data ?? NIL_ADDRESS,
-    })
+    const tx = await this.contract.linkCharacter(
+      {
+        fromCharacterId: fromCharacterId,
+        toCharacterId: toCharacterId,
+        linkType: ethers.utils.formatBytes32String(linkType),
+        data: data ?? NIL_ADDRESS,
+      },
+      overrides,
+    )
 
     const receipt = await tx.wait()
 
@@ -58,18 +67,22 @@ export class LinkContract extends BaseContract {
     toAddresses: string[],
     linkType: string,
     data?: string[],
+    overrides?: Overrides,
   ): Promise<Result<number, true>> | never {
     toAddresses.forEach((address) => {
       this.validateAddress(address)
     })
 
-    const tx = await this.peripheryContract.linkCharactersInBatch({
-      fromCharacterId: fromCharacterId,
-      toCharacterIds,
-      toAddresses,
-      linkType: ethers.utils.formatBytes32String(linkType),
-      data: data ?? toCharacterIds.map(() => NIL_ADDRESS),
-    })
+    const tx = await this.peripheryContract.linkCharactersInBatch(
+      {
+        fromCharacterId: fromCharacterId,
+        toCharacterIds,
+        toAddresses,
+        linkType: ethers.utils.formatBytes32String(linkType),
+        data: data ?? toCharacterIds.map(() => NIL_ADDRESS),
+      },
+      overrides,
+    )
 
     const receipt = await tx.wait()
 
@@ -120,16 +133,20 @@ export class LinkContract extends BaseContract {
     fromCharacterId: BigNumberish,
     toAddress: string,
     linkType: string,
+    overrides?: Overrides,
   ):
     | Promise<Result<{ toCharacterId: number; linklistId: number }, true>>
     | never {
     this.validateAddress(toAddress)
 
-    const tx = await this.contract.createThenLinkCharacter({
-      fromCharacterId: fromCharacterId,
-      to: toAddress,
-      linkType: ethers.utils.formatBytes32String(linkType),
-    })
+    const tx = await this.contract.createThenLinkCharacter(
+      {
+        fromCharacterId: fromCharacterId,
+        to: toAddress,
+        linkType: ethers.utils.formatBytes32String(linkType),
+      },
+      overrides,
+    )
 
     const receipt = await tx.wait()
 
@@ -158,12 +175,16 @@ export class LinkContract extends BaseContract {
     fromCharacterId: BigNumberish,
     toCharacterId: BigNumberish,
     linkType: string,
+    overrides?: Overrides,
   ): Promise<Result<undefined, true>> | never {
-    const tx = await this.contract.unlinkCharacter({
-      fromCharacterId: fromCharacterId,
-      toCharacterId: toCharacterId,
-      linkType: ethers.utils.formatBytes32String(linkType),
-    })
+    const tx = await this.contract.unlinkCharacter(
+      {
+        fromCharacterId: fromCharacterId,
+        toCharacterId: toCharacterId,
+        linkType: ethers.utils.formatBytes32String(linkType),
+      },
+      overrides,
+    )
     const receipt = await tx.wait()
     return {
       data: undefined,
@@ -182,10 +203,12 @@ export class LinkContract extends BaseContract {
   async getLinkingCharacterIds(
     fromCharacterId: BigNumberish,
     linkType: string,
+    overrides?: CallOverrides,
   ): Promise<Result<number[]>> | never {
     const linkList = await this.peripheryContract.getLinkingCharacterIds(
       fromCharacterId,
       ethers.utils.formatBytes32String(linkType),
+      overrides,
     )
     return {
       data: linkList.map((link) => link.toNumber()),
@@ -203,10 +226,12 @@ export class LinkContract extends BaseContract {
   async getLinkingCharacters(
     fromCharacterId: BigNumberish,
     linkType: string,
+    overrides?: CallOverrides,
   ): Promise<Result<Character[]>> | never {
     const ids = await this.peripheryContract.getLinkingCharacterIds(
       fromCharacterId,
       ethers.utils.formatBytes32String(linkType),
+      overrides,
     )
     const characters = await Promise.all(
       /// @ts-ignore
@@ -319,14 +344,18 @@ export class LinkContract extends BaseContract {
     toNoteId: BigNumberish,
     linkType: string,
     data?: string,
+    overrides?: Overrides,
   ): Promise<Result<number, true>> | never {
-    const tx = await this.contract.linkNote({
-      fromCharacterId: fromCharacterId,
-      toCharacterId: toCharacterId,
-      toNoteId: toNoteId,
-      linkType: ethers.utils.formatBytes32String(linkType),
-      data: data ?? NIL_ADDRESS,
-    })
+    const tx = await this.contract.linkNote(
+      {
+        fromCharacterId: fromCharacterId,
+        toCharacterId: toCharacterId,
+        toNoteId: toNoteId,
+        linkType: ethers.utils.formatBytes32String(linkType),
+        data: data ?? NIL_ADDRESS,
+      },
+      overrides,
+    )
 
     const receipt = await tx.wait()
 
@@ -353,13 +382,17 @@ export class LinkContract extends BaseContract {
     toCharacterId: BigNumberish,
     toNoteId: BigNumberish,
     linkType: string,
+    overrides?: Overrides,
   ): Promise<Result<undefined, true>> | never {
-    const tx = await this.contract.unlinkNote({
-      fromCharacterId: fromCharacterId,
-      toCharacterId: toCharacterId,
-      toNoteId: toNoteId,
-      linkType: ethers.utils.formatBytes32String(linkType),
-    })
+    const tx = await this.contract.unlinkNote(
+      {
+        fromCharacterId: fromCharacterId,
+        toCharacterId: toCharacterId,
+        toNoteId: toNoteId,
+        linkType: ethers.utils.formatBytes32String(linkType),
+      },
+      overrides,
+    )
 
     const receipt = await tx.wait()
 

@@ -1,7 +1,12 @@
 import { NIL_ADDRESS } from '../utils'
 import { BaseContract } from './base'
 import { autoSwitchMainnet } from '../decorators'
-import type { Result, Character } from '../../types/contract'
+import type {
+  Result,
+  Character,
+  Overrides,
+  CallOverrides,
+} from '../../types/contract'
 import { CharacterMetadata } from '../../types/metadata'
 import { Ipfs } from '../../ipfs'
 import { type BigNumberish } from 'ethers'
@@ -21,19 +26,23 @@ export class CharacterContract extends BaseContract {
     owner: string,
     handle: string,
     metadataOrUri: CharacterMetadata | string,
+    overrides?: Overrides,
   ): Promise<Result<number, true>> | never {
     this.validateAddress(owner)
     this.validateHandleFormat(handle)
 
     const { uri } = await Ipfs.parseMetadataOrUri('character', metadataOrUri)
 
-    const tx = await this.contract.createCharacter({
-      to: owner,
-      handle: handle,
-      uri: uri,
-      linkModule: NIL_ADDRESS,
-      linkModuleInitData: NIL_ADDRESS, // TODO: ?
-    })
+    const tx = await this.contract.createCharacter(
+      {
+        to: owner,
+        handle: handle,
+        uri: uri,
+        linkModule: NIL_ADDRESS,
+        linkModuleInitData: NIL_ADDRESS, // TODO: ?
+      },
+      overrides,
+    )
 
     const receipt = await tx.wait()
 
@@ -56,10 +65,11 @@ export class CharacterContract extends BaseContract {
   async setHandle(
     characterId: BigNumberish,
     handle: string,
+    overrides?: Overrides,
   ): Promise<Result<undefined, true>> | never {
     this.validateHandleFormat(handle)
 
-    const tx = await this.contract.setHandle(characterId, handle)
+    const tx = await this.contract.setHandle(characterId, handle, overrides)
     const receipt = await tx.wait()
     return {
       data: undefined,
@@ -78,6 +88,7 @@ export class CharacterContract extends BaseContract {
   async setCharacterUri(
     characterId: BigNumberish,
     metadataOrUri: CharacterMetadata | string,
+    overrides?: Overrides,
   ):
     | Promise<Result<{ uri: string; metadata: CharacterMetadata }, true>>
     | never {
@@ -87,7 +98,7 @@ export class CharacterContract extends BaseContract {
       true,
     )
 
-    const tx = await this.contract.setCharacterUri(characterId, uri)
+    const tx = await this.contract.setCharacterUri(characterId, uri, overrides)
     const receipt = await tx.wait()
 
     return {
@@ -106,8 +117,9 @@ export class CharacterContract extends BaseContract {
   async setCharacterMetadata(
     characterId: BigNumberish,
     metadata: CharacterMetadata,
+    overrides?: Overrides,
   ) {
-    return this.setCharacterUri(characterId, metadata)
+    return this.setCharacterUri(characterId, metadata, overrides)
   }
 
   /**
@@ -150,6 +162,7 @@ export class CharacterContract extends BaseContract {
   async changeCharacterMetadata(
     characterId: BigNumberish,
     modifier: (metadata?: CharacterMetadata) => CharacterMetadata,
+    overrides?: Overrides,
   ) {
     const character = await this.getCharacter(characterId)
 
@@ -162,7 +175,7 @@ export class CharacterContract extends BaseContract {
       metadata.type = 'character'
     }
 
-    return this.setCharacterMetadata(characterId, metadata)
+    return this.setCharacterMetadata(characterId, metadata, overrides)
   }
 
   /**
@@ -176,8 +189,13 @@ export class CharacterContract extends BaseContract {
   async setSocialToken(
     characterId: BigNumberish,
     socialToken: string,
+    overrides?: Overrides,
   ): Promise<Result<undefined, true>> | never {
-    const tx = await this.contract.setSocialToken(characterId, socialToken)
+    const tx = await this.contract.setSocialToken(
+      characterId,
+      socialToken,
+      overrides,
+    )
     const receipt = await tx.wait()
     return {
       data: undefined,
@@ -194,8 +212,9 @@ export class CharacterContract extends BaseContract {
   @autoSwitchMainnet()
   async setPrimaryCharacterId(
     characterId: BigNumberish,
+    overrides?: Overrides,
   ): Promise<Result<undefined, true>> | never {
-    const tx = await this.contract.setPrimaryCharacterId(characterId)
+    const tx = await this.contract.setPrimaryCharacterId(characterId, overrides)
     const receipt = await tx.wait()
     return {
       data: undefined,
@@ -212,9 +231,13 @@ export class CharacterContract extends BaseContract {
   @autoSwitchMainnet()
   async getPrimaryCharacterId(
     address: string,
+    overrides?: CallOverrides,
   ): Promise<Result<number>> | never {
     this.validateAddress(address)
-    const characterId = await this.contract.getPrimaryCharacterId(address)
+    const characterId = await this.contract.getPrimaryCharacterId(
+      address,
+      overrides,
+    )
     return {
       data: characterId.toNumber(),
     }
@@ -229,8 +252,12 @@ export class CharacterContract extends BaseContract {
   @autoSwitchMainnet()
   async isPrimaryCharacterId(
     characterId: BigNumberish,
+    overrides?: CallOverrides,
   ): Promise<Result<boolean>> | never {
-    const isPrimary = await this.contract.isPrimaryCharacter(characterId)
+    const isPrimary = await this.contract.isPrimaryCharacter(
+      characterId,
+      overrides,
+    )
     return {
       data: isPrimary,
     }
@@ -245,10 +272,14 @@ export class CharacterContract extends BaseContract {
   @autoSwitchMainnet()
   async getCharacterByHandle(
     handle: string,
+    overrides?: CallOverrides,
   ): Promise<Result<Character>> | never {
     handle = handle.toLowerCase()
 
-    const character = await this.contract.getCharacterByHandle(handle)
+    const character = await this.contract.getCharacterByHandle(
+      handle,
+      overrides,
+    )
 
     const metadata = character.uri
       ? await Ipfs.uriToMetadata<CharacterMetadata>(character.uri)
@@ -275,8 +306,9 @@ export class CharacterContract extends BaseContract {
   @autoSwitchMainnet()
   async getCharacter(
     characterId: BigNumberish,
+    overrides?: CallOverrides,
   ): Promise<Result<Character>> | never {
-    const character = await this.contract.getCharacter(characterId)
+    const character = await this.contract.getCharacter(characterId, overrides)
 
     const { metadata } = await Ipfs.parseMetadataOrUri(
       'character',
@@ -303,8 +335,11 @@ export class CharacterContract extends BaseContract {
    * @returns The handle of the character.
    */
   @autoSwitchMainnet()
-  async getHandle(characterId: BigNumberish): Promise<Result<string>> | never {
-    const handle = await this.contract.getHandle(characterId)
+  async getHandle(
+    characterId: BigNumberish,
+    overrides?: CallOverrides,
+  ): Promise<Result<string>> | never {
+    const handle = await this.contract.getHandle(characterId, overrides)
     return {
       data: handle,
     }
@@ -319,8 +354,9 @@ export class CharacterContract extends BaseContract {
   @autoSwitchMainnet()
   async getCharacterUri(
     characterId: BigNumberish,
+    overrides?: CallOverrides,
   ): Promise<Result<string>> | never {
-    const uri = await this.contract.getCharacterUri(characterId)
+    const uri = await this.contract.getCharacterUri(characterId, overrides)
     return {
       data: uri,
     }
@@ -335,13 +371,14 @@ export class CharacterContract extends BaseContract {
   @autoSwitchMainnet()
   async getCharacterByTransaction(
     txHash: string,
+    overrides?: CallOverrides,
   ): Promise<Result<Character>> | never {
     const receipt = await this.contract.provider.getTransactionReceipt(txHash)
 
     const parser = this.parseLog(receipt.logs, 'createCharacter')
 
     const characterId = parser.args.characterId.toNumber()
-    const result = await this.getCharacter(characterId)
+    const result = await this.getCharacter(characterId, overrides)
 
     return result
   }
@@ -355,9 +392,13 @@ export class CharacterContract extends BaseContract {
   @autoSwitchMainnet()
   async existsCharacterForAddress(
     address: string,
+    overrides?: CallOverrides,
   ): Promise<Result<boolean>> | never {
     this.validateAddress(address)
-    const characterId = await this.contract.getPrimaryCharacterId(address)
+    const characterId = await this.contract.getPrimaryCharacterId(
+      address,
+      overrides,
+    )
     const exists = characterId.toString() !== '0'
     return {
       data: exists,
@@ -373,8 +414,9 @@ export class CharacterContract extends BaseContract {
   @autoSwitchMainnet()
   async existsCharacterForHandle(
     handle: string,
+    overrides?: CallOverrides,
   ): Promise<Result<boolean>> | never {
-    const data = await this.contract.getCharacterByHandle(handle)
+    const data = await this.contract.getCharacterByHandle(handle, overrides)
     const exists = data.handle !== ''
     return {
       data: exists,
