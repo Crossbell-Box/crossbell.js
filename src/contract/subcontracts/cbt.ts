@@ -16,7 +16,7 @@ export class CbtContract extends BaseContract {
   async mintCbt(
     characterId: BigNumberish,
     tokenId: BigNumberish,
-    overrides?: Overrides,
+    overrides: Overrides = {},
   ): Promise<Result<undefined, true>> | never {
     const tx = await this.cbtContract.mint(characterId, tokenId, overrides)
 

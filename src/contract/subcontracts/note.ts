@@ -32,7 +32,7 @@ export class NoteContract extends BaseContract {
     characterId: BigNumberish,
     metadataOrUri: NoteMetadata | string,
     { locked = false }: PostNoteOptions = {},
-    overrides?: Overrides,
+    overrides: Overrides = {},
   ): Promise<Result<{ noteId: number }, true>> | never {
     const { uri } = await Ipfs.parseMetadataOrUri('note', metadataOrUri)
 
@@ -76,7 +76,7 @@ export class NoteContract extends BaseContract {
     metadataOrUri: NoteMetadata | string,
     targetUri: string,
     { locked = false }: PostNoteOptions = {},
-    overrides?: Overrides,
+    overrides: Overrides = {},
   ): Promise<Result<{ noteId: number }, true>> | never {
     const { uri } = await Ipfs.parseMetadataOrUri('note', metadataOrUri)
 
@@ -122,7 +122,7 @@ export class NoteContract extends BaseContract {
     targetCharacterId: BigNumberish,
     targetNoteId: BigNumberish,
     { locked = false }: PostNoteOptions = {},
-    overrides?: Overrides,
+    overrides: Overrides = {},
   ): Promise<Result<{ noteId: number }, true>> | never {
     const { uri } = await Ipfs.parseMetadataOrUri('note', metadataOrUri)
 
@@ -168,7 +168,7 @@ export class NoteContract extends BaseContract {
     characterId: BigNumberish,
     noteId: BigNumberish,
     metadataOrUri: NoteMetadata | string,
-    overrides?: Overrides,
+    overrides: Overrides = {},
   ): Promise<Result<{ uri: string; metadata: NoteMetadata }, true>> | never {
     const { uri, metadata } = await Ipfs.parseMetadataOrUri(
       'note',
@@ -236,7 +236,7 @@ export class NoteContract extends BaseContract {
     characterId: BigNumberish,
     noteId: BigNumberish,
     modifier: (metadata?: NoteMetadata) => NoteMetadata,
-    overrides?: Overrides,
+    overrides: Overrides = {},
   ) {
     const note = await this.getNote(characterId, noteId)
 
@@ -260,7 +260,7 @@ export class NoteContract extends BaseContract {
     characterId: BigNumberish,
     noteId: BigNumberish,
     metadata: NoteMetadata,
-    overrides?: Overrides,
+    overrides: Overrides = {},
   ) {
     return this.setNoteUri(characterId, noteId, metadata, overrides)
   }
@@ -276,50 +276,50 @@ export class NoteContract extends BaseContract {
     characterId: BigNumberish,
     noteId: BigNumberish,
     linkItemType?: undefined,
-    overrides?: CallOverrides,
+    overrides: CallOverrides = {},
   ): Promise<Result<Note<undefined>>> | never
   async getNote<T = LinkItemERC721>(
     characterId: string,
     noteId: string,
     linkItemType: 'ERC721',
-    overrides?: CallOverrides,
+    overrides: CallOverrides = {},
   ): Promise<Result<Note<LinkItemERC721>>> | never
   async getNote<T = LinkItemAnyUri>(
     characterId: string,
     noteId: string,
     linkItemType: 'AnyUri',
-    overrides?: CallOverrides,
+    overrides: CallOverrides = {},
   ): Promise<Result<Note<LinkItemAnyUri>>> | never
   async getNote<T = LinkItemCharacter>(
     characterId: string,
     noteId: string,
     linkItemType: 'Character',
-    overrides?: CallOverrides,
+    overrides: CallOverrides = {},
   ): Promise<Result<Note<LinkItemCharacter>>> | never
   async getNote<T = LinkItemAddress>(
     characterId: string,
     noteId: string,
     linkItemType: 'Address',
-    overrides?: CallOverrides,
+    overrides: CallOverrides = {},
   ): Promise<Result<Note<LinkItemAddress>>> | never
   async getNote<T = LinkItemNote>(
     characterId: string,
     noteId: string,
     linkItemType: 'Note',
-    overrides?: CallOverrides,
+    overrides: CallOverrides = {},
   ): Promise<Result<Note<LinkItemNote>>> | never
   async getNote<T = LinkItemLinklist>(
     characterId: string,
     noteId: string,
     linkItemType: 'Linklist',
-    overrides?: CallOverrides,
+    overrides: CallOverrides = {},
   ): Promise<Result<Note<LinkItemLinklist>>> | never
   @autoSwitchMainnet()
   async getNote<T extends LinkItem>(
     characterId: BigNumberish,
     noteId: BigNumberish,
     linkItemType?: Note['linkItemTypeString'],
-    overrides?: CallOverrides,
+    overrides: CallOverrides = {},
   ): Promise<Result<Note<T>>> | never {
     const data = await this.contract.getNote(characterId, noteId, overrides)
 
@@ -409,7 +409,7 @@ export class NoteContract extends BaseContract {
   async deleteNote(
     characterId: BigNumberish,
     noteId: BigNumberish,
-    overrides?: Overrides,
+    overrides: Overrides = {},
   ): Promise<Result<undefined, true>> | never {
     const tx = await this.contract.deleteNote(characterId, noteId, overrides)
 
@@ -438,7 +438,7 @@ export class NoteContract extends BaseContract {
   async lockNote(
     characterId: BigNumberish,
     noteId: BigNumberish,
-    overrides?: Overrides,
+    overrides: Overrides = {},
   ): Promise<Result<undefined, true>> | never {
     const tx = await this.contract.lockNote(characterId, noteId, overrides)
 
@@ -463,7 +463,7 @@ export class NoteContract extends BaseContract {
     characterId: BigNumberish,
     noteId: BigNumberish,
     toAddress: string,
-    overrides?: Overrides,
+    overrides: Overrides = {},
   ):
     | Promise<Result<{ contractAddress: string; tokenId: number }, true>>
     | never {

@@ -3,7 +3,7 @@
 const { exec } = require('child_process')
 const { promisify } = require('util')
 const execAsync = promisify(exec)
-const { writeFile } = require('fs/promises')
+const { writeFile, readFile } = require('fs/promises')
 const { resolve } = require('path')
 const { fetch } = require('undici')
 
@@ -55,6 +55,16 @@ const main = async () => {
     genTypes(peripheryDir),
     genTypes(cbtDir),
   ])
+
+  // patch types
+  // this is needed to make sure the types bundled with the package are correct
+  // perhaps this is a bug of esbuild?
+  const peripheryTypeFile = resolve(peripheryDir, 'types/Abi.ts')
+  const peripheryType = await readFile(peripheryTypeFile, 'utf-8')
+  await writeFile(
+    peripheryTypeFile,
+    peripheryType.replace(/export (declare namespace DataTypes)/, '$1'),
+  )
 
   console.log('done')
 }

@@ -18,3 +18,5 @@ export function genRandomHandle(): string {
   }
   return 'a-random-handle-' + handle
 }
+
+export const NIL_ADDRESS = '0x0000000000000000000000000000000000000000'

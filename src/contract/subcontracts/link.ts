@@ -25,7 +25,7 @@ export class LinkContract extends BaseContract {
     toCharacterId: BigNumberish,
     linkType: string,
     data?: string,
-    overrides?: Overrides,
+    overrides: Overrides = {},
   ): Promise<Result<number, true>> | never {
     const tx = await this.contract.linkCharacter(
       {
@@ -67,7 +67,7 @@ export class LinkContract extends BaseContract {
     toAddresses: string[],
     linkType: string,
     data?: string[],
-    overrides?: Overrides,
+    overrides: Overrides = {},
   ): Promise<Result<number, true>> | never {
     toAddresses.forEach((address) => {
       this.validateAddress(address)
@@ -133,7 +133,7 @@ export class LinkContract extends BaseContract {
     fromCharacterId: BigNumberish,
     toAddress: string,
     linkType: string,
-    overrides?: Overrides,
+    overrides: Overrides = {},
   ):
     | Promise<Result<{ toCharacterId: number; linklistId: number }, true>>
     | never {
@@ -175,7 +175,7 @@ export class LinkContract extends BaseContract {
     fromCharacterId: BigNumberish,
     toCharacterId: BigNumberish,
     linkType: string,
-    overrides?: Overrides,
+    overrides: Overrides = {},
   ): Promise<Result<undefined, true>> | never {
     const tx = await this.contract.unlinkCharacter(
       {
@@ -203,7 +203,7 @@ export class LinkContract extends BaseContract {
   async getLinkingCharacterIds(
     fromCharacterId: BigNumberish,
     linkType: string,
-    overrides?: CallOverrides,
+    overrides: CallOverrides = {},
   ): Promise<Result<number[]>> | never {
     const linkList = await this.peripheryContract.getLinkingCharacterIds(
       fromCharacterId,
@@ -226,7 +226,7 @@ export class LinkContract extends BaseContract {
   async getLinkingCharacters(
     fromCharacterId: BigNumberish,
     linkType: string,
-    overrides?: CallOverrides,
+    overrides: CallOverrides = {},
   ): Promise<Result<Character[]>> | never {
     const ids = await this.peripheryContract.getLinkingCharacterIds(
       fromCharacterId,
@@ -344,7 +344,7 @@ export class LinkContract extends BaseContract {
     toNoteId: BigNumberish,
     linkType: string,
     data?: string,
-    overrides?: Overrides,
+    overrides: Overrides = {},
   ): Promise<Result<number, true>> | never {
     const tx = await this.contract.linkNote(
       {
@@ -382,7 +382,7 @@ export class LinkContract extends BaseContract {
     toCharacterId: BigNumberish,
     toNoteId: BigNumberish,
     linkType: string,
-    overrides?: Overrides,
+    overrides: Overrides = {},
   ): Promise<Result<undefined, true>> | never {
     const tx = await this.contract.unlinkNote(
       {

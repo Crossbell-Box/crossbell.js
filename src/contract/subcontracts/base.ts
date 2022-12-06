@@ -12,6 +12,8 @@ import type {
   CharacterCreatedEvent,
   LinkNoteEvent,
   SetOperatorEvent,
+  GrantOperatorPermissionsEvent,
+  GrantOperatorPermissions4NoteEvent,
 } from '../abis/entry/types/Abi'
 import {
   type Abi as PeripheryAbi,
@@ -32,7 +34,9 @@ const logTopics: Record<
   | 'mintNote'
   | 'linkNote'
   | 'setOperator'
-  | 'mint',
+  | 'mint'
+  | 'grantOperatorPermissions'
+  | 'grantOperatorPermissions4Note',
   // values
   | keyof EntryAbi['filters']
   | keyof PeripheryAbi['filters']
@@ -45,6 +49,9 @@ const logTopics: Record<
   mintNote: 'MintNote(address,uint256,uint256,address,uint256)',
   setOperator: 'SetOperator(uint256,address,uint256)',
   mint: 'Mint(uint256,uint256,uint256)',
+  grantOperatorPermissions: 'GrantOperatorPermissions(uint256,address,uint256)',
+  grantOperatorPermissions4Note:
+    'GrantOperatorPermissions4Note(uint256,uint256,address,uint256)',
 } as const
 
 type ContractOptions = {
@@ -231,6 +238,14 @@ export class BaseContract {
   protected parseLog<T = MintEvent>(
     logs: ethers.providers.Log[],
     filterTopic: 'mint',
+  ): T
+  protected parseLog<T = GrantOperatorPermissionsEvent>(
+    logs: ethers.providers.Log[],
+    filterTopic: 'grantOperatorPermissions',
+  ): T
+  protected parseLog<T = GrantOperatorPermissions4NoteEvent>(
+    logs: ethers.providers.Log[],
+    filterTopic: 'grantOperatorPermissions4Note',
   ): T
   protected parseLog<T>(
     logs: ethers.providers.Log[],

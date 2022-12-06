@@ -99,6 +99,24 @@ const _abi = [
     inputs: [
       {
         internalType: "uint256",
+        name: "profileId",
+        type: "uint256",
+      },
+      {
+        internalType: "string",
+        name: "newUri",
+        type: "string",
+      },
+    ],
+    name: "_setCharacterUri",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
         name: "characterId",
         type: "uint256",
       },
@@ -620,13 +638,47 @@ const _abi = [
         name: "characterId",
         type: "uint256",
       },
-    ],
-    name: "getOperator",
-    outputs: [
       {
         internalType: "address",
-        name: "",
+        name: "operator",
         type: "address",
+      },
+    ],
+    name: "getOperatorPermissions",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "characterId",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "noteId",
+        type: "uint256",
+      },
+      {
+        internalType: "address",
+        name: "operator",
+        type: "address",
+      },
+    ],
+    name: "getOperatorPermissions4Note",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
       },
     ],
     stateMutability: "view",
@@ -681,6 +733,57 @@ const _abi = [
       },
     ],
     stateMutability: "pure",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "characterId",
+        type: "uint256",
+      },
+      {
+        internalType: "address",
+        name: "operator",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "permissionBitMap",
+        type: "uint256",
+      },
+    ],
+    name: "grantOperatorPermissions",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "characterId",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "noteId",
+        type: "uint256",
+      },
+      {
+        internalType: "address",
+        name: "operator",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "permissionBitMap",
+        type: "uint256",
+      },
+    ],
+    name: "grantOperatorPermissions4Note",
+    outputs: [],
+    stateMutability: "nonpayable",
     type: "function",
   },
   {
@@ -1022,6 +1125,19 @@ const _abi = [
       },
     ],
     name: "lockNote",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256[]",
+        name: "characterIds",
+        type: "uint256[]",
+      },
+    ],
+    name: "migrateOperator",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
@@ -1717,71 +1833,6 @@ const _abi = [
         components: [
           {
             internalType: "uint256",
-            name: "characterId",
-            type: "uint256",
-          },
-          {
-            internalType: "address",
-            name: "linkModule",
-            type: "address",
-          },
-          {
-            internalType: "bytes",
-            name: "linkModuleInitData",
-            type: "bytes",
-          },
-        ],
-        internalType: "struct DataTypes.setLinkModule4CharacterData",
-        name: "vars",
-        type: "tuple",
-      },
-    ],
-    name: "setLinkModule4Character",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        components: [
-          {
-            internalType: "address",
-            name: "tokenAddress",
-            type: "address",
-          },
-          {
-            internalType: "uint256",
-            name: "tokenId",
-            type: "uint256",
-          },
-          {
-            internalType: "address",
-            name: "linkModule",
-            type: "address",
-          },
-          {
-            internalType: "bytes",
-            name: "linkModuleInitData",
-            type: "bytes",
-          },
-        ],
-        internalType: "struct DataTypes.setLinkModule4ERC721Data",
-        name: "vars",
-        type: "tuple",
-      },
-    ],
-    name: "setLinkModule4ERC721",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        components: [
-          {
-            internalType: "uint256",
             name: "linklistId",
             type: "uint256",
           },
@@ -1797,46 +1848,11 @@ const _abi = [
           },
         ],
         internalType: "struct DataTypes.setLinkModule4LinklistData",
-        name: "vars",
+        name: "",
         type: "tuple",
       },
     ],
     name: "setLinkModule4Linklist",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        components: [
-          {
-            internalType: "uint256",
-            name: "characterId",
-            type: "uint256",
-          },
-          {
-            internalType: "uint256",
-            name: "noteId",
-            type: "uint256",
-          },
-          {
-            internalType: "address",
-            name: "linkModule",
-            type: "address",
-          },
-          {
-            internalType: "bytes",
-            name: "linkModuleInitData",
-            type: "bytes",
-          },
-        ],
-        internalType: "struct DataTypes.setLinkModule4NoteData",
-        name: "vars",
-        type: "tuple",
-      },
-    ],
-    name: "setLinkModule4Note",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
@@ -2440,6 +2456,62 @@ const _abi = [
       },
     ],
     name: "DetachLinklist",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "uint256",
+        name: "characterId",
+        type: "uint256",
+      },
+      {
+        indexed: true,
+        internalType: "address",
+        name: "operator",
+        type: "address",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "permissionBitMap",
+        type: "uint256",
+      },
+    ],
+    name: "GrantOperatorPermissions",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "uint256",
+        name: "characterId",
+        type: "uint256",
+      },
+      {
+        indexed: true,
+        internalType: "uint256",
+        name: "noteId",
+        type: "uint256",
+      },
+      {
+        indexed: true,
+        internalType: "address",
+        name: "operator",
+        type: "address",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "permissionBitMap",
+        type: "uint256",
+      },
+    ],
+    name: "GrantOperatorPermissions4Note",
     type: "event",
   },
   {
