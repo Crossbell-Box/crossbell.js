@@ -276,43 +276,43 @@ export class NoteContract extends BaseContract {
     characterId: BigNumberish,
     noteId: BigNumberish,
     linkItemType?: undefined,
-    overrides: CallOverrides = {},
+    overrides?: CallOverrides,
   ): Promise<Result<Note<undefined>>> | never
   async getNote<T = LinkItemERC721>(
     characterId: string,
     noteId: string,
     linkItemType: 'ERC721',
-    overrides: CallOverrides = {},
+    overrides?: CallOverrides,
   ): Promise<Result<Note<LinkItemERC721>>> | never
   async getNote<T = LinkItemAnyUri>(
     characterId: string,
     noteId: string,
     linkItemType: 'AnyUri',
-    overrides: CallOverrides = {},
+    overrides?: CallOverrides,
   ): Promise<Result<Note<LinkItemAnyUri>>> | never
   async getNote<T = LinkItemCharacter>(
     characterId: string,
     noteId: string,
     linkItemType: 'Character',
-    overrides: CallOverrides = {},
+    overrides?: CallOverrides,
   ): Promise<Result<Note<LinkItemCharacter>>> | never
   async getNote<T = LinkItemAddress>(
     characterId: string,
     noteId: string,
     linkItemType: 'Address',
-    overrides: CallOverrides = {},
+    overrides?: CallOverrides,
   ): Promise<Result<Note<LinkItemAddress>>> | never
   async getNote<T = LinkItemNote>(
     characterId: string,
     noteId: string,
     linkItemType: 'Note',
-    overrides: CallOverrides = {},
+    overrides?: CallOverrides,
   ): Promise<Result<Note<LinkItemNote>>> | never
   async getNote<T = LinkItemLinklist>(
     characterId: string,
     noteId: string,
     linkItemType: 'Linklist',
-    overrides: CallOverrides = {},
+    overrides?: CallOverrides,
   ): Promise<Result<Note<LinkItemLinklist>>> | never
   @autoSwitchMainnet()
   async getNote<T extends LinkItem>(
