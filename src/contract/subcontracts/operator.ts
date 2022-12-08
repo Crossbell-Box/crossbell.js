@@ -246,13 +246,13 @@ export class OperatorContract extends BaseContract {
   // }
 
   /**
-   * This converts the permission constants array to a uint256.
+   * This converts the character operator permission constants array to a uint256.
    *
    * @category Operator
    * @param permissions - The permission constants array.
    * @returns The uint256.
    */
-  private convertPermissionsToUint256ForCharacter(
+  convertPermissionsToUint256ForCharacter(
     permissions: PermissionsForCharacter,
   ): BigNumber {
     const bits = permissions.map((permission) => {
@@ -276,13 +276,13 @@ export class OperatorContract extends BaseContract {
   }
 
   /**
-   * This converts the permission constants array to a uint256.
+   * This converts the note operator permission constants array to a uint256.
    *
    * @category Operator
    * @param permissions - The permission constants array.
    * @returns The uint256.
    */
-  private convertPermissionsToUint256ForNote(
+  convertPermissionsToUint256ForNote(
     permissions: PermissionsForNote,
   ): BigNumber {
     const bits = permissions.map((permission) => {
@@ -305,7 +305,12 @@ export class OperatorContract extends BaseContract {
     return uint256Decimal
   }
 
-  private convertUint256ToPermissionsForCharacter(
+  /**
+   * This converts the uint256 to the character operator permission constants array.
+   * @param permissionUint256 - The uint256.
+   * @returns The permission constants array.
+   */
+  convertUint256ToPermissionsForCharacter(
     permissionUint256: BigNumberish,
   ): PermissionsForCharacter {
     const binaryBits = this.convertUint256ToBinaryBits(permissionUint256)
@@ -327,7 +332,12 @@ export class OperatorContract extends BaseContract {
     return permissions
   }
 
-  private convertUint256ToPermissionsForNote(
+  /**
+   * This converts the uint256 to the note operator permission constants array.
+   * @param permissionUint256 - The uint256.
+   * @returns The permission constants array.
+   */
+  convertUint256ToPermissionsForNote(
     permissionUint256: BigNumberish,
   ): PermissionsForNote {
     const binaryBits = this.convertUint256ToBinaryBits(permissionUint256)
