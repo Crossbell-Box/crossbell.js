@@ -15,7 +15,7 @@ export class AchievementIndexer extends BaseIndexer {
    * @param options - The options to send to the indexer.
    * @returns The list of achievements.
    */
-  async getAchievement(
+  async getAchievements(
     characterId: BigNumberish,
     { status }: { status?: AchievementItem['status'][] } = {},
   ): Promise<ListResponse<AchievementSection> | null> {
