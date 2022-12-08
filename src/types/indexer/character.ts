@@ -9,7 +9,6 @@ export type CharacterEntity = {
   socialToken: string | null
   operator: string
   owner: string
-  operators: string[]
   fromAddress: string
   createdAt: string
   updatedAt: string
