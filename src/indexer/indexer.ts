@@ -9,8 +9,9 @@ import { MintedNoteIndexer } from './subapis/minted_note'
 import { MetadataIndexer } from './subapis/metadata'
 import { AchievementIndexer } from './subapis/achievement'
 import { NotificationIndexer } from './subapis/notification'
+import { OperatorIndexer } from './subapis/operators'
 
-const Indexers = Mixin(
+const mixin1 = Mixin(
   CharacterIndexer,
   LinklistIndexer,
   LinkIndexer,
@@ -22,6 +23,8 @@ const Indexers = Mixin(
   AchievementIndexer,
   NotificationIndexer,
 )
+
+const mixin2 = Mixin(mixin1, OperatorIndexer)
 
 /**
  * This class is used to fetch data like characters, links from the indexer.
@@ -37,4 +40,4 @@ const Indexers = Mixin(
  *
  * @see https://indexer.crossbell.io/docs The underlying APIs.
  */
-export class Indexer extends Indexers {}
+export class Indexer extends mixin2 {}
