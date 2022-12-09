@@ -11,11 +11,19 @@ type AchievementInfo = {
   unit: string
 }
 
+export enum AchievementStatus {
+  INACTIVE = 'INACTIVE',
+  MINTABLE = 'MINTABLE',
+  MINTED = 'MINTED',
+}
+
+export type AchievementStatusKey = keyof typeof AchievementStatus
+
 export type AchievementItem = {
   tokenId: number
   characterId: number
   name: string
-  status: 'INACTIVE' | 'MINTABLE' | 'MINTED'
+  status: AchievementStatusKey
   tokenNumber: number
   currentValue: number
   createdAt: string

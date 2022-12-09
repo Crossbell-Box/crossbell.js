@@ -1,6 +1,6 @@
 import { BaseIndexer } from './base'
 import queryString from 'query-string'
-import type { FeedEntity, FeedType, ListResponse } from '../../types/indexer'
+import type { FeedEntity, FeedTypeKey, ListResponse } from '../../types/indexer'
 import { type BigNumberish } from 'ethers'
 
 export class FeedIndexer extends BaseIndexer {
@@ -20,7 +20,7 @@ export class FeedIndexer extends BaseIndexer {
       cursor,
     }: {
       /** The type of feed */
-      type?: FeedType | FeedType[]
+      type?: FeedTypeKey | FeedTypeKey[]
       /** Limit the count of items returned. */
       limit?: number
       /** Used for pagination. */
@@ -55,7 +55,7 @@ export class FeedIndexer extends BaseIndexer {
       cursor,
     }: {
       /** The type of feed */
-      type?: FeedType | FeedType[]
+      type?: FeedTypeKey | FeedTypeKey[]
       /** Limit the count of items returned. */
       limit?: number
       /** Used for pagination. */

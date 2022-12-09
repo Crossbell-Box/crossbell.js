@@ -3,14 +3,9 @@ import { autoSwitchMainnet } from '../decorators'
 import type { Overrides, Result } from '../../types/contract'
 import { BigNumber, BigNumberish, CallOverrides } from 'ethers'
 import BN from 'bn.js'
+import { CharacterPermissionKey, NotePermissionKey } from '../../types'
 
 // https://github.com/Crossbell-Box/CIPs/blob/main/CIPs/CIP-7.md
-
-type PermissionsForCharacter =
-  OperatorContract['CHARACTER_PERMISSION_BITMAP'][keyof OperatorContract['CHARACTER_PERMISSION_BITMAP']][]
-
-type PermissionsForNote =
-  OperatorContract['NOTE_PERMISSION_BITMAP'][keyof OperatorContract['NOTE_PERMISSION_BITMAP']][]
 
 export class OperatorContract extends BaseContract {
   private CHARACTER_PERMISSION_BITMAP = {
@@ -18,7 +13,7 @@ export class OperatorContract extends BaseContract {
     1: 'SET_SOCIAL_TOKEN',
     2: 'GRANT_OPERATOR_PERMISSIONS',
     176: 'SET_CHARACTER_URI',
-    177: 'SET_LINK_LIST_URI',
+    177: 'SET_LINKLIST_URI',
     178: 'LINK_CHARACTER',
     179: 'UNLINK_CHARACTER',
     180: 'CREATE_THEN_LINK_CHARACTER',
@@ -28,23 +23,23 @@ export class OperatorContract extends BaseContract {
     184: 'UNLINK_ERC721',
     185: 'LINK_ADDRESS',
     186: 'UNLINK_ADDRESS',
-    187: 'LINK_ANY_URI',
-    188: 'UNLINK_ANY_URI',
-    189: 'LINK_LINK_LIST',
-    190: 'UNLINK_LINK_LIST',
+    187: 'LINK_ANYURI',
+    188: 'UNLINK_ANYURI',
+    189: 'LINK_LINKLIST',
+    190: 'UNLINK_LINKLIST',
     191: 'SET_LINK_MODULE_FOR_CHARACTER',
     192: 'SET_LINK_MODULE_FOR_NOTE',
-    193: 'SET_LINK_MODULE_FOR_LINK_LIST',
+    193: 'SET_LINK_MODULE_FOR_LINKLIST',
     194: 'SET_MINT_MODULE_FOR_NOTE',
     195: 'SET_NOTE_URI',
     196: 'LOCK_NOTE',
     197: 'DELETE_NOTE',
     198: 'POST_NOTE_FOR_CHARACTER',
     199: 'POST_NOTE_FOR_ADDRESS',
-    200: 'POST_NOTE_FOR_LINK_LIST',
+    200: 'POST_NOTE_FOR_LINKLIST',
     201: 'POST_NOTE_FOR_NOTE',
     202: 'POST_NOTE_FOR_ERC721',
-    203: 'POST_NOTE_FOR_ANY_URI',
+    203: 'POST_NOTE_FOR_ANYURI',
     236: 'POST_NOTE',
   } as const
 
@@ -77,7 +72,7 @@ export class OperatorContract extends BaseContract {
   async grantOperatorPermissionsForCharacter(
     characterId: BigNumberish,
     operator: string,
-    permissions: PermissionsForCharacter,
+    permissions: CharacterPermissionKey[],
     overrides: Overrides = {},
   ): Promise<Result<{ bitmapUint256: BigNumber }, true>> | never {
     this.validateAddress(operator)
@@ -127,7 +122,7 @@ export class OperatorContract extends BaseContract {
     characterId: BigNumberish,
     noteId: BigNumberish,
     operator: string,
-    permissions: PermissionsForNote,
+    permissions: NotePermissionKey[],
     overrides: Overrides = {},
   ): Promise<Result<{ bitmapUint256: BigNumber }, true>> | never {
     this.validateAddress(operator)
@@ -183,7 +178,7 @@ export class OperatorContract extends BaseContract {
     characterId: BigNumberish,
     operator: string,
     overrides: CallOverrides = {},
-  ): Promise<Result<PermissionsForCharacter, false>> | never {
+  ): Promise<Result<CharacterPermissionKey[], false>> | never {
     const permissionUint256 = await this.contract.getOperatorPermissions(
       characterId,
       operator,
@@ -212,7 +207,7 @@ export class OperatorContract extends BaseContract {
     noteId: BigNumberish,
     operator: string,
     overrides: CallOverrides = {},
-  ): Promise<Result<PermissionsForNote, false>> | never {
+  ): Promise<Result<NotePermissionKey[], false>> | never {
     const permissionUint256 = await this.contract.getOperatorPermissions4Note(
       characterId,
       noteId,
@@ -253,7 +248,7 @@ export class OperatorContract extends BaseContract {
    * @returns The uint256.
    */
   convertPermissionsToUint256ForCharacter(
-    permissions: PermissionsForCharacter,
+    permissions: CharacterPermissionKey[],
   ): BigNumber {
     const bits = permissions.map((permission) => {
       const bit = Object.entries(this.CHARACTER_PERMISSION_BITMAP).find(
@@ -283,7 +278,7 @@ export class OperatorContract extends BaseContract {
    * @returns The uint256.
    */
   convertPermissionsToUint256ForNote(
-    permissions: PermissionsForNote,
+    permissions: NotePermissionKey[],
   ): BigNumber {
     const bits = permissions.map((permission) => {
       const bit = Object.entries(this.NOTE_PERMISSION_BITMAP).find(
@@ -307,12 +302,14 @@ export class OperatorContract extends BaseContract {
 
   /**
    * This converts the uint256 to the character operator permission constants array.
+   *
+   * @category Operator
    * @param permissionUint256 - The uint256.
    * @returns The permission constants array.
    */
   convertUint256ToPermissionsForCharacter(
     permissionUint256: BigNumberish,
-  ): PermissionsForCharacter {
+  ): CharacterPermissionKey[] {
     const binaryBits = this.convertUint256ToBinaryBits(permissionUint256)
 
     const permissions = binaryBits
@@ -327,19 +324,21 @@ export class OperatorContract extends BaseContract {
           }
         }
       })
-      .filter(Boolean) as PermissionsForCharacter
+      .filter(Boolean) as CharacterPermissionKey[]
 
     return permissions
   }
 
   /**
    * This converts the uint256 to the note operator permission constants array.
+   *
+   * @category Operator
    * @param permissionUint256 - The uint256.
    * @returns The permission constants array.
    */
   convertUint256ToPermissionsForNote(
     permissionUint256: BigNumberish,
-  ): PermissionsForNote {
+  ): NotePermissionKey[] {
     const binaryBits = this.convertUint256ToBinaryBits(permissionUint256)
 
     const permissions = binaryBits
@@ -354,7 +353,7 @@ export class OperatorContract extends BaseContract {
           }
         }
       })
-      .filter(Boolean) as PermissionsForNote
+      .filter(Boolean) as NotePermissionKey[]
 
     return permissions
   }

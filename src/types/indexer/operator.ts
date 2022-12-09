@@ -1,41 +1,44 @@
-export type CharacterOperatorPermission =
-  | 'SET_HANDLE'
-  | 'SET_SOCIAL_TOKEN'
-  | 'GRANT_OPERATOR_PERMISSIONS'
-  | 'SET_CHARACTER_URI'
-  | 'SET_LINK_LIST_URI'
-  | 'LINK_CHARACTER'
-  | 'UNLINK_CHARACTER'
-  | 'CREATE_THEN_LINK_CHARACTER'
-  | 'LINK_NOTE'
-  | 'UNLINK_NOTE'
-  | 'LINK_ERC721'
-  | 'UNLINK_ERC721'
-  | 'LINK_ADDRESS'
-  | 'UNLINK_ADDRESS'
-  | 'LINK_ANY_URI'
-  | 'UNLINK_ANY_URI'
-  | 'LINK_LINK_LIST'
-  | 'UNLINK_LINK_LIST'
-  | 'SET_LINK_MODULE_FOR_CHARACTER'
-  | 'SET_LINK_MODULE_FOR_NOTE'
-  | 'SET_LINK_MODULE_FOR_LINK_LIST'
-  | 'SET_MINT_MODULE_FOR_NOTE'
-  | 'SET_NOTE_URI'
-  | 'LOCK_NOTE'
-  | 'DELETE_NOTE'
-  | 'POST_NOTE_FOR_CHARACTER'
-  | 'POST_NOTE_FOR_ADDRESS'
-  | 'POST_NOTE_FOR_LINK_LIST'
-  | 'POST_NOTE_FOR_NOTE'
-  | 'POST_NOTE_FOR_ERC721'
-  | 'POST_NOTE_FOR_ANY_URI'
-  | 'POST_NOTE'
+export enum CharacterOperatorPermission {
+  SET_HANDLE = 'SET_HANDLE',
+  SET_SOCIAL_TOKEN = 'SET_SOCIAL_TOKEN',
+  GRANT_OPERATOR_PERMISSIONS = 'GRANT_OPERATOR_PERMISSIONS',
+  SET_CHARACTER_URI = 'SET_CHARACTER_URI',
+  SET_LINKLIST_URI = 'SET_LINKLIST_URI',
+  LINK_CHARACTER = 'LINK_CHARACTER',
+  UNLINK_CHARACTER = 'UNLINK_CHARACTER',
+  CREATE_THEN_LINK_CHARACTER = 'CREATE_THEN_LINK_CHARACTER',
+  LINK_NOTE = 'LINK_NOTE',
+  UNLINK_NOTE = 'UNLINK_NOTE',
+  LINK_ERC721 = 'LINK_ERC721',
+  UNLINK_ERC721 = 'UNLINK_ERC721',
+  LINK_ADDRESS = 'LINK_ADDRESS',
+  UNLINK_ADDRESS = 'UNLINK_ADDRESS',
+  LINK_ANYURI = 'LINK_ANYURI',
+  UNLINK_ANYURI = 'UNLINK_ANYURI',
+  LINK_LINKLIST = 'LINK_LINKLIST',
+  UNLINK_LINKLIST = 'UNLINK_LINKLIST',
+  SET_LINK_MODULE_FOR_CHARACTER = 'SET_LINK_MODULE_FOR_CHARACTER',
+  SET_LINK_MODULE_FOR_NOTE = 'SET_LINK_MODULE_FOR_NOTE',
+  SET_LINK_MODULE_FOR_LINKLIST = 'SET_LINK_MODULE_FOR_LINKLIST',
+  SET_MINT_MODULE_FOR_NOTE = 'SET_MINT_MODULE_FOR_NOTE',
+  SET_NOTE_URI = 'SET_NOTE_URI',
+  LOCK_NOTE = 'LOCK_NOTE',
+  DELETE_NOTE = 'DELETE_NOTE',
+  POST_NOTE_FOR_CHARACTER = 'POST_NOTE_FOR_CHARACTER',
+  POST_NOTE_FOR_ADDRESS = 'POST_NOTE_FOR_ADDRESS',
+  POST_NOTE_FOR_LINKLIST = 'POST_NOTE_FOR_LINKLIST',
+  POST_NOTE_FOR_NOTE = 'POST_NOTE_FOR_NOTE',
+  POST_NOTE_FOR_ERC721 = 'POST_NOTE_FOR_ERC721',
+  POST_NOTE_FOR_ANYURI = 'POST_NOTE_FOR_ANYURI',
+  POST_NOTE = 'POST_NOTE',
+}
+
+export type CharacterPermissionKey = keyof typeof CharacterOperatorPermission
 
 export type CharacterOperatorEntity = {
   characterId: number
   operator: string
-  permissions: CharacterOperatorPermission[]
+  permissions: CharacterPermissionKey[]
   createdAt: Date
   updatedAt: Date
   transactionHash: string
@@ -46,18 +49,21 @@ export type CharacterOperatorEntity = {
   updatedLogIndex: number
 }
 
-export type NoteOperatorPermission =
-  | 'SET_LINK_MODULE_FOR_NOTE'
-  | 'SET_MINT_MODULE_FOR_NOTE'
-  | 'SET_NOTE_URI'
-  | 'LOCK_NOTE'
-  | 'DELETE_NOTE'
+export enum NoteOperatorPermission {
+  SET_LINK_MODULE_FOR_NOTE = 'SET_LINK_MODULE_FOR_NOTE',
+  SET_MINT_MODULE_FOR_NOTE = 'SET_MINT_MODULE_FOR_NOTE',
+  SET_NOTE_URI = 'SET_NOTE_URI',
+  LOCK_NOTE = 'LOCK_NOTE',
+  DELETE_NOTE = 'DELETE_NOTE',
+}
+
+export type NotePermissionKey = keyof typeof NoteOperatorPermission
 
 export type NoteOperatorEntity = {
   characterId: number
   noteId: number
   operator: string
-  permissions: NoteOperatorPermission[]
+  permissions: NotePermissionKey[]
   createdAt: Date
   updatedAt: Date
   transactionHash: string

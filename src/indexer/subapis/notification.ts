@@ -3,7 +3,7 @@ import queryString from 'query-string'
 import type {
   ListResponse,
   NotificationEntity,
-  NotificationType,
+  NotificationTypeKey,
 } from '../../types/indexer'
 import { type BigNumberish } from 'ethers'
 
@@ -25,7 +25,7 @@ export class NotificationIndexer extends BaseIndexer {
       cursor,
     }: {
       /** The type of notification */
-      type?: NotificationType | NotificationType[]
+      type?: NotificationTypeKey | NotificationTypeKey[]
       /** Whether to include metadata of the character */
       includeCharacterMetadata?: boolean
       /** Limit the count of items returned. */

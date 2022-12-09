@@ -4,6 +4,7 @@ import type {
   ListResponse,
   AchievementSection,
   AchievementItem,
+  AchievementStatusKey,
 } from '../../types/indexer'
 import { type BigNumberish } from 'ethers'
 
@@ -17,7 +18,7 @@ export class AchievementIndexer extends BaseIndexer {
    */
   async getAchievements(
     characterId: BigNumberish,
-    { status }: { status?: AchievementItem['status'][] } = {},
+    { status }: { status?: AchievementStatusKey[] } = {},
   ): Promise<ListResponse<AchievementSection> | null> {
     let url = `${this.endpoint}/characters/${characterId}/achievements?`
 
