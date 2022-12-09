@@ -1,4 +1,5 @@
-import { BaseMetadata } from './base'
+import { Mixin } from 'ts-mixer'
+import { AttributesMetadata, BaseMetadata } from './base'
 
 export class NoteMetadataAttachmentBase<
   ContentType extends 'address' | 'content',
@@ -45,7 +46,7 @@ export class NoteMetadataAttachmentBase<
   height?: number
 }
 
-export class NoteMetadata extends BaseMetadata {
+export class NoteMetadata extends Mixin(BaseMetadata, AttributesMetadata) {
   /**
    * The tags of this note.
    *
@@ -75,18 +76,6 @@ export class NoteMetadata extends BaseMetadata {
         | NoteMetadataAttachmentBase<'address'>
         | NoteMetadataAttachmentBase<'content'>
       )[]
-
-  /**
-   * Custom attributes.
-   *
-   * @example
-   * [{ value: "post", trait_type: "type" }, { value: "https://example.com", trait_type: "URL" }, { value: 1546360800, trait_type: 'Birthday', "display_type": "date" }]
-   */
-  attributes?: {
-    value: string | number | boolean | null
-    trait_type?: string
-    display_type?: 'string' | 'number' | 'date' | 'boolean'
-  }[]
 
   /**
    * The source of this note. I.e. where it was originally created.

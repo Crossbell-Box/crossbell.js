@@ -1,15 +1,17 @@
-import { BaseMetadata } from './base'
+import { Mixin } from 'ts-mixer'
+import { AttributesMetadata, BaseMetadata } from './base'
 
-export class CharacterMetadata extends BaseMetadata {
+export class CharacterMetadata extends Mixin(BaseMetadata, AttributesMetadata) {
   /** The name of this character. */
   name?: string
 
   /**
    * The avatars of this character.
    * The first avatar is the primary avatar.
+   *
    * @example
    * ['ipfs://Qm...', 'ipfs://Qm...']
-   **/
+   */
   avatars?: string[]
 
   /** The bio of this character. */
@@ -17,11 +19,18 @@ export class CharacterMetadata extends BaseMetadata {
 
   /**
    * The websites of this character.
+   *
    * @example
    * ['https://example.com', 'https://example.org']
    */
   websites?: string[]
 
+  /**
+   * The banners of this character.
+   *
+   * @example
+   * [{ address: 'ipfs://Qm...', mime_type: 'image/png' }]
+   */
   banners?: {
     /**
      * The address (url) of this banner.
