@@ -54,13 +54,13 @@
   "devDependencies": {
     "@typechain/ethers-v5": "^10.1.1",
     "@types/async-retry": "^1.4.5",
-    "@types/node": "^18.11.11",
-    "prettier": "^2.8.0",
+    "@types/node": "^18.11.12",
+    "prettier": "^2.8.1",
     "tsup": "^6.5.0",
     "typechain": "^8.1.1",
     "typedoc": "^0.23.21",
-    "typescript": "^4.9.3",
-    "vitest": "^0.25.4"
+    "typescript": "^4.9.4",
+    "vitest": "^0.25.6"
   },
   "publishConfig": {
     "access": "public"
