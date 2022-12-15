@@ -1,6 +1,8 @@
 // @ts-ignore
 import { fetch } from 'fetch-undici'
 
-globalThis.fetch = fetch
+if (typeof globalThis.fetch === 'undefined') {
+  globalThis.fetch = fetch
+}
 
 export { fetch }

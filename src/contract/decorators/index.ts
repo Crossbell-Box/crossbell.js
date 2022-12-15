@@ -1,4 +1,5 @@
 import { Network } from '../../network'
+import { Logger } from '../../utils/logger'
 // import { BaseContract } from '../subcontracts/base'
 
 export function autoSwitchMainnet() {
@@ -15,7 +16,7 @@ export function autoSwitchMainnet() {
         const provider = this.contract.provider
         const isMainnet = await Network.isCrossbellMainnet(provider)
         if (!isMainnet) {
-          console.warn("You're not on the mainnet. Switching to mainnet.")
+          Logger.warn("You're not on the mainnet. Switching to mainnet.")
           await Network.switchToCrossbellMainnet(provider)
           // @ts-ignore
           await this.connect() // connect again

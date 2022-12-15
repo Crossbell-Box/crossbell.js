@@ -9,6 +9,7 @@ import type {
 } from '../types/metadata'
 import { IpfsResponse } from '../types/ipfs'
 import { Network } from '../network'
+import { Logger } from '../utils/logger'
 
 export class Ipfs {
   static async uploadJson(json: any) {
@@ -58,7 +59,7 @@ export class Ipfs {
       // to cf-ipfs endpoint
       uri = uri.replace('ipfs://', Network.getIpfsGateway())
       if (!isIpfs.url(uri)) {
-        console.warn('[Crossbell.js] Wrong IPFS url: ' + uri)
+        Logger.warn('Wrong IPFS url: ' + uri)
         return
       }
     }

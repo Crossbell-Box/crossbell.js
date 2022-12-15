@@ -4,6 +4,7 @@ import type { Overrides, Result } from '../../types/contract'
 import { BigNumber, BigNumberish, CallOverrides } from 'ethers'
 import BN from 'bn.js'
 import { CharacterPermissionKey, NotePermissionKey } from '../../types'
+import { Logger } from '../../utils/logger'
 
 // https://github.com/Crossbell-Box/CIPs/blob/main/CIPs/CIP-7.md
 
@@ -319,7 +320,7 @@ export class OperatorContract extends BaseContract {
           if (this.isPermissionBitForCharacter(index)) {
             return this.CHARACTER_PERMISSION_BITMAP[index]
           } else {
-            console.warn('Found invalid permission bit.', index)
+            Logger.warn('Found invalid permission bit.', index)
             return
           }
         }
@@ -348,7 +349,7 @@ export class OperatorContract extends BaseContract {
           if (this.isPermissionBitForNote(index)) {
             return this.NOTE_PERMISSION_BITMAP[index]
           } else {
-            console.warn('Found invalid permission bit.', index)
+            Logger.warn('Found invalid permission bit.', index)
             return
           }
         }
@@ -361,7 +362,7 @@ export class OperatorContract extends BaseContract {
   /**
    * This converts binary bits array to a uint256 in decimal.
    *
-   * @category Utility
+   * @category Operator
    * @param bits - The binary bits array.
    * @returns The uint256 in decimal.
    */
@@ -384,6 +385,8 @@ export class OperatorContract extends BaseContract {
 
   /**
    * This converts a uint256 in decimal to binary bits array.
+   *
+   * @category Operator
    * @param uint256 - The uint256 in decimal.
    * @returns The binary bits array of length 256.
    */
@@ -396,6 +399,13 @@ export class OperatorContract extends BaseContract {
       .map((bit) => parseInt(bit))
   }
 
+  /**
+   * This checks if the permission bit is for character.
+   *
+   * @category Operator
+   * @param bit - The permission bit.
+   * @returns true if the permission bit is for character; otherwise, false.
+   */
   private isPermissionBitForCharacter(
     bit: number,
   ): bit is keyof OperatorContract['CHARACTER_PERMISSION_BITMAP'] {
@@ -404,6 +414,13 @@ export class OperatorContract extends BaseContract {
     )
   }
 
+  /**
+   * This checks if the permission bit is for note.
+   *
+   * @category Operator
+   * @param bit - The permission bit.
+   * @returns true if the permission bit is for note; otherwise, false.
+   */
   private isPermissionBitForNote(
     bit: number,
   ): bit is keyof OperatorContract['NOTE_PERMISSION_BITMAP'] {

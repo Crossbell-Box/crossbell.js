@@ -25,6 +25,8 @@ import {
 } from '../abis/cbt/types'
 import type { MintEvent } from '../abis/cbt/types/Abi'
 import { validateIsInSdn } from '../../utils/sdn'
+import { Logger } from '../../utils/logger'
+import { checkLatestVersion } from '../../utils/version_checker'
 
 const logTopics: Record<
   // keys
@@ -55,9 +57,10 @@ const logTopics: Record<
 } as const
 
 type ContractOptions = {
-  entryContractAddress?: string
-  peripheryContractAddress?: string
+  entryContractAddress: string
+  peripheryContractAddress: string
   cbtContractAddress?: string
+  enableVersionCheck: boolean
 }
 
 export class BaseContract {
@@ -147,10 +150,23 @@ export class BaseContract {
       | ethers.providers.ExternalProvider
       | ethers.providers.JsonRpcFetchFunc
       | string,
-    options?: ContractOptions,
+    options?: Partial<ContractOptions>,
   ) {
     this._providerOrPrivateKey = providerOrPrivateKey
-    this.options = options ?? {}
+    this.options = this.initOptions(options)
+    this.checkVersion()
+  }
+
+  initOptions(options?: Partial<ContractOptions>): ContractOptions {
+    return {
+      entryContractAddress:
+        options?.entryContractAddress ?? Network.getContractAddress(),
+      peripheryContractAddress:
+        options?.peripheryContractAddress ??
+        Network.getPeripheryContractAddress(),
+      cbtContractAddress: options?.cbtContractAddress,
+      enableVersionCheck: options?.enableVersionCheck ?? true,
+    }
   }
 
   /**
@@ -172,7 +188,7 @@ export class BaseContract {
       try {
         await provider.send('eth_requestAccounts', [])
       } catch (e) {
-        console.warn(
+        Logger.warn(
           'Provider may not support eth_requestAccounts. Fallback to provider.enable()',
           e,
         )
@@ -191,13 +207,12 @@ export class BaseContract {
     }
 
     this.contract = EntryAbi__factory.connect(
-      this.options.entryContractAddress ?? Network.getContractAddress(),
+      this.options.entryContractAddress,
       this._signerOrProvider,
     )
 
     this.peripheryContract = PeripheryAbi__factory.connect(
-      this.options.peripheryContractAddress ??
-        Network.getPeripheryContractAddress(),
+      this.options.peripheryContractAddress,
       this._signerOrProvider,
     )
 
@@ -330,6 +345,12 @@ export class BaseContract {
     //     )
     //   }
     // }
+  }
+
+  private checkVersion() {
+    if (this.options.enableVersionCheck) {
+      checkLatestVersion()
+    }
   }
 
   protected validateAddress(address: string) {
