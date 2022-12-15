@@ -3495,7 +3495,7 @@ const _abi = [
     name: "Web3EntryInitialized",
     type: "event",
   },
-];
+] as const;
 
 export class Abi__factory {
   static readonly abi = _abi;
