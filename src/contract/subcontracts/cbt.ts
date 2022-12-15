@@ -27,4 +27,42 @@ export class CbtContract extends BaseContract {
       transactionHash: receipt.transactionHash,
     }
   }
+
+  /**
+   * This sets the URI of the token.
+   *
+   * @category CharacterBoundToken
+   * @param tokenId - The id of the token.
+   * @param uri - The URI of the token.
+   * @returns The transaction hash.
+   */
+  @autoSwitchMainnet()
+  async setCbtTokenUri(
+    tokenId: BigNumberish,
+    uri: string,
+    overrides: Overrides = {},
+  ): Promise<Result<undefined, true>> | never {
+    const tx = await this.cbtContract.setTokenURI(tokenId, uri, overrides)
+
+    const receipt = await tx.wait()
+
+    return {
+      data: undefined,
+      transactionHash: receipt.transactionHash,
+    }
+  }
+
+  /**
+   * This returns the URI of the token.
+   * @category CharacterBoundToken
+   * @param tokenId - The id of the token.
+   * @returns The URI of the token.
+   */
+  async getCbtTokenUri(tokenId: BigNumberish): Promise<Result<string>> | never {
+    const uri = await this.cbtContract.uri(tokenId)
+
+    return {
+      data: uri,
+    }
+  }
 }
