@@ -19,6 +19,7 @@ export class MintedNoteIndexer extends BaseIndexer {
       noteId,
       limit,
       cursor,
+      order,
     }: {
       /** The character ID of the note */
       noteCharacterId?: BigNumberish
@@ -28,6 +29,8 @@ export class MintedNoteIndexer extends BaseIndexer {
       limit?: number
       /** Used for pagination. */
       cursor?: string
+      /** The order to sort by. */
+      order?: 'asc' | 'desc'
     } = {},
   ): Promise<ListResponse<MintedNoteEntity>> {
     let url = `${this.endpoint}/addresses/${address}/minted/notes?`
@@ -36,6 +39,7 @@ export class MintedNoteIndexer extends BaseIndexer {
       noteId,
       limit,
       cursor,
+      order,
     })
 
     const res = await this.fetch(url).then((res) => res.json())
@@ -59,6 +63,7 @@ export class MintedNoteIndexer extends BaseIndexer {
       owner,
       limit,
       cursor,
+      order,
     }: {
       /** The address of the owner */
       owner?: string
@@ -66,6 +71,8 @@ export class MintedNoteIndexer extends BaseIndexer {
       limit?: number
       /** Used for pagination. */
       cursor?: string
+      /** The order to sort by. */
+      order?: 'asc' | 'desc'
     } = {},
   ): Promise<ListResponse<MintedNoteEntity>> {
     let url = `${this.endpoint}/notes/${characterId}/${noteId}/minted?`
@@ -73,6 +80,7 @@ export class MintedNoteIndexer extends BaseIndexer {
       owner,
       limit,
       cursor,
+      order,
     })
 
     const res = await this.fetch(url).then((res) => res.json())

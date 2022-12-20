@@ -30,6 +30,7 @@ export class LinkIndexer extends BaseIndexer {
       toTokenId,
       toLinklistId,
       toUri,
+      order,
     }: {
       /** Limit the count of items returned. */
       limit?: number
@@ -55,6 +56,8 @@ export class LinkIndexer extends BaseIndexer {
       toLinklistId?: BigNumberish
       /** The toUri to filter by. */
       toUri?: string
+      /** The order to sort by. */
+      order?: 'asc' | 'desc'
     } = {},
   ): Promise<ListResponse<LinkEntity>> {
     let url = `${this.endpoint}/characters/${characterId}/links?`
@@ -71,6 +74,7 @@ export class LinkIndexer extends BaseIndexer {
       toTokenId,
       toLinklistId,
       toUri,
+      order,
     })
 
     const res = await this.fetch(url).then((res) => res.json())
@@ -92,6 +96,7 @@ export class LinkIndexer extends BaseIndexer {
       limit = 20,
       cursor,
       linkType,
+      order,
     }: {
       /** Limit the count of items returned. */
       limit?: number
@@ -99,10 +104,12 @@ export class LinkIndexer extends BaseIndexer {
       cursor?: string
       /** The link type to filter by. e.g. 'follow' */
       linkType?: string
+      /** The order to sort by. */
+      order?: 'asc' | 'desc'
     } = {},
   ): Promise<ListResponse<LinkEntity>> {
     let url = `${this.endpoint}/characters/${characterId}/backlinks?`
-    url += queryString.stringify({ limit, cursor, linkType })
+    url += queryString.stringify({ limit, cursor, linkType, order })
 
     const res = await this.fetch(url).then((res) => res.json())
 
@@ -123,6 +130,7 @@ export class LinkIndexer extends BaseIndexer {
       limit = 20,
       cursor,
       linkType,
+      order,
     }: {
       /** Limit the count of items returned. */
       limit?: number
@@ -130,10 +138,12 @@ export class LinkIndexer extends BaseIndexer {
       cursor?: string
       /** The link type to filter by. e.g. 'follow' */
       linkType?: string
+      /** The order to sort by. */
+      order?: 'asc' | 'desc'
     } = {},
   ): Promise<ListResponse<LinkEntity>> {
     let url = `${this.endpoint}/addresses/${address}/backlinks?`
-    url += queryString.stringify({ limit, cursor, linkType })
+    url += queryString.stringify({ limit, cursor, linkType, order })
 
     const res = await this.fetch(url).then((res) => res.json())
 
@@ -156,6 +166,7 @@ export class LinkIndexer extends BaseIndexer {
       limit = 20,
       cursor,
       linkType,
+      order,
     }: {
       /** Limit the count of items returned. */
       limit?: number
@@ -163,10 +174,12 @@ export class LinkIndexer extends BaseIndexer {
       cursor?: string
       /** The link type to filter by. e.g. 'follow' */
       linkType?: string
+      /** The order to sort by. */
+      order?: 'asc' | 'desc'
     } = {},
   ): Promise<ListResponse<LinkEntity>> {
     let url = `${this.endpoint}/notes/${characterId}/${noteId}/backlinks?`
-    url += queryString.stringify({ limit, cursor, linkType })
+    url += queryString.stringify({ limit, cursor, linkType, order })
 
     const res = await this.fetch(url).then((res) => res.json())
 
@@ -189,6 +202,7 @@ export class LinkIndexer extends BaseIndexer {
       limit = 20,
       cursor,
       linkType,
+      order,
     }: {
       /** Limit the count of items returned. */
       limit?: number
@@ -196,10 +210,12 @@ export class LinkIndexer extends BaseIndexer {
       cursor?: string
       /** The link type to filter by. e.g. 'follow' */
       linkType?: string
+      /** The order to sort by. */
+      order?: 'asc' | 'desc'
     } = {},
   ): Promise<ListResponse<LinkEntity>> {
     let url = `${this.endpoint}/erc721s/${contractAddress}/${tokenId}/backlinks?`
-    url += queryString.stringify({ limit, cursor, linkType })
+    url += queryString.stringify({ limit, cursor, linkType, order })
 
     const res = await this.fetch(url).then((res) => res.json())
 
@@ -220,6 +236,7 @@ export class LinkIndexer extends BaseIndexer {
       limit = 20,
       cursor,
       linkType,
+      order,
     }: {
       /** Limit the count of items returned. */
       limit?: number
@@ -227,10 +244,12 @@ export class LinkIndexer extends BaseIndexer {
       cursor?: string
       /** The link type to filter by. e.g. 'follow' */
       linkType?: string
+      /** The order to sort by. */
+      order?: 'asc' | 'desc'
     } = {},
   ): Promise<ListResponse<LinkEntity>> {
     let url = `${this.endpoint}/linklists/${linklistId}/backlinks?`
-    url += queryString.stringify({ limit, cursor, linkType })
+    url += queryString.stringify({ limit, cursor, linkType, order })
 
     const res = await this.fetch(url).then((res) => res.json())
 
@@ -251,6 +270,7 @@ export class LinkIndexer extends BaseIndexer {
       limit = 20,
       cursor,
       linkType,
+      order,
     }: {
       /** Limit the count of items returned. */
       limit?: number
@@ -258,10 +278,12 @@ export class LinkIndexer extends BaseIndexer {
       cursor?: string
       /** The link type to filter by. e.g. 'follow' */
       linkType?: string
+      /** The order to sort by. */
+      order?: 'asc' | 'desc'
     } = {},
   ): Promise<ListResponse<LinkEntity>> {
     let url = `${this.endpoint}/anyuris/${uri}/backlinks?`
-    url += queryString.stringify({ limit, cursor, linkType })
+    url += queryString.stringify({ limit, cursor, linkType, order })
 
     const res = await this.fetch(url).then((res) => res.json())
 
