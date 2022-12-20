@@ -1,5 +1,6 @@
 import './fetch'
 import { Logger } from './logger'
+import { version } from '../../package.json'
 
 // check if the version is the latest
 export const checkLatestVersion = async () => {
@@ -8,7 +9,6 @@ export const checkLatestVersion = async () => {
       'https://registry.npmjs.org/crossbell.js/latest',
     ).then((res) => res.json())
     const latest = res.version
-    const { version } = await import('../../package.json')
     if (latest !== version) {
       Logger.warn(
         `There is a new version of crossbell.js available: ${latest}. You are using version: ${version}. Please update to the latest version.`,
