@@ -1,4 +1,4 @@
-import * as isIpfs from 'is-ipfs'
+import isIpfs from 'is-ipfs'
 import retry from 'async-retry'
 import '../utils/fetch'
 import type {
