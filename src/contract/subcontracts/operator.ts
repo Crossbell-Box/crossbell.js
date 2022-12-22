@@ -3,7 +3,7 @@ import { autoSwitchMainnet } from '../decorators'
 import type { Overrides, Result } from '../../types/contract'
 import { BigNumber, BigNumberish, CallOverrides } from 'ethers'
 import BN from 'bn.js'
-import { CharacterPermissionKey, NotePermissionKey } from '../../types'
+import { CharacterPermissionKey } from '../../types'
 import { Logger } from '../../utils/logger'
 
 // https://github.com/Crossbell-Box/CIPs/blob/main/CIPs/CIP-7.md
@@ -13,6 +13,7 @@ export class OperatorContract extends BaseContract {
     0: 'SET_HANDLE',
     1: 'SET_SOCIAL_TOKEN',
     2: 'GRANT_OPERATOR_PERMISSIONS',
+    3: 'GRANT_OPERATORS_FOR_NOTE',
     176: 'SET_CHARACTER_URI',
     177: 'SET_LINKLIST_URI',
     178: 'LINK_CHARACTER',
@@ -42,14 +43,6 @@ export class OperatorContract extends BaseContract {
     202: 'POST_NOTE_FOR_ERC721',
     203: 'POST_NOTE_FOR_ANY_URI',
     236: 'POST_NOTE',
-  } as const
-
-  private NOTE_PERMISSION_BITMAP = {
-    0: 'SET_LINK_MODULE_FOR_NOTE',
-    1: 'SET_MINT_MODULE_FOR_NOTE',
-    2: 'SET_NOTE_URI',
-    3: 'LOCK_NOTE',
-    4: 'DELETE_NOTE',
   } as const
 
   /**
@@ -107,45 +100,43 @@ export class OperatorContract extends BaseContract {
    * An operator can be any address.
    * It can then be used to operate transactions in behalf of the note's owner.
    *
-   * Each time an operator is granted permissions, its previous permissions are overwritten.
+   * Each time an operator is granted permissions, its previous operators are overwritten.
    *
-   * To completely remove an operator, pass an empty array (`[]`) to the `permissions` parameter.
+   * To remove operators, call {@link revokeOperatorsForNote}.
    *
    * @category Operator
    * @param characterId - The id of the character.
    * @param noteId - The id of the note.
-   * @param operator - The address of the operator.
-   * @param permissions - The permissions of the operator.
+   * @param allowlist - Operators that are allowed to operate the note.
+   * @param blocklist - Operators that are not allowed to operate the note.
+   *                    (Used to override the character permission and allowlist.)
    * @returns The transaction hash.
    */
   @autoSwitchMainnet()
-  async grantOperatorPermissionsForNote(
+  async grantOperatorsForNote(
     characterId: BigNumberish,
     noteId: BigNumberish,
-    operator: string,
-    permissions: NotePermissionKey[],
+    allowlist: string[],
+    blocklist: string[] = [],
     overrides: Overrides = {},
-  ): Promise<Result<{ bitmapUint256: BigNumber }, true>> | never {
-    this.validateAddress(operator)
+  ): Promise<Result<{}, true>> | never {
+    this.validateAddress(allowlist)
+    this.validateAddress(blocklist)
 
-    const permissionUint256 =
-      this.convertPermissionsToUint256ForNote(permissions)
-    const tx = await this.contract.grantOperatorPermissions4Note(
+    const tx = await this.contract.grantOperators4Note(
       characterId,
       noteId,
-      operator,
-      permissionUint256,
+      blocklist,
+      allowlist,
       overrides,
     )
 
     const receipt = await tx.wait()
 
-    const log = this.parseLog(receipt.logs, 'grantOperatorPermissions4Note')
+    // const log = this.parseLog(receipt.logs, 'grantOperators4Note')
 
     return {
-      data: {
-        bitmapUint256: log.args.permissionBitMap,
-      },
+      data: {},
       transactionHash: receipt.transactionHash,
     }
   }
@@ -164,6 +155,57 @@ export class OperatorContract extends BaseContract {
     const operators = await this.contract.getOperators(characterId, overrides)
     return {
       data: operators,
+    }
+  }
+
+  /**
+   * This returns operators of the note.
+   *
+   * @category Operator
+   * @param characterId - The id of the character.
+   * @param noteId - The id of the note.
+   */
+  async getOperatorsForNote(
+    characterId: BigNumberish,
+    noteId: BigNumberish,
+    overrides: CallOverrides = {},
+  ):
+    | Promise<Result<{ allowlist: string[]; blocklist: string[] }, false>>
+    | never {
+    const { blacklist, whitelist } = await this.contract.getOperators4Note(
+      characterId,
+      noteId,
+      overrides,
+    )
+    return {
+      data: {
+        allowlist: whitelist,
+        blocklist: blacklist,
+      },
+    }
+  }
+
+  /**
+   * This checks if an operator is allowed to operate a note.
+   *
+   * @category Operator
+   * @param characterId - The id of the character.
+   * @param noteId - The id of the note.
+   * @param operator - The address of the operator.
+   * @returns Whether the operator is allowed to operate the note.
+   */
+  async isOperatorAllowedForNote(
+    characterId: BigNumberish,
+    noteId: BigNumberish,
+    operator: string,
+  ): Promise<Result<boolean, false>> | never {
+    const isAllowed = await this.contract.hasNotePermission(
+      characterId,
+      noteId,
+      operator,
+    )
+    return {
+      data: isAllowed,
     }
   }
 
@@ -195,53 +237,6 @@ export class OperatorContract extends BaseContract {
   }
 
   /**
-   * This returns the permissions of an operator for a note.
-   *
-   * @category Operator
-   * @param characterId - The id of the character.
-   * @param noteId - The id of the note.
-   * @param operator - The address of the operator.
-   * @returns The permissions of the operator.
-   */
-  async getOperatorPermissionsForNote(
-    characterId: BigNumberish,
-    noteId: BigNumberish,
-    operator: string,
-    overrides: CallOverrides = {},
-  ): Promise<Result<NotePermissionKey[], false>> | never {
-    const permissionUint256 = await this.contract.getOperatorPermissions4Note(
-      characterId,
-      noteId,
-      operator,
-      overrides,
-    )
-
-    const permissions =
-      this.convertUint256ToPermissionsForNote(permissionUint256)
-
-    return {
-      data: permissions,
-    }
-  }
-
-  /**
-   * This returns the operator utils.
-   *
-   * @category Operator
-   * @returns The operator utils.
-   */
-  // readonly operatorUtils = {
-  //   convertPermissionsToUint256ForCharacter:
-  //     this.convertPermissionsToUint256ForCharacter.bind(this),
-  //   convertPermissionsToUint256ForNote:
-  //     this.convertPermissionsToUint256ForNote.bind(this),
-  //   convertUint256ToPermissionsForCharacter:
-  //     this.convertUint256ToPermissionsForCharacter.bind(this),
-  //   convertUint256ToPermissionsForNote:
-  //     this.convertUint256ToPermissionsForNote.bind(this),
-  // }
-
-  /**
    * This converts the character operator permission constants array to a uint256.
    *
    * @category Operator
@@ -253,36 +248,6 @@ export class OperatorContract extends BaseContract {
   ): BigNumber {
     const bits = permissions.map((permission) => {
       const bit = Object.entries(this.CHARACTER_PERMISSION_BITMAP).find(
-        ([, value]) => value === permission,
-      )![0]
-      return parseInt(bit)
-    })
-
-    const uint256Array = Array<number>(256).fill(0)
-
-    bits.forEach((bit) => {
-      uint256Array[bit] = 1
-    })
-
-    uint256Array.reverse()
-
-    const uint256Decimal = this.convertsBinaryBitsToUint256(uint256Array)
-
-    return uint256Decimal
-  }
-
-  /**
-   * This converts the note operator permission constants array to a uint256.
-   *
-   * @category Operator
-   * @param permissions - The permission constants array.
-   * @returns The uint256.
-   */
-  convertPermissionsToUint256ForNote(
-    permissions: NotePermissionKey[],
-  ): BigNumber {
-    const bits = permissions.map((permission) => {
-      const bit = Object.entries(this.NOTE_PERMISSION_BITMAP).find(
         ([, value]) => value === permission,
       )![0]
       return parseInt(bit)
@@ -326,35 +291,6 @@ export class OperatorContract extends BaseContract {
         }
       })
       .filter(Boolean) as CharacterPermissionKey[]
-
-    return permissions
-  }
-
-  /**
-   * This converts the uint256 to the note operator permission constants array.
-   *
-   * @category Operator
-   * @param permissionUint256 - The uint256.
-   * @returns The permission constants array.
-   */
-  convertUint256ToPermissionsForNote(
-    permissionUint256: BigNumberish,
-  ): NotePermissionKey[] {
-    const binaryBits = this.convertUint256ToBinaryBits(permissionUint256)
-
-    const permissions = binaryBits
-      .reverse()
-      .map((bit, index) => {
-        if (bit === 1) {
-          if (this.isPermissionBitForNote(index)) {
-            return this.NOTE_PERMISSION_BITMAP[index]
-          } else {
-            Logger.warn('Found invalid permission bit.', index)
-            return
-          }
-        }
-      })
-      .filter(Boolean) as NotePermissionKey[]
 
     return permissions
   }
@@ -412,18 +348,5 @@ export class OperatorContract extends BaseContract {
     return Object.keys(this.CHARACTER_PERMISSION_BITMAP).includes(
       bit.toString(),
     )
-  }
-
-  /**
-   * This checks if the permission bit is for note.
-   *
-   * @category Operator
-   * @param bit - The permission bit.
-   * @returns true if the permission bit is for note; otherwise, false.
-   */
-  private isPermissionBitForNote(
-    bit: number,
-  ): bit is keyof OperatorContract['NOTE_PERMISSION_BITMAP'] {
-    return Object.keys(this.NOTE_PERMISSION_BITMAP).includes(bit.toString())
   }
 }

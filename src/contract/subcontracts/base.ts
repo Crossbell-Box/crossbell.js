@@ -11,9 +11,8 @@ import type {
   PostNoteEvent,
   CharacterCreatedEvent,
   LinkNoteEvent,
-  SetOperatorEvent,
   GrantOperatorPermissionsEvent,
-  GrantOperatorPermissions4NoteEvent,
+  GrantOperators4NoteEvent,
 } from '../abis/entry/types/Abi'
 import {
   type Abi as PeripheryAbi,
@@ -28,33 +27,35 @@ import { validateIsInSdn } from '../../utils/sdn'
 import { Logger } from '../../utils/logger'
 import { checkLatestVersion } from '../../utils/version_checker'
 
-const logTopics: Record<
-  // keys
-  | 'createCharacter'
-  | 'linkCharacter'
-  | 'postNote'
-  | 'mintNote'
-  | 'linkNote'
-  | 'setOperator'
-  | 'mint'
-  | 'grantOperatorPermissions'
-  | 'grantOperatorPermissions4Note',
-  // values
-  | keyof EntryAbi['filters']
-  | keyof PeripheryAbi['filters']
-  | keyof CbtAbi['filters']
-> = {
+const logTopics = {
   createCharacter: 'CharacterCreated(uint256,address,address,string,uint256)',
   linkCharacter: 'LinkCharacter(address,uint256,uint256,bytes32,uint256)',
   linkNote: 'LinkNote(uint256,uint256,uint256,bytes32,uint256)',
   postNote: 'PostNote(uint256,uint256,bytes32,bytes32,bytes)',
   mintNote: 'MintNote(address,uint256,uint256,address,uint256)',
-  setOperator: 'SetOperator(uint256,address,uint256)',
   mint: 'Mint(uint256,uint256,uint256)',
   grantOperatorPermissions: 'GrantOperatorPermissions(uint256,address,uint256)',
-  grantOperatorPermissions4Note:
-    'GrantOperatorPermissions4Note(uint256,uint256,address,uint256)',
-} as const
+  grantOperators4Note:
+    'GrantOperators4Note(uint256,uint256,address[],address[])',
+} as const satisfies Record<
+  // keys
+  string,
+  // values
+  | keyof EntryAbi['filters']
+  | keyof PeripheryAbi['filters']
+  | keyof CbtAbi['filters']
+>
+
+type LogEvents = {
+  'CharacterCreated(uint256,address,address,string,uint256)': CharacterCreatedEvent
+  'LinkCharacter(address,uint256,uint256,bytes32,uint256)': LinkCharacterEvent
+  'LinkNote(uint256,uint256,uint256,bytes32,uint256)': LinkNoteEvent
+  'PostNote(uint256,uint256,bytes32,bytes32,bytes)': PostNoteEvent
+  'MintNote(address,uint256,uint256,address,uint256)': MintNoteEvent
+  'Mint(uint256,uint256,uint256)': MintEvent
+  'GrantOperatorPermissions(uint256,address,uint256)': GrantOperatorPermissionsEvent
+  'GrantOperators4Note(uint256,uint256,address[],address[])': GrantOperators4NoteEvent
+}
 
 type ContractOptions = {
   entryContractAddress: string
@@ -226,46 +227,10 @@ export class BaseContract {
     this._hasConnected = true
   }
 
-  protected parseLog<T = SetOperatorEvent>(
+  protected parseLog<TopicName extends keyof typeof logTopics>(
     logs: ethers.providers.Log[],
-    filterTopic: 'setOperator',
-  ): T
-  protected parseLog<T = MintNoteEvent>(
-    logs: ethers.providers.Log[],
-    filterTopic: 'mintNote',
-  ): T
-  protected parseLog<T = CharacterCreatedEvent>(
-    logs: ethers.providers.Log[],
-    filterTopic: 'createCharacter',
-  ): T
-  protected parseLog<T = LinkCharacterEvent>(
-    logs: ethers.providers.Log[],
-    filterTopic: 'linkCharacter',
-  ): T
-  protected parseLog<T = LinkNoteEvent>(
-    logs: ethers.providers.Log[],
-    filterTopic: 'linkNote',
-  ): T
-  protected parseLog<T = PostNoteEvent>(
-    logs: ethers.providers.Log[],
-    filterTopic: 'postNote',
-  ): T
-  protected parseLog<T = MintEvent>(
-    logs: ethers.providers.Log[],
-    filterTopic: 'mint',
-  ): T
-  protected parseLog<T = GrantOperatorPermissionsEvent>(
-    logs: ethers.providers.Log[],
-    filterTopic: 'grantOperatorPermissions',
-  ): T
-  protected parseLog<T = GrantOperatorPermissions4NoteEvent>(
-    logs: ethers.providers.Log[],
-    filterTopic: 'grantOperatorPermissions4Note',
-  ): T
-  protected parseLog<T>(
-    logs: ethers.providers.Log[],
-    filterTopic: keyof typeof logTopics,
-  ): T {
+    filterTopic: TopicName,
+  ): LogEvents[typeof logTopics[TopicName]] {
     const targetTopicHash = ethers.utils.keccak256(
       ethers.utils.toUtf8Bytes(logTopics[filterTopic]),
     )
@@ -282,7 +247,9 @@ export class BaseContract {
 
     const log = _logs[0]
 
-    return this.contract.interface.parseLog(log) as unknown as T
+    return this.contract.interface.parseLog(
+      log,
+    ) as unknown as LogEvents[typeof logTopics[TopicName]]
   }
 
   private getDefaultProvider():
@@ -353,7 +320,11 @@ export class BaseContract {
     }
   }
 
-  protected validateAddress(address: string) {
-    validateIsInSdn(address)
+  protected validateAddress(address: string | string[]) {
+    if (Array.isArray(address)) {
+      address.forEach((addr) => this.validateAddress(addr))
+    } else {
+      validateIsInSdn(address)
+    }
   }
 }

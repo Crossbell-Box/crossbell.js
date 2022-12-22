@@ -49,21 +49,10 @@ export type CharacterOperatorEntity = {
   updatedLogIndex: number
 }
 
-export enum NoteOperatorPermission {
-  SET_LINK_MODULE_FOR_NOTE = 'SET_LINK_MODULE_FOR_NOTE',
-  SET_MINT_MODULE_FOR_NOTE = 'SET_MINT_MODULE_FOR_NOTE',
-  SET_NOTE_URI = 'SET_NOTE_URI',
-  LOCK_NOTE = 'LOCK_NOTE',
-  DELETE_NOTE = 'DELETE_NOTE',
-}
-
-export type NotePermissionKey = keyof typeof NoteOperatorPermission
-
 export type NoteOperatorEntity = {
   characterId: number
   noteId: number
   operator: string
-  permissions: NotePermissionKey[]
   createdAt: Date
   updatedAt: Date
   transactionHash: string
