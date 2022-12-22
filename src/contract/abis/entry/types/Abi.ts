@@ -441,8 +441,6 @@ export declare namespace DataTypes {
 
 export interface AbiInterface extends utils.Interface {
   functions: {
-    "_setCharacterUri(uint256,string)": FunctionFragment;
-    "addOperator(uint256,address)": FunctionFragment;
     "approve(address,uint256)": FunctionFragment;
     "balanceOf(address)": FunctionFragment;
     "burn(uint256)": FunctionFragment;
@@ -463,15 +461,15 @@ export interface AbiInterface extends utils.Interface {
     "getLinklistUri(uint256)": FunctionFragment;
     "getNote(uint256,uint256)": FunctionFragment;
     "getOperatorPermissions(uint256,address)": FunctionFragment;
-    "getOperatorPermissions4Note(uint256,uint256,address)": FunctionFragment;
     "getOperators(uint256)": FunctionFragment;
+    "getOperators4Note(uint256,uint256)": FunctionFragment;
     "getPrimaryCharacterId(address)": FunctionFragment;
     "getRevision()": FunctionFragment;
     "grantOperatorPermissions(uint256,address,uint256)": FunctionFragment;
-    "grantOperatorPermissions4Note(uint256,uint256,address,uint256)": FunctionFragment;
+    "grantOperators4Note(uint256,uint256,address[],address[])": FunctionFragment;
+    "hasNotePermission(uint256,uint256,address)": FunctionFragment;
     "initialize(string,string,address,address,address,address)": FunctionFragment;
     "isApprovedForAll(address,address)": FunctionFragment;
-    "isOperator(uint256,address)": FunctionFragment;
     "isPrimaryCharacter(uint256)": FunctionFragment;
     "linkAddress((uint256,address,bytes32,bytes))": FunctionFragment;
     "linkAnyUri((uint256,string,bytes32,bytes))": FunctionFragment;
@@ -480,7 +478,7 @@ export interface AbiInterface extends utils.Interface {
     "linkLinklist((uint256,uint256,bytes32,bytes))": FunctionFragment;
     "linkNote((uint256,uint256,uint256,bytes32,bytes))": FunctionFragment;
     "lockNote(uint256,uint256)": FunctionFragment;
-    "migrateOperator(uint256[])": FunctionFragment;
+    "migrateOperator(address,uint256[])": FunctionFragment;
     "mintNote((uint256,uint256,address,bytes))": FunctionFragment;
     "name()": FunctionFragment;
     "ownerOf(uint256)": FunctionFragment;
@@ -491,8 +489,8 @@ export interface AbiInterface extends utils.Interface {
     "postNote4ERC721((uint256,string,address,bytes,address,bytes,bool),(address,uint256))": FunctionFragment;
     "postNote4Linklist((uint256,string,address,bytes,address,bytes,bool),uint256)": FunctionFragment;
     "postNote4Note((uint256,string,address,bytes,address,bytes,bool),(uint256,uint256))": FunctionFragment;
-    "removeOperator(uint256,address)": FunctionFragment;
     "resolver()": FunctionFragment;
+    "revokeOperators4Note(uint256,uint256,address[],address[])": FunctionFragment;
     "safeTransferFrom(address,address,uint256)": FunctionFragment;
     "safeTransferFrom(address,address,uint256,bytes)": FunctionFragment;
     "setApprovalForAll(address,bool)": FunctionFragment;
@@ -503,7 +501,6 @@ export interface AbiInterface extends utils.Interface {
     "setLinklistUri(uint256,string)": FunctionFragment;
     "setMintModule4Note((uint256,uint256,address,bytes))": FunctionFragment;
     "setNoteUri(uint256,uint256,string)": FunctionFragment;
-    "setOperator(uint256,address)": FunctionFragment;
     "setPrimaryCharacterId(uint256)": FunctionFragment;
     "setSocialToken(uint256,address)": FunctionFragment;
     "supportsInterface(bytes4)": FunctionFragment;
@@ -523,8 +520,6 @@ export interface AbiInterface extends utils.Interface {
 
   getFunction(
     nameOrSignatureOrTopic:
-      | "_setCharacterUri"
-      | "addOperator"
       | "approve"
       | "balanceOf"
       | "burn"
@@ -545,15 +540,15 @@ export interface AbiInterface extends utils.Interface {
       | "getLinklistUri"
       | "getNote"
       | "getOperatorPermissions"
-      | "getOperatorPermissions4Note"
       | "getOperators"
+      | "getOperators4Note"
       | "getPrimaryCharacterId"
       | "getRevision"
       | "grantOperatorPermissions"
-      | "grantOperatorPermissions4Note"
+      | "grantOperators4Note"
+      | "hasNotePermission"
       | "initialize"
       | "isApprovedForAll"
-      | "isOperator"
       | "isPrimaryCharacter"
       | "linkAddress"
       | "linkAnyUri"
@@ -573,8 +568,8 @@ export interface AbiInterface extends utils.Interface {
       | "postNote4ERC721"
       | "postNote4Linklist"
       | "postNote4Note"
-      | "removeOperator"
       | "resolver"
+      | "revokeOperators4Note"
       | "safeTransferFrom(address,address,uint256)"
       | "safeTransferFrom(address,address,uint256,bytes)"
       | "setApprovalForAll"
@@ -585,7 +580,6 @@ export interface AbiInterface extends utils.Interface {
       | "setLinklistUri"
       | "setMintModule4Note"
       | "setNoteUri"
-      | "setOperator"
       | "setPrimaryCharacterId"
       | "setSocialToken"
       | "supportsInterface"
@@ -603,14 +597,6 @@ export interface AbiInterface extends utils.Interface {
       | "unlinkNote"
   ): FunctionFragment;
 
-  encodeFunctionData(
-    functionFragment: "_setCharacterUri",
-    values: [PromiseOrValue<BigNumberish>, PromiseOrValue<string>]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "addOperator",
-    values: [PromiseOrValue<BigNumberish>, PromiseOrValue<string>]
-  ): string;
   encodeFunctionData(
     functionFragment: "approve",
     values: [PromiseOrValue<string>, PromiseOrValue<BigNumberish>]
@@ -692,16 +678,12 @@ export interface AbiInterface extends utils.Interface {
     values: [PromiseOrValue<BigNumberish>, PromiseOrValue<string>]
   ): string;
   encodeFunctionData(
-    functionFragment: "getOperatorPermissions4Note",
-    values: [
-      PromiseOrValue<BigNumberish>,
-      PromiseOrValue<BigNumberish>,
-      PromiseOrValue<string>
-    ]
-  ): string;
-  encodeFunctionData(
     functionFragment: "getOperators",
     values: [PromiseOrValue<BigNumberish>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getOperators4Note",
+    values: [PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
     functionFragment: "getPrimaryCharacterId",
@@ -720,12 +702,20 @@ export interface AbiInterface extends utils.Interface {
     ]
   ): string;
   encodeFunctionData(
-    functionFragment: "grantOperatorPermissions4Note",
+    functionFragment: "grantOperators4Note",
     values: [
       PromiseOrValue<BigNumberish>,
       PromiseOrValue<BigNumberish>,
-      PromiseOrValue<string>,
-      PromiseOrValue<BigNumberish>
+      PromiseOrValue<string>[],
+      PromiseOrValue<string>[]
+    ]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "hasNotePermission",
+    values: [
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<string>
     ]
   ): string;
   encodeFunctionData(
@@ -742,10 +732,6 @@ export interface AbiInterface extends utils.Interface {
   encodeFunctionData(
     functionFragment: "isApprovedForAll",
     values: [PromiseOrValue<string>, PromiseOrValue<string>]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "isOperator",
-    values: [PromiseOrValue<BigNumberish>, PromiseOrValue<string>]
   ): string;
   encodeFunctionData(
     functionFragment: "isPrimaryCharacter",
@@ -781,7 +767,7 @@ export interface AbiInterface extends utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "migrateOperator",
-    values: [PromiseOrValue<BigNumberish>[]]
+    values: [PromiseOrValue<string>, PromiseOrValue<BigNumberish>[]]
   ): string;
   encodeFunctionData(
     functionFragment: "mintNote",
@@ -820,11 +806,16 @@ export interface AbiInterface extends utils.Interface {
     functionFragment: "postNote4Note",
     values: [DataTypes.PostNoteDataStruct, DataTypes.NoteStructStruct]
   ): string;
-  encodeFunctionData(
-    functionFragment: "removeOperator",
-    values: [PromiseOrValue<BigNumberish>, PromiseOrValue<string>]
-  ): string;
   encodeFunctionData(functionFragment: "resolver", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "revokeOperators4Note",
+    values: [
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<string>[],
+      PromiseOrValue<string>[]
+    ]
+  ): string;
   encodeFunctionData(
     functionFragment: "safeTransferFrom(address,address,uint256)",
     values: [
@@ -877,10 +868,6 @@ export interface AbiInterface extends utils.Interface {
       PromiseOrValue<BigNumberish>,
       PromiseOrValue<string>
     ]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "setOperator",
-    values: [PromiseOrValue<BigNumberish>, PromiseOrValue<string>]
   ): string;
   encodeFunctionData(
     functionFragment: "setPrimaryCharacterId",
@@ -944,14 +931,6 @@ export interface AbiInterface extends utils.Interface {
     values: [DataTypes.UnlinkNoteDataStruct]
   ): string;
 
-  decodeFunctionResult(
-    functionFragment: "_setCharacterUri",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "addOperator",
-    data: BytesLike
-  ): Result;
   decodeFunctionResult(functionFragment: "approve", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "balanceOf", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "burn", data: BytesLike): Result;
@@ -1015,11 +994,11 @@ export interface AbiInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "getOperatorPermissions4Note",
+    functionFragment: "getOperators",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "getOperators",
+    functionFragment: "getOperators4Note",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -1035,7 +1014,11 @@ export interface AbiInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "grantOperatorPermissions4Note",
+    functionFragment: "grantOperators4Note",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "hasNotePermission",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "initialize", data: BytesLike): Result;
@@ -1043,7 +1026,6 @@ export interface AbiInterface extends utils.Interface {
     functionFragment: "isApprovedForAll",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "isOperator", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "isPrimaryCharacter",
     data: BytesLike
@@ -1096,11 +1078,11 @@ export interface AbiInterface extends utils.Interface {
     functionFragment: "postNote4Note",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "resolver", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "removeOperator",
+    functionFragment: "revokeOperators4Note",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "resolver", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "safeTransferFrom(address,address,uint256)",
     data: BytesLike
@@ -1135,10 +1117,6 @@ export interface AbiInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "setNoteUri", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "setOperator",
-    data: BytesLike
-  ): Result;
   decodeFunctionResult(
     functionFragment: "setPrimaryCharacterId",
     data: BytesLike
@@ -1196,14 +1174,13 @@ export interface AbiInterface extends utils.Interface {
     "ApprovalForAll(address,address,bool)": EventFragment;
     "Initialized(uint8)": EventFragment;
     "Transfer(address,address,uint256)": EventFragment;
-    "AddOperator(uint256,address,uint256)": EventFragment;
     "AttachLinklist(uint256,uint256,bytes32)": EventFragment;
     "BaseInitialized(string,string,uint256)": EventFragment;
     "CharacterCreated(uint256,address,address,string,uint256)": EventFragment;
     "DeleteNote(uint256,uint256)": EventFragment;
     "DetachLinklist(uint256,uint256,bytes32)": EventFragment;
     "GrantOperatorPermissions(uint256,address,uint256)": EventFragment;
-    "GrantOperatorPermissions4Note(uint256,uint256,address,uint256)": EventFragment;
+    "GrantOperators4Note(uint256,uint256,address[],address[])": EventFragment;
     "LinkAddress(uint256,address,bytes32,uint256)": EventFragment;
     "LinkAnyUri(uint256,string,bytes32,uint256)": EventFragment;
     "LinkCharacter(address,uint256,uint256,bytes32,uint256)": EventFragment;
@@ -1216,7 +1193,7 @@ export interface AbiInterface extends utils.Interface {
     "MintNFTInitialized(uint256,uint256,uint256)": EventFragment;
     "MintNote(address,uint256,uint256,address,uint256)": EventFragment;
     "PostNote(uint256,uint256,bytes32,bytes32,bytes)": EventFragment;
-    "RemoveOperator(uint256,address,uint256)": EventFragment;
+    "RevokeOperators4Note(uint256,uint256,address[],address[])": EventFragment;
     "SetCharacterUri(uint256,string)": EventFragment;
     "SetHandle(address,uint256,string)": EventFragment;
     "SetLinkModule4Address(address,address,bytes,uint256)": EventFragment;
@@ -1226,7 +1203,6 @@ export interface AbiInterface extends utils.Interface {
     "SetLinkModule4Note(uint256,uint256,address,bytes,uint256)": EventFragment;
     "SetMintModule4Note(uint256,uint256,address,bytes,uint256)": EventFragment;
     "SetNoteUri(uint256,uint256,string)": EventFragment;
-    "SetOperator(uint256,address,uint256)": EventFragment;
     "SetPrimaryCharacterId(address,uint256,uint256)": EventFragment;
     "SetSocialToken(address,uint256,address)": EventFragment;
     "UnlinkAddress(uint256,address,bytes32)": EventFragment;
@@ -1243,16 +1219,13 @@ export interface AbiInterface extends utils.Interface {
   getEvent(nameOrSignatureOrTopic: "ApprovalForAll"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Initialized"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Transfer"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "AddOperator"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "AttachLinklist"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "BaseInitialized"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "CharacterCreated"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "DeleteNote"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "DetachLinklist"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "GrantOperatorPermissions"): EventFragment;
-  getEvent(
-    nameOrSignatureOrTopic: "GrantOperatorPermissions4Note"
-  ): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "GrantOperators4Note"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "LinkAddress"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "LinkAnyUri"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "LinkCharacter"): EventFragment;
@@ -1265,7 +1238,7 @@ export interface AbiInterface extends utils.Interface {
   getEvent(nameOrSignatureOrTopic: "MintNFTInitialized"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "MintNote"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "PostNote"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "RemoveOperator"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "RevokeOperators4Note"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "SetCharacterUri"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "SetHandle"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "SetLinkModule4Address"): EventFragment;
@@ -1275,7 +1248,6 @@ export interface AbiInterface extends utils.Interface {
   getEvent(nameOrSignatureOrTopic: "SetLinkModule4Note"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "SetMintModule4Note"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "SetNoteUri"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "SetOperator"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "SetPrimaryCharacterId"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "SetSocialToken"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "UnlinkAddress"): EventFragment;
@@ -1330,18 +1302,6 @@ export type TransferEvent = TypedEvent<
 >;
 
 export type TransferEventFilter = TypedEventFilter<TransferEvent>;
-
-export interface AddOperatorEventObject {
-  characterId: BigNumber;
-  operator: string;
-  timestamp: BigNumber;
-}
-export type AddOperatorEvent = TypedEvent<
-  [BigNumber, string, BigNumber],
-  AddOperatorEventObject
->;
-
-export type AddOperatorEventFilter = TypedEventFilter<AddOperatorEvent>;
 
 export interface AttachLinklistEventObject {
   linklistId: BigNumber;
@@ -1418,19 +1378,19 @@ export type GrantOperatorPermissionsEvent = TypedEvent<
 export type GrantOperatorPermissionsEventFilter =
   TypedEventFilter<GrantOperatorPermissionsEvent>;
 
-export interface GrantOperatorPermissions4NoteEventObject {
+export interface GrantOperators4NoteEventObject {
   characterId: BigNumber;
   noteId: BigNumber;
-  operator: string;
-  permissionBitMap: BigNumber;
+  blacklist: string[];
+  whitelist: string[];
 }
-export type GrantOperatorPermissions4NoteEvent = TypedEvent<
-  [BigNumber, BigNumber, string, BigNumber],
-  GrantOperatorPermissions4NoteEventObject
+export type GrantOperators4NoteEvent = TypedEvent<
+  [BigNumber, BigNumber, string[], string[]],
+  GrantOperators4NoteEventObject
 >;
 
-export type GrantOperatorPermissions4NoteEventFilter =
-  TypedEventFilter<GrantOperatorPermissions4NoteEvent>;
+export type GrantOperators4NoteEventFilter =
+  TypedEventFilter<GrantOperators4NoteEvent>;
 
 export interface LinkAddressEventObject {
   fromCharacterId: BigNumber;
@@ -1591,17 +1551,19 @@ export type PostNoteEvent = TypedEvent<
 
 export type PostNoteEventFilter = TypedEventFilter<PostNoteEvent>;
 
-export interface RemoveOperatorEventObject {
+export interface RevokeOperators4NoteEventObject {
   characterId: BigNumber;
-  operator: string;
-  timestamp: BigNumber;
+  noteId: BigNumber;
+  blacklist: string[];
+  whitelist: string[];
 }
-export type RemoveOperatorEvent = TypedEvent<
-  [BigNumber, string, BigNumber],
-  RemoveOperatorEventObject
+export type RevokeOperators4NoteEvent = TypedEvent<
+  [BigNumber, BigNumber, string[], string[]],
+  RevokeOperators4NoteEventObject
 >;
 
-export type RemoveOperatorEventFilter = TypedEventFilter<RemoveOperatorEvent>;
+export type RevokeOperators4NoteEventFilter =
+  TypedEventFilter<RevokeOperators4NoteEvent>;
 
 export interface SetCharacterUriEventObject {
   characterId: BigNumber;
@@ -1724,18 +1686,6 @@ export type SetNoteUriEvent = TypedEvent<
 >;
 
 export type SetNoteUriEventFilter = TypedEventFilter<SetNoteUriEvent>;
-
-export interface SetOperatorEventObject {
-  characterId: BigNumber;
-  operator: string;
-  timestamp: BigNumber;
-}
-export type SetOperatorEvent = TypedEvent<
-  [BigNumber, string, BigNumber],
-  SetOperatorEventObject
->;
-
-export type SetOperatorEventFilter = TypedEventFilter<SetOperatorEvent>;
 
 export interface SetPrimaryCharacterIdEventObject {
   account: string;
@@ -1893,18 +1843,6 @@ export interface Abi extends BaseContract {
   removeListener: OnEvent<this>;
 
   functions: {
-    _setCharacterUri(
-      profileId: PromiseOrValue<BigNumberish>,
-      newUri: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
-
-    addOperator(
-      characterId: PromiseOrValue<BigNumberish>,
-      operator: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
-
     approve(
       to: PromiseOrValue<string>,
       tokenId: PromiseOrValue<BigNumberish>,
@@ -2008,17 +1946,18 @@ export interface Abi extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[BigNumber]>;
 
-    getOperatorPermissions4Note(
-      characterId: PromiseOrValue<BigNumberish>,
-      noteId: PromiseOrValue<BigNumberish>,
-      operator: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<[BigNumber]>;
-
     getOperators(
       characterId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<[string[]]>;
+
+    getOperators4Note(
+      characterId: PromiseOrValue<BigNumberish>,
+      noteId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<
+      [string[], string[]] & { blacklist: string[]; whitelist: string[] }
+    >;
 
     getPrimaryCharacterId(
       account: PromiseOrValue<string>,
@@ -2034,13 +1973,20 @@ export interface Abi extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
-    grantOperatorPermissions4Note(
+    grantOperators4Note(
+      characterId: PromiseOrValue<BigNumberish>,
+      noteId: PromiseOrValue<BigNumberish>,
+      blacklist: PromiseOrValue<string>[],
+      whitelist: PromiseOrValue<string>[],
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
+    hasNotePermission(
       characterId: PromiseOrValue<BigNumberish>,
       noteId: PromiseOrValue<BigNumberish>,
       operator: PromiseOrValue<string>,
-      permissionBitMap: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
+      overrides?: CallOverrides
+    ): Promise<[boolean]>;
 
     initialize(
       _name: PromiseOrValue<string>,
@@ -2054,12 +2000,6 @@ export interface Abi extends BaseContract {
 
     isApprovedForAll(
       owner: PromiseOrValue<string>,
-      operator: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<[boolean]>;
-
-    isOperator(
-      characterId: PromiseOrValue<BigNumberish>,
       operator: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<[boolean]>;
@@ -2106,6 +2046,7 @@ export interface Abi extends BaseContract {
     ): Promise<ContractTransaction>;
 
     migrateOperator(
+      newbieVilla: PromiseOrValue<string>,
       characterIds: PromiseOrValue<BigNumberish>[],
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
@@ -2163,13 +2104,15 @@ export interface Abi extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
-    removeOperator(
+    resolver(overrides?: CallOverrides): Promise<[string]>;
+
+    revokeOperators4Note(
       characterId: PromiseOrValue<BigNumberish>,
-      operator: PromiseOrValue<string>,
+      noteId: PromiseOrValue<BigNumberish>,
+      blacklist: PromiseOrValue<string>[],
+      whitelist: PromiseOrValue<string>[],
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
-
-    resolver(overrides?: CallOverrides): Promise<[string]>;
 
     "safeTransferFrom(address,address,uint256)"(
       from: PromiseOrValue<string>,
@@ -2210,7 +2153,7 @@ export interface Abi extends BaseContract {
     ): Promise<ContractTransaction>;
 
     setLinkModule4Linklist(
-      arg0: DataTypes.SetLinkModule4LinklistDataStruct,
+      vars: DataTypes.SetLinkModule4LinklistDataStruct,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
@@ -2229,12 +2172,6 @@ export interface Abi extends BaseContract {
       characterId: PromiseOrValue<BigNumberish>,
       noteId: PromiseOrValue<BigNumberish>,
       newUri: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
-
-    setOperator(
-      characterId: PromiseOrValue<BigNumberish>,
-      operator: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
@@ -2311,18 +2248,6 @@ export interface Abi extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
   };
-
-  _setCharacterUri(
-    profileId: PromiseOrValue<BigNumberish>,
-    newUri: PromiseOrValue<string>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
-
-  addOperator(
-    characterId: PromiseOrValue<BigNumberish>,
-    operator: PromiseOrValue<string>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
 
   approve(
     to: PromiseOrValue<string>,
@@ -2427,17 +2352,18 @@ export interface Abi extends BaseContract {
     overrides?: CallOverrides
   ): Promise<BigNumber>;
 
-  getOperatorPermissions4Note(
-    characterId: PromiseOrValue<BigNumberish>,
-    noteId: PromiseOrValue<BigNumberish>,
-    operator: PromiseOrValue<string>,
-    overrides?: CallOverrides
-  ): Promise<BigNumber>;
-
   getOperators(
     characterId: PromiseOrValue<BigNumberish>,
     overrides?: CallOverrides
   ): Promise<string[]>;
+
+  getOperators4Note(
+    characterId: PromiseOrValue<BigNumberish>,
+    noteId: PromiseOrValue<BigNumberish>,
+    overrides?: CallOverrides
+  ): Promise<
+    [string[], string[]] & { blacklist: string[]; whitelist: string[] }
+  >;
 
   getPrimaryCharacterId(
     account: PromiseOrValue<string>,
@@ -2453,13 +2379,20 @@ export interface Abi extends BaseContract {
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
-  grantOperatorPermissions4Note(
+  grantOperators4Note(
+    characterId: PromiseOrValue<BigNumberish>,
+    noteId: PromiseOrValue<BigNumberish>,
+    blacklist: PromiseOrValue<string>[],
+    whitelist: PromiseOrValue<string>[],
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  hasNotePermission(
     characterId: PromiseOrValue<BigNumberish>,
     noteId: PromiseOrValue<BigNumberish>,
     operator: PromiseOrValue<string>,
-    permissionBitMap: PromiseOrValue<BigNumberish>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
+    overrides?: CallOverrides
+  ): Promise<boolean>;
 
   initialize(
     _name: PromiseOrValue<string>,
@@ -2473,12 +2406,6 @@ export interface Abi extends BaseContract {
 
   isApprovedForAll(
     owner: PromiseOrValue<string>,
-    operator: PromiseOrValue<string>,
-    overrides?: CallOverrides
-  ): Promise<boolean>;
-
-  isOperator(
-    characterId: PromiseOrValue<BigNumberish>,
     operator: PromiseOrValue<string>,
     overrides?: CallOverrides
   ): Promise<boolean>;
@@ -2525,6 +2452,7 @@ export interface Abi extends BaseContract {
   ): Promise<ContractTransaction>;
 
   migrateOperator(
+    newbieVilla: PromiseOrValue<string>,
     characterIds: PromiseOrValue<BigNumberish>[],
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
@@ -2582,13 +2510,15 @@ export interface Abi extends BaseContract {
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
-  removeOperator(
+  resolver(overrides?: CallOverrides): Promise<string>;
+
+  revokeOperators4Note(
     characterId: PromiseOrValue<BigNumberish>,
-    operator: PromiseOrValue<string>,
+    noteId: PromiseOrValue<BigNumberish>,
+    blacklist: PromiseOrValue<string>[],
+    whitelist: PromiseOrValue<string>[],
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
-
-  resolver(overrides?: CallOverrides): Promise<string>;
 
   "safeTransferFrom(address,address,uint256)"(
     from: PromiseOrValue<string>,
@@ -2629,7 +2559,7 @@ export interface Abi extends BaseContract {
   ): Promise<ContractTransaction>;
 
   setLinkModule4Linklist(
-    arg0: DataTypes.SetLinkModule4LinklistDataStruct,
+    vars: DataTypes.SetLinkModule4LinklistDataStruct,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
@@ -2648,12 +2578,6 @@ export interface Abi extends BaseContract {
     characterId: PromiseOrValue<BigNumberish>,
     noteId: PromiseOrValue<BigNumberish>,
     newUri: PromiseOrValue<string>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
-
-  setOperator(
-    characterId: PromiseOrValue<BigNumberish>,
-    operator: PromiseOrValue<string>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
@@ -2731,18 +2655,6 @@ export interface Abi extends BaseContract {
   ): Promise<ContractTransaction>;
 
   callStatic: {
-    _setCharacterUri(
-      profileId: PromiseOrValue<BigNumberish>,
-      newUri: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    addOperator(
-      characterId: PromiseOrValue<BigNumberish>,
-      operator: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
     approve(
       to: PromiseOrValue<string>,
       tokenId: PromiseOrValue<BigNumberish>,
@@ -2846,17 +2758,18 @@ export interface Abi extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    getOperatorPermissions4Note(
-      characterId: PromiseOrValue<BigNumberish>,
-      noteId: PromiseOrValue<BigNumberish>,
-      operator: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
     getOperators(
       characterId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<string[]>;
+
+    getOperators4Note(
+      characterId: PromiseOrValue<BigNumberish>,
+      noteId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<
+      [string[], string[]] & { blacklist: string[]; whitelist: string[] }
+    >;
 
     getPrimaryCharacterId(
       account: PromiseOrValue<string>,
@@ -2872,13 +2785,20 @@ export interface Abi extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
-    grantOperatorPermissions4Note(
+    grantOperators4Note(
+      characterId: PromiseOrValue<BigNumberish>,
+      noteId: PromiseOrValue<BigNumberish>,
+      blacklist: PromiseOrValue<string>[],
+      whitelist: PromiseOrValue<string>[],
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    hasNotePermission(
       characterId: PromiseOrValue<BigNumberish>,
       noteId: PromiseOrValue<BigNumberish>,
       operator: PromiseOrValue<string>,
-      permissionBitMap: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
-    ): Promise<void>;
+    ): Promise<boolean>;
 
     initialize(
       _name: PromiseOrValue<string>,
@@ -2892,12 +2812,6 @@ export interface Abi extends BaseContract {
 
     isApprovedForAll(
       owner: PromiseOrValue<string>,
-      operator: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<boolean>;
-
-    isOperator(
-      characterId: PromiseOrValue<BigNumberish>,
       operator: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<boolean>;
@@ -2944,6 +2858,7 @@ export interface Abi extends BaseContract {
     ): Promise<void>;
 
     migrateOperator(
+      newbieVilla: PromiseOrValue<string>,
       characterIds: PromiseOrValue<BigNumberish>[],
       overrides?: CallOverrides
     ): Promise<void>;
@@ -3001,13 +2916,15 @@ export interface Abi extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    removeOperator(
+    resolver(overrides?: CallOverrides): Promise<string>;
+
+    revokeOperators4Note(
       characterId: PromiseOrValue<BigNumberish>,
-      operator: PromiseOrValue<string>,
+      noteId: PromiseOrValue<BigNumberish>,
+      blacklist: PromiseOrValue<string>[],
+      whitelist: PromiseOrValue<string>[],
       overrides?: CallOverrides
     ): Promise<void>;
-
-    resolver(overrides?: CallOverrides): Promise<string>;
 
     "safeTransferFrom(address,address,uint256)"(
       from: PromiseOrValue<string>,
@@ -3048,7 +2965,7 @@ export interface Abi extends BaseContract {
     ): Promise<void>;
 
     setLinkModule4Linklist(
-      arg0: DataTypes.SetLinkModule4LinklistDataStruct,
+      vars: DataTypes.SetLinkModule4LinklistDataStruct,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -3067,12 +2984,6 @@ export interface Abi extends BaseContract {
       characterId: PromiseOrValue<BigNumberish>,
       noteId: PromiseOrValue<BigNumberish>,
       newUri: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    setOperator(
-      characterId: PromiseOrValue<BigNumberish>,
-      operator: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -3187,17 +3098,6 @@ export interface Abi extends BaseContract {
       tokenId?: PromiseOrValue<BigNumberish> | null
     ): TransferEventFilter;
 
-    "AddOperator(uint256,address,uint256)"(
-      characterId?: PromiseOrValue<BigNumberish> | null,
-      operator?: PromiseOrValue<string> | null,
-      timestamp?: null
-    ): AddOperatorEventFilter;
-    AddOperator(
-      characterId?: PromiseOrValue<BigNumberish> | null,
-      operator?: PromiseOrValue<string> | null,
-      timestamp?: null
-    ): AddOperatorEventFilter;
-
     "AttachLinklist(uint256,uint256,bytes32)"(
       linklistId?: PromiseOrValue<BigNumberish> | null,
       characterId?: PromiseOrValue<BigNumberish> | null,
@@ -3266,18 +3166,18 @@ export interface Abi extends BaseContract {
       permissionBitMap?: null
     ): GrantOperatorPermissionsEventFilter;
 
-    "GrantOperatorPermissions4Note(uint256,uint256,address,uint256)"(
+    "GrantOperators4Note(uint256,uint256,address[],address[])"(
       characterId?: PromiseOrValue<BigNumberish> | null,
       noteId?: PromiseOrValue<BigNumberish> | null,
-      operator?: PromiseOrValue<string> | null,
-      permissionBitMap?: null
-    ): GrantOperatorPermissions4NoteEventFilter;
-    GrantOperatorPermissions4Note(
+      blacklist?: null,
+      whitelist?: null
+    ): GrantOperators4NoteEventFilter;
+    GrantOperators4Note(
       characterId?: PromiseOrValue<BigNumberish> | null,
       noteId?: PromiseOrValue<BigNumberish> | null,
-      operator?: PromiseOrValue<string> | null,
-      permissionBitMap?: null
-    ): GrantOperatorPermissions4NoteEventFilter;
+      blacklist?: null,
+      whitelist?: null
+    ): GrantOperators4NoteEventFilter;
 
     "LinkAddress(uint256,address,bytes32,uint256)"(
       fromCharacterId?: PromiseOrValue<BigNumberish> | null,
@@ -3433,16 +3333,18 @@ export interface Abi extends BaseContract {
       data?: null
     ): PostNoteEventFilter;
 
-    "RemoveOperator(uint256,address,uint256)"(
+    "RevokeOperators4Note(uint256,uint256,address[],address[])"(
       characterId?: PromiseOrValue<BigNumberish> | null,
-      operator?: PromiseOrValue<string> | null,
-      timestamp?: null
-    ): RemoveOperatorEventFilter;
-    RemoveOperator(
+      noteId?: PromiseOrValue<BigNumberish> | null,
+      blacklist?: null,
+      whitelist?: null
+    ): RevokeOperators4NoteEventFilter;
+    RevokeOperators4Note(
       characterId?: PromiseOrValue<BigNumberish> | null,
-      operator?: PromiseOrValue<string> | null,
-      timestamp?: null
-    ): RemoveOperatorEventFilter;
+      noteId?: PromiseOrValue<BigNumberish> | null,
+      blacklist?: null,
+      whitelist?: null
+    ): RevokeOperators4NoteEventFilter;
 
     "SetCharacterUri(uint256,string)"(
       characterId?: PromiseOrValue<BigNumberish> | null,
@@ -3558,17 +3460,6 @@ export interface Abi extends BaseContract {
       noteId?: null,
       newUri?: null
     ): SetNoteUriEventFilter;
-
-    "SetOperator(uint256,address,uint256)"(
-      characterId?: PromiseOrValue<BigNumberish> | null,
-      operator?: PromiseOrValue<string> | null,
-      timestamp?: null
-    ): SetOperatorEventFilter;
-    SetOperator(
-      characterId?: PromiseOrValue<BigNumberish> | null,
-      operator?: PromiseOrValue<string> | null,
-      timestamp?: null
-    ): SetOperatorEventFilter;
 
     "SetPrimaryCharacterId(address,uint256,uint256)"(
       account?: PromiseOrValue<string> | null,
@@ -3692,18 +3583,6 @@ export interface Abi extends BaseContract {
   };
 
   estimateGas: {
-    _setCharacterUri(
-      profileId: PromiseOrValue<BigNumberish>,
-      newUri: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
-
-    addOperator(
-      characterId: PromiseOrValue<BigNumberish>,
-      operator: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
-
     approve(
       to: PromiseOrValue<string>,
       tokenId: PromiseOrValue<BigNumberish>,
@@ -3807,15 +3686,14 @@ export interface Abi extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    getOperatorPermissions4Note(
+    getOperators(
       characterId: PromiseOrValue<BigNumberish>,
-      noteId: PromiseOrValue<BigNumberish>,
-      operator: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    getOperators(
+    getOperators4Note(
       characterId: PromiseOrValue<BigNumberish>,
+      noteId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -3833,12 +3711,19 @@ export interface Abi extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
-    grantOperatorPermissions4Note(
+    grantOperators4Note(
+      characterId: PromiseOrValue<BigNumberish>,
+      noteId: PromiseOrValue<BigNumberish>,
+      blacklist: PromiseOrValue<string>[],
+      whitelist: PromiseOrValue<string>[],
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    hasNotePermission(
       characterId: PromiseOrValue<BigNumberish>,
       noteId: PromiseOrValue<BigNumberish>,
       operator: PromiseOrValue<string>,
-      permissionBitMap: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     initialize(
@@ -3853,12 +3738,6 @@ export interface Abi extends BaseContract {
 
     isApprovedForAll(
       owner: PromiseOrValue<string>,
-      operator: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    isOperator(
-      characterId: PromiseOrValue<BigNumberish>,
       operator: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
@@ -3905,6 +3784,7 @@ export interface Abi extends BaseContract {
     ): Promise<BigNumber>;
 
     migrateOperator(
+      newbieVilla: PromiseOrValue<string>,
       characterIds: PromiseOrValue<BigNumberish>[],
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
@@ -3962,13 +3842,15 @@ export interface Abi extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
-    removeOperator(
+    resolver(overrides?: CallOverrides): Promise<BigNumber>;
+
+    revokeOperators4Note(
       characterId: PromiseOrValue<BigNumberish>,
-      operator: PromiseOrValue<string>,
+      noteId: PromiseOrValue<BigNumberish>,
+      blacklist: PromiseOrValue<string>[],
+      whitelist: PromiseOrValue<string>[],
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
-
-    resolver(overrides?: CallOverrides): Promise<BigNumber>;
 
     "safeTransferFrom(address,address,uint256)"(
       from: PromiseOrValue<string>,
@@ -4009,7 +3891,7 @@ export interface Abi extends BaseContract {
     ): Promise<BigNumber>;
 
     setLinkModule4Linklist(
-      arg0: DataTypes.SetLinkModule4LinklistDataStruct,
+      vars: DataTypes.SetLinkModule4LinklistDataStruct,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
@@ -4028,12 +3910,6 @@ export interface Abi extends BaseContract {
       characterId: PromiseOrValue<BigNumberish>,
       noteId: PromiseOrValue<BigNumberish>,
       newUri: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
-
-    setOperator(
-      characterId: PromiseOrValue<BigNumberish>,
-      operator: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
@@ -4112,18 +3988,6 @@ export interface Abi extends BaseContract {
   };
 
   populateTransaction: {
-    _setCharacterUri(
-      profileId: PromiseOrValue<BigNumberish>,
-      newUri: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
-
-    addOperator(
-      characterId: PromiseOrValue<BigNumberish>,
-      operator: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
-
     approve(
       to: PromiseOrValue<string>,
       tokenId: PromiseOrValue<BigNumberish>,
@@ -4229,15 +4093,14 @@ export interface Abi extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    getOperatorPermissions4Note(
+    getOperators(
       characterId: PromiseOrValue<BigNumberish>,
-      noteId: PromiseOrValue<BigNumberish>,
-      operator: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    getOperators(
+    getOperators4Note(
       characterId: PromiseOrValue<BigNumberish>,
+      noteId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
@@ -4255,12 +4118,19 @@ export interface Abi extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
-    grantOperatorPermissions4Note(
+    grantOperators4Note(
+      characterId: PromiseOrValue<BigNumberish>,
+      noteId: PromiseOrValue<BigNumberish>,
+      blacklist: PromiseOrValue<string>[],
+      whitelist: PromiseOrValue<string>[],
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    hasNotePermission(
       characterId: PromiseOrValue<BigNumberish>,
       noteId: PromiseOrValue<BigNumberish>,
       operator: PromiseOrValue<string>,
-      permissionBitMap: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     initialize(
@@ -4275,12 +4145,6 @@ export interface Abi extends BaseContract {
 
     isApprovedForAll(
       owner: PromiseOrValue<string>,
-      operator: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    isOperator(
-      characterId: PromiseOrValue<BigNumberish>,
       operator: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
@@ -4327,6 +4191,7 @@ export interface Abi extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     migrateOperator(
+      newbieVilla: PromiseOrValue<string>,
       characterIds: PromiseOrValue<BigNumberish>[],
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
@@ -4384,13 +4249,15 @@ export interface Abi extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
-    removeOperator(
+    resolver(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    revokeOperators4Note(
       characterId: PromiseOrValue<BigNumberish>,
-      operator: PromiseOrValue<string>,
+      noteId: PromiseOrValue<BigNumberish>,
+      blacklist: PromiseOrValue<string>[],
+      whitelist: PromiseOrValue<string>[],
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
-
-    resolver(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     "safeTransferFrom(address,address,uint256)"(
       from: PromiseOrValue<string>,
@@ -4431,7 +4298,7 @@ export interface Abi extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     setLinkModule4Linklist(
-      arg0: DataTypes.SetLinkModule4LinklistDataStruct,
+      vars: DataTypes.SetLinkModule4LinklistDataStruct,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -4450,12 +4317,6 @@ export interface Abi extends BaseContract {
       characterId: PromiseOrValue<BigNumberish>,
       noteId: PromiseOrValue<BigNumberish>,
       newUri: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
-
-    setOperator(
-      characterId: PromiseOrValue<BigNumberish>,
-      operator: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 

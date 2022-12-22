@@ -90,42 +90,6 @@
   {
     "inputs": [
       {
-        "internalType": "uint256",
-        "name": "profileId",
-        "type": "uint256"
-      },
-      {
-        "internalType": "string",
-        "name": "newUri",
-        "type": "string"
-      }
-    ],
-    "name": "_setCharacterUri",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "characterId",
-        "type": "uint256"
-      },
-      {
-        "internalType": "address",
-        "name": "operator",
-        "type": "address"
-      }
-    ],
-    "name": "addOperator",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
         "internalType": "address",
         "name": "to",
         "type": "address"
@@ -653,24 +617,14 @@
         "internalType": "uint256",
         "name": "characterId",
         "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "noteId",
-        "type": "uint256"
-      },
-      {
-        "internalType": "address",
-        "name": "operator",
-        "type": "address"
       }
     ],
-    "name": "getOperatorPermissions4Note",
+    "name": "getOperators",
     "outputs": [
       {
-        "internalType": "uint256",
+        "internalType": "address[]",
         "name": "",
-        "type": "uint256"
+        "type": "address[]"
       }
     ],
     "stateMutability": "view",
@@ -682,13 +636,23 @@
         "internalType": "uint256",
         "name": "characterId",
         "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "noteId",
+        "type": "uint256"
       }
     ],
-    "name": "getOperators",
+    "name": "getOperators4Note",
     "outputs": [
       {
         "internalType": "address[]",
-        "name": "",
+        "name": "blacklist",
+        "type": "address[]"
+      },
+      {
+        "internalType": "address[]",
+        "name": "whitelist",
         "type": "address[]"
       }
     ],
@@ -763,19 +727,48 @@
         "type": "uint256"
       },
       {
-        "internalType": "address",
-        "name": "operator",
-        "type": "address"
+        "internalType": "address[]",
+        "name": "blacklist",
+        "type": "address[]"
+      },
+      {
+        "internalType": "address[]",
+        "name": "whitelist",
+        "type": "address[]"
+      }
+    ],
+    "name": "grantOperators4Note",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "characterId",
+        "type": "uint256"
       },
       {
         "internalType": "uint256",
-        "name": "permissionBitMap",
+        "name": "noteId",
         "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "operator",
+        "type": "address"
       }
     ],
-    "name": "grantOperatorPermissions4Note",
-    "outputs": [],
-    "stateMutability": "nonpayable",
+    "name": "hasNotePermission",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -830,30 +823,6 @@
       }
     ],
     "name": "isApprovedForAll",
-    "outputs": [
-      {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "characterId",
-        "type": "uint256"
-      },
-      {
-        "internalType": "address",
-        "name": "operator",
-        "type": "address"
-      }
-    ],
-    "name": "isOperator",
     "outputs": [
       {
         "internalType": "bool",
@@ -1123,6 +1092,11 @@
   },
   {
     "inputs": [
+      {
+        "internalType": "address",
+        "name": "newbieVilla",
+        "type": "address"
+      },
       {
         "internalType": "uint256[]",
         "name": "characterIds",
@@ -1654,24 +1628,6 @@
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "characterId",
-        "type": "uint256"
-      },
-      {
-        "internalType": "address",
-        "name": "operator",
-        "type": "address"
-      }
-    ],
-    "name": "removeOperator",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
     "inputs": [],
     "name": "resolver",
     "outputs": [
@@ -1682,6 +1638,34 @@
       }
     ],
     "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "characterId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "noteId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address[]",
+        "name": "blacklist",
+        "type": "address[]"
+      },
+      {
+        "internalType": "address[]",
+        "name": "whitelist",
+        "type": "address[]"
+      }
+    ],
+    "name": "revokeOperators4Note",
+    "outputs": [],
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
@@ -1840,7 +1824,7 @@
           }
         ],
         "internalType": "struct DataTypes.setLinkModule4LinklistData",
-        "name": "",
+        "name": "vars",
         "type": "tuple"
       }
     ],
@@ -1921,24 +1905,6 @@
       }
     ],
     "name": "setNoteUri",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "characterId",
-        "type": "uint256"
-      },
-      {
-        "internalType": "address",
-        "name": "operator",
-        "type": "address"
-      }
-    ],
-    "name": "setOperator",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -2300,31 +2266,6 @@
       {
         "indexed": true,
         "internalType": "uint256",
-        "name": "characterId",
-        "type": "uint256"
-      },
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "operator",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "timestamp",
-        "type": "uint256"
-      }
-    ],
-    "name": "AddOperator",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "internalType": "uint256",
         "name": "linklistId",
         "type": "uint256"
       },
@@ -2491,19 +2432,19 @@
         "type": "uint256"
       },
       {
-        "indexed": true,
-        "internalType": "address",
-        "name": "operator",
-        "type": "address"
+        "indexed": false,
+        "internalType": "address[]",
+        "name": "blacklist",
+        "type": "address[]"
       },
       {
         "indexed": false,
-        "internalType": "uint256",
-        "name": "permissionBitMap",
-        "type": "uint256"
+        "internalType": "address[]",
+        "name": "whitelist",
+        "type": "address[]"
       }
     ],
-    "name": "GrantOperatorPermissions4Note",
+    "name": "GrantOperators4Note",
     "type": "event"
   },
   {
@@ -2889,18 +2830,24 @@
       },
       {
         "indexed": true,
-        "internalType": "address",
-        "name": "operator",
-        "type": "address"
+        "internalType": "uint256",
+        "name": "noteId",
+        "type": "uint256"
       },
       {
         "indexed": false,
-        "internalType": "uint256",
-        "name": "timestamp",
-        "type": "uint256"
+        "internalType": "address[]",
+        "name": "blacklist",
+        "type": "address[]"
+      },
+      {
+        "indexed": false,
+        "internalType": "address[]",
+        "name": "whitelist",
+        "type": "address[]"
       }
     ],
-    "name": "RemoveOperator",
+    "name": "RevokeOperators4Note",
     "type": "event"
   },
   {
@@ -3174,31 +3121,6 @@
       }
     ],
     "name": "SetNoteUri",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "internalType": "uint256",
-        "name": "characterId",
-        "type": "uint256"
-      },
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "operator",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "timestamp",
-        "type": "uint256"
-      }
-    ],
-    "name": "SetOperator",
     "type": "event"
   },
   {

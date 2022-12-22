@@ -24,8 +24,8 @@ export class OperatorContract extends BaseContract {
     184: 'UNLINK_ERC721',
     185: 'LINK_ADDRESS',
     186: 'UNLINK_ADDRESS',
-    187: 'LINK_ANYURI',
-    188: 'UNLINK_ANYURI',
+    187: 'LINK_ANY_URI',
+    188: 'UNLINK_ANY_URI',
     189: 'LINK_LINKLIST',
     190: 'UNLINK_LINKLIST',
     191: 'SET_LINK_MODULE_FOR_CHARACTER',
@@ -40,7 +40,7 @@ export class OperatorContract extends BaseContract {
     200: 'POST_NOTE_FOR_LINKLIST',
     201: 'POST_NOTE_FOR_NOTE',
     202: 'POST_NOTE_FOR_ERC721',
-    203: 'POST_NOTE_FOR_ANYURI',
+    203: 'POST_NOTE_FOR_ANY_URI',
     236: 'POST_NOTE',
   } as const
 

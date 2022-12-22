@@ -98,42 +98,6 @@ const _abi = [
   {
     inputs: [
       {
-        internalType: "uint256",
-        name: "profileId",
-        type: "uint256",
-      },
-      {
-        internalType: "string",
-        name: "newUri",
-        type: "string",
-      },
-    ],
-    name: "_setCharacterUri",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "characterId",
-        type: "uint256",
-      },
-      {
-        internalType: "address",
-        name: "operator",
-        type: "address",
-      },
-    ],
-    name: "addOperator",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
         internalType: "address",
         name: "to",
         type: "address",
@@ -662,23 +626,13 @@ const _abi = [
         name: "characterId",
         type: "uint256",
       },
-      {
-        internalType: "uint256",
-        name: "noteId",
-        type: "uint256",
-      },
-      {
-        internalType: "address",
-        name: "operator",
-        type: "address",
-      },
     ],
-    name: "getOperatorPermissions4Note",
+    name: "getOperators",
     outputs: [
       {
-        internalType: "uint256",
+        internalType: "address[]",
         name: "",
-        type: "uint256",
+        type: "address[]",
       },
     ],
     stateMutability: "view",
@@ -691,12 +645,22 @@ const _abi = [
         name: "characterId",
         type: "uint256",
       },
+      {
+        internalType: "uint256",
+        name: "noteId",
+        type: "uint256",
+      },
     ],
-    name: "getOperators",
+    name: "getOperators4Note",
     outputs: [
       {
         internalType: "address[]",
-        name: "",
+        name: "blacklist",
+        type: "address[]",
+      },
+      {
+        internalType: "address[]",
+        name: "whitelist",
         type: "address[]",
       },
     ],
@@ -771,19 +735,48 @@ const _abi = [
         type: "uint256",
       },
       {
+        internalType: "address[]",
+        name: "blacklist",
+        type: "address[]",
+      },
+      {
+        internalType: "address[]",
+        name: "whitelist",
+        type: "address[]",
+      },
+    ],
+    name: "grantOperators4Note",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "characterId",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "noteId",
+        type: "uint256",
+      },
+      {
         internalType: "address",
         name: "operator",
         type: "address",
       },
+    ],
+    name: "hasNotePermission",
+    outputs: [
       {
-        internalType: "uint256",
-        name: "permissionBitMap",
-        type: "uint256",
+        internalType: "bool",
+        name: "",
+        type: "bool",
       },
     ],
-    name: "grantOperatorPermissions4Note",
-    outputs: [],
-    stateMutability: "nonpayable",
+    stateMutability: "view",
     type: "function",
   },
   {
@@ -838,30 +831,6 @@ const _abi = [
       },
     ],
     name: "isApprovedForAll",
-    outputs: [
-      {
-        internalType: "bool",
-        name: "",
-        type: "bool",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "characterId",
-        type: "uint256",
-      },
-      {
-        internalType: "address",
-        name: "operator",
-        type: "address",
-      },
-    ],
-    name: "isOperator",
     outputs: [
       {
         internalType: "bool",
@@ -1131,6 +1100,11 @@ const _abi = [
   },
   {
     inputs: [
+      {
+        internalType: "address",
+        name: "newbieVilla",
+        type: "address",
+      },
       {
         internalType: "uint256[]",
         name: "characterIds",
@@ -1662,24 +1636,6 @@ const _abi = [
     type: "function",
   },
   {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "characterId",
-        type: "uint256",
-      },
-      {
-        internalType: "address",
-        name: "operator",
-        type: "address",
-      },
-    ],
-    name: "removeOperator",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
     inputs: [],
     name: "resolver",
     outputs: [
@@ -1690,6 +1646,34 @@ const _abi = [
       },
     ],
     stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "characterId",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "noteId",
+        type: "uint256",
+      },
+      {
+        internalType: "address[]",
+        name: "blacklist",
+        type: "address[]",
+      },
+      {
+        internalType: "address[]",
+        name: "whitelist",
+        type: "address[]",
+      },
+    ],
+    name: "revokeOperators4Note",
+    outputs: [],
+    stateMutability: "nonpayable",
     type: "function",
   },
   {
@@ -1848,7 +1832,7 @@ const _abi = [
           },
         ],
         internalType: "struct DataTypes.setLinkModule4LinklistData",
-        name: "",
+        name: "vars",
         type: "tuple",
       },
     ],
@@ -1929,24 +1913,6 @@ const _abi = [
       },
     ],
     name: "setNoteUri",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "characterId",
-        type: "uint256",
-      },
-      {
-        internalType: "address",
-        name: "operator",
-        type: "address",
-      },
-    ],
-    name: "setOperator",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
@@ -2308,31 +2274,6 @@ const _abi = [
       {
         indexed: true,
         internalType: "uint256",
-        name: "characterId",
-        type: "uint256",
-      },
-      {
-        indexed: true,
-        internalType: "address",
-        name: "operator",
-        type: "address",
-      },
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "timestamp",
-        type: "uint256",
-      },
-    ],
-    name: "AddOperator",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: "uint256",
         name: "linklistId",
         type: "uint256",
       },
@@ -2499,19 +2440,19 @@ const _abi = [
         type: "uint256",
       },
       {
-        indexed: true,
-        internalType: "address",
-        name: "operator",
-        type: "address",
+        indexed: false,
+        internalType: "address[]",
+        name: "blacklist",
+        type: "address[]",
       },
       {
         indexed: false,
-        internalType: "uint256",
-        name: "permissionBitMap",
-        type: "uint256",
+        internalType: "address[]",
+        name: "whitelist",
+        type: "address[]",
       },
     ],
-    name: "GrantOperatorPermissions4Note",
+    name: "GrantOperators4Note",
     type: "event",
   },
   {
@@ -2897,18 +2838,24 @@ const _abi = [
       },
       {
         indexed: true,
-        internalType: "address",
-        name: "operator",
-        type: "address",
+        internalType: "uint256",
+        name: "noteId",
+        type: "uint256",
       },
       {
         indexed: false,
-        internalType: "uint256",
-        name: "timestamp",
-        type: "uint256",
+        internalType: "address[]",
+        name: "blacklist",
+        type: "address[]",
+      },
+      {
+        indexed: false,
+        internalType: "address[]",
+        name: "whitelist",
+        type: "address[]",
       },
     ],
-    name: "RemoveOperator",
+    name: "RevokeOperators4Note",
     type: "event",
   },
   {
@@ -3182,31 +3129,6 @@ const _abi = [
       },
     ],
     name: "SetNoteUri",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: "uint256",
-        name: "characterId",
-        type: "uint256",
-      },
-      {
-        indexed: true,
-        internalType: "address",
-        name: "operator",
-        type: "address",
-      },
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "timestamp",
-        type: "uint256",
-      },
-    ],
-    name: "SetOperator",
     type: "event",
   },
   {
