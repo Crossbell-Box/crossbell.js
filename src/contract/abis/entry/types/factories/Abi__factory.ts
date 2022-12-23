@@ -655,12 +655,12 @@ const _abi = [
     outputs: [
       {
         internalType: "address[]",
-        name: "blacklist",
+        name: "blocklist",
         type: "address[]",
       },
       {
         internalType: "address[]",
-        name: "whitelist",
+        name: "allowlist",
         type: "address[]",
       },
     ],
@@ -736,47 +736,18 @@ const _abi = [
       },
       {
         internalType: "address[]",
-        name: "blacklist",
+        name: "blocklist",
         type: "address[]",
       },
       {
         internalType: "address[]",
-        name: "whitelist",
+        name: "allowlist",
         type: "address[]",
       },
     ],
     name: "grantOperators4Note",
     outputs: [],
     stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "characterId",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "noteId",
-        type: "uint256",
-      },
-      {
-        internalType: "address",
-        name: "operator",
-        type: "address",
-      },
-    ],
-    name: "hasNotePermission",
-    outputs: [
-      {
-        internalType: "bool",
-        name: "",
-        type: "bool",
-      },
-    ],
-    stateMutability: "view",
     type: "function",
   },
   {
@@ -831,6 +802,35 @@ const _abi = [
       },
     ],
     name: "isApprovedForAll",
+    outputs: [
+      {
+        internalType: "bool",
+        name: "",
+        type: "bool",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "characterId",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "noteId",
+        type: "uint256",
+      },
+      {
+        internalType: "address",
+        name: "operator",
+        type: "address",
+      },
+    ],
+    name: "isOperatorAllowedForNote",
     outputs: [
       {
         internalType: "bool",
@@ -1094,24 +1094,6 @@ const _abi = [
       },
     ],
     name: "lockNote",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "newbieVilla",
-        type: "address",
-      },
-      {
-        internalType: "uint256[]",
-        name: "characterIds",
-        type: "uint256[]",
-      },
-    ],
-    name: "migrateOperator",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
@@ -1646,34 +1628,6 @@ const _abi = [
       },
     ],
     stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "characterId",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "noteId",
-        type: "uint256",
-      },
-      {
-        internalType: "address[]",
-        name: "blacklist",
-        type: "address[]",
-      },
-      {
-        internalType: "address[]",
-        name: "whitelist",
-        type: "address[]",
-      },
-    ],
-    name: "revokeOperators4Note",
-    outputs: [],
-    stateMutability: "nonpayable",
     type: "function",
   },
   {
@@ -2442,13 +2396,13 @@ const _abi = [
       {
         indexed: false,
         internalType: "address[]",
-        name: "blacklist",
+        name: "blocklist",
         type: "address[]",
       },
       {
         indexed: false,
         internalType: "address[]",
-        name: "whitelist",
+        name: "allowlist",
         type: "address[]",
       },
     ],
@@ -2825,37 +2779,6 @@ const _abi = [
       },
     ],
     name: "PostNote",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: "uint256",
-        name: "characterId",
-        type: "uint256",
-      },
-      {
-        indexed: true,
-        internalType: "uint256",
-        name: "noteId",
-        type: "uint256",
-      },
-      {
-        indexed: false,
-        internalType: "address[]",
-        name: "blacklist",
-        type: "address[]",
-      },
-      {
-        indexed: false,
-        internalType: "address[]",
-        name: "whitelist",
-        type: "address[]",
-      },
-    ],
-    name: "RevokeOperators4Note",
     type: "event",
   },
   {

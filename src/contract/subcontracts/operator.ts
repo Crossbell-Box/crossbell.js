@@ -172,16 +172,13 @@ export class OperatorContract extends BaseContract {
   ):
     | Promise<Result<{ allowlist: string[]; blocklist: string[] }, false>>
     | never {
-    const { blacklist, whitelist } = await this.contract.getOperators4Note(
+    const { allowlist, blocklist } = await this.contract.getOperators4Note(
       characterId,
       noteId,
       overrides,
     )
     return {
-      data: {
-        allowlist: whitelist,
-        blocklist: blacklist,
-      },
+      data: { allowlist, blocklist },
     }
   }
 
@@ -199,7 +196,7 @@ export class OperatorContract extends BaseContract {
     noteId: BigNumberish,
     operator: string,
   ): Promise<Result<boolean, false>> | never {
-    const isAllowed = await this.contract.hasNotePermission(
+    const isAllowed = await this.contract.isOperatorAllowedForNote(
       characterId,
       noteId,
       operator,

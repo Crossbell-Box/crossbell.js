@@ -40,28 +40,18 @@ export class OperatorIndexer extends BaseIndexer {
    * @category Operator
    * @param characterId - The id of the character.
    * @param noteId - The id of the note.
-   * @param options - The options to send to the indexer.
    * @returns The list of operators.
    */
   async getNoteOperators(
     characterId: BigNumberish,
     noteId: BigNumberish,
-    {
-      limit = 20,
-      cursor,
-    }: {
-      /** Limit the count of items returned. */
-      limit?: number
-      /** Used for pagination. */
-      cursor?: string
-    } = {},
-  ): Promise<ListResponse<NoteOperatorEntity>> {
+  ): Promise<NoteOperatorEntity> {
     let url = `${this.endpoint}/characters/${characterId}/notes/${noteId}/operators?`
-    url += queryString.stringify({ limit, cursor })
+    // url += queryString.stringify()
 
     const res = await this.fetch(url).then((res) => res.json())
 
-    return res as ListResponse<NoteOperatorEntity>
+    return res as NoteOperatorEntity
   }
 
   /**

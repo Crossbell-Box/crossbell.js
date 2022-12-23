@@ -2,6 +2,7 @@ export enum CharacterOperatorPermission {
   SET_HANDLE = 'SET_HANDLE',
   SET_SOCIAL_TOKEN = 'SET_SOCIAL_TOKEN',
   GRANT_OPERATOR_PERMISSIONS = 'GRANT_OPERATOR_PERMISSIONS',
+  GRANT_OPERATORS_FOR_NOTE = 'GRANT_OPERATORS_FOR_NOTE',
   SET_CHARACTER_URI = 'SET_CHARACTER_URI',
   SET_LINKLIST_URI = 'SET_LINKLIST_URI',
   LINK_CHARACTER = 'LINK_CHARACTER',
@@ -52,7 +53,8 @@ export type CharacterOperatorEntity = {
 export type NoteOperatorEntity = {
   characterId: number
   noteId: number
-  operator: string
+  allowlist: string[]
+  blocklist: string[]
   createdAt: Date
   updatedAt: Date
   transactionHash: string
