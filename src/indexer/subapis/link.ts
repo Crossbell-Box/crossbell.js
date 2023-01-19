@@ -1,8 +1,8 @@
 import { BaseIndexer } from './base'
-import queryString from 'query-string'
 import type { LinkEntity, ListResponse } from '../../types/indexer'
 import type { LinkItemType } from '../../types/contract'
 import { type BigNumberish } from 'ethers'
+import { createSearchParamsString } from '../../utils/query_string'
 
 export class LinkIndexer extends BaseIndexer {
   /**
@@ -61,7 +61,7 @@ export class LinkIndexer extends BaseIndexer {
     } = {},
   ): Promise<ListResponse<LinkEntity>> {
     let url = `${this.endpoint}/characters/${characterId}/links?`
-    url += queryString.stringify({
+    url += createSearchParamsString({
       limit,
       cursor,
       linkType,
@@ -109,7 +109,7 @@ export class LinkIndexer extends BaseIndexer {
     } = {},
   ): Promise<ListResponse<LinkEntity>> {
     let url = `${this.endpoint}/characters/${characterId}/backlinks?`
-    url += queryString.stringify({ limit, cursor, linkType, order })
+    url += createSearchParamsString({ limit, cursor, linkType, order })
 
     const res = await this.fetch(url).then((res) => res.json())
 
@@ -143,7 +143,7 @@ export class LinkIndexer extends BaseIndexer {
     } = {},
   ): Promise<ListResponse<LinkEntity>> {
     let url = `${this.endpoint}/addresses/${address}/backlinks?`
-    url += queryString.stringify({ limit, cursor, linkType, order })
+    url += createSearchParamsString({ limit, cursor, linkType, order })
 
     const res = await this.fetch(url).then((res) => res.json())
 
@@ -179,7 +179,7 @@ export class LinkIndexer extends BaseIndexer {
     } = {},
   ): Promise<ListResponse<LinkEntity>> {
     let url = `${this.endpoint}/notes/${characterId}/${noteId}/backlinks?`
-    url += queryString.stringify({ limit, cursor, linkType, order })
+    url += createSearchParamsString({ limit, cursor, linkType, order })
 
     const res = await this.fetch(url).then((res) => res.json())
 
@@ -215,7 +215,7 @@ export class LinkIndexer extends BaseIndexer {
     } = {},
   ): Promise<ListResponse<LinkEntity>> {
     let url = `${this.endpoint}/erc721s/${contractAddress}/${tokenId}/backlinks?`
-    url += queryString.stringify({ limit, cursor, linkType, order })
+    url += createSearchParamsString({ limit, cursor, linkType, order })
 
     const res = await this.fetch(url).then((res) => res.json())
 
@@ -249,7 +249,7 @@ export class LinkIndexer extends BaseIndexer {
     } = {},
   ): Promise<ListResponse<LinkEntity>> {
     let url = `${this.endpoint}/linklists/${linklistId}/backlinks?`
-    url += queryString.stringify({ limit, cursor, linkType, order })
+    url += createSearchParamsString({ limit, cursor, linkType, order })
 
     const res = await this.fetch(url).then((res) => res.json())
 
@@ -283,7 +283,7 @@ export class LinkIndexer extends BaseIndexer {
     } = {},
   ): Promise<ListResponse<LinkEntity>> {
     let url = `${this.endpoint}/anyuris/${uri}/backlinks?`
-    url += queryString.stringify({ limit, cursor, linkType, order })
+    url += createSearchParamsString({ limit, cursor, linkType, order })
 
     const res = await this.fetch(url).then((res) => res.json())
 
