@@ -25,6 +25,7 @@ import {
 import type { MintEvent } from '../abis/cbt/types/Abi'
 import { validateIsInSdn } from '../../utils/sdn'
 import { Logger } from '../../utils/logger'
+import { isBrowser } from 'browser-or-node'
 import { checkLatestVersion } from '../../utils/version_checker'
 
 const logTopics = {
@@ -61,6 +62,10 @@ type ContractOptions = {
   entryContractAddress: string
   peripheryContractAddress: string
   cbtContractAddress?: string
+  /**
+   * Enable version check.
+   * @default true if not in browser environment
+   */
   enableVersionCheck: boolean
 }
 
@@ -166,7 +171,7 @@ export class BaseContract {
         options?.peripheryContractAddress ??
         Network.getPeripheryContractAddress(),
       cbtContractAddress: options?.cbtContractAddress,
-      enableVersionCheck: options?.enableVersionCheck ?? true,
+      enableVersionCheck: options?.enableVersionCheck ?? !isBrowser,
     }
   }
 
@@ -230,7 +235,7 @@ export class BaseContract {
   protected parseLog<TopicName extends keyof typeof logTopics>(
     logs: ethers.providers.Log[],
     filterTopic: TopicName,
-  ): LogEvents[typeof logTopics[TopicName]] {
+  ): LogEvents[(typeof logTopics)[TopicName]] {
     const targetTopicHash = ethers.utils.keccak256(
       ethers.utils.toUtf8Bytes(logTopics[filterTopic]),
     )
@@ -249,7 +254,7 @@ export class BaseContract {
 
     return this.contract.interface.parseLog(
       log,
-    ) as unknown as LogEvents[typeof logTopics[TopicName]]
+    ) as unknown as LogEvents[(typeof logTopics)[TopicName]]
   }
 
   private getDefaultProvider():
