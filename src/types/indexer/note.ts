@@ -8,6 +8,7 @@ export type NoteEntity = {
   noteId: number
   linkItemType: LinkItemType | null
   linkKey: string
+  character?: CharacterEntity | null
   toCharacterId: number | null
   toCharacter?: CharacterEntity | null
   toAddress: string | null

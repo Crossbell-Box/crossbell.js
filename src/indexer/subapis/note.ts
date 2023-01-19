@@ -87,7 +87,11 @@ export class NoteIndexer extends BaseIndexer {
     /** The order of the returned list. */
     orderBy?: 'createdAt' | 'updatedAt' | 'publishedAt'
   } = {}): Promise<
-    ListResponse<NoteEntity & { fromNotes: ListResponse<NoteEntity> }>
+    ListResponse<
+      NoteEntity & {
+        fromNotes: ListResponse<NoteEntity>
+      }
+    >
   > {
     let url = `${this.endpoint}/notes?`
     url += createSearchParamsString({
