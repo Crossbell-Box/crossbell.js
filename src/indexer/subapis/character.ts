@@ -1,7 +1,7 @@
 import { BaseIndexer } from './base'
-import queryString from 'query-string'
 import type { ListResponse, CharacterEntity } from '../../types/indexer'
 import { type BigNumberish } from 'ethers'
+import { createSearchParamsString } from '../../utils/query_string'
 
 export class CharacterIndexer extends BaseIndexer {
   /**
@@ -27,7 +27,7 @@ export class CharacterIndexer extends BaseIndexer {
     } = {},
   ): Promise<ListResponse<CharacterEntity>> {
     let url = `${this.endpoint}/addresses/${address}/characters?`
-    url += queryString.stringify({ primary, limit, cursor })
+    url += createSearchParamsString({ primary, limit, cursor })
 
     const res = await this.fetch(url).then((res) => res.json())
 

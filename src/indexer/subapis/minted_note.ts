@@ -1,7 +1,7 @@
 import { BaseIndexer } from './base'
-import queryString from 'query-string'
 import type { ListResponse, MintedNoteEntity } from '../../types/indexer'
 import { type BigNumberish } from 'ethers'
+import { createSearchParamsString } from '../../utils/query_string'
 
 export class MintedNoteIndexer extends BaseIndexer {
   /**
@@ -34,7 +34,7 @@ export class MintedNoteIndexer extends BaseIndexer {
     } = {},
   ): Promise<ListResponse<MintedNoteEntity>> {
     let url = `${this.endpoint}/addresses/${address}/minted/notes?`
-    url += queryString.stringify({
+    url += createSearchParamsString({
       noteCharacterId,
       noteId,
       limit,
@@ -76,7 +76,7 @@ export class MintedNoteIndexer extends BaseIndexer {
     } = {},
   ): Promise<ListResponse<MintedNoteEntity>> {
     let url = `${this.endpoint}/notes/${characterId}/${noteId}/minted?`
-    url += queryString.stringify({
+    url += createSearchParamsString({
       owner,
       limit,
       cursor,

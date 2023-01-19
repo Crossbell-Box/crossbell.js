@@ -1,7 +1,7 @@
 import { BaseIndexer } from './base'
-import queryString from 'query-string'
 import type { LinklistEntity, ListResponse } from '../../types/indexer'
 import { type BigNumberish } from 'ethers'
+import { createSearchParamsString } from '../../utils/query_string'
 
 export class LinklistIndexer extends BaseIndexer {
   /**
@@ -30,7 +30,7 @@ export class LinklistIndexer extends BaseIndexer {
     } = {},
   ): Promise<ListResponse<LinklistEntity>> {
     let url = `${this.endpoint}/addresses/${address}/linklists?`
-    url += queryString.stringify({ attached, linkType, limit, cursor })
+    url += createSearchParamsString({ attached, linkType, limit, cursor })
 
     const res = await this.fetch(url).then((res) => res.json())
 
@@ -63,7 +63,7 @@ export class LinklistIndexer extends BaseIndexer {
     } = {},
   ): Promise<ListResponse<LinklistEntity>> {
     let url = `${this.endpoint}/characters/${characterId}/linklists?`
-    url += queryString.stringify({ attached, linkType, limit, cursor })
+    url += createSearchParamsString({ attached, linkType, limit, cursor })
 
     const res = await this.fetch(url).then((res) => res.json())
 

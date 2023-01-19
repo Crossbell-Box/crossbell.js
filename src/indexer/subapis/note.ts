@@ -1,8 +1,8 @@
 import { BaseIndexer } from './base'
-import queryString from 'query-string'
 import type { ListResponse, NoteEntity } from '../../types/indexer'
 import type { LinkItemType } from '../../types/contract'
 import { type BigNumberish } from 'ethers'
+import { createSearchParamsString } from '../../utils/query_string'
 
 export class NoteIndexer extends BaseIndexer {
   /**
@@ -90,7 +90,7 @@ export class NoteIndexer extends BaseIndexer {
     ListResponse<NoteEntity & { fromNotes: ListResponse<NoteEntity> }>
   > {
     let url = `${this.endpoint}/notes?`
-    url += queryString.stringify({
+    url += createSearchParamsString({
       characterId,
       limit,
       cursor,
@@ -160,7 +160,7 @@ export class NoteIndexer extends BaseIndexer {
     } = {},
   ): Promise<ListResponse<string>> {
     let url = `${this.endpoint}/characters/${characterId}/notes/tags?`
-    url += queryString.stringify({
+    url += createSearchParamsString({
       sources,
     })
 

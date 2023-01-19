@@ -1,7 +1,7 @@
 import { BaseIndexer } from './base'
-import queryString from 'query-string'
 import type { FeedEntity, FeedTypeKey, ListResponse } from '../../types/indexer'
 import { type BigNumberish } from 'ethers'
+import { createSearchParamsString } from '../../utils/query_string'
 
 export class FeedIndexer extends BaseIndexer {
   /**
@@ -28,7 +28,7 @@ export class FeedIndexer extends BaseIndexer {
     } = {},
   ): Promise<ListResponse<FeedEntity>> {
     let url = `${this.endpoint}/characters/${characterId}/feed?`
-    url += queryString.stringify({
+    url += createSearchParamsString({
       type,
       limit,
       cursor,
@@ -63,7 +63,7 @@ export class FeedIndexer extends BaseIndexer {
     } = {},
   ): Promise<ListResponse<FeedEntity>> {
     let url = `${this.endpoint}/characters/${characterId}/feed/follow?`
-    url += queryString.stringify({
+    url += createSearchParamsString({
       type,
       limit,
       cursor,

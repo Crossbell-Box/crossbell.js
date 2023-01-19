@@ -1,5 +1,4 @@
 import { BaseIndexer } from './base'
-import queryString from 'query-string'
 import type {
   ListResponse,
   NoteEntity,
@@ -7,6 +6,7 @@ import type {
 } from '../../types/indexer'
 import type { LinkItemType } from '../../types/contract'
 import { type BigNumberish } from 'ethers'
+import { createSearchParamsString } from '../../utils/query_string'
 
 export class SearchIndexer extends BaseIndexer {
   /**
@@ -30,7 +30,7 @@ export class SearchIndexer extends BaseIndexer {
     },
   ): Promise<ListResponse<CharacterEntity>> {
     let url = `${this.endpoint}/characters/search?`
-    url += queryString.stringify({ q: query, limit, cursor })
+    url += createSearchParamsString({ q: query, limit, cursor })
 
     const res = await this.fetch(url).then((res) => res.json())
 
@@ -67,7 +67,7 @@ export class SearchIndexer extends BaseIndexer {
     },
   ): Promise<ListResponse<NoteEntity>> {
     let url = `${this.endpoint}/notes/search?`
-    url += queryString.stringify({
+    url += createSearchParamsString({
       q: query,
       limit,
       cursor,

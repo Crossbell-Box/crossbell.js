@@ -1,5 +1,4 @@
 import { BaseIndexer } from './base'
-import queryString from 'query-string'
 import type {
   ListResponse,
   AchievementSection,
@@ -7,6 +6,7 @@ import type {
   AchievementStatusKey,
 } from '../../types/indexer'
 import { type BigNumberish } from 'ethers'
+import { createSearchParamsString } from '../../utils/query_string'
 
 export class AchievementIndexer extends BaseIndexer {
   /**
@@ -22,7 +22,7 @@ export class AchievementIndexer extends BaseIndexer {
   ): Promise<ListResponse<AchievementSection> | null> {
     let url = `${this.endpoint}/characters/${characterId}/achievements?`
 
-    url += queryString.stringify({ status })
+    url += createSearchParamsString({ status })
 
     const res = await this.fetch(url).then((res) => res.json())
 

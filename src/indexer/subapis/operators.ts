@@ -1,11 +1,11 @@
 import { BaseIndexer } from './base'
-import queryString from 'query-string'
 import type {
   ListResponse,
   CharacterOperatorEntity,
   NoteOperatorEntity,
 } from '../../types/indexer'
 import { type BigNumberish } from 'ethers'
+import { createSearchParamsString } from '../../utils/query_string'
 
 export class OperatorIndexer extends BaseIndexer {
   /**
@@ -28,7 +28,7 @@ export class OperatorIndexer extends BaseIndexer {
     } = {},
   ): Promise<ListResponse<CharacterOperatorEntity>> {
     let url = `${this.endpoint}/characters/${characterId}/operators?`
-    url += queryString.stringify({ limit, cursor })
+    url += createSearchParamsString({ limit, cursor })
 
     const res = await this.fetch(url).then((res) => res.json())
 
@@ -47,7 +47,7 @@ export class OperatorIndexer extends BaseIndexer {
     noteId: BigNumberish,
   ): Promise<NoteOperatorEntity> {
     let url = `${this.endpoint}/characters/${characterId}/notes/${noteId}/operators?`
-    // url += queryString.stringify()
+    // url += createSearchParamsString()
 
     const res = await this.fetch(url).then((res) => res.json())
 

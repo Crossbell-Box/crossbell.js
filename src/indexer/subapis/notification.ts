@@ -1,11 +1,11 @@
 import { BaseIndexer } from './base'
-import queryString from 'query-string'
 import type {
   ListResponse,
   NotificationEntity,
   NotificationTypeKey,
 } from '../../types/indexer'
 import { type BigNumberish } from 'ethers'
+import { createSearchParamsString } from '../../utils/query_string'
 
 export class NotificationIndexer extends BaseIndexer {
   /**
@@ -35,7 +35,7 @@ export class NotificationIndexer extends BaseIndexer {
     } = {},
   ): Promise<ListResponse<NotificationEntity>> {
     let url = `${this.endpoint}/characters/${characterId}/notifications?`
-    url += queryString.stringify({
+    url += createSearchParamsString({
       type,
       includeCharacterMetadata,
       limit,
@@ -68,7 +68,7 @@ export class NotificationIndexer extends BaseIndexer {
     } = {},
   ): Promise<NotificationEntity | null> {
     let url = `${this.endpoint}/characters/${characterId}/notifications/${transactionHash}/${logIndex}?`
-    url += queryString.stringify({
+    url += createSearchParamsString({
       includeCharacterMetadata,
     })
 
