@@ -172,4 +172,31 @@ export class NoteIndexer extends BaseIndexer {
 
     return res as ListResponse<string>
   }
+
+  /**
+   * This returns all distinct tags of notes owned by a character.
+   *
+   * @category Note
+   * @param characterId - The characterId of the notes owner.
+   * @param options - The options to send to the indexer.
+   * @returns The list of tags.
+   */
+  async getDistinctNoteSourcesOfCharacter(
+    characterId: BigNumberish,
+    {
+      tags,
+    }: {
+      /** The `metadata.content.tags` to filter by. */
+      tags?: string | string[]
+    } = {},
+  ): Promise<ListResponse<string>> {
+    let url = `${this.endpoint}/characters/${characterId}/notes/tags?`
+    url += createSearchParamsString({
+      tags,
+    })
+
+    const res = await this.fetch(url).then((res) => res.json())
+
+    return res as ListResponse<string>
+  }
 }
