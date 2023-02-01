@@ -190,7 +190,7 @@ export class NoteIndexer extends BaseIndexer {
       tags?: string | string[]
     } = {},
   ): Promise<ListResponse<string>> {
-    let url = `${this.endpoint}/characters/${characterId}/notes/tags?`
+    let url = `${this.endpoint}/characters/${characterId}/notes/sources?`
     url += createSearchParamsString({
       tags,
     })

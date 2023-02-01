@@ -102,7 +102,7 @@ export class OperatorContract extends BaseContract {
    *
    * Each time an operator is granted permissions, its previous operators are overwritten.
    *
-   * To remove operators, call {@link revokeOperatorsForNote}.
+   * To completely remove an operator, pass an empty array (`[]`) to the `permissions` parameter.
    *
    * @category Operator
    * @param characterId - The id of the character.
