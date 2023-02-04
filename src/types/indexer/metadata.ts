@@ -2,7 +2,7 @@ import { NoteMetadata, CharacterMetadata } from './../metadata'
 
 export type MetadataType = 'CHARACTER' | 'NOTE' | 'LINKLIST'
 
-export type MetadataEntity<T extends MetadataType> = {
+export interface MetadataEntity<T extends MetadataType> {
   uri?: string
   type?: MetadataType | null
   content?:

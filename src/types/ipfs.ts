@@ -1,4 +1,4 @@
-export type IpfsResponse = {
+export interface IpfsResponse {
   status: 'ok' | 'error'
   cid: string
   /** ipfs url. e.g. `ipfs://...` */

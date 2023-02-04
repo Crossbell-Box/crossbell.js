@@ -13,7 +13,7 @@ export enum NotificationType {
 
 export type NotificationTypeKey = keyof typeof NotificationType
 
-export type NotificationEntity = {
+export interface NotificationEntity {
   characterId: number
   character?: CharacterEntity
   type: NotificationTypeKey

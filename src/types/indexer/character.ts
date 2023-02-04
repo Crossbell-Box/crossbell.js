@@ -1,6 +1,6 @@
 import { MetadataEntity } from './metadata'
 
-export type CharacterEntity = {
+export interface CharacterEntity {
   characterId: number
   handle: string
   primary: boolean

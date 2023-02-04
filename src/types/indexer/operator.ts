@@ -36,7 +36,7 @@ export enum CharacterOperatorPermission {
 
 export type CharacterPermissionKey = keyof typeof CharacterOperatorPermission
 
-export type CharacterOperatorEntity = {
+export interface CharacterOperatorEntity {
   characterId: number
   operator: string
   permissions: CharacterPermissionKey[]
@@ -50,7 +50,7 @@ export type CharacterOperatorEntity = {
   updatedLogIndex: number
 }
 
-export type NoteOperatorEntity = {
+export interface NoteOperatorEntity {
   characterId: number
   noteId: number
   allowlist: string[]

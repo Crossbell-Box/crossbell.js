@@ -31,7 +31,7 @@ export enum FeedType {
 
 export type FeedTypeKey = keyof typeof FeedType
 
-export type FeedEntity = {
+export interface FeedEntity {
   type: FeedTypeKey
   character?: CharacterEntity | null
   characterId: number | null

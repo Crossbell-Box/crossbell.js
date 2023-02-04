@@ -1,6 +1,6 @@
 import { MetadataEntity } from './metadata'
 
-export type LinklistEntity = {
+export interface LinklistEntity {
   linklistId: number
   attached: boolean
   fromCharacterId: number | null

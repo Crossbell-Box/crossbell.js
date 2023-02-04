@@ -6,17 +6,14 @@ import type {
 /**
  * The result of a call to a transaction / get function.
  */
-export type Result<T, HasTxHash extends boolean = false> = {
+export interface Result<T, HasTxHash extends boolean = false> {
   data: T
-} & (HasTxHash extends true
-  ? {
-      /** only available for write operation */
-      transactionHash: string
-    }
-  : {})
-
-export type Overrides = Overrides_ & {
-  from?: string | undefined
+  /** only available for write operation */
+  transactionHash?: HasTxHash extends true ? string : never
 }
 
-export type CallOverrides = CallOverrides_
+export interface Overrides extends Overrides_ {
+  from?: string
+}
+
+export interface CallOverrides extends CallOverrides_ {}

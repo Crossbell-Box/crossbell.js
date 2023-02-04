@@ -3,7 +3,7 @@ import { CharacterEntity } from './character'
 import { LinklistEntity } from './linklist'
 import { NoteEntity } from './note'
 
-export type LinkEntity = {
+export interface LinkEntity {
   linklistId: number
   linklist?: LinklistEntity
   linkType: string

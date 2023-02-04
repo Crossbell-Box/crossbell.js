@@ -1,4 +1,4 @@
-export type CharacterStatEntity = {
+export interface CharacterStatEntity {
   characterId: number
   viewCount: number
   viewInListCount: number
@@ -6,7 +6,7 @@ export type CharacterStatEntity = {
   viewNoteCount: number
 }
 
-export type NoteStatEntity = {
+export interface NoteStatEntity {
   characterId: number
   noteId: number
   viewCount: number

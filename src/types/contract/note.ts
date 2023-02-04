@@ -1,7 +1,7 @@
 import { NoteMetadata } from '../metadata'
 import { LinkItem, LinkItemType } from './link'
 
-export type Note<T extends LinkItem | undefined = undefined> = {
+export interface Note<T extends LinkItem | undefined = undefined> {
   /** The character id of the address who owns the note.  */
   characterId: number
   /** The id of this note. Each id is unique under one character. */
@@ -38,7 +38,7 @@ export type Note<T extends LinkItem | undefined = undefined> = {
   locked: boolean
 }
 
-export type PostNoteOptions = {
+export interface PostNoteOptions {
   /** If locked, the note will be not able to be edited. */
   locked?: boolean
 }

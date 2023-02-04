@@ -3,7 +3,7 @@ import { LinklistEntity } from './linklist'
 import { MetadataEntity } from './metadata'
 import { LinkItemType } from './../contract'
 
-export type NoteEntity = {
+export interface NoteEntity {
   characterId: number
   noteId: number
   linkItemType: LinkItemType | null

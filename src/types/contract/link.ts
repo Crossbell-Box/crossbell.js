@@ -12,29 +12,29 @@ export type LinkItemType =
 // | 'ListLink'
 // | 'AnyLink'
 
-export type LinkItemCharacter = {
+export interface LinkItemCharacter {
   characterId: number
 }
 
-export type LinkItemAddress = {
+export interface LinkItemAddress {
   address: string
 }
 
-export type LinkItemNote = {
+export interface LinkItemNote {
   characterId: number
   noteId: number
 }
 
-export type LinkItemERC721 = {
+export interface LinkItemERC721 {
   contractAddress: string
   tokenId: string
 }
 
-export type LinkItemLinklist = {
+export interface LinkItemLinklist {
   linklistId: number
 }
 
-export type LinkItemAnyUri = {
+export interface LinkItemAnyUri {
   uri: string
 }
 

@@ -1,4 +1,4 @@
-type AchievementInfo = {
+interface AchievementInfo {
   tokenId: number
   name: FunctionStringCallback
   uri: string
@@ -19,7 +19,7 @@ export enum AchievementStatus {
 
 export type AchievementStatusKey = keyof typeof AchievementStatus
 
-export type AchievementItem = {
+export interface AchievementItem {
   tokenId: number
   characterId: number
   name: string
@@ -36,7 +36,7 @@ export type AchievementItem = {
   }
 }
 
-type AchievementItemGroup = {
+interface AchievementItemGroup {
   info: {
     name: string
     title: string
@@ -44,7 +44,7 @@ type AchievementItemGroup = {
   items: AchievementItem[]
 }
 
-export type AchievementSection = {
+export interface AchievementSection {
   info: {
     name: string
     title: string

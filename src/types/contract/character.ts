@@ -1,6 +1,6 @@
 import { CharacterMetadata } from '../metadata'
 
-export type Character = {
+export interface Character {
   /** The id of this character. */
   characterId: number
   /** The handle of this character. */

@@ -1,7 +1,7 @@
 import { CharacterEntity } from './character'
 import { NoteEntity } from './note'
 
-export type MintedNoteEntity = {
+export interface MintedNoteEntity {
   noteCharacterId: number
   noteCharacter?: CharacterEntity
   noteId: number
