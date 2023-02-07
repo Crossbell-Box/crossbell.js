@@ -31,11 +31,13 @@ const main = async () => {
     { abi: abi2 },
     { abi: periphery_abi },
     { abi: cbt_abi },
+    { abi: newbie_villa_abi },
   ] = await Promise.all([
     getAbi('Web3Entry'),
     getAbi('Events'),
     getAbi('Periphery'),
     getAbi('CharacterBoundToken'),
+    getAbi('NewbieVilla'),
   ])
 
   const abi = [...abi1, ...abi2]
@@ -43,17 +45,20 @@ const main = async () => {
   const entryDir = resolve(__dirname, '../src/contract/abis/entry')
   const peripheryDir = resolve(__dirname, '../src/contract/abis/periphery')
   const cbtDir = resolve(__dirname, '../src/contract/abis/cbt')
+  const newbieVillaDir = resolve(__dirname, '../src/contract/abis/newbie-villa')
 
   await Promise.all([
     writeJson(entryDir, abi),
     writeJson(peripheryDir, periphery_abi),
     writeJson(cbtDir, cbt_abi),
+    writeJson(newbieVillaDir, newbie_villa_abi),
   ])
 
   await Promise.all([
     genTypes(entryDir),
     genTypes(peripheryDir),
     genTypes(cbtDir),
+    genTypes(newbieVillaDir),
   ])
 
   // patch types

@@ -9,6 +9,8 @@ export class Network {
     '0xa6f969045641Cf486a747A2688F3a5A6d43cd0D8'
   static readonly #CONTRACT_CROSSBELL_PERIPHERY =
     '0x96e96b7af62d628ce7eb2016d2c1d2786614ea73'
+  static readonly #CONTRACT_NEWBIE_VILLA =
+    '0xD0c83f0BB2c61D55B3d33950b70C59ba2f131caA'
 
   static readonly #availableNetworks: IAvailableNetwork[] = ['crossbell']
   static #currentNetwork: IAvailableNetwork = 'crossbell'
@@ -59,6 +61,14 @@ export class Network {
    */
   static getPeripheryContractAddress() {
     return this.#CONTRACT_CROSSBELL_PERIPHERY
+  }
+
+  /**
+   * This returns the contract address of the newbie villa contract
+   * @returns The contract address of the newbie villa contract
+   */
+  static getNewbieVillaContractAddress() {
+    return this.#CONTRACT_NEWBIE_VILLA
   }
 
   /**

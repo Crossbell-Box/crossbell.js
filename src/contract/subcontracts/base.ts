@@ -22,6 +22,10 @@ import {
   type Abi as CbtAbi,
   Abi__factory as CbtAbi__factory,
 } from '../abis/cbt/types'
+import {
+  type Abi as NewbieVillaAbi,
+  Abi__factory as NewbieVillaAbi__factory,
+} from '../abis/newbie-villa/types'
 import type { MintEvent } from '../abis/cbt/types/Abi'
 import { validateIsInSdn } from '../../utils/sdn'
 import { Logger } from '../../utils/logger'
@@ -62,6 +66,7 @@ type ContractOptions = {
   entryContractAddress: string
   peripheryContractAddress: string
   cbtContractAddress?: string
+  newbieVillaContractAddress: string
   /**
    * Enable version check.
    * @default true if not in browser environment
@@ -79,6 +84,7 @@ export class BaseContract {
   private _contract!: EntryAbi
   private _peripheryContract!: PeripheryAbi
   private _cbtContract!: CbtAbi
+  private _newbieVillaContract!: NewbieVillaAbi
 
   private _hasConnected: boolean = false
 
@@ -127,6 +133,20 @@ export class BaseContract {
   }
 
   /**
+   * Returns the internal newbie villa contract.
+   * @category Internal Contract
+   */
+  get newbieVillaContract(): NewbieVillaAbi {
+    this.checkConnection()
+
+    return this._newbieVillaContract
+  }
+
+  set newbieVillaContract(contract: NewbieVillaAbi) {
+    this._newbieVillaContract = contract
+  }
+
+  /**
    * This creates a new Contract instance to interact with.
    * @param providerOrPrivateKey - The provider or private key to connect to the contract.
    * @returns The Contract instance.
@@ -171,6 +191,9 @@ export class BaseContract {
         options?.peripheryContractAddress ??
         Network.getPeripheryContractAddress(),
       cbtContractAddress: options?.cbtContractAddress,
+      newbieVillaContractAddress:
+        options?.newbieVillaContractAddress ??
+        Network.getNewbieVillaContractAddress(),
       enableVersionCheck: options?.enableVersionCheck ?? !isBrowser,
     }
   }
@@ -228,6 +251,11 @@ export class BaseContract {
         this._signerOrProvider,
       )
     }
+
+    this._newbieVillaContract = NewbieVillaAbi__factory.connect(
+      this.options.newbieVillaContractAddress,
+      this._signerOrProvider,
+    )
 
     this._hasConnected = true
   }

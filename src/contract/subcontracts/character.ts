@@ -426,6 +426,43 @@ export class CharacterContract extends BaseContract {
   }
 
   /**
+   * This withdraws a character from the Newbie Villa contract.
+   * @category Character
+   * @param toAddress - The address of the user that will receive the character.
+   * @param characterId - The character ID of the character you want to withdraw.
+   * @param nonce - The nonce given from the server
+   * @param expires - The expiration time given from the server
+   * @param proof - The proof given from the server
+   * @returns The transaction hash.
+   */
+  @autoSwitchMainnet()
+  async withdrawCharacterFromNewbieVilla(
+    toAddress: string,
+    characterId: BigNumberish,
+    nonce: BigNumberish,
+    expires: BigNumberish,
+    proof: string,
+    overrides: CallOverrides = {},
+  ): Promise<Result<undefined, true>> | never {
+    this.validateAddress(toAddress)
+
+    const tx = await this.newbieVillaContract.withdraw(
+      toAddress,
+      characterId,
+      nonce,
+      expires,
+      proof,
+    )
+
+    const receipt = await tx.wait()
+
+    return {
+      data: undefined,
+      transactionHash: receipt.transactionHash,
+    }
+  }
+
+  /**
    * This validates if a handle is in a correct format.
    * @param handle - The handle of the character you want to get the social token for.
    */
