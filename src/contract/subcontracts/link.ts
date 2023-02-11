@@ -86,10 +86,12 @@ export class LinkContract extends BaseContract {
 
     const receipt = await tx.wait()
 
-    const parser = this.parseLog(receipt.logs, 'linkCharacter')
+    const log = this.parseLog(receipt.logs, 'linkCharacter', {
+      throwOnMultipleLogsFound: false,
+    })
 
     return {
-      data: parser.args.linklistId.toNumber(),
+      data: log.args.linklistId.toNumber(),
       transactionHash: receipt.transactionHash,
     }
   }

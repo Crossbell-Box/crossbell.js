@@ -263,6 +263,11 @@ export class BaseContract {
   protected parseLog<TopicName extends keyof typeof logTopics>(
     logs: ethers.providers.Log[],
     filterTopic: TopicName,
+    {
+      throwOnMultipleLogsFound = true,
+    }: {
+      throwOnMultipleLogsFound?: boolean
+    } = {},
   ): LogEvents[(typeof logTopics)[TopicName]] {
     const targetTopicHash = ethers.utils.keccak256(
       ethers.utils.toUtf8Bytes(logTopics[filterTopic]),
@@ -274,8 +279,10 @@ export class BaseContract {
       throw new Error(`Log with topic ${filterTopic} not found`)
     }
 
-    if (_logs.length > 1) {
-      throw new Error(`More than one log with topic ${filterTopic} found`)
+    if (throwOnMultipleLogsFound) {
+      if (_logs.length > 1) {
+        throw new Error(`More than one log with topic ${filterTopic} found`)
+      }
     }
 
     const log = _logs[0]
