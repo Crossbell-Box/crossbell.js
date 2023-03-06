@@ -9,6 +9,7 @@ export const checkLatestVersion = async () => {
   if (hasNotified) return
 
   try {
+    hasNotified = true
     const res: string = await fetch(
       'https://registry.npmjs.org/crossbell.js/latest',
     )
@@ -32,7 +33,5 @@ export const checkLatestVersion = async () => {
     }
   } catch (e) {
     Logger.warn('Failed to check for the latest version of crossbell.js.', e)
-  } finally {
-    hasNotified = true
   }
 }
