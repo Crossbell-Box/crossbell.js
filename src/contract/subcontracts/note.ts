@@ -65,8 +65,11 @@ export class NoteContract extends BaseContract {
   /**
    * This creates multiple new notes.
    * @category Note
-   * @param characterId - The character ID of the owner who post this note. Must be your own character, otherwise it will be rejected.
-   * @param metadataOrUri - The metadata or URI of the content you want to post.
+   * @param notes - The notes you want to post.
+   * @param notes[].characterId - The character ID of the owner who post this note. Must be your own character, otherwise it will be rejected.
+   * @param notes[].metadataOrUri - The metadata or URI of the content you want to post.
+   * @param notes[].options - The options of the note.
+   * @param notes[].options.locked - Whether the note is locked.
    * @returns The id of the new note.
    */
   @autoSwitchMainnet()
