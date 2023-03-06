@@ -18,6 +18,7 @@ import {
 import { Ipfs } from '../../ipfs'
 import { NIL_ADDRESS } from '../utils'
 import { autoSwitchMainnet } from '../decorators'
+import pLimit from 'p-limit'
 
 export class NoteContract extends BaseContract {
   /**
@@ -56,6 +57,64 @@ export class NoteContract extends BaseContract {
     return {
       data: {
         noteId: log.args.noteId.toNumber(),
+      },
+      transactionHash: receipt.transactionHash,
+    }
+  }
+
+  /**
+   * This creates multiple new notes.
+   * @category Note
+   * @param characterId - The character ID of the owner who post this note. Must be your own character, otherwise it will be rejected.
+   * @param metadataOrUri - The metadata or URI of the content you want to post.
+   * @returns The id of the new note.
+   */
+  @autoSwitchMainnet()
+  async postNotes(
+    notes: {
+      characterId: BigNumberish
+      metadataOrUri: NoteMetadata | string
+      options?: PostNoteOptions
+    }[],
+    overrides: Overrides = {},
+  ): Promise<Result<{ noteIds: number[] }, true>> | never {
+    const limitedPromise = pLimit(10)
+    const encodedDataArr = await Promise.all(
+      notes.map((note) => {
+        return limitedPromise(async () => {
+          const { uri } = await Ipfs.parseMetadataOrUri(
+            'note',
+            note.metadataOrUri,
+          )
+          return this.contract.interface.encodeFunctionData('postNote', [
+            {
+              characterId: note.characterId,
+              contentUri: uri,
+              linkModule: NIL_ADDRESS, // TODO:
+              linkModuleInitData: NIL_ADDRESS,
+              mintModule: NIL_ADDRESS,
+              mintModuleInitData: NIL_ADDRESS,
+              locked: note.options?.locked ?? false,
+            },
+          ])
+        })
+      }),
+    )
+
+    const tx = await this.contract.multicall(encodedDataArr, overrides)
+
+    const receipt = await tx.wait()
+
+    const logs = this.parseLog(receipt.logs, 'postNote', {
+      throwOnMultipleLogsFound: false,
+      returnMultipleLogs: true,
+    })
+
+    const noteIds = logs.map((log) => log.args.noteId.toNumber())
+
+    return {
+      data: {
+        noteIds: noteIds,
       },
       transactionHash: receipt.transactionHash,
     }

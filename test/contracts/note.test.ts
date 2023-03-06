@@ -26,6 +26,33 @@ describe('should post note', () => {
     expect(note.metadata?.title).toBe('test')
   })
 
+  test('postNotes and check', async () => {
+    const { data } = await contract.postNotes([
+      {
+        characterId,
+        metadataOrUri: {
+          title: 'test1',
+          content: 'test1',
+        },
+      },
+      {
+        characterId,
+        metadataOrUri: {
+          title: 'test2',
+          content: 'test2',
+        },
+      },
+    ])
+
+    expect(data.noteIds).toHaveLength(2)
+
+    const { data: note1 } = await contract.getNote(characterId, data.noteIds[0])
+    expect(note1.metadata?.title).toBe('test1')
+
+    const { data: note2 } = await contract.getNote(characterId, data.noteIds[1])
+    expect(note2.metadata?.title).toBe('test2')
+  })
+
   test('mintNote', async () => {
     const { data } = await contract.postNote(characterId, {
       title: 'test',

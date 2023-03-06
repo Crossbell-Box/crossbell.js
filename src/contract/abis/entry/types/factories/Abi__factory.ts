@@ -8,6 +8,77 @@ import type { Abi, AbiInterface } from "../Abi";
 
 const _abi = [
   {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "characterId",
+        type: "uint256",
+      },
+    ],
+    name: "ErrCharacterNotExists",
+    type: "error",
+  },
+  {
+    inputs: [],
+    name: "ErrHandleContainsInvalidCharacters",
+    type: "error",
+  },
+  {
+    inputs: [],
+    name: "ErrHandleExists",
+    type: "error",
+  },
+  {
+    inputs: [],
+    name: "ErrHandleLengthInvalid",
+    type: "error",
+  },
+  {
+    inputs: [],
+    name: "ErrNotAddressOwner",
+    type: "error",
+  },
+  {
+    inputs: [],
+    name: "ErrNotCharacterOwner",
+    type: "error",
+  },
+  {
+    inputs: [],
+    name: "ErrNotEnoughPermission",
+    type: "error",
+  },
+  {
+    inputs: [],
+    name: "ErrNotEnoughPermissionForThisNote",
+    type: "error",
+  },
+  {
+    inputs: [],
+    name: "ErrNoteIsDeleted",
+    type: "error",
+  },
+  {
+    inputs: [],
+    name: "ErrNoteLocked",
+    type: "error",
+  },
+  {
+    inputs: [],
+    name: "ErrNoteNotExists",
+    type: "error",
+  },
+  {
+    inputs: [],
+    name: "ErrSocialTokenExists",
+    type: "error",
+  },
+  {
+    inputs: [],
+    name: "ErrTargetAlreadyHasPrimaryCharacter",
+    type: "error",
+  },
+  {
     anonymous: false,
     inputs: [
       {
@@ -181,7 +252,13 @@ const _abi = [
       },
     ],
     name: "createCharacter",
-    outputs: [],
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "characterId",
+        type: "uint256",
+      },
+    ],
     stateMutability: "nonpayable",
     type: "function",
   },
@@ -754,32 +831,32 @@ const _abi = [
     inputs: [
       {
         internalType: "string",
-        name: "_name",
+        name: "name_",
         type: "string",
       },
       {
         internalType: "string",
-        name: "_symbol",
+        name: "symbol_",
         type: "string",
       },
       {
         internalType: "address",
-        name: "_linklistContract",
+        name: "linklist_",
         type: "address",
       },
       {
         internalType: "address",
-        name: "_mintNFTImpl",
+        name: "mintNFTImpl_",
         type: "address",
       },
       {
         internalType: "address",
-        name: "_periphery",
+        name: "periphery_",
         type: "address",
       },
       {
         internalType: "address",
-        name: "_resolver",
+        name: "newbieVilla_",
         type: "address",
       },
     ],
@@ -1132,8 +1209,27 @@ const _abi = [
     outputs: [
       {
         internalType: "uint256",
-        name: "",
+        name: "tokenId",
         type: "uint256",
+      },
+    ],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "bytes[]",
+        name: "data",
+        type: "bytes[]",
+      },
+    ],
+    name: "multicall",
+    outputs: [
+      {
+        internalType: "bytes[]",
+        name: "results",
+        type: "bytes[]",
       },
     ],
     stateMutability: "nonpayable",
@@ -1220,7 +1316,7 @@ const _abi = [
     outputs: [
       {
         internalType: "uint256",
-        name: "",
+        name: "noteId",
         type: "uint256",
       },
     ],
@@ -1268,7 +1364,7 @@ const _abi = [
           },
         ],
         internalType: "struct DataTypes.PostNoteData",
-        name: "noteData",
+        name: "vars",
         type: "tuple",
       },
       {
@@ -1329,7 +1425,7 @@ const _abi = [
           },
         ],
         internalType: "struct DataTypes.PostNoteData",
-        name: "postNoteData",
+        name: "vars",
         type: "tuple",
       },
       {
@@ -1390,7 +1486,7 @@ const _abi = [
           },
         ],
         internalType: "struct DataTypes.PostNoteData",
-        name: "postNoteData",
+        name: "vars",
         type: "tuple",
       },
       {
@@ -1451,7 +1547,7 @@ const _abi = [
           },
         ],
         internalType: "struct DataTypes.PostNoteData",
-        name: "postNoteData",
+        name: "vars",
         type: "tuple",
       },
       {
@@ -1524,7 +1620,7 @@ const _abi = [
           },
         ],
         internalType: "struct DataTypes.PostNoteData",
-        name: "noteData",
+        name: "vars",
         type: "tuple",
       },
       {
@@ -1585,7 +1681,7 @@ const _abi = [
           },
         ],
         internalType: "struct DataTypes.PostNoteData",
-        name: "postNoteData",
+        name: "vars",
         type: "tuple",
       },
       {

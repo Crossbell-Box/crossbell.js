@@ -31,16 +31,21 @@ export interface AbiInterface extends utils.Interface {
   functions: {
     "ADMIN_ROLE()": FunctionFragment;
     "DEFAULT_ADMIN_ROLE()": FunctionFragment;
+    "ERC1820_REGISTRY()": FunctionFragment;
+    "TOKENS_RECIPIENT_INTERFACE_HASH()": FunctionFragment;
+    "balanceOf(uint256)": FunctionFragment;
     "getRoleAdmin(bytes32)": FunctionFragment;
     "getRoleMember(bytes32,uint256)": FunctionFragment;
     "getRoleMemberCount(bytes32)": FunctionFragment;
+    "getToken()": FunctionFragment;
     "grantRole(bytes32,address)": FunctionFragment;
     "hasRole(bytes32,address)": FunctionFragment;
-    "initialize(address,address)": FunctionFragment;
+    "initialize(address,address,address,address)": FunctionFragment;
     "onERC721Received(address,address,uint256,bytes)": FunctionFragment;
     "renounceRole(bytes32,address)": FunctionFragment;
     "revokeRole(bytes32,address)": FunctionFragment;
     "supportsInterface(bytes4)": FunctionFragment;
+    "tokensReceived(address,address,address,uint256,bytes,bytes)": FunctionFragment;
     "web3Entry()": FunctionFragment;
     "withdraw(address,uint256,uint256,uint256,bytes)": FunctionFragment;
     "xsyncOperator()": FunctionFragment;
@@ -50,9 +55,13 @@ export interface AbiInterface extends utils.Interface {
     nameOrSignatureOrTopic:
       | "ADMIN_ROLE"
       | "DEFAULT_ADMIN_ROLE"
+      | "ERC1820_REGISTRY"
+      | "TOKENS_RECIPIENT_INTERFACE_HASH"
+      | "balanceOf"
       | "getRoleAdmin"
       | "getRoleMember"
       | "getRoleMemberCount"
+      | "getToken"
       | "grantRole"
       | "hasRole"
       | "initialize"
@@ -60,6 +69,7 @@ export interface AbiInterface extends utils.Interface {
       | "renounceRole"
       | "revokeRole"
       | "supportsInterface"
+      | "tokensReceived"
       | "web3Entry"
       | "withdraw"
       | "xsyncOperator"
@@ -74,6 +84,18 @@ export interface AbiInterface extends utils.Interface {
     values?: undefined
   ): string;
   encodeFunctionData(
+    functionFragment: "ERC1820_REGISTRY",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "TOKENS_RECIPIENT_INTERFACE_HASH",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "balanceOf",
+    values: [PromiseOrValue<BigNumberish>]
+  ): string;
+  encodeFunctionData(
     functionFragment: "getRoleAdmin",
     values: [PromiseOrValue<BytesLike>]
   ): string;
@@ -85,6 +107,7 @@ export interface AbiInterface extends utils.Interface {
     functionFragment: "getRoleMemberCount",
     values: [PromiseOrValue<BytesLike>]
   ): string;
+  encodeFunctionData(functionFragment: "getToken", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "grantRole",
     values: [PromiseOrValue<BytesLike>, PromiseOrValue<string>]
@@ -95,7 +118,12 @@ export interface AbiInterface extends utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "initialize",
-    values: [PromiseOrValue<string>, PromiseOrValue<string>]
+    values: [
+      PromiseOrValue<string>,
+      PromiseOrValue<string>,
+      PromiseOrValue<string>,
+      PromiseOrValue<string>
+    ]
   ): string;
   encodeFunctionData(
     functionFragment: "onERC721Received",
@@ -117,6 +145,17 @@ export interface AbiInterface extends utils.Interface {
   encodeFunctionData(
     functionFragment: "supportsInterface",
     values: [PromiseOrValue<BytesLike>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "tokensReceived",
+    values: [
+      PromiseOrValue<string>,
+      PromiseOrValue<string>,
+      PromiseOrValue<string>,
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<BytesLike>,
+      PromiseOrValue<BytesLike>
+    ]
   ): string;
   encodeFunctionData(functionFragment: "web3Entry", values?: undefined): string;
   encodeFunctionData(
@@ -140,6 +179,15 @@ export interface AbiInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
+    functionFragment: "ERC1820_REGISTRY",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "TOKENS_RECIPIENT_INTERFACE_HASH",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "balanceOf", data: BytesLike): Result;
+  decodeFunctionResult(
     functionFragment: "getRoleAdmin",
     data: BytesLike
   ): Result;
@@ -151,6 +199,7 @@ export interface AbiInterface extends utils.Interface {
     functionFragment: "getRoleMemberCount",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "getToken", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "grantRole", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "hasRole", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "initialize", data: BytesLike): Result;
@@ -167,6 +216,10 @@ export interface AbiInterface extends utils.Interface {
     functionFragment: "supportsInterface",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(
+    functionFragment: "tokensReceived",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "web3Entry", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "withdraw", data: BytesLike): Result;
   decodeFunctionResult(
@@ -179,12 +232,14 @@ export interface AbiInterface extends utils.Interface {
     "RoleAdminChanged(bytes32,bytes32,bytes32)": EventFragment;
     "RoleGranted(bytes32,address,address)": EventFragment;
     "RoleRevoked(bytes32,address,address)": EventFragment;
+    "Withdraw(address,uint256,address,uint256)": EventFragment;
   };
 
   getEvent(nameOrSignatureOrTopic: "Initialized"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "RoleAdminChanged"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "RoleGranted"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "RoleRevoked"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "Withdraw"): EventFragment;
 }
 
 export interface InitializedEventObject {
@@ -231,6 +286,19 @@ export type RoleRevokedEvent = TypedEvent<
 
 export type RoleRevokedEventFilter = TypedEventFilter<RoleRevokedEvent>;
 
+export interface WithdrawEventObject {
+  to: string;
+  characterId: BigNumber;
+  token: string;
+  amount: BigNumber;
+}
+export type WithdrawEvent = TypedEvent<
+  [string, BigNumber, string, BigNumber],
+  WithdrawEventObject
+>;
+
+export type WithdrawEventFilter = TypedEventFilter<WithdrawEvent>;
+
 export interface Abi extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
   attach(addressOrName: string): this;
@@ -262,6 +330,17 @@ export interface Abi extends BaseContract {
 
     DEFAULT_ADMIN_ROLE(overrides?: CallOverrides): Promise<[string]>;
 
+    ERC1820_REGISTRY(overrides?: CallOverrides): Promise<[string]>;
+
+    TOKENS_RECIPIENT_INTERFACE_HASH(
+      overrides?: CallOverrides
+    ): Promise<[string]>;
+
+    balanceOf(
+      characterId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
+
     getRoleAdmin(
       role: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
@@ -278,6 +357,8 @@ export interface Abi extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[BigNumber]>;
 
+    getToken(overrides?: CallOverrides): Promise<[string]>;
+
     grantRole(
       role: PromiseOrValue<BytesLike>,
       account: PromiseOrValue<string>,
@@ -291,8 +372,10 @@ export interface Abi extends BaseContract {
     ): Promise<[boolean]>;
 
     initialize(
-      _web3Entry: PromiseOrValue<string>,
-      _xsyncOperator: PromiseOrValue<string>,
+      web3Entry_: PromiseOrValue<string>,
+      xsyncOperator_: PromiseOrValue<string>,
+      token_: PromiseOrValue<string>,
+      admin_: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
@@ -321,6 +404,16 @@ export interface Abi extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[boolean]>;
 
+    tokensReceived(
+      arg0: PromiseOrValue<string>,
+      arg1: PromiseOrValue<string>,
+      to: PromiseOrValue<string>,
+      amount: PromiseOrValue<BigNumberish>,
+      userData: PromiseOrValue<BytesLike>,
+      operatorData: PromiseOrValue<BytesLike>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
     web3Entry(overrides?: CallOverrides): Promise<[string]>;
 
     withdraw(
@@ -339,6 +432,15 @@ export interface Abi extends BaseContract {
 
   DEFAULT_ADMIN_ROLE(overrides?: CallOverrides): Promise<string>;
 
+  ERC1820_REGISTRY(overrides?: CallOverrides): Promise<string>;
+
+  TOKENS_RECIPIENT_INTERFACE_HASH(overrides?: CallOverrides): Promise<string>;
+
+  balanceOf(
+    characterId: PromiseOrValue<BigNumberish>,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
   getRoleAdmin(
     role: PromiseOrValue<BytesLike>,
     overrides?: CallOverrides
@@ -355,6 +457,8 @@ export interface Abi extends BaseContract {
     overrides?: CallOverrides
   ): Promise<BigNumber>;
 
+  getToken(overrides?: CallOverrides): Promise<string>;
+
   grantRole(
     role: PromiseOrValue<BytesLike>,
     account: PromiseOrValue<string>,
@@ -368,8 +472,10 @@ export interface Abi extends BaseContract {
   ): Promise<boolean>;
 
   initialize(
-    _web3Entry: PromiseOrValue<string>,
-    _xsyncOperator: PromiseOrValue<string>,
+    web3Entry_: PromiseOrValue<string>,
+    xsyncOperator_: PromiseOrValue<string>,
+    token_: PromiseOrValue<string>,
+    admin_: PromiseOrValue<string>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
@@ -398,6 +504,16 @@ export interface Abi extends BaseContract {
     overrides?: CallOverrides
   ): Promise<boolean>;
 
+  tokensReceived(
+    arg0: PromiseOrValue<string>,
+    arg1: PromiseOrValue<string>,
+    to: PromiseOrValue<string>,
+    amount: PromiseOrValue<BigNumberish>,
+    userData: PromiseOrValue<BytesLike>,
+    operatorData: PromiseOrValue<BytesLike>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
   web3Entry(overrides?: CallOverrides): Promise<string>;
 
   withdraw(
@@ -416,6 +532,15 @@ export interface Abi extends BaseContract {
 
     DEFAULT_ADMIN_ROLE(overrides?: CallOverrides): Promise<string>;
 
+    ERC1820_REGISTRY(overrides?: CallOverrides): Promise<string>;
+
+    TOKENS_RECIPIENT_INTERFACE_HASH(overrides?: CallOverrides): Promise<string>;
+
+    balanceOf(
+      characterId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     getRoleAdmin(
       role: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
@@ -432,6 +557,8 @@ export interface Abi extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    getToken(overrides?: CallOverrides): Promise<string>;
+
     grantRole(
       role: PromiseOrValue<BytesLike>,
       account: PromiseOrValue<string>,
@@ -445,8 +572,10 @@ export interface Abi extends BaseContract {
     ): Promise<boolean>;
 
     initialize(
-      _web3Entry: PromiseOrValue<string>,
-      _xsyncOperator: PromiseOrValue<string>,
+      web3Entry_: PromiseOrValue<string>,
+      xsyncOperator_: PromiseOrValue<string>,
+      token_: PromiseOrValue<string>,
+      admin_: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -474,6 +603,16 @@ export interface Abi extends BaseContract {
       interfaceId: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
     ): Promise<boolean>;
+
+    tokensReceived(
+      arg0: PromiseOrValue<string>,
+      arg1: PromiseOrValue<string>,
+      to: PromiseOrValue<string>,
+      amount: PromiseOrValue<BigNumberish>,
+      userData: PromiseOrValue<BytesLike>,
+      operatorData: PromiseOrValue<BytesLike>,
+      overrides?: CallOverrides
+    ): Promise<void>;
 
     web3Entry(overrides?: CallOverrides): Promise<string>;
 
@@ -525,12 +664,36 @@ export interface Abi extends BaseContract {
       account?: PromiseOrValue<string> | null,
       sender?: PromiseOrValue<string> | null
     ): RoleRevokedEventFilter;
+
+    "Withdraw(address,uint256,address,uint256)"(
+      to?: null,
+      characterId?: null,
+      token?: null,
+      amount?: null
+    ): WithdrawEventFilter;
+    Withdraw(
+      to?: null,
+      characterId?: null,
+      token?: null,
+      amount?: null
+    ): WithdrawEventFilter;
   };
 
   estimateGas: {
     ADMIN_ROLE(overrides?: CallOverrides): Promise<BigNumber>;
 
     DEFAULT_ADMIN_ROLE(overrides?: CallOverrides): Promise<BigNumber>;
+
+    ERC1820_REGISTRY(overrides?: CallOverrides): Promise<BigNumber>;
+
+    TOKENS_RECIPIENT_INTERFACE_HASH(
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    balanceOf(
+      characterId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
     getRoleAdmin(
       role: PromiseOrValue<BytesLike>,
@@ -548,6 +711,8 @@ export interface Abi extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    getToken(overrides?: CallOverrides): Promise<BigNumber>;
+
     grantRole(
       role: PromiseOrValue<BytesLike>,
       account: PromiseOrValue<string>,
@@ -561,8 +726,10 @@ export interface Abi extends BaseContract {
     ): Promise<BigNumber>;
 
     initialize(
-      _web3Entry: PromiseOrValue<string>,
-      _xsyncOperator: PromiseOrValue<string>,
+      web3Entry_: PromiseOrValue<string>,
+      xsyncOperator_: PromiseOrValue<string>,
+      token_: PromiseOrValue<string>,
+      admin_: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
@@ -589,6 +756,16 @@ export interface Abi extends BaseContract {
     supportsInterface(
       interfaceId: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    tokensReceived(
+      arg0: PromiseOrValue<string>,
+      arg1: PromiseOrValue<string>,
+      to: PromiseOrValue<string>,
+      amount: PromiseOrValue<BigNumberish>,
+      userData: PromiseOrValue<BytesLike>,
+      operatorData: PromiseOrValue<BytesLike>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     web3Entry(overrides?: CallOverrides): Promise<BigNumber>;
@@ -612,6 +789,17 @@ export interface Abi extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
+    ERC1820_REGISTRY(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    TOKENS_RECIPIENT_INTERFACE_HASH(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    balanceOf(
+      characterId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
     getRoleAdmin(
       role: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
@@ -628,6 +816,8 @@ export interface Abi extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
+    getToken(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
     grantRole(
       role: PromiseOrValue<BytesLike>,
       account: PromiseOrValue<string>,
@@ -641,8 +831,10 @@ export interface Abi extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     initialize(
-      _web3Entry: PromiseOrValue<string>,
-      _xsyncOperator: PromiseOrValue<string>,
+      web3Entry_: PromiseOrValue<string>,
+      xsyncOperator_: PromiseOrValue<string>,
+      token_: PromiseOrValue<string>,
+      admin_: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -669,6 +861,16 @@ export interface Abi extends BaseContract {
     supportsInterface(
       interfaceId: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    tokensReceived(
+      arg0: PromiseOrValue<string>,
+      arg1: PromiseOrValue<string>,
+      to: PromiseOrValue<string>,
+      amount: PromiseOrValue<BigNumberish>,
+      userData: PromiseOrValue<BytesLike>,
+      operatorData: PromiseOrValue<BytesLike>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     web3Entry(overrides?: CallOverrides): Promise<PopulatedTransaction>;

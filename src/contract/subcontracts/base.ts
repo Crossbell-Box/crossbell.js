@@ -263,12 +263,42 @@ export class BaseContract {
   protected parseLog<TopicName extends keyof typeof logTopics>(
     logs: ethers.providers.Log[],
     filterTopic: TopicName,
+  ): LogEvents[(typeof logTopics)[TopicName]]
+  protected parseLog<TopicName extends keyof typeof logTopics>(
+    logs: ethers.providers.Log[],
+    filterTopic: TopicName,
     {
-      throwOnMultipleLogsFound = true,
+      throwOnMultipleLogsFound,
+      returnMultipleLogs,
     }: {
       throwOnMultipleLogsFound?: boolean
+      returnMultipleLogs?: false
+    },
+  ): LogEvents[(typeof logTopics)[TopicName]]
+  protected parseLog<TopicName extends keyof typeof logTopics>(
+    logs: ethers.providers.Log[],
+    filterTopic: TopicName,
+    {
+      throwOnMultipleLogsFound,
+      returnMultipleLogs,
+    }: {
+      throwOnMultipleLogsFound?: boolean
+      returnMultipleLogs?: true
+    },
+  ): LogEvents[(typeof logTopics)[TopicName]][]
+  protected parseLog<TopicName extends keyof typeof logTopics>(
+    logs: ethers.providers.Log[],
+    filterTopic: TopicName,
+    {
+      throwOnMultipleLogsFound = true,
+      returnMultipleLogs = false,
+    }: {
+      throwOnMultipleLogsFound?: boolean
+      returnMultipleLogs?: boolean
     } = {},
-  ): LogEvents[(typeof logTopics)[TopicName]] {
+  ):
+    | LogEvents[(typeof logTopics)[TopicName]]
+    | LogEvents[(typeof logTopics)[TopicName]][] {
     const targetTopicHash = ethers.utils.keccak256(
       ethers.utils.toUtf8Bytes(logTopics[filterTopic]),
     )
@@ -283,6 +313,12 @@ export class BaseContract {
       if (_logs.length > 1) {
         throw new Error(`More than one log with topic ${filterTopic} found`)
       }
+    }
+
+    if (returnMultipleLogs) {
+      return _logs.map((log) =>
+        this.contract.interface.parseLog(log),
+      ) as unknown as LogEvents[(typeof logTopics)[TopicName]][]
     }
 
     const log = _logs[0]

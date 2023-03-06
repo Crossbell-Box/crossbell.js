@@ -479,6 +479,7 @@ export interface AbiInterface extends utils.Interface {
     "linkNote((uint256,uint256,uint256,bytes32,bytes))": FunctionFragment;
     "lockNote(uint256,uint256)": FunctionFragment;
     "mintNote((uint256,uint256,address,bytes))": FunctionFragment;
+    "multicall(bytes[])": FunctionFragment;
     "name()": FunctionFragment;
     "ownerOf(uint256)": FunctionFragment;
     "postNote((uint256,string,address,bytes,address,bytes,bool))": FunctionFragment;
@@ -556,6 +557,7 @@ export interface AbiInterface extends utils.Interface {
       | "linkNote"
       | "lockNote"
       | "mintNote"
+      | "multicall"
       | "name"
       | "ownerOf"
       | "postNote"
@@ -764,6 +766,10 @@ export interface AbiInterface extends utils.Interface {
   encodeFunctionData(
     functionFragment: "mintNote",
     values: [DataTypes.MintNoteDataStruct]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "multicall",
+    values: [PromiseOrValue<BytesLike>[]]
   ): string;
   encodeFunctionData(functionFragment: "name", values?: undefined): string;
   encodeFunctionData(
@@ -1030,6 +1036,7 @@ export interface AbiInterface extends utils.Interface {
   decodeFunctionResult(functionFragment: "linkNote", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "lockNote", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "mintNote", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "multicall", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "name", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "ownerOf", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "postNote", data: BytesLike): Result;
@@ -1941,12 +1948,12 @@ export interface Abi extends BaseContract {
     ): Promise<ContractTransaction>;
 
     initialize(
-      _name: PromiseOrValue<string>,
-      _symbol: PromiseOrValue<string>,
-      _linklistContract: PromiseOrValue<string>,
-      _mintNFTImpl: PromiseOrValue<string>,
-      _periphery: PromiseOrValue<string>,
-      _resolver: PromiseOrValue<string>,
+      name_: PromiseOrValue<string>,
+      symbol_: PromiseOrValue<string>,
+      linklist_: PromiseOrValue<string>,
+      mintNFTImpl_: PromiseOrValue<string>,
+      periphery_: PromiseOrValue<string>,
+      newbieVilla_: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
@@ -2009,6 +2016,11 @@ export interface Abi extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
+    multicall(
+      data: PromiseOrValue<BytesLike>[],
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
     name(overrides?: CallOverrides): Promise<[string]>;
 
     ownerOf(
@@ -2022,37 +2034,37 @@ export interface Abi extends BaseContract {
     ): Promise<ContractTransaction>;
 
     postNote4Address(
-      noteData: DataTypes.PostNoteDataStruct,
+      vars: DataTypes.PostNoteDataStruct,
       ethAddress: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     postNote4AnyUri(
-      postNoteData: DataTypes.PostNoteDataStruct,
+      vars: DataTypes.PostNoteDataStruct,
       uri: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     postNote4Character(
-      postNoteData: DataTypes.PostNoteDataStruct,
+      vars: DataTypes.PostNoteDataStruct,
       toCharacterId: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     postNote4ERC721(
-      postNoteData: DataTypes.PostNoteDataStruct,
+      vars: DataTypes.PostNoteDataStruct,
       erc721: DataTypes.ERC721StructStruct,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     postNote4Linklist(
-      noteData: DataTypes.PostNoteDataStruct,
+      vars: DataTypes.PostNoteDataStruct,
       toLinklistId: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     postNote4Note(
-      postNoteData: DataTypes.PostNoteDataStruct,
+      vars: DataTypes.PostNoteDataStruct,
       note: DataTypes.NoteStructStruct,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
@@ -2333,12 +2345,12 @@ export interface Abi extends BaseContract {
   ): Promise<ContractTransaction>;
 
   initialize(
-    _name: PromiseOrValue<string>,
-    _symbol: PromiseOrValue<string>,
-    _linklistContract: PromiseOrValue<string>,
-    _mintNFTImpl: PromiseOrValue<string>,
-    _periphery: PromiseOrValue<string>,
-    _resolver: PromiseOrValue<string>,
+    name_: PromiseOrValue<string>,
+    symbol_: PromiseOrValue<string>,
+    linklist_: PromiseOrValue<string>,
+    mintNFTImpl_: PromiseOrValue<string>,
+    periphery_: PromiseOrValue<string>,
+    newbieVilla_: PromiseOrValue<string>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
@@ -2401,6 +2413,11 @@ export interface Abi extends BaseContract {
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
+  multicall(
+    data: PromiseOrValue<BytesLike>[],
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
   name(overrides?: CallOverrides): Promise<string>;
 
   ownerOf(
@@ -2414,37 +2431,37 @@ export interface Abi extends BaseContract {
   ): Promise<ContractTransaction>;
 
   postNote4Address(
-    noteData: DataTypes.PostNoteDataStruct,
+    vars: DataTypes.PostNoteDataStruct,
     ethAddress: PromiseOrValue<string>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   postNote4AnyUri(
-    postNoteData: DataTypes.PostNoteDataStruct,
+    vars: DataTypes.PostNoteDataStruct,
     uri: PromiseOrValue<string>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   postNote4Character(
-    postNoteData: DataTypes.PostNoteDataStruct,
+    vars: DataTypes.PostNoteDataStruct,
     toCharacterId: PromiseOrValue<BigNumberish>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   postNote4ERC721(
-    postNoteData: DataTypes.PostNoteDataStruct,
+    vars: DataTypes.PostNoteDataStruct,
     erc721: DataTypes.ERC721StructStruct,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   postNote4Linklist(
-    noteData: DataTypes.PostNoteDataStruct,
+    vars: DataTypes.PostNoteDataStruct,
     toLinklistId: PromiseOrValue<BigNumberish>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   postNote4Note(
-    postNoteData: DataTypes.PostNoteDataStruct,
+    vars: DataTypes.PostNoteDataStruct,
     note: DataTypes.NoteStructStruct,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
@@ -2605,7 +2622,7 @@ export interface Abi extends BaseContract {
     createCharacter(
       vars: DataTypes.CreateCharacterDataStruct,
       overrides?: CallOverrides
-    ): Promise<void>;
+    ): Promise<BigNumber>;
 
     createThenLinkCharacter(
       vars: DataTypes.CreateThenLinkCharacterDataStruct,
@@ -2725,12 +2742,12 @@ export interface Abi extends BaseContract {
     ): Promise<void>;
 
     initialize(
-      _name: PromiseOrValue<string>,
-      _symbol: PromiseOrValue<string>,
-      _linklistContract: PromiseOrValue<string>,
-      _mintNFTImpl: PromiseOrValue<string>,
-      _periphery: PromiseOrValue<string>,
-      _resolver: PromiseOrValue<string>,
+      name_: PromiseOrValue<string>,
+      symbol_: PromiseOrValue<string>,
+      linklist_: PromiseOrValue<string>,
+      mintNFTImpl_: PromiseOrValue<string>,
+      periphery_: PromiseOrValue<string>,
+      newbieVilla_: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -2793,6 +2810,11 @@ export interface Abi extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    multicall(
+      data: PromiseOrValue<BytesLike>[],
+      overrides?: CallOverrides
+    ): Promise<string[]>;
+
     name(overrides?: CallOverrides): Promise<string>;
 
     ownerOf(
@@ -2806,37 +2828,37 @@ export interface Abi extends BaseContract {
     ): Promise<BigNumber>;
 
     postNote4Address(
-      noteData: DataTypes.PostNoteDataStruct,
+      vars: DataTypes.PostNoteDataStruct,
       ethAddress: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     postNote4AnyUri(
-      postNoteData: DataTypes.PostNoteDataStruct,
+      vars: DataTypes.PostNoteDataStruct,
       uri: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     postNote4Character(
-      postNoteData: DataTypes.PostNoteDataStruct,
+      vars: DataTypes.PostNoteDataStruct,
       toCharacterId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     postNote4ERC721(
-      postNoteData: DataTypes.PostNoteDataStruct,
+      vars: DataTypes.PostNoteDataStruct,
       erc721: DataTypes.ERC721StructStruct,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     postNote4Linklist(
-      noteData: DataTypes.PostNoteDataStruct,
+      vars: DataTypes.PostNoteDataStruct,
       toLinklistId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     postNote4Note(
-      postNoteData: DataTypes.PostNoteDataStruct,
+      vars: DataTypes.PostNoteDataStruct,
       note: DataTypes.NoteStructStruct,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
@@ -3624,12 +3646,12 @@ export interface Abi extends BaseContract {
     ): Promise<BigNumber>;
 
     initialize(
-      _name: PromiseOrValue<string>,
-      _symbol: PromiseOrValue<string>,
-      _linklistContract: PromiseOrValue<string>,
-      _mintNFTImpl: PromiseOrValue<string>,
-      _periphery: PromiseOrValue<string>,
-      _resolver: PromiseOrValue<string>,
+      name_: PromiseOrValue<string>,
+      symbol_: PromiseOrValue<string>,
+      linklist_: PromiseOrValue<string>,
+      mintNFTImpl_: PromiseOrValue<string>,
+      periphery_: PromiseOrValue<string>,
+      newbieVilla_: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
@@ -3692,6 +3714,11 @@ export interface Abi extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
+    multicall(
+      data: PromiseOrValue<BytesLike>[],
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
     name(overrides?: CallOverrides): Promise<BigNumber>;
 
     ownerOf(
@@ -3705,37 +3732,37 @@ export interface Abi extends BaseContract {
     ): Promise<BigNumber>;
 
     postNote4Address(
-      noteData: DataTypes.PostNoteDataStruct,
+      vars: DataTypes.PostNoteDataStruct,
       ethAddress: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     postNote4AnyUri(
-      postNoteData: DataTypes.PostNoteDataStruct,
+      vars: DataTypes.PostNoteDataStruct,
       uri: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     postNote4Character(
-      postNoteData: DataTypes.PostNoteDataStruct,
+      vars: DataTypes.PostNoteDataStruct,
       toCharacterId: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     postNote4ERC721(
-      postNoteData: DataTypes.PostNoteDataStruct,
+      vars: DataTypes.PostNoteDataStruct,
       erc721: DataTypes.ERC721StructStruct,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     postNote4Linklist(
-      noteData: DataTypes.PostNoteDataStruct,
+      vars: DataTypes.PostNoteDataStruct,
       toLinklistId: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     postNote4Note(
-      postNoteData: DataTypes.PostNoteDataStruct,
+      vars: DataTypes.PostNoteDataStruct,
       note: DataTypes.NoteStructStruct,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
@@ -4017,12 +4044,12 @@ export interface Abi extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     initialize(
-      _name: PromiseOrValue<string>,
-      _symbol: PromiseOrValue<string>,
-      _linklistContract: PromiseOrValue<string>,
-      _mintNFTImpl: PromiseOrValue<string>,
-      _periphery: PromiseOrValue<string>,
-      _resolver: PromiseOrValue<string>,
+      name_: PromiseOrValue<string>,
+      symbol_: PromiseOrValue<string>,
+      linklist_: PromiseOrValue<string>,
+      mintNFTImpl_: PromiseOrValue<string>,
+      periphery_: PromiseOrValue<string>,
+      newbieVilla_: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -4085,6 +4112,11 @@ export interface Abi extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
+    multicall(
+      data: PromiseOrValue<BytesLike>[],
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
     name(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     ownerOf(
@@ -4098,37 +4130,37 @@ export interface Abi extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     postNote4Address(
-      noteData: DataTypes.PostNoteDataStruct,
+      vars: DataTypes.PostNoteDataStruct,
       ethAddress: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     postNote4AnyUri(
-      postNoteData: DataTypes.PostNoteDataStruct,
+      vars: DataTypes.PostNoteDataStruct,
       uri: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     postNote4Character(
-      postNoteData: DataTypes.PostNoteDataStruct,
+      vars: DataTypes.PostNoteDataStruct,
       toCharacterId: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     postNote4ERC721(
-      postNoteData: DataTypes.PostNoteDataStruct,
+      vars: DataTypes.PostNoteDataStruct,
       erc721: DataTypes.ERC721StructStruct,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     postNote4Linklist(
-      noteData: DataTypes.PostNoteDataStruct,
+      vars: DataTypes.PostNoteDataStruct,
       toLinklistId: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     postNote4Note(
-      postNoteData: DataTypes.PostNoteDataStruct,
+      vars: DataTypes.PostNoteDataStruct,
       note: DataTypes.NoteStructStruct,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
