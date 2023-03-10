@@ -1,4 +1,3 @@
-import isIpfs from 'is-ipfs'
 import retry from 'async-retry'
 import '../utils/fetch'
 import type {
@@ -8,7 +7,6 @@ import type {
   CharacterMetadata,
 } from '../types/metadata'
 import { IpfsResponse } from '../types/ipfs'
-import { Logger } from '../utils/logger'
 import { ipfsFetch, isIpfsUrl } from '@crossbell/ipfs-fetch'
 
 export class Ipfs {
@@ -56,11 +54,6 @@ export class Ipfs {
 
   static async uriToMetadata<T extends Metadata>(uri: string) {
     if (isIpfsUrl(uri)) {
-      if (!isIpfs.url(uri)) {
-        Logger.error('Wrong IPFS url: ' + uri)
-        return
-      }
-      // to cf-ipfs endpoint
       const res = await ipfsFetch(uri).then((res) => res.text())
       try {
         const json = JSON.parse(res)

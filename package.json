@@ -48,7 +48,6 @@
     "browser-or-node": "^2.1.1",
     "ethers": "^5.7.2",
     "fetch-undici": "^3.0.1",
-    "is-ipfs": "^6.0.2",
     "p-limit": "^3.1.0",
     "ts-mixer": "^6.0.3",
     "web3-providers-ws": "^1.8.2"
