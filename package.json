@@ -43,6 +43,7 @@
     "watch": "npm run build-fast -- --watch"
   },
   "dependencies": {
+    "@crossbell/ipfs-fetch": "^0.0.15",
     "async-retry": "^1.3.3",
     "browser-or-node": "^2.1.1",
     "ethers": "^5.7.2",

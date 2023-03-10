@@ -8,8 +8,8 @@ import type {
   CharacterMetadata,
 } from '../types/metadata'
 import { IpfsResponse } from '../types/ipfs'
-import { Network } from '../network'
 import { Logger } from '../utils/logger'
+import { ipfsFetch, isIpfsUrl } from '@crossbell/ipfs-fetch'
 
 export class Ipfs {
   static async uploadJson(json: any) {
@@ -55,12 +55,18 @@ export class Ipfs {
   }
 
   static async uriToMetadata<T extends Metadata>(uri: string) {
-    if (uri.startsWith('ipfs://')) {
-      // to cf-ipfs endpoint
-      uri = uri.replace('ipfs://', Network.getIpfsGateway())
+    if (isIpfsUrl(uri)) {
       if (!isIpfs.url(uri)) {
-        Logger.warn('Wrong IPFS url: ' + uri)
+        Logger.error('Wrong IPFS url: ' + uri)
         return
+      }
+      // to cf-ipfs endpoint
+      const res = await ipfsFetch(uri).then((res) => res.text())
+      try {
+        const json = JSON.parse(res)
+        return json as T
+      } catch (e) {
+        throw new Error('Failed to parse metadata from uri: ' + uri)
       }
     }
 
@@ -71,7 +77,7 @@ export class Ipfs {
       return res as T
     } catch (e) {
       throw new Error(
-        `Failed to fetch metadata from uri: ${uri}. Response: ` + res,
+        `Failed to fetch metadata from uri: ${uri} . Response: ` + res,
       )
     }
   }

@@ -2,8 +2,6 @@ import { ethers } from 'ethers'
 
 export type IAvailableNetwork = 'crossbell'
 
-// globalThis.process.env.CROSSBELL_RPC_ADDRESS = 'ws://137.184.70.176:8546' // TEST
-
 export class Network {
   static readonly #CONTRACT_CROSSBELL =
     '0xa6f969045641Cf486a747A2688F3a5A6d43cd0D8'
@@ -92,6 +90,7 @@ export class Network {
   /**
    * This returns the IPFS gateway used for the metadata requests.
    * @default 'https://w3s.link/ipfs/'
+   * @deprecated this is not used anymore
    * @returns The IPFS gateway.
    */
   static getIpfsGateway() {
@@ -101,6 +100,7 @@ export class Network {
   /**
    * This sets the IPFS gateway used for the metadata requests.
    * @default 'https://w3s.link/ipfs/'
+   * @deprecated this is not used anymore
    * @param gateway - The IPFS gateway to use for the metadata requests.
    */
   static setIpfsGateway(gateway: string) {
