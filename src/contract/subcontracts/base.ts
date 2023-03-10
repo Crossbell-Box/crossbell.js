@@ -26,6 +26,14 @@ import {
   type Abi as NewbieVillaAbi,
   Abi__factory as NewbieVillaAbi__factory,
 } from '../abis/newbie-villa/types'
+import {
+  type Abi as TipAbi,
+  Abi__factory as TipAbi__factory,
+} from '../abis/tips/types'
+import {
+  type Abi as MiraAbi,
+  Abi__factory as MiraAbi__factory,
+} from '../abis/mira/types'
 import type { MintEvent } from '../abis/cbt/types/Abi'
 import { validateIsInSdn } from '../../utils/sdn'
 import { Logger } from '../../utils/logger'
@@ -67,6 +75,8 @@ type ContractOptions = {
   peripheryContractAddress: string
   cbtContractAddress?: string
   newbieVillaContractAddress: string
+  tipsContractAddress: string
+  miraContractAddress: string
   /**
    * Enable version check.
    * @default true if not in browser environment
@@ -85,10 +95,12 @@ export class BaseContract {
   private _peripheryContract!: PeripheryAbi
   private _cbtContract!: CbtAbi
   private _newbieVillaContract!: NewbieVillaAbi
+  private _tipsContract!: TipAbi
+  private _miraContract!: MiraAbi
 
   private _hasConnected: boolean = false
 
-  private options: ContractOptions
+  protected options: ContractOptions
 
   /**
    * Returns the internal contract.
@@ -130,6 +142,32 @@ export class BaseContract {
 
   set cbtContract(contract: CbtAbi) {
     this._cbtContract = contract
+  }
+
+  /**
+   * Returns the internal cbt contract.
+   */
+  get tipsContract(): TipAbi {
+    this.checkConnection()
+
+    return this._tipsContract
+  }
+
+  set tipsContract(contract: TipAbi) {
+    this._tipsContract = contract
+  }
+
+  /**
+   * Returns the internal mira contract.
+   */
+  get miraContract(): MiraAbi {
+    this.checkConnection()
+
+    return this._miraContract
+  }
+
+  set miraContract(contract: MiraAbi) {
+    this._miraContract = contract
   }
 
   /**
@@ -191,6 +229,10 @@ export class BaseContract {
         options?.peripheryContractAddress ??
         Network.getPeripheryContractAddress(),
       cbtContractAddress: options?.cbtContractAddress,
+      tipsContractAddress:
+        options?.tipsContractAddress ?? Network.getTipsContractAddress(),
+      miraContractAddress:
+        options?.miraContractAddress ?? Network.getMiraContractAddress(),
       newbieVillaContractAddress:
         options?.newbieVillaContractAddress ??
         Network.getNewbieVillaContractAddress(),
@@ -254,6 +296,16 @@ export class BaseContract {
 
     this._newbieVillaContract = NewbieVillaAbi__factory.connect(
       this.options.newbieVillaContractAddress,
+      this._signerOrProvider,
+    )
+
+    this._tipsContract = TipAbi__factory.connect(
+      this.options.tipsContractAddress,
+      this._signerOrProvider,
+    )
+
+    this._miraContract = MiraAbi__factory.connect(
+      this.options.miraContractAddress,
       this._signerOrProvider,
     )
 

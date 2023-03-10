@@ -11,6 +11,8 @@ export class Network {
     '0x96e96b7af62d628ce7eb2016d2c1d2786614ea73'
   static readonly #CONTRACT_NEWBIE_VILLA =
     '0xD0c83f0BB2c61D55B3d33950b70C59ba2f131caA'
+  static readonly #CONTRACT_TIPS = '0x0058be0845952D887D1668B5545de995E12e8783'
+  static readonly #CONTRACT_MIRA = '0xAfB95CC0BD320648B3E8Df6223d9CDD05EbeDC64'
 
   static readonly #availableNetworks: IAvailableNetwork[] = ['crossbell']
   static #currentNetwork: IAvailableNetwork = 'crossbell'
@@ -69,6 +71,22 @@ export class Network {
    */
   static getNewbieVillaContractAddress() {
     return this.#CONTRACT_NEWBIE_VILLA
+  }
+
+  /**
+   * This returns the contract address of the tips contract
+   * @returns The contract address of the tips contract
+   */
+  static getTipsContractAddress() {
+    return this.#CONTRACT_TIPS
+  }
+
+  /**
+   * This returns the contract address of the mira contract
+   * @returns The contract address of the mira contract
+   */
+  static getMiraContractAddress() {
+    return this.#CONTRACT_MIRA
   }
 
   /**
