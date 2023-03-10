@@ -53,26 +53,31 @@ export class Ipfs {
   }
 
   static async uriToMetadata<T extends Metadata>(uri: string) {
-    if (isIpfsUrl(uri)) {
-      const res = await ipfsFetch(uri).then((res) => res.text())
-      try {
-        const json = JSON.parse(res)
-        return json as T
-      } catch (e) {
-        throw new Error('Failed to parse metadata from uri: ' + uri)
-      }
-    }
+    return retry(
+      async () => {
+        if (isIpfsUrl(uri)) {
+          const res = await ipfsFetch(uri).then((res) => res.text())
+          try {
+            const json = JSON.parse(res)
+            return json as T
+          } catch (e) {
+            throw new Error('Failed to parse metadata from uri: ' + uri)
+          }
+        }
 
-    let res
-    try {
-      res = await fetch(uri).then((res) => res.text())
-      res = JSON.parse(res)
-      return res as T
-    } catch (e) {
-      throw new Error(
-        `Failed to fetch metadata from uri: ${uri} . Response: ` + res,
-      )
-    }
+        let res
+        try {
+          res = await fetch(uri).then((res) => res.text())
+          res = JSON.parse(res)
+          return res as T
+        } catch (e) {
+          throw new Error(
+            `Failed to fetch metadata from uri: ${uri} . Response: ` + res,
+          )
+        }
+      },
+      { retries: 3 },
+    )
   }
 
   static async parseMetadataOrUri<T = NoteMetadata>(
