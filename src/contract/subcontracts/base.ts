@@ -27,8 +27,8 @@ import {
   Abi__factory as NewbieVillaAbi__factory,
 } from '../abis/newbie-villa/types'
 import {
-  type Abi as TipAbi,
-  Abi__factory as TipAbi__factory,
+  type Abi as TipsAbi,
+  Abi__factory as TipsAbi__factory,
 } from '../abis/tips/types'
 import {
   type Abi as MiraAbi,
@@ -95,7 +95,7 @@ export class BaseContract {
   private _peripheryContract!: PeripheryAbi
   private _cbtContract!: CbtAbi
   private _newbieVillaContract!: NewbieVillaAbi
-  private _tipsContract!: TipAbi
+  private _tipsContract!: TipsAbi
   private _miraContract!: MiraAbi
 
   private _hasConnected: boolean = false
@@ -147,13 +147,13 @@ export class BaseContract {
   /**
    * Returns the internal cbt contract.
    */
-  get tipsContract(): TipAbi {
+  get tipsContract(): TipsAbi {
     this.checkConnection()
 
     return this._tipsContract
   }
 
-  set tipsContract(contract: TipAbi) {
+  set tipsContract(contract: TipsAbi) {
     this._tipsContract = contract
   }
 
@@ -299,7 +299,7 @@ export class BaseContract {
       this._signerOrProvider,
     )
 
-    this._tipsContract = TipAbi__factory.connect(
+    this._tipsContract = TipsAbi__factory.connect(
       this.options.tipsContractAddress,
       this._signerOrProvider,
     )

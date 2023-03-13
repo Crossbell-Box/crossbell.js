@@ -1,6 +1,6 @@
 {
   "name": "crossbell.js",
-  "version": "0.16.8",
+  "version": "0.16.9",
   "description": "JavaScript SDK to interact with Crossbell",
   "keywords": [
     "crossbell",
@@ -55,7 +55,7 @@
   "devDependencies": {
     "@typechain/ethers-v5": "^10.2.0",
     "@types/async-retry": "^1.4.5",
-    "@types/node": "^18.15.0",
+    "@types/node": "^18.15.1",
     "prettier": "^2.8.4",
     "tsup": "^6.6.3",
     "typechain": "^8.1.1",
