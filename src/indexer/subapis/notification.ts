@@ -21,6 +21,8 @@ export class NotificationIndexer extends BaseIndexer {
     {
       type,
       includeCharacterMetadata,
+      includeSelfInvoked,
+      includeIsRead,
       limit,
       cursor,
     }: {
@@ -28,6 +30,10 @@ export class NotificationIndexer extends BaseIndexer {
       type?: NotificationTypeKey | NotificationTypeKey[]
       /** Whether to include metadata of the character */
       includeCharacterMetadata?: boolean
+      /** Whether to include actions invoked by the character itself */
+      includeSelfInvoked?: boolean
+      /** Whether to include `isRead` attribute to indicate whether the notification is read */
+      includeIsRead?: boolean
       /** Limit the count of items returned. */
       limit?: number
       /** Used for pagination. */
@@ -38,6 +44,8 @@ export class NotificationIndexer extends BaseIndexer {
     url += createSearchParamsString({
       type,
       includeCharacterMetadata,
+      includeSelfInvoked,
+      includeIsRead,
       limit,
       cursor,
     })

@@ -22,4 +22,5 @@ export interface NotificationEntity {
   logIndex: number
   feed?: FeedEntity
   createdAt: Date
+  isRead?: boolean
 }
