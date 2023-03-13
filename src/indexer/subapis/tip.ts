@@ -17,6 +17,7 @@ export class TipIndexer extends BaseIndexer {
     toCharacterId,
     toNoteId,
     tokenAddress,
+    includeZeroAmount,
     limit,
     cursor,
   }: {
@@ -28,6 +29,8 @@ export class TipIndexer extends BaseIndexer {
     toNoteId?: BigNumberish
     /** The token address of the token sent in tip. */
     tokenAddress?: string
+    /** Whether to include tips with zero amount. */
+    includeZeroAmount?: boolean
     /** Limit the count of items returned. */
     limit?: number
     /** Used for pagination. */
@@ -39,6 +42,7 @@ export class TipIndexer extends BaseIndexer {
       toCharacterId,
       toNoteId,
       tokenAddress,
+      includeZeroAmount,
       limit,
       cursor,
     })
