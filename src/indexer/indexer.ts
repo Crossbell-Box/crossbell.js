@@ -10,6 +10,7 @@ import { MetadataIndexer } from './subapis/metadata'
 import { AchievementIndexer } from './subapis/achievement'
 import { NotificationIndexer } from './subapis/notification'
 import { OperatorIndexer } from './subapis/operators'
+import { TipIndexer } from './subapis/tip'
 
 const mixin1 = Mixin(
   CharacterIndexer,
@@ -24,7 +25,7 @@ const mixin1 = Mixin(
   NotificationIndexer,
 )
 
-const mixin2 = Mixin(mixin1, OperatorIndexer)
+const mixin2 = Mixin(mixin1, OperatorIndexer, TipIndexer)
 
 /**
  * This class is used to fetch data like characters, links from the indexer.
