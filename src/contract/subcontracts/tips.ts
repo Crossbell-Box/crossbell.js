@@ -111,4 +111,20 @@ export class TipsContract extends BaseContract {
       data: res,
     }
   }
+
+  /**
+   * This gets the token decimals of $MIRA.
+   *
+   * @category TipsContract
+   * @returns The token decimals of $MIRA.
+   */
+  async getMiraTokenDecimals(
+    overrides: CallOverrides = {},
+  ): Promise<Result<number>> | never {
+    const res = await this.miraContract.decimals(overrides)
+
+    return {
+      data: res,
+    }
+  }
 }
