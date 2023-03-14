@@ -115,4 +115,15 @@ export class NoteMetadata extends Mixin(BaseMetadata, AttributesMetadata) {
    * 'nsfw'
    */
   content_warning?: 'nsfw' | 'sensitive' | 'spoiler'
+
+  /**
+   * The variant of this note.
+   *
+   * - `undefined`: the normal note.
+   * - `"achievement"`: the achievement variant.
+   *
+   * @example
+   * 'achievement'
+   */
+  variant?: 'achievement'
 }
