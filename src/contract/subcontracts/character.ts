@@ -447,13 +447,14 @@ export class CharacterContract extends BaseContract {
    * @param proof - The proof given from the server
    * @returns The transaction hash.
    */
+  @autoSwitchMainnet()
   async withdrawCharacterFromNewbieVilla(
     toAddress: string,
     characterId: BigNumberish,
     nonce: BigNumberish,
     expires: BigNumberish,
     proof: string,
-    overrides: CallOverrides = {},
+    overrides: Overrides = {},
   ): Promise<Result<undefined, true>> | never {
     this.validateAddress(toAddress)
 
@@ -463,6 +464,7 @@ export class CharacterContract extends BaseContract {
       nonce,
       expires,
       proof,
+      overrides,
     )
 
     const receipt = await tx.wait()
