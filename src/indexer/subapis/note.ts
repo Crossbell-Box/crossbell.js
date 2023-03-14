@@ -3,6 +3,7 @@ import type { ListResponse, NoteEntity } from '../../types/indexer'
 import type { LinkItemType } from '../../types/contract'
 import { type BigNumberish } from 'ethers'
 import { createSearchParamsString } from '../../utils/query_string'
+import { NoteMetadata } from '../../types'
 
 export class NoteIndexer extends BaseIndexer {
   /**
@@ -27,6 +28,7 @@ export class NoteIndexer extends BaseIndexer {
     tags,
     sources,
     externalUrls,
+    variant,
     limit = 20,
     cursor,
     includeEmptyMetadata,
@@ -66,6 +68,8 @@ export class NoteIndexer extends BaseIndexer {
     sources?: string | string[]
     /** The `metadata.content.external_urls` to filter by. */
     externalUrls?: string | string[]
+    /** The `metadata.content.variant` to filter by. */
+    variant?: NoteMetadata['variant']
     /** Limit the count of items returned. */
     limit?: number
     /** Used for pagination. */
@@ -111,6 +115,7 @@ export class NoteIndexer extends BaseIndexer {
       tags,
       sources,
       externalUrls,
+      variant,
       includeEmptyMetadata,
       includeCharacter,
       includeHeadCharacter,

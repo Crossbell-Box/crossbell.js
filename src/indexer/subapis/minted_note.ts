@@ -2,6 +2,7 @@ import { BaseIndexer } from './base'
 import type { ListResponse, MintedNoteEntity } from '../../types/indexer'
 import { type BigNumberish } from 'ethers'
 import { createSearchParamsString } from '../../utils/query_string'
+import { NoteMetadata } from '../../types'
 
 export class MintedNoteIndexer extends BaseIndexer {
   /**
@@ -17,6 +18,7 @@ export class MintedNoteIndexer extends BaseIndexer {
     {
       noteCharacterId,
       noteId,
+      variant,
       limit,
       cursor,
       order,
@@ -25,6 +27,8 @@ export class MintedNoteIndexer extends BaseIndexer {
       noteCharacterId?: BigNumberish
       /** THe note id */
       noteId?: BigNumberish
+      /** The `metadata.content.variant` to filter by. */
+      variant?: NoteMetadata['variant']
       /** Limit the count of items returned. */
       limit?: number
       /** Used for pagination. */
@@ -37,6 +41,7 @@ export class MintedNoteIndexer extends BaseIndexer {
     url += createSearchParamsString({
       noteCharacterId,
       noteId,
+      variant,
       limit,
       cursor,
       order,
