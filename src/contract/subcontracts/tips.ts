@@ -1,7 +1,7 @@
 import { autoSwitchMainnet } from '../decorators'
 import type { Overrides, Result } from '../../types/contract'
 import { BaseContract } from './base'
-import { type BigNumberish } from 'ethers'
+import { CallOverrides, type BigNumberish } from 'ethers'
 
 export class TipsContract extends BaseContract {
   /**
@@ -75,6 +75,24 @@ export class TipsContract extends BaseContract {
     return {
       data: undefined,
       transactionHash: receipt.transactionHash,
+    }
+  }
+
+  /**
+   * This gets the balance of $MIRA token of an address.
+   *
+   * @category TipsContract
+   * @param address - The address to get the balance of.
+   * @returns The balance of $MIRA token of the address. Unit: wei.
+   */
+  async getMiraBalance(
+    address: string,
+    overrides: CallOverrides = {},
+  ): Promise<Result<string>> | never {
+    const res = await this.miraContract.balanceOf(address, overrides)
+
+    return {
+      data: res.toString(),
     }
   }
 }
