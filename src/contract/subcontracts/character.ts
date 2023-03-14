@@ -223,12 +223,32 @@ export class CharacterContract extends BaseContract {
   }
 
   /**
+   * This burns a character.
+   * @category Character
+   * @param characterId - The character ID of the character you want to burn.
+   * @returns The transaction hash.
+   */
+  @autoSwitchMainnet()
+  async burnCharacter(
+    characterId: BigNumberish,
+    overrides: Overrides = {},
+  ): Promise<Result<undefined, true>> | never {
+    const tx = await this.contract.burn(characterId, overrides)
+
+    const receipt = await tx.wait()
+
+    return {
+      data: undefined,
+      transactionHash: receipt.transactionHash,
+    }
+  }
+
+  /**
    * This returns the primary character ID of the given address.
    * @category Character
    * @param address - The address of the user you want to get the primary character ID for.
    * @returns The characterId of the primary character of the address.
    */
-  @autoSwitchMainnet()
   async getPrimaryCharacterId(
     address: string,
     overrides: CallOverrides = {},
@@ -251,7 +271,6 @@ export class CharacterContract extends BaseContract {
    * @param characterId - The character ID of the character you want to check.
    * @returns A boolean value.
    */
-  @autoSwitchMainnet()
   async isPrimaryCharacterId(
     characterId: BigNumberish,
     overrides: CallOverrides = {},
@@ -271,7 +290,6 @@ export class CharacterContract extends BaseContract {
    * @param handle - The handle of the character you want to get the content of.
    * @returns The character with the given handle.
    */
-  @autoSwitchMainnet()
   async getCharacterByHandle(
     handle: string,
     overrides: CallOverrides = {},
@@ -305,7 +323,6 @@ export class CharacterContract extends BaseContract {
    * @param characterId - The character ID of the character you want to get.
    * @returns The character with the given characterId.
    */
-  @autoSwitchMainnet()
   async getCharacter(
     characterId: BigNumberish,
     overrides: CallOverrides = {},
@@ -336,7 +353,6 @@ export class CharacterContract extends BaseContract {
    * @param characterId - The characterId of the character you want to get the handle for.
    * @returns The handle of the character.
    */
-  @autoSwitchMainnet()
   async getHandle(
     characterId: BigNumberish,
     overrides: CallOverrides = {},
@@ -353,7 +369,6 @@ export class CharacterContract extends BaseContract {
    * @param characterId - The character ID of the character you want to get the URI for.
    * @returns The URI of the character.
    */
-  @autoSwitchMainnet()
   async getCharacterUri(
     characterId: BigNumberish,
     overrides: CallOverrides = {},
@@ -370,7 +385,6 @@ export class CharacterContract extends BaseContract {
    * @param txHash - The transaction hash of the {@link createCharacter} transaction.
    * @returns The characterId of the character that was created.
    */
-  @autoSwitchMainnet()
   async getCharacterByTransaction(
     txHash: string,
     overrides: CallOverrides = {},
@@ -391,7 +405,6 @@ export class CharacterContract extends BaseContract {
    * @param address - The address of a user.
    * @returns A boolean indicating whether the character exists.
    */
-  @autoSwitchMainnet()
   async existsCharacterForAddress(
     address: string,
     overrides: CallOverrides = {},
@@ -413,7 +426,6 @@ export class CharacterContract extends BaseContract {
    * @param handle - The handle of a character.
    * @returns A boolean indicating whether the character exists.
    */
-  @autoSwitchMainnet()
   async existsCharacterForHandle(
     handle: string,
     overrides: CallOverrides = {},
@@ -435,7 +447,6 @@ export class CharacterContract extends BaseContract {
    * @param proof - The proof given from the server
    * @returns The transaction hash.
    */
-  @autoSwitchMainnet()
   async withdrawCharacterFromNewbieVilla(
     toAddress: string,
     characterId: BigNumberish,
