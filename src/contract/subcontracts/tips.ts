@@ -95,4 +95,20 @@ export class TipsContract extends BaseContract {
       data: res.toString(),
     }
   }
+
+  /**
+   * This gets the token address of $MIRA.
+   *
+   * @category TipsContract
+   * @returns The token address of $MIRA.
+   */
+  async getMiraTokenAddress(
+    overrides: CallOverrides = {},
+  ): Promise<Result<string>> | never {
+    const res = await this.tipsContract.getToken(overrides)
+
+    return {
+      data: res,
+    }
+  }
 }
