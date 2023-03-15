@@ -18,7 +18,7 @@ describe.concurrent('characters', () => {
 
 describe.concurrent('links', () => {
   test.concurrent('getLinklists', async () => {
-    const res = await indexer.getLinklistsByAddress(mockUser.address)
+    const res = await indexer.getLinklistsOfCharacter(10)
     expect(res.list).toBeInstanceOf(Array)
   })
 
