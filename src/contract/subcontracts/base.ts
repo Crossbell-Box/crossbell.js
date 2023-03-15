@@ -42,7 +42,6 @@ import type { MintEvent } from '../abis/cbt/types/Abi'
 import { validateIsInSdn } from '../../utils/sdn'
 import { Logger } from '../../utils/logger'
 import { isBrowser } from 'browser-or-node'
-import { checkLatestVersion } from '../../utils/version_checker'
 
 const logTopics = {
   createCharacter: 'CharacterCreated(uint256,address,address,string,uint256)',
@@ -237,7 +236,6 @@ export class BaseContract {
   ) {
     this._providerOrPrivateKey = providerOrPrivateKey
     this.options = this.initOptions(options)
-    this.checkVersion()
   }
 
   initOptions(options?: Partial<ContractOptions>): ContractOptions {
@@ -467,12 +465,6 @@ export class BaseContract {
     //     )
     //   }
     // }
-  }
-
-  private checkVersion() {
-    if (this.options.enableVersionCheck) {
-      checkLatestVersion()
-    }
   }
 
   protected validateAddress(address: string | string[]) {

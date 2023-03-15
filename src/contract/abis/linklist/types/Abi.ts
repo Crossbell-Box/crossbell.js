@@ -671,18 +671,12 @@ export interface AbiInterface extends utils.Interface {
     "ApprovalForAll(address,address,bool)": EventFragment;
     "Initialized(uint8)": EventFragment;
     "Transfer(address,uint256,uint256)": EventFragment;
-    "Transfer(address,address,uint256)": EventFragment;
   };
 
   getEvent(nameOrSignatureOrTopic: "Approval"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "ApprovalForAll"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Initialized"): EventFragment;
-  getEvent(
-    nameOrSignatureOrTopic: "Transfer(address,uint256,uint256)"
-  ): EventFragment;
-  getEvent(
-    nameOrSignatureOrTopic: "Transfer(address,address,uint256)"
-  ): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "Transfer"): EventFragment;
 }
 
 export interface ApprovalEventObject {
@@ -716,31 +710,17 @@ export type InitializedEvent = TypedEvent<[number], InitializedEventObject>;
 
 export type InitializedEventFilter = TypedEventFilter<InitializedEvent>;
 
-export interface Transfer_address_uint256_uint256_EventObject {
+export interface TransferEventObject {
   from: string;
   characterId: BigNumber;
   tokenId: BigNumber;
 }
-export type Transfer_address_uint256_uint256_Event = TypedEvent<
+export type TransferEvent = TypedEvent<
   [string, BigNumber, BigNumber],
-  Transfer_address_uint256_uint256_EventObject
+  TransferEventObject
 >;
 
-export type Transfer_address_uint256_uint256_EventFilter =
-  TypedEventFilter<Transfer_address_uint256_uint256_Event>;
-
-export interface Transfer_address_address_uint256_EventObject {
-  from: string;
-  to: string;
-  tokenId: BigNumber;
-}
-export type Transfer_address_address_uint256_Event = TypedEvent<
-  [string, string, BigNumber],
-  Transfer_address_address_uint256_EventObject
->;
-
-export type Transfer_address_address_uint256_EventFilter =
-  TypedEventFilter<Transfer_address_address_uint256_Event>;
+export type TransferEventFilter = TypedEventFilter<TransferEvent>;
 
 export interface Abi extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
@@ -1777,12 +1757,12 @@ export interface Abi extends BaseContract {
       from?: PromiseOrValue<string> | null,
       characterId?: PromiseOrValue<BigNumberish> | null,
       tokenId?: PromiseOrValue<BigNumberish> | null
-    ): Transfer_address_uint256_uint256_EventFilter;
-    "Transfer(address,address,uint256)"(
+    ): TransferEventFilter;
+    Transfer(
       from?: PromiseOrValue<string> | null,
-      to?: PromiseOrValue<string> | null,
+      characterId?: PromiseOrValue<BigNumberish> | null,
       tokenId?: PromiseOrValue<BigNumberish> | null
-    ): Transfer_address_address_uint256_EventFilter;
+    ): TransferEventFilter;
   };
 
   estimateGas: {
