@@ -18,6 +18,7 @@ export class TipIndexer extends BaseIndexer {
     toNoteId,
     tokenAddress,
     includeZeroAmount,
+    includeMetadata,
     limit,
     cursor,
   }: {
@@ -31,6 +32,8 @@ export class TipIndexer extends BaseIndexer {
     tokenAddress?: string
     /** Whether to include tips with zero amount. */
     includeZeroAmount?: boolean
+    /** Whether to include character and note metadata */
+    includeMetadata?: boolean
     /** Limit the count of items returned. */
     limit?: number
     /** Used for pagination. */
@@ -43,6 +46,7 @@ export class TipIndexer extends BaseIndexer {
       toNoteId,
       tokenAddress,
       includeZeroAmount,
+      includeMetadata,
       limit,
       cursor,
     })
