@@ -48,6 +48,7 @@ const main = async () => {
     { abi: newbie_villa_abi },
     { abi: tips_abi },
     mira_abi,
+    { abi: linklist_abi },
   ] = await Promise.all([
     getAbi('Web3Entry'),
     getAbi('Events'),
@@ -58,6 +59,7 @@ const main = async () => {
     getAbi(
       'https://raw.githubusercontent.com/Crossbell-Box/crossbell-bridge-contracts/main/build-info/MiraToken.abi',
     ),
+    getAbi('Linklist'),
   ])
 
   const abi = [...abi1, ...abi2]
@@ -68,6 +70,7 @@ const main = async () => {
   const newbieVillaDir = resolve(__dirname, '../src/contract/abis/newbie-villa')
   const tipsDir = resolve(__dirname, '../src/contract/abis/tips')
   const miraDir = resolve(__dirname, '../src/contract/abis/mira')
+  const linklistDir = resolve(__dirname, '../src/contract/abis/linklist')
 
   await Promise.all([
     writeJson(entryDir, abi),
@@ -76,6 +79,7 @@ const main = async () => {
     writeJson(newbieVillaDir, newbie_villa_abi),
     writeJson(tipsDir, tips_abi),
     writeJson(miraDir, mira_abi),
+    writeJson(linklistDir, linklist_abi),
   ])
 
   await Promise.all([
@@ -85,6 +89,7 @@ const main = async () => {
     genTypes(newbieVillaDir),
     genTypes(tipsDir),
     genTypes(miraDir),
+    genTypes(linklistDir),
   ])
 
   // patch types

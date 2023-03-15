@@ -34,6 +34,10 @@ import {
   type Abi as MiraAbi,
   Abi__factory as MiraAbi__factory,
 } from '../abis/mira/types'
+import {
+  type Abi as LinklistAbi,
+  Abi__factory as LinklistAbi__factory,
+} from '../abis/linklist/types'
 import type { MintEvent } from '../abis/cbt/types/Abi'
 import { validateIsInSdn } from '../../utils/sdn'
 import { Logger } from '../../utils/logger'
@@ -77,6 +81,7 @@ type ContractOptions = {
   newbieVillaContractAddress: string
   tipsContractAddress: string
   miraContractAddress: string
+  linklistContractAddress: string
   /**
    * Enable version check.
    * @default true if not in browser environment
@@ -97,6 +102,7 @@ export class BaseContract {
   private _newbieVillaContract!: NewbieVillaAbi
   private _tipsContract!: TipsAbi
   private _miraContract!: MiraAbi
+  private _linklistContract!: LinklistAbi
 
   private _hasConnected: boolean = false
 
@@ -171,6 +177,19 @@ export class BaseContract {
   }
 
   /**
+   * Returns the internal linklist contract.
+   */
+  get linklistContract(): LinklistAbi {
+    this.checkConnection()
+
+    return this._linklistContract
+  }
+
+  set linklistContract(contract: LinklistAbi) {
+    this._linklistContract = contract
+  }
+
+  /**
    * Returns the internal newbie villa contract.
    * @category Internal Contract
    */
@@ -236,6 +255,9 @@ export class BaseContract {
       newbieVillaContractAddress:
         options?.newbieVillaContractAddress ??
         Network.getNewbieVillaContractAddress(),
+      linklistContractAddress:
+        options?.linklistContractAddress ??
+        Network.getLinklistContractAddress(),
       enableVersionCheck: options?.enableVersionCheck ?? !isBrowser,
     }
   }
@@ -306,6 +328,11 @@ export class BaseContract {
 
     this._miraContract = MiraAbi__factory.connect(
       this.options.miraContractAddress,
+      this._signerOrProvider,
+    )
+
+    this._linklistContract = LinklistAbi__factory.connect(
+      this.options.linklistContractAddress,
       this._signerOrProvider,
     )
 

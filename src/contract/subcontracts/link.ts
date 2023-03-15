@@ -102,7 +102,6 @@ export class LinkContract extends BaseContract {
    * @param txHash - The transaction hash of the transaction you want to get the linklist id of.
    * @returns The linklist id of the transaction.
    */
-  @autoSwitchMainnet()
   async getLinklistIdByTransaction(
     txHash: string,
   ): Promise<Result<number>> | never {
@@ -201,7 +200,6 @@ export class LinkContract extends BaseContract {
    * @param linkType - The type of link you want to get.
    * @returns An array of character ids that are linked to the character id passed in.
    */
-  @autoSwitchMainnet()
   async getLinkingCharacterIds(
     fromCharacterId: BigNumberish,
     linkType: string,
@@ -224,7 +222,6 @@ export class LinkContract extends BaseContract {
    * @param linkType - The type of link you want to get.
    * @returns An array of character that are linked to the character id passed in.
    */
-  @autoSwitchMainnet()
   async getLinkingCharacters(
     fromCharacterId: BigNumberish,
     linkType: string,
