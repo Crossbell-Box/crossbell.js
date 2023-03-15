@@ -66,11 +66,6 @@
     "type": "error"
   },
   {
-    "inputs": [],
-    "name": "ErrTargetAlreadyHasPrimaryCharacter",
-    "type": "error"
-  },
-  {
     "anonymous": false,
     "inputs": [
       {
@@ -280,7 +275,13 @@
       }
     ],
     "name": "createThenLinkCharacter",
-    "outputs": [],
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "characterId",
+        "type": "uint256"
+      }
+    ],
     "stateMutability": "nonpayable",
     "type": "function"
   },
@@ -2879,6 +2880,37 @@
         "type": "uint256"
       },
       {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "noteId",
+        "type": "uint256"
+      },
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "address[]",
+        "name": "approvedAddresses",
+        "type": "address[]"
+      }
+    ],
+    "name": "SetApprovedMintAmount4Addresses",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "characterId",
+        "type": "uint256"
+      },
+      {
         "indexed": false,
         "internalType": "string",
         "name": "newUri",
@@ -2931,14 +2963,14 @@
       {
         "indexed": false,
         "internalType": "bytes",
-        "name": "returnData",
+        "name": "linkModuleInitData",
         "type": "bytes"
       },
       {
         "indexed": false,
-        "internalType": "uint256",
-        "name": "timestamp",
-        "type": "uint256"
+        "internalType": "bytes",
+        "name": "returnData",
+        "type": "bytes"
       }
     ],
     "name": "SetLinkModule4Address",
@@ -2962,14 +2994,14 @@
       {
         "indexed": false,
         "internalType": "bytes",
-        "name": "returnData",
+        "name": "linkModuleInitData",
         "type": "bytes"
       },
       {
         "indexed": false,
-        "internalType": "uint256",
-        "name": "timestamp",
-        "type": "uint256"
+        "internalType": "bytes",
+        "name": "returnData",
+        "type": "bytes"
       }
     ],
     "name": "SetLinkModule4Character",
@@ -2999,14 +3031,14 @@
       {
         "indexed": false,
         "internalType": "bytes",
-        "name": "returnData",
+        "name": "linkModuleInitData",
         "type": "bytes"
       },
       {
         "indexed": false,
-        "internalType": "uint256",
-        "name": "timestamp",
-        "type": "uint256"
+        "internalType": "bytes",
+        "name": "returnData",
+        "type": "bytes"
       }
     ],
     "name": "SetLinkModule4ERC721",
@@ -3030,14 +3062,14 @@
       {
         "indexed": false,
         "internalType": "bytes",
-        "name": "returnData",
+        "name": "linkModuleInitData",
         "type": "bytes"
       },
       {
         "indexed": false,
-        "internalType": "uint256",
-        "name": "timestamp",
-        "type": "uint256"
+        "internalType": "bytes",
+        "name": "returnData",
+        "type": "bytes"
       }
     ],
     "name": "SetLinkModule4Linklist",
@@ -3067,14 +3099,14 @@
       {
         "indexed": false,
         "internalType": "bytes",
-        "name": "returnData",
+        "name": "linkModuleInitData",
         "type": "bytes"
       },
       {
         "indexed": false,
-        "internalType": "uint256",
-        "name": "timestamp",
-        "type": "uint256"
+        "internalType": "bytes",
+        "name": "returnData",
+        "type": "bytes"
       }
     ],
     "name": "SetLinkModule4Note",
@@ -3104,14 +3136,14 @@
       {
         "indexed": false,
         "internalType": "bytes",
-        "name": "returnData",
+        "name": "mintModuleInitData",
         "type": "bytes"
       },
       {
         "indexed": false,
-        "internalType": "uint256",
-        "name": "timestamp",
-        "type": "uint256"
+        "internalType": "bytes",
+        "name": "returnData",
+        "type": "bytes"
       }
     ],
     "name": "SetMintModule4Note",

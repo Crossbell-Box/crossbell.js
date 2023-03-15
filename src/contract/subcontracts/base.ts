@@ -41,7 +41,6 @@ import {
 import type { MintEvent } from '../abis/cbt/types/Abi'
 import { validateIsInSdn } from '../../utils/sdn'
 import { Logger } from '../../utils/logger'
-import { isBrowser } from 'browser-or-node'
 
 const logTopics = {
   createCharacter: 'CharacterCreated(uint256,address,address,string,uint256)',
@@ -81,11 +80,6 @@ type ContractOptions = {
   tipsContractAddress: string
   miraContractAddress: string
   linklistContractAddress: string
-  /**
-   * Enable version check.
-   * @default true if not in browser environment
-   */
-  enableVersionCheck: boolean
 }
 
 export class BaseContract {
@@ -256,7 +250,6 @@ export class BaseContract {
       linklistContractAddress:
         options?.linklistContractAddress ??
         Network.getLinklistContractAddress(),
-      enableVersionCheck: options?.enableVersionCheck ?? !isBrowser,
     }
   }
 

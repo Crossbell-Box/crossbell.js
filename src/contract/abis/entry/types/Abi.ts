@@ -1175,14 +1175,15 @@ export interface AbiInterface extends utils.Interface {
     "MintNFTInitialized(uint256,uint256,uint256)": EventFragment;
     "MintNote(address,uint256,uint256,address,uint256)": EventFragment;
     "PostNote(uint256,uint256,bytes32,bytes32,bytes)": EventFragment;
+    "SetApprovedMintAmount4Addresses(uint256,uint256,uint256,address[])": EventFragment;
     "SetCharacterUri(uint256,string)": EventFragment;
     "SetHandle(address,uint256,string)": EventFragment;
-    "SetLinkModule4Address(address,address,bytes,uint256)": EventFragment;
-    "SetLinkModule4Character(uint256,address,bytes,uint256)": EventFragment;
-    "SetLinkModule4ERC721(address,uint256,address,bytes,uint256)": EventFragment;
-    "SetLinkModule4Linklist(uint256,address,bytes,uint256)": EventFragment;
-    "SetLinkModule4Note(uint256,uint256,address,bytes,uint256)": EventFragment;
-    "SetMintModule4Note(uint256,uint256,address,bytes,uint256)": EventFragment;
+    "SetLinkModule4Address(address,address,bytes,bytes)": EventFragment;
+    "SetLinkModule4Character(uint256,address,bytes,bytes)": EventFragment;
+    "SetLinkModule4ERC721(address,uint256,address,bytes,bytes)": EventFragment;
+    "SetLinkModule4Linklist(uint256,address,bytes,bytes)": EventFragment;
+    "SetLinkModule4Note(uint256,uint256,address,bytes,bytes)": EventFragment;
+    "SetMintModule4Note(uint256,uint256,address,bytes,bytes)": EventFragment;
     "SetNoteUri(uint256,uint256,string)": EventFragment;
     "SetPrimaryCharacterId(address,uint256,uint256)": EventFragment;
     "SetSocialToken(address,uint256,address)": EventFragment;
@@ -1219,6 +1220,9 @@ export interface AbiInterface extends utils.Interface {
   getEvent(nameOrSignatureOrTopic: "MintNFTInitialized"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "MintNote"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "PostNote"): EventFragment;
+  getEvent(
+    nameOrSignatureOrTopic: "SetApprovedMintAmount4Addresses"
+  ): EventFragment;
   getEvent(nameOrSignatureOrTopic: "SetCharacterUri"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "SetHandle"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "SetLinkModule4Address"): EventFragment;
@@ -1531,6 +1535,20 @@ export type PostNoteEvent = TypedEvent<
 
 export type PostNoteEventFilter = TypedEventFilter<PostNoteEvent>;
 
+export interface SetApprovedMintAmount4AddressesEventObject {
+  characterId: BigNumber;
+  noteId: BigNumber;
+  amount: BigNumber;
+  approvedAddresses: string[];
+}
+export type SetApprovedMintAmount4AddressesEvent = TypedEvent<
+  [BigNumber, BigNumber, BigNumber, string[]],
+  SetApprovedMintAmount4AddressesEventObject
+>;
+
+export type SetApprovedMintAmount4AddressesEventFilter =
+  TypedEventFilter<SetApprovedMintAmount4AddressesEvent>;
+
 export interface SetCharacterUriEventObject {
   characterId: BigNumber;
   newUri: string;
@@ -1557,11 +1575,11 @@ export type SetHandleEventFilter = TypedEventFilter<SetHandleEvent>;
 export interface SetLinkModule4AddressEventObject {
   account: string;
   linkModule: string;
+  linkModuleInitData: string;
   returnData: string;
-  timestamp: BigNumber;
 }
 export type SetLinkModule4AddressEvent = TypedEvent<
-  [string, string, string, BigNumber],
+  [string, string, string, string],
   SetLinkModule4AddressEventObject
 >;
 
@@ -1571,11 +1589,11 @@ export type SetLinkModule4AddressEventFilter =
 export interface SetLinkModule4CharacterEventObject {
   characterId: BigNumber;
   linkModule: string;
+  linkModuleInitData: string;
   returnData: string;
-  timestamp: BigNumber;
 }
 export type SetLinkModule4CharacterEvent = TypedEvent<
-  [BigNumber, string, string, BigNumber],
+  [BigNumber, string, string, string],
   SetLinkModule4CharacterEventObject
 >;
 
@@ -1586,11 +1604,11 @@ export interface SetLinkModule4ERC721EventObject {
   tokenAddress: string;
   tokenId: BigNumber;
   linkModule: string;
+  linkModuleInitData: string;
   returnData: string;
-  timestamp: BigNumber;
 }
 export type SetLinkModule4ERC721Event = TypedEvent<
-  [string, BigNumber, string, string, BigNumber],
+  [string, BigNumber, string, string, string],
   SetLinkModule4ERC721EventObject
 >;
 
@@ -1600,11 +1618,11 @@ export type SetLinkModule4ERC721EventFilter =
 export interface SetLinkModule4LinklistEventObject {
   linklistId: BigNumber;
   linkModule: string;
+  linkModuleInitData: string;
   returnData: string;
-  timestamp: BigNumber;
 }
 export type SetLinkModule4LinklistEvent = TypedEvent<
-  [BigNumber, string, string, BigNumber],
+  [BigNumber, string, string, string],
   SetLinkModule4LinklistEventObject
 >;
 
@@ -1615,11 +1633,11 @@ export interface SetLinkModule4NoteEventObject {
   characterId: BigNumber;
   noteId: BigNumber;
   linkModule: string;
+  linkModuleInitData: string;
   returnData: string;
-  timestamp: BigNumber;
 }
 export type SetLinkModule4NoteEvent = TypedEvent<
-  [BigNumber, BigNumber, string, string, BigNumber],
+  [BigNumber, BigNumber, string, string, string],
   SetLinkModule4NoteEventObject
 >;
 
@@ -1630,11 +1648,11 @@ export interface SetMintModule4NoteEventObject {
   characterId: BigNumber;
   noteId: BigNumber;
   mintModule: string;
+  mintModuleInitData: string;
   returnData: string;
-  timestamp: BigNumber;
 }
 export type SetMintModule4NoteEvent = TypedEvent<
-  [BigNumber, BigNumber, string, string, BigNumber],
+  [BigNumber, BigNumber, string, string, string],
   SetMintModule4NoteEventObject
 >;
 
@@ -2627,7 +2645,7 @@ export interface Abi extends BaseContract {
     createThenLinkCharacter(
       vars: DataTypes.CreateThenLinkCharacterDataStruct,
       overrides?: CallOverrides
-    ): Promise<void>;
+    ): Promise<BigNumber>;
 
     deleteNote(
       characterId: PromiseOrValue<BigNumberish>,
@@ -3272,6 +3290,19 @@ export interface Abi extends BaseContract {
       data?: null
     ): PostNoteEventFilter;
 
+    "SetApprovedMintAmount4Addresses(uint256,uint256,uint256,address[])"(
+      characterId?: PromiseOrValue<BigNumberish> | null,
+      noteId?: PromiseOrValue<BigNumberish> | null,
+      amount?: PromiseOrValue<BigNumberish> | null,
+      approvedAddresses?: null
+    ): SetApprovedMintAmount4AddressesEventFilter;
+    SetApprovedMintAmount4Addresses(
+      characterId?: PromiseOrValue<BigNumberish> | null,
+      noteId?: PromiseOrValue<BigNumberish> | null,
+      amount?: PromiseOrValue<BigNumberish> | null,
+      approvedAddresses?: null
+    ): SetApprovedMintAmount4AddressesEventFilter;
+
     "SetCharacterUri(uint256,string)"(
       characterId?: PromiseOrValue<BigNumberish> | null,
       newUri?: null
@@ -3292,88 +3323,88 @@ export interface Abi extends BaseContract {
       newHandle?: null
     ): SetHandleEventFilter;
 
-    "SetLinkModule4Address(address,address,bytes,uint256)"(
+    "SetLinkModule4Address(address,address,bytes,bytes)"(
       account?: PromiseOrValue<string> | null,
       linkModule?: PromiseOrValue<string> | null,
-      returnData?: null,
-      timestamp?: null
+      linkModuleInitData?: null,
+      returnData?: null
     ): SetLinkModule4AddressEventFilter;
     SetLinkModule4Address(
       account?: PromiseOrValue<string> | null,
       linkModule?: PromiseOrValue<string> | null,
-      returnData?: null,
-      timestamp?: null
+      linkModuleInitData?: null,
+      returnData?: null
     ): SetLinkModule4AddressEventFilter;
 
-    "SetLinkModule4Character(uint256,address,bytes,uint256)"(
+    "SetLinkModule4Character(uint256,address,bytes,bytes)"(
       characterId?: PromiseOrValue<BigNumberish> | null,
       linkModule?: PromiseOrValue<string> | null,
-      returnData?: null,
-      timestamp?: null
+      linkModuleInitData?: null,
+      returnData?: null
     ): SetLinkModule4CharacterEventFilter;
     SetLinkModule4Character(
       characterId?: PromiseOrValue<BigNumberish> | null,
       linkModule?: PromiseOrValue<string> | null,
-      returnData?: null,
-      timestamp?: null
+      linkModuleInitData?: null,
+      returnData?: null
     ): SetLinkModule4CharacterEventFilter;
 
-    "SetLinkModule4ERC721(address,uint256,address,bytes,uint256)"(
+    "SetLinkModule4ERC721(address,uint256,address,bytes,bytes)"(
       tokenAddress?: PromiseOrValue<string> | null,
       tokenId?: PromiseOrValue<BigNumberish> | null,
       linkModule?: PromiseOrValue<string> | null,
-      returnData?: null,
-      timestamp?: null
+      linkModuleInitData?: null,
+      returnData?: null
     ): SetLinkModule4ERC721EventFilter;
     SetLinkModule4ERC721(
       tokenAddress?: PromiseOrValue<string> | null,
       tokenId?: PromiseOrValue<BigNumberish> | null,
       linkModule?: PromiseOrValue<string> | null,
-      returnData?: null,
-      timestamp?: null
+      linkModuleInitData?: null,
+      returnData?: null
     ): SetLinkModule4ERC721EventFilter;
 
-    "SetLinkModule4Linklist(uint256,address,bytes,uint256)"(
+    "SetLinkModule4Linklist(uint256,address,bytes,bytes)"(
       linklistId?: PromiseOrValue<BigNumberish> | null,
       linkModule?: PromiseOrValue<string> | null,
-      returnData?: null,
-      timestamp?: null
+      linkModuleInitData?: null,
+      returnData?: null
     ): SetLinkModule4LinklistEventFilter;
     SetLinkModule4Linklist(
       linklistId?: PromiseOrValue<BigNumberish> | null,
       linkModule?: PromiseOrValue<string> | null,
-      returnData?: null,
-      timestamp?: null
+      linkModuleInitData?: null,
+      returnData?: null
     ): SetLinkModule4LinklistEventFilter;
 
-    "SetLinkModule4Note(uint256,uint256,address,bytes,uint256)"(
+    "SetLinkModule4Note(uint256,uint256,address,bytes,bytes)"(
       characterId?: PromiseOrValue<BigNumberish> | null,
       noteId?: PromiseOrValue<BigNumberish> | null,
       linkModule?: PromiseOrValue<string> | null,
-      returnData?: null,
-      timestamp?: null
+      linkModuleInitData?: null,
+      returnData?: null
     ): SetLinkModule4NoteEventFilter;
     SetLinkModule4Note(
       characterId?: PromiseOrValue<BigNumberish> | null,
       noteId?: PromiseOrValue<BigNumberish> | null,
       linkModule?: PromiseOrValue<string> | null,
-      returnData?: null,
-      timestamp?: null
+      linkModuleInitData?: null,
+      returnData?: null
     ): SetLinkModule4NoteEventFilter;
 
-    "SetMintModule4Note(uint256,uint256,address,bytes,uint256)"(
+    "SetMintModule4Note(uint256,uint256,address,bytes,bytes)"(
       characterId?: PromiseOrValue<BigNumberish> | null,
       noteId?: PromiseOrValue<BigNumberish> | null,
       mintModule?: PromiseOrValue<string> | null,
-      returnData?: null,
-      timestamp?: null
+      mintModuleInitData?: null,
+      returnData?: null
     ): SetMintModule4NoteEventFilter;
     SetMintModule4Note(
       characterId?: PromiseOrValue<BigNumberish> | null,
       noteId?: PromiseOrValue<BigNumberish> | null,
       mintModule?: PromiseOrValue<string> | null,
-      returnData?: null,
-      timestamp?: null
+      mintModuleInitData?: null,
+      returnData?: null
     ): SetMintModule4NoteEventFilter;
 
     "SetNoteUri(uint256,uint256,string)"(
