@@ -3,7 +3,7 @@ import { autoSwitchMainnet } from '../decorators'
 import type { Result } from '../../types/contract'
 
 export class RevisionContract extends BaseContract {
-  private CURRENT_SDK_REVISION = 2
+  private CURRENT_SDK_REVISION = 4
 
   /**
    * This returns the remote latest revision of the contract.

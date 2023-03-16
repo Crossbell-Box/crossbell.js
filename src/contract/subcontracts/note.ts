@@ -376,7 +376,6 @@ export class NoteContract extends BaseContract {
     linkItemType: 'Linklist',
     overrides?: CallOverrides,
   ): Promise<Result<Note<LinkItemLinklist>>> | never
-  @autoSwitchMainnet()
   async getNote<T extends LinkItem>(
     characterId: BigNumberish,
     noteId: BigNumberish,
