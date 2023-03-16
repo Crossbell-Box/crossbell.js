@@ -13,6 +13,10 @@ import type {
   LinkNoteEvent,
   GrantOperatorPermissionsEvent,
   GrantOperators4NoteEvent,
+  LinkAddressEvent,
+  LinkLinklistEvent,
+  LinkERC721Event,
+  LinkAnyUriEvent,
 } from '../abis/entry/types/Abi'
 import {
   type Abi as PeripheryAbi,
@@ -41,11 +45,18 @@ import {
 import type { MintEvent } from '../abis/cbt/types/Abi'
 import { validateIsInSdn } from '../../utils/sdn'
 import { Logger } from '../../utils/logger'
+import { MintOrLinkModule, MintOrLinkModuleConfig } from '../../types'
+import { NIL_ADDRESS } from '../utils'
+import { isAddressEqual } from '../../utils'
 
 const logTopics = {
   createCharacter: 'CharacterCreated(uint256,address,address,string,uint256)',
   linkCharacter: 'LinkCharacter(address,uint256,uint256,bytes32,uint256)',
   linkNote: 'LinkNote(uint256,uint256,uint256,bytes32,uint256)',
+  linkAddress: 'LinkAddress(uint256,address,bytes32,uint256)',
+  linkLinklist: 'LinkLinklist(uint256,uint256,bytes32,uint256)',
+  linkERC721: 'LinkERC721(uint256,address,uint256,bytes32,uint256)',
+  linkAnyUri: 'LinkAnyUri(uint256,string,bytes32,uint256)',
   postNote: 'PostNote(uint256,uint256,bytes32,bytes32,bytes)',
   mintNote: 'MintNote(address,uint256,uint256,address,uint256)',
   mint: 'Mint(uint256,uint256,uint256)',
@@ -65,6 +76,10 @@ type LogEvents = {
   'CharacterCreated(uint256,address,address,string,uint256)': CharacterCreatedEvent
   'LinkCharacter(address,uint256,uint256,bytes32,uint256)': LinkCharacterEvent
   'LinkNote(uint256,uint256,uint256,bytes32,uint256)': LinkNoteEvent
+  'LinkAddress(uint256,address,bytes32,uint256)': LinkAddressEvent
+  'LinkLinklist(uint256,uint256,bytes32,uint256)': LinkLinklistEvent
+  'LinkERC721(uint256,address,uint256,bytes32,uint256)': LinkERC721Event
+  'LinkAnyUri(uint256,string,bytes32,uint256)': LinkAnyUriEvent
   'PostNote(uint256,uint256,bytes32,bytes32,bytes)': PostNoteEvent
   'MintNote(address,uint256,uint256,address,uint256)': MintNoteEvent
   'Mint(uint256,uint256,uint256)': MintEvent
@@ -465,6 +480,88 @@ export class BaseContract {
       address.forEach((addr) => this.validateAddress(addr))
     } else {
       validateIsInSdn(address)
+    }
+  }
+
+  //// module
+
+  private _moduleResponseCache = undefined as MintOrLinkModule[] | undefined
+  private _lastModuleResponseCacheTime = 0
+
+  protected async getModules({
+    type,
+  }: {
+    type?: MintOrLinkModule['type']
+  } = {}) {
+    const now = Date.now()
+    const isMoreThanOneMinute =
+      now - this._lastModuleResponseCacheTime > 60 * 1000
+
+    if (!this._moduleResponseCache || isMoreThanOneMinute) {
+      const res = (await fetch(
+        'https://raw.githubusercontent.com/Crossbell-Box/Crossbell-Contracts/main/deployments/modules.json',
+      ).then((res) => res.json())) as MintOrLinkModule[]
+      this._moduleResponseCache = res
+      this._lastModuleResponseCacheTime = now
+    }
+
+    if (type) {
+      return this._moduleResponseCache.filter((module) => module.type === type)
+    }
+
+    return this._moduleResponseCache
+  }
+
+  protected async getModule(address: string) {
+    const modules = await this.getModules()
+    return modules.find((module) => isAddressEqual(module.address, address))
+  }
+
+  async getLinkModules() {
+    return this.getModules({ type: 'link' })
+  }
+
+  async getLinkModule(address: string) {
+    const modules = await this.getLinkModules()
+    return modules.find(
+      (module) =>
+        isAddressEqual(module.address, address) && module.type === 'link',
+    )
+  }
+
+  async getMintModules() {
+    return this.getModules({ type: 'mint' })
+  }
+
+  async getMintModule(address: string) {
+    const modules = await this.getMintModules()
+    return modules.find(
+      (module) =>
+        isAddressEqual(module.address, address) && module.type === 'mint',
+    )
+  }
+
+  protected async getModuleConfig(m?: MintOrLinkModuleConfig) {
+    if (!m) {
+      return {
+        address: NIL_ADDRESS,
+        initData: NIL_ADDRESS,
+      }
+    }
+
+    const module = await this.getModule(m.address)
+    if (!module) {
+      throw new Error('Invalid module address ' + m.address)
+    }
+
+    const initData = this.contract.interface._abiCoder.encode(
+      module.initDataStructure.map((item) => item.type),
+      m.data,
+    )
+
+    return {
+      address: m.address,
+      initData,
     }
   }
 }

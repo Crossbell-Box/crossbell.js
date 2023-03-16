@@ -26,25 +26,29 @@ export class NoteContract extends BaseContract {
    * @category Note
    * @param characterId - The character ID of the owner who post this note. Must be your own character, otherwise it will be rejected.
    * @param metadataOrUri - The metadata or URI of the content you want to post.
+   * @param options - The options for this post.
    * @returns The id of the new note.
    */
   @autoSwitchMainnet()
   async postNote(
     characterId: BigNumberish,
     metadataOrUri: NoteMetadata | string,
-    { locked = false }: PostNoteOptions = {},
+    { locked = false, linkModule, mintModule }: PostNoteOptions = {},
     overrides: Overrides = {},
   ): Promise<Result<{ noteId: number }, true>> | never {
     const { uri } = await Ipfs.parseMetadataOrUri('note', metadataOrUri)
+
+    const linkModuleConfig = await this.getModuleConfig(linkModule)
+    const mintModuleConfig = await this.getModuleConfig(mintModule)
 
     const tx = await this.contract.postNote(
       {
         characterId: characterId,
         contentUri: uri,
-        linkModule: NIL_ADDRESS, // TODO:
-        linkModuleInitData: NIL_ADDRESS,
-        mintModule: NIL_ADDRESS,
-        mintModuleInitData: NIL_ADDRESS,
+        linkModule: linkModuleConfig.address,
+        linkModuleInitData: linkModuleConfig.initData,
+        mintModule: mintModuleConfig.address,
+        mintModuleInitData: mintModuleConfig.initData,
         locked: locked,
       },
       overrides,
@@ -70,6 +74,8 @@ export class NoteContract extends BaseContract {
    * @param notes[].metadataOrUri - The metadata or URI of the content you want to post.
    * @param notes[].options - The options of the note.
    * @param notes[].options.locked - Whether the note is locked.
+   * @param notes[].options.linkModule - The link module of the note.
+   * @param notes[].options.mintModule - The mint module of the note.
    * @returns The id of the new note.
    */
   @autoSwitchMainnet()
@@ -89,14 +95,21 @@ export class NoteContract extends BaseContract {
             'note',
             note.metadataOrUri,
           )
+          const linkModuleConfig = await this.getModuleConfig(
+            note.options?.linkModule,
+          )
+          const mintModuleConfig = await this.getModuleConfig(
+            note.options?.mintModule,
+          )
+
           return this.contract.interface.encodeFunctionData('postNote', [
             {
               characterId: note.characterId,
               contentUri: uri,
-              linkModule: NIL_ADDRESS, // TODO:
-              linkModuleInitData: NIL_ADDRESS,
-              mintModule: NIL_ADDRESS,
-              mintModuleInitData: NIL_ADDRESS,
+              linkModule: linkModuleConfig.address,
+              linkModuleInitData: linkModuleConfig.initData,
+              mintModule: mintModuleConfig.address,
+              mintModuleInitData: mintModuleConfig.initData,
               locked: note.options?.locked ?? false,
             },
           ])
@@ -137,19 +150,22 @@ export class NoteContract extends BaseContract {
     characterId: BigNumberish,
     metadataOrUri: NoteMetadata | string,
     targetUri: string,
-    { locked = false }: PostNoteOptions = {},
+    { locked = false, linkModule, mintModule }: PostNoteOptions = {},
     overrides: Overrides = {},
   ): Promise<Result<{ noteId: number }, true>> | never {
     const { uri } = await Ipfs.parseMetadataOrUri('note', metadataOrUri)
+
+    const linkModuleConfig = await this.getModuleConfig(linkModule)
+    const mintModuleConfig = await this.getModuleConfig(mintModule)
 
     const tx = await this.contract.postNote4AnyUri(
       {
         characterId: characterId,
         contentUri: uri,
-        linkModule: NIL_ADDRESS, // TODO:
-        linkModuleInitData: NIL_ADDRESS,
-        mintModule: NIL_ADDRESS,
-        mintModuleInitData: NIL_ADDRESS,
+        linkModule: linkModuleConfig.address,
+        linkModuleInitData: linkModuleConfig.initData,
+        mintModule: mintModuleConfig.address,
+        mintModuleInitData: mintModuleConfig.initData,
         locked: locked,
       },
       targetUri,
@@ -183,19 +199,22 @@ export class NoteContract extends BaseContract {
     metadataOrUri: NoteMetadata | string,
     targetCharacterId: BigNumberish,
     targetNoteId: BigNumberish,
-    { locked = false }: PostNoteOptions = {},
+    { locked = false, linkModule, mintModule }: PostNoteOptions = {},
     overrides: Overrides = {},
   ): Promise<Result<{ noteId: number }, true>> | never {
     const { uri } = await Ipfs.parseMetadataOrUri('note', metadataOrUri)
+
+    const linkModuleConfig = await this.getModuleConfig(linkModule)
+    const mintModuleConfig = await this.getModuleConfig(mintModule)
 
     const tx = await this.contract.postNote4Note(
       {
         characterId: characterId,
         contentUri: uri,
-        linkModule: NIL_ADDRESS, // TODO:
-        linkModuleInitData: NIL_ADDRESS,
-        mintModule: NIL_ADDRESS,
-        mintModuleInitData: NIL_ADDRESS,
+        linkModule: linkModuleConfig.address,
+        linkModuleInitData: linkModuleConfig.initData,
+        mintModule: mintModuleConfig.address,
+        mintModuleInitData: mintModuleConfig.initData,
         locked: locked,
       },
       {

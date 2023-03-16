@@ -1,5 +1,6 @@
 import { NoteMetadata } from '../metadata'
 import { LinkItem, LinkItemType } from './link'
+import { MintOrLinkModuleConfig } from './module'
 
 export interface Note<T extends LinkItem | undefined = undefined> {
   /** The character id of the address who owns the note.  */
@@ -41,4 +42,8 @@ export interface Note<T extends LinkItem | undefined = undefined> {
 export interface PostNoteOptions {
   /** If locked, the note will be not able to be edited. */
   locked?: boolean
+  /** The mint module */
+  mintModule?: MintOrLinkModuleConfig
+  /** The link module */
+  linkModule?: MintOrLinkModuleConfig
 }

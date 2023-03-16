@@ -1,4 +1,3 @@
-import { NIL_ADDRESS } from '../utils'
 import { BaseContract } from './base'
 import { autoSwitchMainnet } from '../decorators'
 import type {
@@ -6,6 +5,7 @@ import type {
   Character,
   Overrides,
   CallOverrides,
+  MintOrLinkModuleConfig,
 } from '../../types/contract'
 import { CharacterMetadata } from '../../types/metadata'
 import { Ipfs } from '../../ipfs'
@@ -26,6 +26,11 @@ export class CharacterContract extends BaseContract {
     owner: string,
     handle: string,
     metadataOrUri: CharacterMetadata | string,
+    {
+      linkModule,
+    }: {
+      linkModule?: MintOrLinkModuleConfig
+    } = {},
     overrides: Overrides = {},
   ): Promise<Result<number, true>> | never {
     this.validateAddress(owner)
@@ -33,13 +38,15 @@ export class CharacterContract extends BaseContract {
 
     const { uri } = await Ipfs.parseMetadataOrUri('character', metadataOrUri)
 
+    const moduleConfig = await this.getModuleConfig(linkModule)
+
     const tx = await this.contract.createCharacter(
       {
         to: owner,
         handle: handle,
         uri: uri,
-        linkModule: NIL_ADDRESS,
-        linkModuleInitData: NIL_ADDRESS, // TODO: ?
+        linkModule: moduleConfig.address,
+        linkModuleInitData: moduleConfig.initData,
       },
       overrides,
     )
