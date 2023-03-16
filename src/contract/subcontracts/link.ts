@@ -249,83 +249,213 @@ export class LinkContract extends BaseContract {
    * @param fromCharacterId - The character ID of the character that is linking to the address.
    * @param toAddress - The address of the character you want to link to.
    * @param linkType - The type of link.
+   * @param data - The data to be passed to the link module if the address has one.
    * @returns The transaction hash of the transaction that was sent to the blockchain, and the linklistId.
    */
-  // TODO: next version
-  // async linkAddress(
-  //   fromCharacterId: string,
-  //   toAddress: string,
-  //   linkType: string,
-  // ): Promise<Result<undefined>> | never {
-  //   const tx = await this.contract.linkAddress(
-  //     fromCharacterId,
-  //     toAddress,
-  //     linkType,
-  //   )
-  //   const receipt = await tx.wait()
-  //   const linklistId = receipt.logs[0].topics[4] as BigNumberish
-  //   return {
-  //     data: undefined,
-  //     transactionHash: receipt.transactionHash,
-  //   }
-  // }
+  @autoSwitchMainnet()
+  async linkAddress(
+    fromCharacterId: string,
+    toAddress: string,
+    linkType: string,
+    data: string = NIL_ADDRESS,
+    overrides: Overrides = {},
+  ): Promise<Result<number, true>> | never {
+    const tx = await this.contract.linkAddress(
+      {
+        fromCharacterId,
+        ethAddress: toAddress,
+        linkType: ethers.utils.formatBytes32String(linkType),
+        data,
+      },
+      overrides,
+    )
+
+    const receipt = await tx.wait()
+
+    const parser = this.parseLog(receipt.logs, 'linkAddress')
+
+    return {
+      data: parser.args.linklistId.toNumber(),
+      transactionHash: receipt.transactionHash,
+    }
+  }
+
+  /**
+   * This removes a link from a character to an address.
+   * @category Link
+   * @param fromCharacterId - The character ID of the character that is linking to another character.
+   * @param toAddress - The address you want to unlink from.
+   * @param linkType - The type of link.
+   * @returns The transaction hash of the transaction that was sent to the blockchain.
+   */
+  @autoSwitchMainnet()
+  async unlinkAddress(
+    fromCharacterId: BigNumberish,
+    toAddress: string,
+    linkType: string,
+    overrides: Overrides = {},
+  ): Promise<Result<undefined, true>> | never {
+    const tx = await this.contract.unlinkAddress(
+      {
+        fromCharacterId: fromCharacterId,
+        ethAddress: toAddress,
+        linkType: ethers.utils.formatBytes32String(linkType),
+      },
+      overrides,
+    )
+    const receipt = await tx.wait()
+    return {
+      data: undefined,
+      transactionHash: receipt.transactionHash,
+    }
+  }
 
   /** link any */
 
   /**
-   * This links a character to any URI with a given link type.
+   * This links a character to any uri with a given link type.
+   * @category Link
+   * @param fromCharacterId - The character ID of the character that is linking to the address.
+   * @param toUri - The uri of the character you want to link to.
+   * @param linkType - The type of link.
+   * @param data - The data to be passed to the link module if the address has one.
+   * @returns The transaction hash of the transaction that was sent to the blockchain, and the linklistId.
+   */
+  @autoSwitchMainnet()
+  async linkAnyUri(
+    fromCharacterId: string,
+    toUri: string,
+    linkType: string,
+    data: string = NIL_ADDRESS,
+    overrides: Overrides = {},
+  ): Promise<Result<number, true>> | never {
+    const tx = await this.contract.linkAnyUri(
+      {
+        fromCharacterId,
+        toUri,
+        linkType: ethers.utils.formatBytes32String(linkType),
+        data,
+      },
+      overrides,
+    )
+
+    const receipt = await tx.wait()
+
+    const parser = this.parseLog(receipt.logs, 'linkAnyUri')
+
+    return {
+      data: parser.args.linklistId.toNumber(),
+      transactionHash: receipt.transactionHash,
+    }
+  }
+
+  /**
+   * This removes a link from a character to an uri.
    * @category Link
    * @param fromCharacterId - The character ID of the character that is linking to another character.
-   * @param toUri - The URI of the character you want to link to.
-   * @param linkType - The type of link you want to create. This is a string that you can define yourself.
+   * @param toUri - The uri you want to unlink from.
+   * @param linkType - The type of link.
    * @returns The transaction hash of the transaction that was sent to the blockchain.
    */
-  // TODO: next version
-  // async linkAny(
-  //   fromCharacterId: string,
-  //   toUri: string,
-  //   linkType: string,
-  // ): Promise<Result<undefined>> | never {
-  //   const tx = await this.contract.linkAny(fromCharacterId, toUri, linkType)
-  //   const receipt = await tx.wait()
-  //   return {
-  //     data: undefined,
-  //     transactionHash: receipt.transactionHash,
-  //   }
-  // }
+  @autoSwitchMainnet()
+  async unlinkAnyUri(
+    fromCharacterId: BigNumberish,
+    toUri: string,
+    linkType: string,
+    overrides: Overrides = {},
+  ): Promise<Result<undefined, true>> | never {
+    const tx = await this.contract.unlinkAnyUri(
+      {
+        fromCharacterId,
+        toUri,
+        linkType: ethers.utils.formatBytes32String(linkType),
+      },
+      overrides,
+    )
+    const receipt = await tx.wait()
+    return {
+      data: undefined,
+      transactionHash: receipt.transactionHash,
+    }
+  }
 
   /** link ERC721 token */
 
   /**
-   * This links a character to an ERC721 token with a given link type.
+   * This links a character to any uri with a given link type.
    * @category Link
-   * @param fromCharacterId - The character ID of the character you want to link from.
-   * @param toTokenAddress - The address of the ERC721 token you want to link to.
-   * @param toTokenId - The token ID of the ERC721 token you want to link to.
+   * @param fromCharacterId - The character ID of the character that is linking to the address.
+   * @param toContractAddress - The address of the ERC721 contract.
+   * @param toTokenId - The token id of the ERC721 token.
+   * @param linkType - The type of link.
+   * @param data - The data to be passed to the link module if the address has one.
+   * @returns The transaction hash of the transaction that was sent to the blockchain, and the linklistId.
+   */
+  @autoSwitchMainnet()
+  async linkErc721(
+    fromCharacterId: string,
+    toContractAddress: string,
+    toTokenId: BigNumberish,
+    linkType: string,
+    data: string = NIL_ADDRESS,
+    overrides: Overrides = {},
+  ): Promise<Result<number, true>> | never {
+    const tx = await this.contract.linkERC721(
+      {
+        fromCharacterId,
+        tokenAddress: toContractAddress,
+        tokenId: toTokenId,
+        linkType: ethers.utils.formatBytes32String(linkType),
+        data,
+      },
+      overrides,
+    )
+
+    const receipt = await tx.wait()
+
+    const parser = this.parseLog(receipt.logs, 'linkAnyUri')
+
+    return {
+      data: parser.args.linklistId.toNumber(),
+      transactionHash: receipt.transactionHash,
+    }
+  }
+
+  /**
+   * This removes a link from a character to an Erc721 token.
+   * @category Link
+   * @param fromCharacterId - The character ID of the character that is linking to another character.
+   * @param toContractAddress - The address of the ERC721 contract.
+   * @param toTokenId - The token id of the ERC721 token.
    * @param linkType - The type of link.
    * @returns The transaction hash of the transaction that was sent to the blockchain.
    */
-  // TODO: next version
-  // async linkErc721(
-  //   fromCharacterId: string,
-  //   toTokenAddress: string,
-  //   toTokenId: string,
-  //   linkType: string,
-  // ): Promise<Result<undefined>> | never {
-  //   const tx = await this.contract.linkERC721(
-  //     fromCharacterId,
-  //     toTokenAddress,
-  //     toTokenId,
-  //     linkType,
-  //   )
-  //   const receipt = await tx.wait()
-  //   return {
-  //     data: undefined,
-  //     transactionHash: receipt.transactionHash,
-  //   }
-  // }
+  @autoSwitchMainnet()
+  async unlinkErc721(
+    fromCharacterId: BigNumberish,
+    toContractAddress: string,
+    toTokenId: BigNumberish,
+    linkType: string,
+    overrides: Overrides = {},
+  ): Promise<Result<undefined, true>> | never {
+    const tx = await this.contract.unlinkERC721(
+      {
+        fromCharacterId,
+        tokenAddress: toContractAddress,
+        tokenId: toTokenId,
+        linkType: ethers.utils.formatBytes32String(linkType),
+      },
+      overrides,
+    )
+    const receipt = await tx.wait()
+    return {
+      data: undefined,
+      transactionHash: receipt.transactionHash,
+    }
+  }
 
   /** link note */
+
   /**
    * This links a character to another note with a given link type.
    * @category Link
@@ -401,53 +531,76 @@ export class LinkContract extends BaseContract {
     }
   }
 
-  /** link link */
-
-  // TODO: next version
-  // async linkLink(
-  //   fromCharacterId: string,
-  //   toLinkId: string,
-  //   linkType: string,
-  // ): Promise<Result<undefined>> | never {
-  //   const tx = await this.contract.linkLink(fromCharacterId, {})
-  //   const receipt = await tx.wait()
-  //   return {
-  //     data: undefined,
-  //     transactionHash: receipt.transactionHash,
-  //   }
-  // }
-
   /** link linklist */
 
-  // TODO: next version
-  // async linkLinklist(
-  //   fromCharacterId: string,
-  //   toLinkListId: string,
-  //   linkType: string,
-  // ): Promise<Result<undefined>> | never {
-  //   const tx = await this.contract.linkLinklist(fromCharacterId, {})
-  //   const receipt = await tx.wait()
-  //   return {
-  //     data: undefined,
-  //     transactionHash: receipt.transactionHash,
-  //   }
-  // }
+  /**
+   * This links a character to a linklist with a given link type.
+   * @category Link
+   * @param fromCharacterId - The character ID of the character that is linking to another note. Must be your own character, otherwise it will be rejected.
+   * @param toLinklistId - The linklist ID of the linklist you want to link to.
+   * @param linkType - The type of link.
+   * @param data - The data to be passed to the link module if the character has one.
+   * @returns The linklist id and the transaction hash of the transaction that was sent to the blockchain.
+   */
+  @autoSwitchMainnet()
+  async linkLinklist(
+    fromCharacterId: BigNumberish,
+    toLinkListId: BigNumberish,
+    linkType: string,
+    data: string = NIL_ADDRESS,
+    overrides: Overrides = {},
+  ): Promise<Result<number, true>> | never {
+    const tx = await this.contract.linkLinklist(
+      {
+        fromCharacterId,
+        toLinkListId,
+        linkType: ethers.utils.formatBytes32String(linkType),
+        data,
+      },
+      overrides,
+    )
 
-  /** mint */
+    const receipt = await tx.wait()
 
-  // TODO: next version
-  // async mintLink(
-  //   toAddress: string,
-  //   toLinkId: string,
-  //   linkType: string,
-  // ): Promise<Result<undefined>> | never {
-  //   const tx = await this.contract.mintLink({}, toAddress)
-  //   const receipt = await tx.wait()
-  //   return {
-  //     data: undefined,
-  //     transactionHash: receipt.transactionHash,
-  //   }
-  // }
+    const parser = this.parseLog(receipt.logs, 'linkNote')
+
+    return {
+      data: parser.args.linklistId.toNumber(),
+      transactionHash: receipt.transactionHash,
+    }
+  }
+
+  /**
+   * This removes a link from a character to a linklist.
+   * @category Link
+   * @param fromCharacterId - The character ID of the character that is linking to another note.
+   * @param toLinklistId - The linklist ID of the linklist you want to unlink to.
+   * @param linkType - The type of link.
+   * @returns The transaction hash of the transaction that was sent to the blockchain.
+   */
+  @autoSwitchMainnet()
+  async unlinkLinklist(
+    fromCharacterId: BigNumberish,
+    toLinklistId: BigNumberish,
+    linkType: string,
+    overrides: Overrides = {},
+  ): Promise<Result<undefined, true>> | never {
+    const tx = await this.contract.unlinkLinklist(
+      {
+        fromCharacterId,
+        toLinkListId: toLinklistId,
+        linkType: ethers.utils.formatBytes32String(linkType),
+      },
+      overrides,
+    )
+
+    const receipt = await tx.wait()
+
+    return {
+      data: undefined,
+      transactionHash: receipt.transactionHash,
+    }
+  }
 
   /** linklist uri */
 
@@ -473,34 +626,6 @@ export class LinkContract extends BaseContract {
   //   return {
   //     data: uri,
   //     transactionHash: undefined,
-  //   }
-  // }
-
-  /** other methods */
-
-  // TODO: next version
-  // async attachLinklist(
-  //   characterId: string,
-  //   linklistId: string,
-  // ): Promise<Result<undefined>> | never {
-  //   const tx = await this.contract.attachLinklist(characterId, linklistId) // will not overwrite and throw error if already attached a same type
-  //   const receipt = await tx.wait()
-  //   return {
-  //     data: undefined,
-  //     transactionHash: receipt.transactionHash,
-  //   }
-  // }
-
-  // TODO: next version
-  // async detachLinklist(
-  //   characterId: string,
-  //   linklistId: string,
-  // ): Promise<Result<undefined>> | never {
-  //   const tx = await this.contract.detachLinklist(characterId, linklistId)
-  //   const receipt = await tx.wait()
-  //   return {
-  //     data: undefined,
-  //     transactionHash: receipt.transactionHash,
   //   }
   // }
 }
