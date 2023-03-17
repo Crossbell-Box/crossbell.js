@@ -51,15 +51,15 @@ export class MintModuleIndexer extends BaseIndexer {
    * This returns a specific mint module.
    *
    * @category MintModule
-   * @param transactionHash - The transactionHash of the mint module.
-   * @param logIndex - The logIndex of the mint module.
+   * @param targetItemType - The targetItemType of the mint module.
+   * @param linkValue - The linkValue of the mint module.
    * @returns The mint module.
    */
   async getMintModule(
-    transactionHash: string,
-    logIndex: BigNumberish,
+    targetItemType: MintModuleTargetItemType,
+    linkValue: BigNumberish,
   ): Promise<MintModuleEntity | null> {
-    const url = `${this.endpoint}/mint-modules/${transactionHash}/${logIndex}`
+    const url = `${this.endpoint}/mint-modules/${targetItemType}/${linkValue}`
     const res = await this.fetch(url).then((res) => res.json())
 
     return res as MintModuleEntity

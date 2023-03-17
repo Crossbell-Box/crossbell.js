@@ -10,10 +10,11 @@ export type LinkModuleTargetItemType =
   | 'Note'
 
 export interface LinkModuleEntity {
+  targetItemType: LinkModuleTargetItemType
+  linkValue: string
   contractAddress: string
   initData: string
   returnData: string
-  targetItemType: LinkModuleTargetItemType
   toCharacterId: number | null
   toCharacter?: CharacterEntity | null
   toAddress: string | null

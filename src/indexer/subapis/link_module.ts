@@ -67,15 +67,15 @@ export class LinkModuleIndexer extends BaseIndexer {
    * This returns a specific link module.
    *
    * @category LinkModule
-   * @param transactionHash - The transactionHash of the link module.
-   * @param logIndex - The logIndex of the link module.
+   * @param targetItemType - The targetItemType of the link module.
+   * @param linkValue - The linkValue of the link module.
    * @returns The link module.
    */
   async getLinkModule(
-    transactionHash: string,
-    logIndex: BigNumberish,
+    targetItemType: LinkModuleTargetItemType,
+    linkValue: BigNumberish,
   ): Promise<LinkModuleEntity | null> {
-    const url = `${this.endpoint}/link-modules/${transactionHash}/${logIndex}`
+    const url = `${this.endpoint}/link-modules/${targetItemType}/${linkValue}`
     const res = await this.fetch(url).then((res) => res.json())
 
     return res as LinkModuleEntity

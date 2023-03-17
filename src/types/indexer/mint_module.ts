@@ -4,10 +4,11 @@ import { NoteEntity } from './note'
 export type MintModuleTargetItemType = 'Note'
 
 export interface MintModuleEntity {
+  targetItemType: MintModuleTargetItemType
+  linkValue: string
   contractAddress: string
   initData: string
   returnData: string
-  targetItemType: MintModuleTargetItemType
   toCharacterId: number | null
   toCharacter?: CharacterEntity | null
   toNoteId: number | null

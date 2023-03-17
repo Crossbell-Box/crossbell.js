@@ -488,28 +488,29 @@ export class BaseContract {
   private _moduleResponseCache = undefined as MintOrLinkModule[] | undefined
   private _lastModuleResponseCacheTime = 0
 
-  protected async getModules({
+  protected async getModules<T extends MintOrLinkModule['type']>({
     type,
   }: {
-    type?: MintOrLinkModule['type']
-  } = {}) {
+    type?: T
+  } = {}): Promise<MintOrLinkModule<T>[]> {
     const now = Date.now()
     const isMoreThanOneMinute =
       now - this._lastModuleResponseCacheTime > 60 * 1000
 
+    let res: MintOrLinkModule<T>[] = []
     if (!this._moduleResponseCache || isMoreThanOneMinute) {
-      const res = (await fetch(
+      res = (await fetch(
         'https://raw.githubusercontent.com/Crossbell-Box/Crossbell-Contracts/main/deployments/modules.json',
-      ).then((res) => res.json())) as MintOrLinkModule[]
+      ).then((res) => res.json())) as MintOrLinkModule<T>[]
       this._moduleResponseCache = res
       this._lastModuleResponseCacheTime = now
     }
 
     if (type) {
-      return this._moduleResponseCache.filter((module) => module.type === type)
+      return res.filter((module) => module.type === type)
     }
 
-    return this._moduleResponseCache
+    return res
   }
 
   protected async getModule(address: string) {
