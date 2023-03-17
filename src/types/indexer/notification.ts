@@ -9,6 +9,7 @@ export enum NotificationType {
   NOTE_MINTED = 'NOTE_MINTED',
   NOTE_POSTED = 'NOTE_POSTED',
   MENTIONED = 'MENTIONED',
+  TIPPED = 'TIPPED',
 }
 
 export type NotificationTypeKey = keyof typeof NotificationType
