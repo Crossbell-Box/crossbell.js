@@ -23,6 +23,7 @@ export class NotificationIndexer extends BaseIndexer {
       includeCharacterMetadata,
       includeSelfInvoked,
       includeIsRead,
+      read,
       limit,
       cursor,
     }: {
@@ -34,6 +35,8 @@ export class NotificationIndexer extends BaseIndexer {
       includeSelfInvoked?: boolean
       /** Whether to include `isRead` attribute to indicate whether the notification is read */
       includeIsRead?: boolean
+      /** Whether to read notifications */
+      read?: boolean
       /** Limit the count of items returned. */
       limit?: number
       /** Used for pagination. */
@@ -46,6 +49,7 @@ export class NotificationIndexer extends BaseIndexer {
       includeCharacterMetadata,
       includeSelfInvoked,
       includeIsRead,
+      read,
       limit,
       cursor,
     })

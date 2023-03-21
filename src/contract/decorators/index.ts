@@ -21,15 +21,11 @@ export function autoSwitchMainnet() {
         }
       }
 
-      // @ts-ignore
-      if (this._hasConnected) {
-        // only check and switch if we have already connected
-        try {
-          await checkAndSwitch()
-        } catch {
-          // we may need to connect again if the user switch network on the halfway
-          await checkAndSwitch()
-        }
+      try {
+        await checkAndSwitch()
+      } catch {
+        // we may need to connect again if the user switch network on the halfway
+        await checkAndSwitch()
       }
 
       return originalMethod.apply(this, args)
