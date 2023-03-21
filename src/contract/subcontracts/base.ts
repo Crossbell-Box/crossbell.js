@@ -46,7 +46,6 @@ import type { MintEvent } from '../abis/cbt/types/Abi'
 import { MintOrLinkModule, MintOrLinkModuleConfig } from '../../types'
 import {
   isAddressEqual,
-  sleep,
   NIL_ADDRESS,
   Logger,
   validateIsInSdn,
@@ -288,60 +287,26 @@ export class BaseContract {
       const provider = this.getExternalProvider(this._providerOrPrivateKey)
 
       try {
-        let status: 'connected' | 'disconnected' | 'error' = 'disconnected'
-
-        provider
-          .send('eth_requestAccounts', [])
-          .then(() => {
-            status = 'connected'
-          })
-          .catch((e) => {
-            status = 'error'
-            Logger.warn('eth_requestAccounts error', e)
-          })
-        while (true) {
-          sleep(100)
-          // @ts-ignore
-          if (status === 'connected') {
-            break
-            // @ts-ignore
-          } else if (status === 'error') {
-            throw new Error('eth_requestAccounts error')
-          }
-        }
-      } catch (e) {
-        Logger.warn(
-          'Provider may not support eth_requestAccounts. Fallback to provider.enable()',
-          e,
-        )
-
         // @ts-ignore
-        if (typeof this._providerOrPrivateKey.enable === 'function') {
-          let status: 'connected' | 'disconnected' | 'error' = 'disconnected'
-
-          let provider = this._providerOrPrivateKey as any
-          provider
-            .enable()
-            .then(() => {
-              status = 'connected'
-            })
-            .catch((e: any) => {
-              status = 'error'
-              Logger.warn('provider.enable() error', e)
-            })
-          while (true) {
-            sleep(100)
-            // @ts-ignore
-            if (status === 'connected') {
-              break
-              // @ts-ignore
-            } else if (status === 'error') {
-              throw new Error('provider.enable() error')
-            }
-          }
+        if (typeof this._providerOrPrivateKey.sendAsync !== 'function') {
+          throw new Error('provider.sendAsync is not a function')
+        }
+        // @ts-ignore
+        this._providerOrPrivateKey.sendAsync(
+          { method: 'eth_requestAccounts', params: [] },
+          () => {},
+        )
+      } catch (e) {
+        // @ts-ignore
+        if (typeof this._providerOrPrivateKey.request === 'function') {
+          // @ts-ignore
+          this._providerOrPrivateKey.request({
+            method: 'eth_requestAccounts',
+            params: [],
+          })
         } else {
           throw new Error(
-            'Provider does not support eth_requestAccounts and does not support enable()',
+            'Provider does not support eth_requestAccounts and does not support send()',
           )
         }
       }
