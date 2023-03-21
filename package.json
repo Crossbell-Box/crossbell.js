@@ -49,18 +49,18 @@
     "fetch-undici": "^3.0.1",
     "p-limit": "^3.1.0",
     "ts-mixer": "^6.0.3",
-    "web3-providers-ws": "^1.8.2"
+    "web3-providers-ws": "1.9.0"
   },
   "devDependencies": {
     "@typechain/ethers-v5": "^10.2.0",
     "@types/async-retry": "^1.4.5",
-    "@types/node": "^18.15.3",
-    "prettier": "^2.8.4",
-    "tsup": "^6.6.3",
+    "@types/node": "^18.15.5",
+    "prettier": "^2.8.5",
+    "tsup": "^6.7.0",
     "typechain": "^8.1.1",
-    "typedoc": "^0.23.27",
+    "typedoc": "^0.23.28",
     "typescript": "^4.9.5",
-    "vitest": "^0.29.3"
+    "vitest": "^0.29.7"
   },
   "publishConfig": {
     "access": "public"
