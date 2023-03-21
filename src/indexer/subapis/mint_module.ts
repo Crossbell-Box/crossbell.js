@@ -5,7 +5,7 @@ import type {
   ListResponse,
 } from '../../types/indexer'
 import { type BigNumberish } from 'ethers'
-import { createSearchParamsString } from '../../utils/query_string'
+import { createSearchParamsString } from '../../utils'
 
 export class MintModuleIndexer extends BaseIndexer {
   /**

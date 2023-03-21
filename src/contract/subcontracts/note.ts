@@ -16,7 +16,7 @@ import {
   CallOverrides,
 } from '../../types'
 import { Ipfs } from '../../ipfs'
-import { NIL_ADDRESS } from '../utils'
+import { NIL_ADDRESS } from '../../utils'
 import { autoSwitchMainnet } from '../decorators'
 import pLimit from 'p-limit'
 

@@ -1,7 +1,7 @@
 import { BaseIndexer } from './base'
 import type { FeedEntity, FeedTypeKey, ListResponse } from '../../types/indexer'
 import { type BigNumberish } from 'ethers'
-import { createSearchParamsString } from '../../utils/query_string'
+import { createSearchParamsString } from '../../utils'
 
 export class FeedIndexer extends BaseIndexer {
   /**

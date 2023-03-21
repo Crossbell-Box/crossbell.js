@@ -12,7 +12,7 @@ export class BaseIndexer {
       | string
       | {
           endpoint?: string
-          fetchOptions?: typeof BaseIndexer['prototype']['fetchOptions']
+          fetchOptions?: (typeof BaseIndexer)['prototype']['fetchOptions']
         },
   ) {
     if (typeof endpointOrOptions === 'string') {

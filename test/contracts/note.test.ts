@@ -8,8 +8,6 @@ const contract = new Contract(mockUser.privateKey)
 describe('should post note', () => {
   let characterId: BigNumberish
   beforeAll(async () => {
-    await contract.connect()
-
     const { data: pid } = await contract.getPrimaryCharacterId(mockUser.address)
     characterId = pid
   })

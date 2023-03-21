@@ -1,15 +1,11 @@
 import { type BigNumberish, Wallet } from 'ethers'
-import { expect, describe, test, beforeAll } from 'vitest'
+import { expect, describe, test } from 'vitest'
 import { Contract } from '../../src'
 import { mockUser, genRandomHandle, metadataUri } from '../mock'
 
 const contract = new Contract(mockUser.privateKey)
 
 describe('link and check', () => {
-  beforeAll(async () => {
-    await contract.connect()
-  })
-
   // create two characters first
   let characterId1: BigNumberish | null = null
   let characterId2: BigNumberish | null = null

@@ -9,6 +9,7 @@ import { CbtContract } from './subcontracts/cbt'
 import { TipsContract } from './subcontracts/tips'
 import { LinkModuleContract } from './subcontracts/link_module'
 import { MintModuleContract } from './subcontracts/mint_module'
+import { Wallet } from 'ethers'
 
 const Contracts = Mixin(
   CharacterContract,
@@ -33,9 +34,6 @@ const Contracts = Mixin(
  * // Create a new contract instance with metamask provider
  * const provider = window.ethereum
  * const contract = new Contract(provider)
- *
- * // Connect to the chain
- * await contract.connect()
  *
  * // Example API: Create a new character for an address
  * try {

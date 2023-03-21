@@ -2,7 +2,7 @@ import { BaseIndexer } from './base'
 import type { ListResponse, NoteEntity } from '../../types/indexer'
 import type { LinkItemType } from '../../types/contract'
 import { type BigNumberish } from 'ethers'
-import { createSearchParamsString } from '../../utils/query_string'
+import { createSearchParamsString } from '../../utils'
 import { NoteMetadata } from '../../types'
 
 export class NoteIndexer extends BaseIndexer {

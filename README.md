@@ -23,9 +23,6 @@ import { Contract } from 'crossbell.js'
 const provider = window.ethereum
 const contract = new Contract(provider)
 
-// Connect to the chain
-await contract.connect()
-
 // Example API: Create a new character for an address
 try {
   const result = await contract.createCharacter(
@@ -50,9 +47,6 @@ import { Contract } from 'crossbell.js'
 const privateKey =
   '0xabcdef0123456789012345678901234567890123456789012345678901234'
 const contract = new Contract(privateKey)
-
-// Connect to the chain
-await contract.connect()
 ```
 
 #### Connect with Read-Only
@@ -63,9 +57,6 @@ You can also connect with a read-only provider. Note that in this case, you can'
 import { Contract } from 'crossbell.js'
 
 const contract = new Contract() // just pass nothing to use a read-only provider
-
-// Connect to the chain
-await contract.connect()
 ```
 
 For more contract api, see [docs](https://crossbell-box.github.io/crossbell.js/classes/Contract.html).

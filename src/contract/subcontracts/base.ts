@@ -43,11 +43,14 @@ import {
   Abi__factory as LinklistAbi__factory,
 } from '../abis/linklist/types'
 import type { MintEvent } from '../abis/cbt/types/Abi'
-import { validateIsInSdn } from '../../utils/sdn'
-import { Logger } from '../../utils/logger'
 import { MintOrLinkModule, MintOrLinkModuleConfig } from '../../types'
-import { NIL_ADDRESS } from '../utils'
-import { isAddressEqual } from '../../utils'
+import {
+  isAddressEqual,
+  sleep,
+  NIL_ADDRESS,
+  Logger,
+  validateIsInSdn,
+} from '../../utils'
 
 const logTopics = {
   createCharacter: 'CharacterCreated(uint256,address,address,string,uint256)',
@@ -104,8 +107,6 @@ export class BaseContract {
     | string
   private _signerOrProvider!: ethers.Signer | ethers.providers.Provider
 
-  private _hasConnected: boolean = false
-
   protected options: ContractOptions
 
   /**
@@ -113,8 +114,6 @@ export class BaseContract {
    * @category Internal Contract
    */
   get contract(): EntryAbi {
-    this.checkConnection()
-
     return this.getContract(this._signerOrProvider)
   }
 
@@ -134,8 +133,6 @@ export class BaseContract {
    * @category Internal Contract
    */
   get peripheryContract(): PeripheryAbi {
-    this.checkConnection()
-
     return this.getPeripheryContract(this._signerOrProvider)
   }
 
@@ -155,8 +152,6 @@ export class BaseContract {
    * @category Internal Contract
    */
   get cbtContract(): CbtAbi {
-    this.checkConnection()
-
     return this.getCbtContract(this._signerOrProvider)
   }
 
@@ -175,8 +170,6 @@ export class BaseContract {
    * Returns the internal cbt contract.
    */
   get tipsContract(): TipsAbi {
-    this.checkConnection()
-
     return this.getTipsContract(this._signerOrProvider)
   }
 
@@ -195,8 +188,6 @@ export class BaseContract {
    * Returns the internal mira contract.
    */
   get miraContract(): MiraAbi {
-    this.checkConnection()
-
     return this.getMiraContract(this._signerOrProvider)
   }
 
@@ -215,8 +206,6 @@ export class BaseContract {
    * Returns the internal linklist contract.
    */
   get linklistContract(): LinklistAbi {
-    this.checkConnection()
-
     return this.getLinklistContract(this._signerOrProvider)
   }
 
@@ -236,8 +225,6 @@ export class BaseContract {
    * @category Internal Contract
    */
   get newbieVillaContract(): NewbieVillaAbi {
-    this.checkConnection()
-
     return this.getNewbieVillaContract(this._signerOrProvider)
   }
 
@@ -286,6 +273,80 @@ export class BaseContract {
   ) {
     this._providerOrPrivateKey = providerOrPrivateKey
     this.options = this.initOptions(options)
+    this._connect()
+  }
+
+  private _connect() {
+    if (typeof this._providerOrPrivateKey === 'undefined') {
+      const provider = this.getDefaultProvider()
+      this._signerOrProvider = provider
+    } else if (typeof this._providerOrPrivateKey === 'string') {
+      const provider = this.getDefaultProvider()
+      const wallet = new ethers.Wallet(this._providerOrPrivateKey, provider)
+      this._signerOrProvider = wallet
+    } else {
+      const provider = this.getExternalProvider(this._providerOrPrivateKey)
+
+      try {
+        let status: 'connected' | 'disconnected' | 'error' = 'disconnected'
+
+        provider
+          .send('eth_requestAccounts', [])
+          .then(() => {
+            status = 'connected'
+          })
+          .catch((e) => {
+            status = 'error'
+            Logger.warn('eth_requestAccounts error', e)
+          })
+        while (true) {
+          sleep(100)
+          // @ts-ignore
+          if (status === 'connected') {
+            break
+            // @ts-ignore
+          } else if (status === 'error') {
+            throw new Error('eth_requestAccounts error')
+          }
+        }
+      } catch (e) {
+        Logger.warn(
+          'Provider may not support eth_requestAccounts. Fallback to provider.enable()',
+          e,
+        )
+
+        // @ts-ignore
+        if (typeof this._providerOrPrivateKey.enable === 'function') {
+          let status: 'connected' | 'disconnected' | 'error' = 'disconnected'
+
+          let provider = this._providerOrPrivateKey as any
+          provider
+            .enable()
+            .then(() => {
+              status = 'connected'
+            })
+            .catch((e: any) => {
+              status = 'error'
+              Logger.warn('provider.enable() error', e)
+            })
+          while (true) {
+            sleep(100)
+            // @ts-ignore
+            if (status === 'connected') {
+              break
+              // @ts-ignore
+            } else if (status === 'error') {
+              throw new Error('provider.enable() error')
+            }
+          }
+        } else {
+          throw new Error(
+            'Provider does not support eth_requestAccounts and does not support enable()',
+          )
+        }
+      }
+      this._signerOrProvider = provider.getSigner()
+    }
   }
 
   private initOptions(options?: Partial<ContractOptions>): ContractOptions {
@@ -314,40 +375,10 @@ export class BaseContract {
    * Connects to the contract.
    * You need to call this before you can use the contract.
    * @category Basic
+   * @deprecated You don't need to call this anymore.
    */
   async connect() {
-    if (typeof this._providerOrPrivateKey === 'undefined') {
-      const provider = this.getDefaultProvider()
-      this._signerOrProvider = provider
-    } else if (typeof this._providerOrPrivateKey === 'string') {
-      const provider = this.getDefaultProvider()
-      const wallet = new ethers.Wallet(this._providerOrPrivateKey, provider)
-      this._signerOrProvider = wallet
-    } else {
-      const provider = this.getExternalProvider(this._providerOrPrivateKey)
-
-      try {
-        await provider.send('eth_requestAccounts', [])
-      } catch (e) {
-        Logger.warn(
-          'Provider may not support eth_requestAccounts. Fallback to provider.enable()',
-          e,
-        )
-
-        // @ts-ignore
-        if (typeof this._providerOrPrivateKey.enable === 'function') {
-          // @ts-ignore
-          await this._providerOrPrivateKey.enable()
-        } else {
-          throw new Error(
-            'Provider does not support eth_requestAccounts and does not support enable()',
-          )
-        }
-      }
-      this._signerOrProvider = provider.getSigner()
-    }
-
-    this._hasConnected = true
+    Logger.warn("connect() is deprecated. You don't need to call this anymore.")
   }
 
   protected parseLog<TopicName extends keyof typeof logTopics>(
@@ -458,27 +489,6 @@ export class BaseContract {
     provider.pollingInterval = 100
 
     return provider
-  }
-
-  private checkConnection() {
-    if (!this._hasConnected) {
-      throw new Error(
-        'Contract not connected. Please call contract.connect() first.',
-      )
-    }
-
-    // if (this._signerOrProvider instanceof ethers.providers.Web3Provider) {
-    //   if (
-    //     this._signerOrProvider.network.chainId !==
-    //     Network.getCrossbellNetworkInfo().chainId
-    //   ) {
-    //     throw new Error(
-    //       `Wrong network. Expected ${
-    //         Network.getCrossbellNetworkInfo().chainId
-    //       } but got ${this._signerOrProvider.network.chainId}`,
-    //     )
-    //   }
-    // }
   }
 
   protected validateAddress(address: string | string[]) {

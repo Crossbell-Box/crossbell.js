@@ -1,5 +1,5 @@
 import { type BigNumberish, Wallet } from 'ethers'
-import { expect, describe, test, beforeAll } from 'vitest'
+import { expect, describe, test } from 'vitest'
 import { Contract } from '../../src'
 import {
   mockUser,
@@ -14,19 +14,7 @@ const contract = new Contract(mockUser.privateKey)
 
 let characterId: BigNumberish | null = null
 
-describe('should fail if not connected', () => {
-  test('should fail to createCharacter if not connected', () => {
-    expect(
-      contract.createCharacter(mockUser.address, randomHandle, metadataUri),
-    ).rejects.toThrow(/Contract not connected/)
-  })
-})
-
 describe('character', () => {
-  beforeAll(async () => {
-    await contract.connect()
-  })
-
   describe('create a character and check', () => {
     test('should fail to createCharacter if the handle is not in correct format', () => {
       expect(

@@ -1,7 +1,7 @@
 import { type BigNumberish, ethers } from 'ethers'
 import { BaseContract } from './base'
 import { autoSwitchMainnet } from '../decorators'
-import { NIL_ADDRESS } from '../utils'
+import { NIL_ADDRESS } from '../../utils'
 import type {
   CallOverrides,
   Character,

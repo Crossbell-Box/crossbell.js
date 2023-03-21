@@ -9,8 +9,6 @@ let characterId: BigNumberish | null = null
 
 describe('tips', () => {
   beforeAll(async () => {
-    await contract.connect()
-
     characterId = await contract
       .getPrimaryCharacterId(mockUser.address)
       .then((res) => res.data)

@@ -1,7 +1,7 @@
 import { BaseIndexer } from './base'
 import type { ListResponse, TipEntity } from '../../types/indexer'
 import { type BigNumberish } from 'ethers'
-import { createSearchParamsString } from '../../utils/query_string'
+import { createSearchParamsString } from '../../utils'
 
 export class TipIndexer extends BaseIndexer {
   /**

@@ -1,7 +1,7 @@
 import { BaseIndexer } from './base'
 import type { ListResponse, MintedNoteEntity } from '../../types/indexer'
 import { type BigNumberish } from 'ethers'
-import { createSearchParamsString } from '../../utils/query_string'
+import { createSearchParamsString } from '../../utils'
 import { NoteMetadata } from '../../types'
 
 export class MintedNoteIndexer extends BaseIndexer {

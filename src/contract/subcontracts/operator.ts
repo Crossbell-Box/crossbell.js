@@ -4,7 +4,7 @@ import type { Overrides, Result } from '../../types/contract'
 import { BigNumber, BigNumberish, CallOverrides } from 'ethers'
 import BN from 'bn.js'
 import { CharacterPermissionKey } from '../../types'
-import { Logger } from '../../utils/logger'
+import { Logger } from '../../utils'
 
 // https://github.com/Crossbell-Box/CIPs/blob/main/CIPs/CIP-7.md
 
