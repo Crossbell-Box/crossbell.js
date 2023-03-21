@@ -9,7 +9,6 @@ import { CbtContract } from './subcontracts/cbt'
 import { TipsContract } from './subcontracts/tips'
 import { LinkModuleContract } from './subcontracts/link_module'
 import { MintModuleContract } from './subcontracts/mint_module'
-import { Wallet } from 'ethers'
 
 const Contracts = Mixin(
   CharacterContract,
