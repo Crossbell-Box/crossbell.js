@@ -262,7 +262,7 @@ export class CharacterContract extends BaseContract {
   ): Promise<Result<number>> | never {
     this.validateAddress(address)
 
-    const characterId = await this.contract.getPrimaryCharacterId(
+    const characterId = await this.getContract().getPrimaryCharacterId(
       address,
       overrides,
     )
@@ -282,7 +282,7 @@ export class CharacterContract extends BaseContract {
     characterId: BigNumberish,
     overrides: CallOverrides = {},
   ): Promise<Result<boolean>> | never {
-    const isPrimary = await this.contract.isPrimaryCharacter(
+    const isPrimary = await this.getContract().isPrimaryCharacter(
       characterId,
       overrides,
     )
@@ -303,7 +303,7 @@ export class CharacterContract extends BaseContract {
   ): Promise<Result<Character>> | never {
     handle = handle.toLowerCase()
 
-    const character = await this.contract.getCharacterByHandle(
+    const character = await this.getContract().getCharacterByHandle(
       handle,
       overrides,
     )
@@ -334,7 +334,10 @@ export class CharacterContract extends BaseContract {
     characterId: BigNumberish,
     overrides: CallOverrides = {},
   ): Promise<Result<Character>> | never {
-    const character = await this.contract.getCharacter(characterId, overrides)
+    const character = await this.getContract().getCharacter(
+      characterId,
+      overrides,
+    )
 
     const { metadata } = await Ipfs.parseMetadataOrUri(
       'character',
@@ -364,7 +367,7 @@ export class CharacterContract extends BaseContract {
     characterId: BigNumberish,
     overrides: CallOverrides = {},
   ): Promise<Result<string>> | never {
-    const handle = await this.contract.getHandle(characterId, overrides)
+    const handle = await this.getContract().getHandle(characterId, overrides)
     return {
       data: handle,
     }
@@ -380,7 +383,7 @@ export class CharacterContract extends BaseContract {
     characterId: BigNumberish,
     overrides: CallOverrides = {},
   ): Promise<Result<string>> | never {
-    const uri = await this.contract.getCharacterUri(characterId, overrides)
+    const uri = await this.getContract().getCharacterUri(characterId, overrides)
     return {
       data: uri,
     }
@@ -396,7 +399,9 @@ export class CharacterContract extends BaseContract {
     txHash: string,
     overrides: CallOverrides = {},
   ): Promise<Result<Character>> | never {
-    const receipt = await this.contract.provider.getTransactionReceipt(txHash)
+    const receipt = await this.getContract().provider.getTransactionReceipt(
+      txHash,
+    )
 
     const parser = this.parseLog(receipt.logs, 'createCharacter')
 
@@ -417,7 +422,7 @@ export class CharacterContract extends BaseContract {
     overrides: CallOverrides = {},
   ): Promise<Result<boolean>> | never {
     this.validateAddress(address)
-    const characterId = await this.contract.getPrimaryCharacterId(
+    const characterId = await this.getContract().getPrimaryCharacterId(
       address,
       overrides,
     )
@@ -437,7 +442,10 @@ export class CharacterContract extends BaseContract {
     handle: string,
     overrides: CallOverrides = {},
   ): Promise<Result<boolean>> | never {
-    const data = await this.contract.getCharacterByHandle(handle, overrides)
+    const data = await this.getContract().getCharacterByHandle(
+      handle,
+      overrides,
+    )
     const exists = data.handle !== ''
     return {
       data: exists,

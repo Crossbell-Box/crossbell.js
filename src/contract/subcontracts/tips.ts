@@ -89,7 +89,7 @@ export class TipsContract extends BaseContract {
     address: string,
     overrides: CallOverrides = {},
   ): Promise<Result<string>> | never {
-    const res = await this.miraContract.balanceOf(address, overrides)
+    const res = await this.getMiraContract().balanceOf(address, overrides)
 
     return {
       data: res.toString(),
@@ -105,7 +105,7 @@ export class TipsContract extends BaseContract {
   async getMiraTokenAddress(
     overrides: CallOverrides = {},
   ): Promise<Result<string>> | never {
-    const res = await this.tipsContract.getToken(overrides)
+    const res = await this.getTipsContract().getToken(overrides)
 
     return {
       data: res,
@@ -121,7 +121,7 @@ export class TipsContract extends BaseContract {
   async getMiraTokenDecimals(
     overrides: CallOverrides = {},
   ): Promise<Result<number>> | never {
-    const res = await this.miraContract.decimals(overrides)
+    const res = await this.getMiraContract().decimals(overrides)
 
     return {
       data: res,

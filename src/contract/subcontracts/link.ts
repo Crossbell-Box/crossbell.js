@@ -205,7 +205,7 @@ export class LinkContract extends BaseContract {
     linkType: string,
     overrides: CallOverrides = {},
   ): Promise<Result<number[]>> | never {
-    const linkList = await this.peripheryContract.getLinkingCharacterIds(
+    const linkList = await this.getPeripheryContract().getLinkingCharacterIds(
       fromCharacterId,
       ethers.utils.formatBytes32String(linkType),
       overrides,
@@ -227,7 +227,7 @@ export class LinkContract extends BaseContract {
     linkType: string,
     overrides: CallOverrides = {},
   ): Promise<Result<Character[]>> | never {
-    const ids = await this.peripheryContract.getLinkingCharacterIds(
+    const ids = await this.getPeripheryContract().getLinkingCharacterIds(
       fromCharacterId,
       ethers.utils.formatBytes32String(linkType),
       overrides,

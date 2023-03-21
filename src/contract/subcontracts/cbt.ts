@@ -1,7 +1,7 @@
 import { autoSwitchMainnet } from '../decorators'
 import type { Overrides, Result } from '../../types/contract'
 import { BaseContract } from './base'
-import { type BigNumberish } from 'ethers'
+import { CallOverrides, type BigNumberish } from 'ethers'
 
 export class CbtContract extends BaseContract {
   /**
@@ -58,8 +58,11 @@ export class CbtContract extends BaseContract {
    * @param tokenId - The id of the token.
    * @returns The URI of the token.
    */
-  async getCbtTokenUri(tokenId: BigNumberish): Promise<Result<string>> | never {
-    const uri = await this.cbtContract.uri(tokenId)
+  async getCbtTokenUri(
+    tokenId: BigNumberish,
+    overrides: CallOverrides = {},
+  ): Promise<Result<string>> | never {
+    const uri = await this.getCbtContract().uri(tokenId, overrides)
 
     return {
       data: uri,

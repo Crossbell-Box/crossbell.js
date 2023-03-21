@@ -12,7 +12,7 @@ export class RevisionContract extends BaseContract {
    */
   @autoSwitchMainnet()
   async getLatestRevision(): Promise<Result<number, false>> | never {
-    const revision = await this.contract.getRevision()
+    const revision = await this.getContract().getRevision()
 
     return {
       data: revision.toNumber(),

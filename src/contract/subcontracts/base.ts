@@ -90,7 +90,7 @@ type LogEvents = {
 type ContractOptions = {
   entryContractAddress: string
   peripheryContractAddress: string
-  cbtContractAddress?: string
+  cbtContractAddress: string
   newbieVillaContractAddress: string
   tipsContractAddress: string
   miraContractAddress: string
@@ -104,14 +104,6 @@ export class BaseContract {
     | string
   private _signerOrProvider!: ethers.Signer | ethers.providers.Provider
 
-  private _contract!: EntryAbi
-  private _peripheryContract!: PeripheryAbi
-  private _cbtContract!: CbtAbi
-  private _newbieVillaContract!: NewbieVillaAbi
-  private _tipsContract!: TipsAbi
-  private _miraContract!: MiraAbi
-  private _linklistContract!: LinklistAbi
-
   private _hasConnected: boolean = false
 
   protected options: ContractOptions
@@ -123,11 +115,18 @@ export class BaseContract {
   get contract(): EntryAbi {
     this.checkConnection()
 
-    return this._contract
+    return this.getContract(this._signerOrProvider)
   }
 
-  set contract(contract: EntryAbi) {
-    this._contract = contract
+  protected getContract(
+    signerOrProvider:
+      | ethers.Signer
+      | ethers.providers.Provider = this.getDefaultProvider(),
+  ) {
+    return EntryAbi__factory.connect(
+      this.options.entryContractAddress,
+      signerOrProvider,
+    )
   }
 
   /**
@@ -137,11 +136,18 @@ export class BaseContract {
   get peripheryContract(): PeripheryAbi {
     this.checkConnection()
 
-    return this._peripheryContract
+    return this.getPeripheryContract(this._signerOrProvider)
   }
 
-  set peripheryContract(contract: PeripheryAbi) {
-    this._peripheryContract = contract
+  protected getPeripheryContract(
+    signerOrProvider:
+      | ethers.Signer
+      | ethers.providers.Provider = this.getDefaultProvider(),
+  ) {
+    return PeripheryAbi__factory.connect(
+      this.options.peripheryContractAddress,
+      signerOrProvider,
+    )
   }
 
   /**
@@ -151,11 +157,18 @@ export class BaseContract {
   get cbtContract(): CbtAbi {
     this.checkConnection()
 
-    return this._cbtContract
+    return this.getCbtContract(this._signerOrProvider)
   }
 
-  set cbtContract(contract: CbtAbi) {
-    this._cbtContract = contract
+  protected getCbtContract(
+    signerOrProvider:
+      | ethers.Signer
+      | ethers.providers.Provider = this.getDefaultProvider(),
+  ) {
+    return CbtAbi__factory.connect(
+      this.options.cbtContractAddress,
+      signerOrProvider,
+    )
   }
 
   /**
@@ -164,11 +177,18 @@ export class BaseContract {
   get tipsContract(): TipsAbi {
     this.checkConnection()
 
-    return this._tipsContract
+    return this.getTipsContract(this._signerOrProvider)
   }
 
-  set tipsContract(contract: TipsAbi) {
-    this._tipsContract = contract
+  protected getTipsContract(
+    signerOrProvider:
+      | ethers.Signer
+      | ethers.providers.Provider = this.getDefaultProvider(),
+  ) {
+    return TipsAbi__factory.connect(
+      this.options.tipsContractAddress,
+      signerOrProvider,
+    )
   }
 
   /**
@@ -177,11 +197,18 @@ export class BaseContract {
   get miraContract(): MiraAbi {
     this.checkConnection()
 
-    return this._miraContract
+    return this.getMiraContract(this._signerOrProvider)
   }
 
-  set miraContract(contract: MiraAbi) {
-    this._miraContract = contract
+  protected getMiraContract(
+    signerOrProvider:
+      | ethers.Signer
+      | ethers.providers.Provider = this.getDefaultProvider(),
+  ) {
+    return MiraAbi__factory.connect(
+      this.options.miraContractAddress,
+      signerOrProvider,
+    )
   }
 
   /**
@@ -190,11 +217,18 @@ export class BaseContract {
   get linklistContract(): LinklistAbi {
     this.checkConnection()
 
-    return this._linklistContract
+    return this.getLinklistContract(this._signerOrProvider)
   }
 
-  set linklistContract(contract: LinklistAbi) {
-    this._linklistContract = contract
+  protected getLinklistContract(
+    signerOrProvider:
+      | ethers.Signer
+      | ethers.providers.Provider = this.getDefaultProvider(),
+  ) {
+    return LinklistAbi__factory.connect(
+      this.options.linklistContractAddress,
+      signerOrProvider,
+    )
   }
 
   /**
@@ -204,11 +238,18 @@ export class BaseContract {
   get newbieVillaContract(): NewbieVillaAbi {
     this.checkConnection()
 
-    return this._newbieVillaContract
+    return this.getNewbieVillaContract(this._signerOrProvider)
   }
 
-  set newbieVillaContract(contract: NewbieVillaAbi) {
-    this._newbieVillaContract = contract
+  protected getNewbieVillaContract(
+    signerOrProvider:
+      | ethers.Signer
+      | ethers.providers.Provider = this.getDefaultProvider(),
+  ) {
+    return NewbieVillaAbi__factory.connect(
+      this.options.newbieVillaContractAddress,
+      signerOrProvider,
+    )
   }
 
   /**
@@ -247,14 +288,15 @@ export class BaseContract {
     this.options = this.initOptions(options)
   }
 
-  initOptions(options?: Partial<ContractOptions>): ContractOptions {
+  private initOptions(options?: Partial<ContractOptions>): ContractOptions {
     return {
       entryContractAddress:
         options?.entryContractAddress ?? Network.getContractAddress(),
       peripheryContractAddress:
         options?.peripheryContractAddress ??
         Network.getPeripheryContractAddress(),
-      cbtContractAddress: options?.cbtContractAddress,
+      cbtContractAddress:
+        options?.cbtContractAddress ?? Network.getCbtContractAddress(),
       tipsContractAddress:
         options?.tipsContractAddress ?? Network.getTipsContractAddress(),
       miraContractAddress:
@@ -304,43 +346,6 @@ export class BaseContract {
       }
       this._signerOrProvider = provider.getSigner()
     }
-
-    this.contract = EntryAbi__factory.connect(
-      this.options.entryContractAddress,
-      this._signerOrProvider,
-    )
-
-    this.peripheryContract = PeripheryAbi__factory.connect(
-      this.options.peripheryContractAddress,
-      this._signerOrProvider,
-    )
-
-    if (this.options.cbtContractAddress) {
-      this.cbtContract = CbtAbi__factory.connect(
-        this.options.cbtContractAddress,
-        this._signerOrProvider,
-      )
-    }
-
-    this._newbieVillaContract = NewbieVillaAbi__factory.connect(
-      this.options.newbieVillaContractAddress,
-      this._signerOrProvider,
-    )
-
-    this._tipsContract = TipsAbi__factory.connect(
-      this.options.tipsContractAddress,
-      this._signerOrProvider,
-    )
-
-    this._miraContract = MiraAbi__factory.connect(
-      this.options.miraContractAddress,
-      this._signerOrProvider,
-    )
-
-    this._linklistContract = LinklistAbi__factory.connect(
-      this.options.linklistContractAddress,
-      this._signerOrProvider,
-    )
 
     this._hasConnected = true
   }
@@ -418,7 +423,7 @@ export class BaseContract {
     | ethers.providers.Web3Provider {
     const addr = Network.getJsonRpcAddress()
     if (addr.startsWith('ws')) {
-      // @ts-ignore https://github.com/ChainSafe/web3.js/tree/1.x/packages/web3-providers-ws#usage
+      // https://github.com/ChainSafe/web3.js/tree/1.x/packages/web3-providers-ws#usage
       const ws = new WebsocketProvider(addr, {
         timeout: 30_000,
         clientConfig: {
@@ -434,6 +439,7 @@ export class BaseContract {
           onTimeout: false,
         },
       })
+      // @ts-ignore
       const provider = new ethers.providers.Web3Provider(ws)
       return provider
     } else {

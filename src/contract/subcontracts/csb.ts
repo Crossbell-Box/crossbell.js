@@ -10,10 +10,9 @@ export class CsbContract extends BaseContract {
    * @param {string} owner - The address of the account to get the $CSB balance of.
    * @returns The $CSB balance of the owner.
    */
-  @autoSwitchMainnet()
   async getBalance(owner: string): Promise<Result<string>> | never {
     this.validateAddress(owner)
-    const balance = await this.contract.provider.getBalance(owner)
+    const balance = await this.getContract().provider.getBalance(owner)
     return {
       data: balance.toString(),
     }

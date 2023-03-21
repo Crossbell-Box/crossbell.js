@@ -401,7 +401,11 @@ export class NoteContract extends BaseContract {
     linkItemType?: Note['linkItemTypeString'],
     overrides: CallOverrides = {},
   ): Promise<Result<Note<T>>> | never {
-    const data = await this.contract.getNote(characterId, noteId, overrides)
+    const data = await this.getContract().getNote(
+      characterId,
+      noteId,
+      overrides,
+    )
 
     const _linkItemType = ethers.utils.parseBytes32String(data.linkItemType)
     const linkItemTypeString =
@@ -414,41 +418,36 @@ export class NoteContract extends BaseContract {
       : undefined
 
     let linkItem: T
+    const pc = this.getPeripheryContract()
     if (linkItemType === 'AnyUri') {
-      const uri = await this.peripheryContract.getLinkingAnyUri(data.linkKey)
+      const uri = await pc.getLinkingAnyUri(data.linkKey)
       linkItem = {
         uri: uri,
       } as T
     } else if (linkItemType === 'ERC721') {
-      const erc721 = await this.peripheryContract.getLinkingERC721(data.linkKey)
+      const erc721 = await pc.getLinkingERC721(data.linkKey)
       linkItem = {
         contractAddress: erc721.tokenAddress.toString(),
         tokenId: erc721.erc721TokenId.toString(),
       } as T
     } else if (linkItemType === 'Address') {
-      const address = await this.peripheryContract.getLinkingAddress(
-        data.linkKey,
-      )
+      const address = await pc.getLinkingAddress(data.linkKey)
       linkItem = {
         address: address.toString(),
       } as T
     } else if (linkItemType === 'Character') {
-      const characterId = await this.peripheryContract.getLinkingCharacterId(
-        data.linkKey,
-      )
+      const characterId = await pc.getLinkingCharacterId(data.linkKey)
       linkItem = {
         characterId: characterId.toNumber(),
       } as T
     } else if (linkItemType === 'Note') {
-      const ret = await this.peripheryContract.getLinkingNote(data.linkKey)
+      const ret = await pc.getLinkingNote(data.linkKey)
       linkItem = {
         characterId: ret.characterId.toNumber(),
         noteId: ret.noteId.toNumber(),
       } as T
     } else if (linkItemType === 'Linklist') {
-      const linklistId = await this.peripheryContract.getLinkingLinklistId(
-        data.linkKey,
-      )
+      const linklistId = await pc.getLinkingLinklistId(data.linkKey)
       linkItem = {
         linklistId: linklistId.toNumber(),
       } as T
