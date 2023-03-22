@@ -2,6 +2,7 @@ import { autoSwitchMainnet } from '../decorators'
 import type { Overrides, Result } from '../../types/contract'
 import { BaseContract } from './base'
 import { CallOverrides, type BigNumberish } from 'ethers'
+import { isAddressEqual } from '../../utils'
 
 export class TipsContract extends BaseContract {
   /**
@@ -77,6 +78,33 @@ export class TipsContract extends BaseContract {
       transactionHash: receipt.transactionHash,
     }
   }
+  /**
+   * This gets the balance of $MIRA token of a character.
+   *
+   * If it is a normal character, this returns the balance of the address of the character.
+   * If it is a newbie-village character, this returns the balance of the character in the contract.
+   *
+   * This throws if the character is not found.
+   *
+   * @category TipsContract
+   * @param characterId - The character ID to get the balance of.
+   * @returns The balance of $MIRA token of the address. Unit: wei.
+   */
+  async getMiraBalanceOfCharacter(
+    characterId: BigNumberish,
+    overrides: CallOverrides = {},
+  ): Promise<Result<string>> | never {
+    const address = await this.getContract().ownerOf(characterId, overrides)
+
+    const balance = isAddressEqual(
+      address,
+      this.options.newbieVillaContractAddress,
+    )
+      ? await this.getNewbieVillaContract().balanceOf(characterId, overrides)
+      : await this.getMiraContract().balanceOf(address, overrides)
+
+    return { data: balance.toString() }
+  }
 
   /**
    * This gets the balance of $MIRA token of an address.
@@ -89,10 +117,10 @@ export class TipsContract extends BaseContract {
     address: string,
     overrides: CallOverrides = {},
   ): Promise<Result<string>> | never {
-    const res = await this.getMiraContract().balanceOf(address, overrides)
+    const balance = await this.getMiraContract().balanceOf(address, overrides)
 
     return {
-      data: res.toString(),
+      data: balance.toString(),
     }
   }
 
