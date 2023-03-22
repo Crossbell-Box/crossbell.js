@@ -35,7 +35,7 @@ export class NotificationIndexer extends BaseIndexer {
       includeSelfInvoked?: boolean
       /** Whether to include `isRead` attribute to indicate whether the notification is read */
       includeIsRead?: boolean
-      /** Whether to read notifications */
+      /** @deprecated Whether to read notifications. Please use */
       read?: boolean
       /** Limit the count of items returned. */
       limit?: number
@@ -57,6 +57,24 @@ export class NotificationIndexer extends BaseIndexer {
     const res = await this.fetch(url).then((res) => res.json())
 
     return res as ListResponse<NotificationEntity>
+  }
+
+  /**
+   * This marks all notifications as read.
+   *
+   * @category Notification
+   * @param characterId - The characterId of the notification owner.
+   * @returns The latest notification date string.
+   */
+  async markNotificationsAsRead(
+    characterId: BigNumberish,
+  ): Promise<{ data: string }> {
+    const url = `${this.endpoint}/characters/${characterId}/notifications/read`
+    const res = await this.fetch(url, {
+      method: 'POST',
+    }).then((res) => res.json())
+
+    return res as { data: string }
   }
 
   /**
