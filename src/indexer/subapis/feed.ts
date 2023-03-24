@@ -42,12 +42,44 @@ export class FeedIndexer extends BaseIndexer {
   /**
    * This returns a list of following's feeds.
    *
+   * @deprecated Please use {@link FeedIndexer.getFeedsOfCharacterFollowing} instead. It has the same functionality but with a better name.
+   *
    * @category Feed
    * @param characterId - The characterId of the feed owner.
    * @param options - The options to send to the indexer.
    * @returns The list of feeds.
    */
   async getFollowingFeedsOfCharacter(
+    characterId: BigNumberish,
+    {
+      type,
+      limit,
+      cursor,
+    }: {
+      /** The type of feed */
+      type?: FeedTypeKey | FeedTypeKey[]
+      /** Limit the count of items returned. */
+      limit?: number
+      /** Used for pagination. */
+      cursor?: string
+    } = {},
+  ): Promise<ListResponse<FeedEntity>> {
+    return this.getFeedsOfCharacterFollowing(characterId, {
+      type,
+      limit,
+      cursor,
+    })
+  }
+
+  /**
+   * This returns a list of following's feeds.
+   *
+   * @category Feed
+   * @param characterId - The characterId of the feed owner.
+   * @param options - The options to send to the indexer.
+   * @returns The list of feeds.
+   */
+  async getFeedsOfCharacterFollowing(
     characterId: BigNumberish,
     {
       type,
