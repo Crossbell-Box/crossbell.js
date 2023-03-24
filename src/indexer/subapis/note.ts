@@ -5,126 +5,98 @@ import { type BigNumberish } from 'ethers'
 import { createSearchParamsString } from '../../utils'
 import { NoteMetadata } from '../../types'
 
+type NoteQueryOptions = {
+  /** The owner of this note */
+  characterId?: BigNumberish
+  /** The link item type to filter by. e.g. 'Character' */
+  linkItemType?: LinkItemType
+  /** The toCharacterId to filter by. */
+  toCharacterId?: BigNumberish
+  /** The toAddress to filter by. */
+  toAddress?: string
+  /** The toNoteId to filter by. */
+  toNoteId?: BigNumberish
+  /** The toContractAddress to filter by. */
+  toContractAddress?: string
+  /** The toTokenId to filter by. */
+  toTokenId?: BigNumberish
+  /** The toLinklistId to filter by. */
+  toLinklistId?: BigNumberish
+  /** The toUri to filter by. */
+  toUri?: string
+  /** Only returns locked notes or not */
+  locked?: boolean
+  /** Also returns deleted notes or not */
+  includeDeleted?: boolean
+  /** The `metadata.content.tags` to filter by. */
+  tags?: string | string[]
+  /** The `metadata.content.sources` to filter by. */
+  sources?: string | string[]
+  /** The `metadata.content.external_urls` to filter by. */
+  externalUrls?: string | string[]
+  /** The `metadata.content.variant` to filter by. */
+  variant?: NoteMetadata['variant']
+  /** Limit the count of items returned. */
+  limit?: number
+  /** Used for pagination. */
+  cursor?: string
+  /** Whether to include notes whose metadata content are empty even though the `tags`, `sources` or `external_urls` fields are specified. */
+  includeEmptyMetadata?: boolean
+  /** Whether to include the character data in the response. */
+  includeCharacter?: boolean
+  /** Whether to include the head character data in the response. */
+  includeHeadCharacter?: boolean
+  /** Whether to include the head note data in the response. */
+  includeHeadNote?: boolean
+  /** Whether to include nested notes */
+  includeNestedNotes?: boolean
+  /** How many levels of nested notes to include */
+  nestedNotesDepth?: 1 | 2 | 3
+  /** How many nested notes to include per note */
+  nestedNotesLimit?: number
+  /** The order of the returned list. */
+  orderBy?: 'createdAt' | 'updatedAt' | 'publishedAt'
+}
+
 export class NoteIndexer extends BaseIndexer {
   /**
    * This returns a list of notes.
    *
    * @category Note
-   * @param options - The options to send to the indexer.
+   * @param options - The options of note query.
    * @returns The list of notes.
    */
-  async getNotes({
-    characterId,
-    linkItemType,
-    toCharacterId,
-    toAddress,
-    toNoteId,
-    toContractAddress,
-    toTokenId,
-    toLinklistId,
-    toUri,
-    locked,
-    includeDeleted,
-    tags,
-    sources,
-    externalUrls,
-    variant,
-    limit = 20,
-    cursor,
-    includeEmptyMetadata,
-    includeCharacter,
-    includeHeadCharacter,
-    includeHeadNote,
-    includeNestedNotes,
-    nestedNotesDepth,
-    nestedNotesLimit,
-    orderBy,
-  }: {
-    /** The owner of this note */
-    characterId?: BigNumberish
-    /** The link item type to filter by. e.g. 'Character' */
-    linkItemType?: LinkItemType
-    /** The toCharacterId to filter by. */
-    toCharacterId?: BigNumberish
-    /** The toAddress to filter by. */
-    toAddress?: string
-    /** The toNoteId to filter by. */
-    toNoteId?: BigNumberish
-    /** The toContractAddress to filter by. */
-    toContractAddress?: string
-    /** The toTokenId to filter by. */
-    toTokenId?: BigNumberish
-    /** The toLinklistId to filter by. */
-    toLinklistId?: BigNumberish
-    /** The toUri to filter by. */
-    toUri?: string
-    /** Only returns locked notes or not */
-    locked?: boolean
-    /** Also returns deleted notes or not */
-    includeDeleted?: boolean
-    /** The `metadata.content.tags` to filter by. */
-    tags?: string | string[]
-    /** The `metadata.content.sources` to filter by. */
-    sources?: string | string[]
-    /** The `metadata.content.external_urls` to filter by. */
-    externalUrls?: string | string[]
-    /** The `metadata.content.variant` to filter by. */
-    variant?: NoteMetadata['variant']
-    /** Limit the count of items returned. */
-    limit?: number
-    /** Used for pagination. */
-    cursor?: string
-    /** Whether to include notes whose metadata content are empty even though the `tags`, `sources` or `external_urls` fields are specified. */
-    includeEmptyMetadata?: boolean
-    /** Whether to include the character data in the response. */
-    includeCharacter?: boolean
-    /** Whether to include the head character data in the response. */
-    includeHeadCharacter?: boolean
-    /** Whether to include the head note data in the response. */
-    includeHeadNote?: boolean
-    /** Whether to include nested notes */
-    includeNestedNotes?: boolean
-    /** How many levels of nested notes to include */
-    nestedNotesDepth?: 1 | 2 | 3
-    /** How many nested notes to include per note */
-    nestedNotesLimit?: number
-    /** The order of the returned list. */
-    orderBy?: 'createdAt' | 'updatedAt' | 'publishedAt'
-  } = {}): Promise<
-    ListResponse<
-      NoteEntity & {
-        fromNotes: ListResponse<NoteEntity>
-      }
-    >
+  async getNotes(
+    options: NoteQueryOptions = {},
+  ): Promise<
+    ListResponse<NoteEntity & { fromNotes: ListResponse<NoteEntity> }>
   > {
     let url = `${this.endpoint}/notes?`
-    url += createSearchParamsString({
-      characterId,
-      limit,
-      cursor,
-      linkItemType,
-      toCharacterId,
-      toAddress,
-      toNoteId,
-      toContractAddress,
-      toTokenId,
-      toLinklistId,
-      toUri,
-      locked,
-      includeDeleted,
-      tags,
-      sources,
-      externalUrls,
-      variant,
-      includeEmptyMetadata,
-      includeCharacter,
-      includeHeadCharacter,
-      includeHeadNote,
-      includeNestedNotes,
-      nestedNotesDepth,
-      nestedNotesLimit,
-      orderBy,
-    })
+    url += createSearchParamsString(options)
+
+    const res = await this.fetch(url).then((res) => res.json())
+
+    return res as ListResponse<
+      NoteEntity & { fromNotes: ListResponse<NoteEntity> }
+    >
+  }
+
+  /**
+   * This returns a list of notes of a list of characters followed by a character.
+   *
+   * @category Note
+   * @param characterId - The characterId.
+   * @param options - The options of note query.
+   * @returns
+   */
+  async getNotesOfCharacterFollowing(
+    characterId: BigNumberish,
+    options: Omit<NoteQueryOptions, 'characterId'> = {},
+  ): Promise<
+    ListResponse<NoteEntity & { fromNotes: ListResponse<NoteEntity> }>
+  > {
+    let url = `${this.endpoint}/characters/${characterId}/notes/following?`
+    url += createSearchParamsString(options)
 
     const res = await this.fetch(url).then((res) => res.json())
 
@@ -156,7 +128,7 @@ export class NoteIndexer extends BaseIndexer {
    *
    * @category Note
    * @param characterId - The characterId of the notes owner.
-   * @param options - The options to send to the indexer.
+   * @param options - The options of note query.
    * @returns The list of tags.
    */
   async getDistinctNoteTagsOfCharacter(
@@ -183,7 +155,7 @@ export class NoteIndexer extends BaseIndexer {
    *
    * @category Note
    * @param characterId - The characterId of the notes owner.
-   * @param options - The options to send to the indexer.
+   * @param options - The options of note query.
    * @returns The list of tags.
    */
   async getDistinctNoteSourcesOfCharacter(
