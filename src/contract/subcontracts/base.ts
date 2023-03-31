@@ -485,6 +485,8 @@ export class BaseContract {
       ).then((res) => res.json())) as MintOrLinkModule<T>[]
       this._moduleResponseCache = res
       this._lastModuleResponseCacheTime = now
+    } else {
+      res = this._moduleResponseCache as MintOrLinkModule<T>[]
     }
 
     if (type) {
@@ -547,12 +549,21 @@ export class BaseContract {
     }
   }
 
-  async decodeModuleInitData(
-    moduleAddress: string,
-    initData: string,
-  ): Promise<
-    (MintOrLinkModule['initDataStructure'][number] & { value: any })[]
-  > {
+  async encodeModuleInitData(moduleAddress: string, data: any[]) {
+    const module = await this.getModule(moduleAddress)
+    if (!module) {
+      throw new Error('Invalid module address ' + moduleAddress)
+    }
+
+    const result = this.contract.interface._abiCoder.encode(
+      module.initDataStructure.map((item) => item.type),
+      data,
+    )
+
+    return result
+  }
+
+  async decodeModuleInitData(moduleAddress: string, initData: string) {
     const module = await this.getModule(moduleAddress)
     if (!module) {
       throw new Error('Invalid module address ' + moduleAddress)
@@ -563,9 +574,6 @@ export class BaseContract {
       initData,
     )
 
-    return module.initDataStructure.map((item, index) => ({
-      ...item,
-      value: result[index],
-    }))
+    return result
   }
 }
