@@ -19,10 +19,7 @@ export class SearchIndexer extends BaseIndexer {
    */
   async searchCharacters(
     query: string,
-    {
-      limit = 20,
-      cursor,
-    }: {
+    options: {
       /** Limit the count of items returned. */
       limit?: number
       /** Used for pagination. */
@@ -30,7 +27,7 @@ export class SearchIndexer extends BaseIndexer {
     },
   ): Promise<ListResponse<CharacterEntity>> {
     let url = `${this.endpoint}/characters/search?`
-    url += createSearchParamsString({ q: query, limit, cursor })
+    url += createSearchParamsString({ q: query, ...options })
 
     const res = await this.fetch(url).then((res) => res.json())
 
@@ -47,15 +44,11 @@ export class SearchIndexer extends BaseIndexer {
    */
   async searchNotes(
     query: string,
-    {
-      tags,
-      linkItemType,
-      characterId,
-      limit = 20,
-      cursor,
-    }: {
+    options: {
       /** Notes with the given tags. */
       tags?: string[]
+      /** Notes with the given sources. */
+      sources?: string[]
       /** The link item type to filter by. e.g. 'Character' */
       linkItemType?: LinkItemType
       /** Note with the given characterId owner */
@@ -69,11 +62,7 @@ export class SearchIndexer extends BaseIndexer {
     let url = `${this.endpoint}/notes/search?`
     url += createSearchParamsString({
       q: query,
-      limit,
-      cursor,
-      tags,
-      linkItemType,
-      characterId,
+      ...options,
     })
 
     const res = await this.fetch(url).then((res) => res.json())
