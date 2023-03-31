@@ -546,4 +546,26 @@ export class BaseContract {
       initData,
     }
   }
+
+  async decodeModuleInitData(
+    moduleAddress: string,
+    initData: string,
+  ): Promise<
+    (MintOrLinkModule['initDataStructure'][number] & { value: any })[]
+  > {
+    const module = await this.getModule(moduleAddress)
+    if (!module) {
+      throw new Error('Invalid module address ' + moduleAddress)
+    }
+
+    const result = this.contract.interface._abiCoder.decode(
+      module.initDataStructure.map((item) => item.type),
+      initData,
+    )
+
+    return module.initDataStructure.map((item, index) => ({
+      ...item,
+      value: result[index],
+    }))
+  }
 }
