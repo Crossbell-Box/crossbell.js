@@ -42,7 +42,7 @@ export class FeedIndexer extends BaseIndexer {
   /**
    * This returns a list of following's feeds.
    *
-   * @deprecated Please use {@link FeedIndexer.getFeedsOfCharacterFollowing} instead. It has the same functionality but with a better name.
+   * @deprecated Please use {@link getFeedsOfCharacterFollowing} instead. It has the same functionality but with a better name.
    *
    * @category Feed
    * @param characterId - The characterId of the feed owner.
