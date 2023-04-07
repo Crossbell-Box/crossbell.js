@@ -29,7 +29,7 @@ jobs:
           cache: pnpm
 
       - name: Install deps & Build
-        run: pnpm i --frozen-lockfile && pnpm run gen-doc
+        run: pnpm i --frozen-lockfile && pnpm run docs:build
 
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@v4

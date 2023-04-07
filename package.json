@@ -38,8 +38,9 @@
     "postbuild": "node ./scripts/post-build.js",
     "build-fast": "tsup",
     "update-abi": "node ./scripts/update-abi.js",
-    "gen-doc": "typedoc",
-    "prepublishOnly": "npm run gen-doc && npm run build",
+    "docs:build": "typedoc",
+    "docs:preview": "serve docs",
+    "prepublishOnly": "npm run docs:build && npm run build",
     "test": "vitest run",
     "release": "bumpp",
     "watch": "npm run build-fast -- --watch"
