@@ -34,22 +34,3 @@ jobs:
         env:
           VITE_MOCK_USER_ADDRESS: ${{ secrets.VITE_MOCK_USER_ADDRESS }}
           VITE_MOCK_USER_PRIVATE_KEY: ${{ secrets.VITE_MOCK_USER_PRIVATE_KEY }}
-
-  publish:
-    name: npm-publish
-    runs-on: ubuntu-latest
-    needs: ['test']
-    steps:
-      - uses: actions/checkout@v3
-
-      - uses: pnpm/action-setup@v2
-
-      - uses: actions/setup-node@v3
-        with:
-          node-version: lts/*
-          registry-url: https://registry.npmjs.com/
-
-      - id: publish
-        uses: JS-DevTools/npm-publish@v1
-        with:
-          token: ${{ secrets.NPM_TOKEN }}
