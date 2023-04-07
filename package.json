@@ -41,6 +41,7 @@
     "gen-doc": "typedoc",
     "prepublishOnly": "npm run gen-doc && npm run build",
     "test": "vitest run",
+    "release": "bumpp",
     "watch": "npm run build-fast -- --watch"
   },
   "dependencies": {
@@ -60,6 +61,7 @@
     "@types/async-retry": "^1.4.5",
     "@types/bn.js": "^5.1.1",
     "@types/node": "^18.15.11",
+    "bumpp": "^9.1.0",
     "prettier": "^2.8.7",
     "tsup": "^6.7.0",
     "typechain": "^8.1.1",
