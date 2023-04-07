@@ -1,17 +1,14 @@
 name: Deploy Docs
 
+permissions:
+  contents: write
+
 on:
   push:
     tags:
       - 'v*'
-  # WIP
-  pull_request:
-    branches: [main]
 
   workflow_dispatch:
-
-permissions:
-  contents: write
 
 concurrency:
   group: 'pages'
