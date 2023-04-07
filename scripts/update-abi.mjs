@@ -1,13 +1,18 @@
 #!/usr/bin/env node
 
-const { exec } = require('child_process')
-const { promisify } = require('util')
-const execAsync = promisify(exec)
-const { writeFile, readFile, mkdir } = require('fs/promises')
-const { resolve } = require('path')
-const { fetch } = require('fetch-undici')
-const { existsSync } = require('fs')
+// @ts-check
 
+import { exec } from 'child_process'
+import { promisify } from 'util'
+import { writeFile, readFile, mkdir } from 'fs/promises'
+import { dirname, resolve } from 'path'
+import { fetch } from 'undici'
+import { existsSync } from 'fs'
+import { fileURLToPath } from 'url'
+
+const execAsync = promisify(exec)
+
+/** @param name {string} */
 const getAbi = (name) =>
   fetch(
     name.startsWith('https')
@@ -26,6 +31,10 @@ const getAbi = (name) =>
     }
   })
 
+/**
+ * @param {string} dir
+ * @param {*} abi
+ */
 const writeJson = async (dir, abi) => {
   if (!existsSync(dir)) {
     await mkdir(dir, { recursive: true })
@@ -34,6 +43,9 @@ const writeJson = async (dir, abi) => {
   writeFile(`${dir}/abi.json`, JSON.stringify(abi, null, 2))
 }
 
+/**
+ * @param {string} dir
+ */
 const genTypes = (dir) =>
   execAsync(
     `npx typechain --target ethers-v5 --out-dir ${dir}/types ${dir}/abi.json`,
@@ -64,6 +76,7 @@ const main = async () => {
 
   const abi = [...abi1, ...abi2]
 
+  const __dirname = dirname(fileURLToPath(import.meta.url))
   const entryDir = resolve(__dirname, '../src/contract/abis/entry')
   const peripheryDir = resolve(__dirname, '../src/contract/abis/periphery')
   const cbtDir = resolve(__dirname, '../src/contract/abis/cbt')

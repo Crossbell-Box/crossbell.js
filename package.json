@@ -40,7 +40,7 @@
     "build": "npm run build-fast -- --dts-resolve",
     "postbuild": "node ./scripts/post-build.js",
     "build-fast": "tsup",
-    "update-abi": "node ./scripts/update-abi.js",
+    "update-abi": "node ./scripts/update-abi.mjs",
     "docs:build": "typedoc",
     "docs:preview": "serve docs",
     "prepublishOnly": "npm run build",

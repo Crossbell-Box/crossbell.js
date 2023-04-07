@@ -1,10 +1,15 @@
 #!/usr/bin/env node
 
-const { writeFile, readFile } = require('fs/promises')
-const { resolve } = require('path')
+// @ts-check
 
+import { writeFile, readFile } from 'fs/promises'
+import { resolve } from 'path'
+import { fileURLToPath } from 'url'
 ;(async () => {
-  const fileLoc = resolve(__dirname, '../dist/index.mjs')
+  const fileLoc = resolve(
+    fileURLToPath(import.meta.url),
+    '../../dist/index.mjs',
+  )
 
   let content = await readFile(fileLoc, 'utf8')
 
