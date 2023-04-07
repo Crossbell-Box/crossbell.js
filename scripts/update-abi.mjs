@@ -2,56 +2,39 @@
 
 // @ts-check
 
-import { exec } from 'child_process'
-import { promisify } from 'util'
-import { writeFile, readFile, mkdir } from 'fs/promises'
-import { dirname, resolve } from 'path'
-import { fetch } from 'undici'
-import { existsSync } from 'fs'
+import { readFile, writeFile } from 'fs/promises'
+import path, { dirname, resolve } from 'path'
 import { fileURLToPath } from 'url'
+import { pascalCase, camelCase } from 'change-case'
+import { format } from 'prettier'
 
-const execAsync = promisify(exec)
+const root = resolve(dirname(fileURLToPath(import.meta.url)), '..')
+const abiDir = resolve(root, 'src/contract/abi')
+const prettierConfig = JSON.parse(
+  await readFile(path.resolve(root, '.prettierrc'), 'utf-8'),
+)
 
-/** @param name {string} */
-const getAbi = (name) =>
-  fetch(
-    name.startsWith('https')
-      ? name
-      : `https://raw.githubusercontent.com/Crossbell-Box/Crossbell-Contracts/main/build-info/${name}.json`,
-  ).then(async (res) => {
-    if (!res.ok) {
-      throw new Error(`Failed to fetch ${name}`)
-    }
+main().catch((err) => {
+  console.error(err)
+  process.exit(1)
+})
 
-    const text = await res.text()
-    try {
-      return JSON.parse(text)
-    } catch (e) {
-      throw new Error(`Failed to parse ${name} abi`)
-    }
-  })
+async function main() {
+  const abis = await getAllAbis()
 
-/**
- * @param {string} dir
- * @param {*} abi
- */
-const writeJson = async (dir, abi) => {
-  if (!existsSync(dir)) {
-    await mkdir(dir, { recursive: true })
-  }
+  const index = abis.map(([name]) => `export * from './${name}'\n`).join('')
+  await Promise.all([
+    writeFile(path.resolve(abiDir, 'index.ts'), index, 'utf-8'),
+    ...abis.map(([name, abi]) => writeAbi(name, abi)),
+  ])
 
-  writeFile(`${dir}/abi.json`, JSON.stringify(abi, null, 2))
+  console.log('done')
 }
 
 /**
- * @param {string} dir
+ * @returns {Promise<[name: string, abi: any][]>}
  */
-const genTypes = (dir) =>
-  execAsync(
-    `npx typechain --target ethers-v5 --out-dir ${dir}/types ${dir}/abi.json`,
-  )
-
-const main = async () => {
+async function getAllAbis() {
   const [
     { abi: abi1 },
     { abi: abi2 },
@@ -76,49 +59,41 @@ const main = async () => {
 
   const abi = [...abi1, ...abi2]
 
-  const __dirname = dirname(fileURLToPath(import.meta.url))
-  const entryDir = resolve(__dirname, '../src/contract/abis/entry')
-  const peripheryDir = resolve(__dirname, '../src/contract/abis/periphery')
-  const cbtDir = resolve(__dirname, '../src/contract/abis/cbt')
-  const newbieVillaDir = resolve(__dirname, '../src/contract/abis/newbie-villa')
-  const tipsDir = resolve(__dirname, '../src/contract/abis/tips')
-  const miraDir = resolve(__dirname, '../src/contract/abis/mira')
-  const linklistDir = resolve(__dirname, '../src/contract/abis/linklist')
-
-  await Promise.all([
-    writeJson(entryDir, abi),
-    writeJson(peripheryDir, periphery_abi),
-    writeJson(cbtDir, cbt_abi),
-    writeJson(newbieVillaDir, newbie_villa_abi),
-    writeJson(tipsDir, tips_abi),
-    writeJson(miraDir, mira_abi),
-    writeJson(linklistDir, linklist_abi),
-  ])
-
-  await Promise.all([
-    genTypes(entryDir),
-    genTypes(peripheryDir),
-    genTypes(cbtDir),
-    genTypes(newbieVillaDir),
-    genTypes(tipsDir),
-    genTypes(miraDir),
-    genTypes(linklistDir),
-  ])
-
-  // patch types
-  // this is needed to make sure the types bundled with the package are correct
-  // perhaps this is a bug of esbuild?
-  const peripheryTypeFile = resolve(peripheryDir, 'types/Abi.ts')
-  const peripheryType = await readFile(peripheryTypeFile, 'utf-8')
-  await writeFile(
-    peripheryTypeFile,
-    peripheryType.replace(/export (declare namespace DataTypes)/, '$1'),
-  )
-
-  console.log('done')
+  return [
+    ['entry', abi],
+    ['periphery', periphery_abi],
+    ['cbt', cbt_abi],
+    ['newbie-villa', newbie_villa_abi],
+    ['tips', tips_abi],
+    ['mira', mira_abi],
+    ['linklist', linklist_abi],
+  ]
 }
 
-main().catch((err) => {
-  console.error(err)
-  process.exit(1)
-})
+/** @param name {string} */
+async function getAbi(name) {
+  return await fetch(
+    name.startsWith('https://')
+      ? name
+      : `https://raw.githubusercontent.com/Crossbell-Box/Crossbell-Contracts/main/build-info/${name}.json`,
+  ).then((res) =>
+    res
+      .json()
+      .catch(() => Promise.reject(new Error(`Failed to parse ${name} abi`))),
+  )
+}
+
+/**
+ * @param {string} name kebab-case
+ * @param {*} abi
+ */
+async function writeAbi(name, abi) {
+  const camelName = camelCase(name)
+  const pascalName = pascalCase(name)
+  const contents = format(
+    `export const ${camelName} = ${JSON.stringify(abi)} as const;
+    export type ${pascalName} = typeof ${camelName};`,
+    { ...prettierConfig, parser: 'babel-ts' },
+  )
+  await writeFile(path.resolve(abiDir, `${name}.ts`), contents)
+}
