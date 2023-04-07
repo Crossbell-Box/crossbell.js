@@ -2,14 +2,16 @@ name: Deploy Docs
 
 on:
   push:
-    branches: ['main']
+    tags:
+      - 'v*'
+  # WIP
+  pull_request:
+    branches: [main]
 
   workflow_dispatch:
 
 permissions:
-  contents: read
-  pages: write
-  id-token: write
+  contents: write
 
 concurrency:
   group: 'pages'
@@ -17,16 +19,10 @@ concurrency:
 
 jobs:
   deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-
-      - name: Setup Pages
-        uses: actions/configure-pages@v3
 
       - uses: pnpm/action-setup@v2
 
@@ -38,12 +34,8 @@ jobs:
       - name: Install deps & Build
         run: pnpm i --frozen-lockfile && pnpm run gen-doc
 
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v1
+      - name: Deploy 🚀
+        uses: JamesIves/github-pages-deploy-action@v4
         with:
-          # Upload entire repository
-          path: './docs'
-
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v2
+          folder: docs
+          branch: docs
