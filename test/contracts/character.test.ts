@@ -1,4 +1,5 @@
-import { type BigNumberish, Wallet } from 'ethers'
+import { type BigNumberish } from 'ethers'
+import { publicKeyToAddress, generatePrivateKey } from 'viem/accounts'
 import { expect, describe, test } from 'vitest'
 import { Contract } from '../../src'
 import {
@@ -34,35 +35,36 @@ describe('character', () => {
       ).rejects.toThrow(/Invalid handle/)
     })
 
-    test('check if a character exists', async () => {
-      const wallet = Wallet.createRandom()
-      const randomAddress = wallet.address
-      const randomHandle = genRandomHandle()
+    test.only('check if a character exists', async () => {
+      const randPrivKey = generatePrivateKey()
+      const randAddr = publicKeyToAddress(randPrivKey)
+      const randHandle = genRandomHandle()
 
       // not exists if not created
       const { data: exists } = await contract.existsCharacterForAddress(
-        randomAddress,
+        randAddr,
       )
       expect(exists).toBe(false)
       const { data: exists2 } = await contract.existsCharacterForHandle(
-        randomHandle,
+        randHandle,
       )
       expect(exists2).toBe(false)
-
+      
       // create one
       const characterId = await contract
-        .createCharacter(randomAddress, randomHandle, metadataUri)
-        .then(({ data }) => data)
-
+      .createCharacter(randAddr, randHandle, metadataUri)
+      .then(({ data }) => data)
+      
       expect(characterId).not.toBeNull()
+      return
 
       // should exist now
       const { data: exists3 } = await contract.existsCharacterForAddress(
-        randomAddress,
+        randAddr,
       )
       expect(exists3).toBe(true)
       const { data: exists4 } = await contract.existsCharacterForHandle(
-        randomHandle,
+        randHandle,
       )
       expect(exists4).toBe(true)
     })

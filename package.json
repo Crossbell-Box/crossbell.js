@@ -59,6 +59,7 @@
     "fetch-undici": "^3.0.1",
     "p-limit": "^3.1.0",
     "ts-mixer": "^6.0.3",
+    "viem": "^0.2.12",
     "web3-providers-ws": "1.9.0"
   },
   "devDependencies": {
@@ -67,7 +68,9 @@
     "@types/async-retry": "^1.4.5",
     "@types/bn.js": "^5.1.1",
     "@types/node": "^18.15.11",
+    "abitype": "^0.7.1",
     "bumpp": "^9.1.0",
+    "change-case": "^4.1.2",
     "prettier": "^2.8.7",
     "tsup": "^6.7.0",
     "typechain": "^8.1.1",

@@ -1,6 +1,6 @@
-import { ethers } from 'ethers'
+import { Address, Chain, Client } from 'viem'
 
-export type IAvailableNetwork = 'crossbell'
+export type AvailableNetwork = 'crossbell'
 
 export class Network {
   static readonly #CONTRACT_CROSSBELL =
@@ -15,8 +15,8 @@ export class Network {
   static readonly #CONTRACT_LINKLIST =
     '0xFc8C75bD5c26F50798758f387B698f207a016b6A'
 
-  static readonly #availableNetworks: IAvailableNetwork[] = ['crossbell']
-  static #currentNetwork: IAvailableNetwork = 'crossbell'
+  static readonly #availableNetworks: AvailableNetwork[] = ['crossbell']
+  static #currentNetwork: AvailableNetwork = 'crossbell'
   static #ipfsGateway = 'https://w3s.link/ipfs/'
   static jsonRpcAddress =
     globalThis.process?.env.CROSSBELL_RPC_ADDRESS ?? 'https://rpc.crossbell.io'
@@ -32,9 +32,9 @@ export class Network {
   /**
    * If the network passed in is available, set the current network to that network. If the network
    * passed in is not available, throw an error.
-   * @param {IAvailableNetwork} network - this is the network that you want to set the provider to.
+   * @param network - this is the network that you want to set the provider to.
    */
-  static setNetwork(network: IAvailableNetwork) {
+  static setNetwork(network: AvailableNetwork) {
     if (this.#availableNetworks.includes(network)) {
       this.#currentNetwork = network
     } else {
@@ -54,7 +54,7 @@ export class Network {
    * This returns the contract address of the main contract
    * @returns The contract address of the main contract
    */
-  static getContractAddress() {
+  static getContractAddress(): Address {
     return this.#CONTRACT_CROSSBELL
   }
 
@@ -62,7 +62,7 @@ export class Network {
    * This returns the contract address of the peripheral contract
    * @returns The contract address of the peripheral contract
    */
-  static getPeripheryContractAddress() {
+  static getPeripheryContractAddress(): Address {
     return this.#CONTRACT_CROSSBELL_PERIPHERY
   }
 
@@ -70,11 +70,11 @@ export class Network {
    * This returns the contract address of the newbie villa contract
    * @returns The contract address of the newbie villa contract
    */
-  static getNewbieVillaContractAddress() {
+  static getNewbieVillaContractAddress(): Address {
     return this.#CONTRACT_NEWBIE_VILLA
   }
 
-  static getCbtContractAddress() {
+  static getCbtContractAddress(): Address {
     return this.#CONTRACT_CBT
   }
 
@@ -82,7 +82,7 @@ export class Network {
    * This returns the contract address of the tips contract
    * @returns The contract address of the tips contract
    */
-  static getTipsContractAddress() {
+  static getTipsContractAddress(): Address {
     return this.#CONTRACT_TIPS
   }
 
@@ -90,7 +90,7 @@ export class Network {
    * This returns the contract address of the mira contract
    * @returns The contract address of the mira contract
    */
-  static getMiraContractAddress() {
+  static getMiraContractAddress(): Address {
     return this.#CONTRACT_MIRA
   }
 
@@ -98,7 +98,7 @@ export class Network {
    * This returns the contract address of the linklist contract
    * @returns The contract address of the linklist contract
    */
-  static getLinklistContractAddress() {
+  static getLinklistContractAddress(): Address {
     return this.#CONTRACT_LINKLIST
   }
 
@@ -133,62 +133,66 @@ export class Network {
       chainId: 3737,
       tokenName: 'CSB',
       tokenSymbol: 'CSB',
-      chainIdHex: '0x' + (3737).toString(16),
+      chainIdHex: `0x${(3737).toString(16)}` satisfies Address,
       rpc: 'https://rpc.crossbell.io',
       explorer: 'https://scan.crossbell.io',
       contract: this.#CONTRACT_CROSSBELL,
-    }
+    } as const
+  }
+
+  static getChain() {
+    return {
+      name: 'Crossbell',
+      network: 'crossbell',
+      id: 3737,
+      nativeCurrency: {
+        name: 'CSB',
+        symbol: 'CSB',
+        decimals: 18,
+      },
+      rpcUrls: {
+        public: { http: ['https://rpc.crossbell.io'] },
+        default: { http: ['https://rpc.crossbell.io'] },
+      },
+      blockExplorers: {
+        etherscan: { name: 'Crossbell', url: 'https://scan.crossbell.io' },
+        default: { name: 'Crossbell', url: 'https://scan.crossbell.io' },
+      },
+      contracts: {
+        multicall3: {
+          address: this.#CONTRACT_CROSSBELL,
+          blockCreated: 30548014,
+        },
+      },
+    } as const satisfies Chain
   }
 
   /**
    * This checks if the current network is the Crossbell mainnet.
-   * @param provider - The provider to check if it's the Crossbell mainnet.
+   * @param client - The provider to check if it's the Crossbell mainnet.
    * @returns A boolean value indicating if the current network is the Crossbell mainnet.
    */
-  static async isCrossbellMainnet(
-    provider: ethers.providers.ExternalProvider | ethers.providers.Provider,
-  ) {
+  static async isCrossbellMainnet(client: Client) {
     const { chainId } = this.getCrossbellMainnetInfo()
-    if (
-      provider instanceof ethers.providers.Web3Provider ||
-      provider instanceof ethers.providers.Provider
-    ) {
-      return (await provider.getNetwork()).chainId === chainId
-    } else {
-      // ExternalProvider
-      provider = new ethers.providers.Web3Provider(provider)
-      return (await provider.getNetwork()).chainId === chainId
-    }
+    return client.chain?.id === chainId
   }
 
   /**
    * This adds the Crossbell chain to the wallet if it's not already there, and then switches to it.
-   * @param provider - The provider that the wallet is connected to
+   * @param client - The provider that the wallet is connected to
    */
-  static async switchToCrossbellMainnet(
-    provider: ethers.providers.ExternalProvider | ethers.providers.Web3Provider,
-  ) {
-    if (provider instanceof ethers.providers.Web3Provider) {
-      provider = provider.provider
-    }
-
-    if (typeof provider.request !== 'function') {
-      throw new Error(
-        'this provider does not follow EIP-1193 API signature. It does not have the provider.request function',
-      )
-    }
-
+  static async switchToCrossbellMainnet(client: Client) {
     const { chainIdHex, chainName, tokenName, tokenSymbol, rpc, explorer } =
       this.getCrossbellMainnetInfo()
 
     try {
-      await provider.request({
+      await client.request({
         method: 'wallet_switchEthereumChain',
         params: [{ chainId: chainIdHex }],
       })
     } catch (e) {
       // if (e.code === 4902) {
-      await provider.request({
+      await client.request({
         method: 'wallet_addEthereumChain',
         params: [
           {

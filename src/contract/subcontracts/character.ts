@@ -10,6 +10,7 @@ import type {
 import { CharacterMetadata } from '../../types/metadata'
 import { Ipfs } from '../../ipfs'
 import { type BigNumberish } from 'ethers'
+import { Address } from 'viem'
 
 export class CharacterContract extends BaseContract {
   /**
@@ -23,7 +24,7 @@ export class CharacterContract extends BaseContract {
    */
   @autoSwitchMainnet()
   async createCharacter(
-    owner: string,
+    owner: Address,
     handle: string,
     metadataOrUri: CharacterMetadata | string,
     {
@@ -32,7 +33,7 @@ export class CharacterContract extends BaseContract {
       linkModule?: MintOrLinkModuleConfig
     } = {},
     overrides: Overrides = {},
-  ): Promise<Result<number, true>> | never {
+  ): Promise<Result<bigint, true>> | never {
     this.validateAddress(owner)
     this.validateHandleFormat(handle)
 
@@ -40,7 +41,7 @@ export class CharacterContract extends BaseContract {
 
     const moduleConfig = await this.getModuleConfig(linkModule)
 
-    const tx = await this.contract.createCharacter(
+    const hash = await this.contract.write.createCharacter([
       {
         to: owner,
         handle: handle,
@@ -48,15 +49,14 @@ export class CharacterContract extends BaseContract {
         linkModule: moduleConfig.address,
         linkModuleInitData: moduleConfig.initData,
       },
-      overrides,
-    )
+    ])
 
-    const receipt = await tx.wait()
+    const receipt = await this.publicClient.waitForTransactionReceipt({ hash })
 
-    const parser = this.parseLog(receipt.logs, 'createCharacter')
+    const parser = this.parseLog(receipt.logs, 'CharacterCreated')
 
     return {
-      data: parser.args.characterId.toNumber(),
+      data: parser.args.characterId,
       transactionHash: receipt.transactionHash,
     }
   }
@@ -418,14 +418,14 @@ export class CharacterContract extends BaseContract {
    * @returns A boolean indicating whether the character exists.
    */
   async existsCharacterForAddress(
-    address: string,
+    address: Address,
     overrides: CallOverrides = {},
   ): Promise<Result<boolean>> | never {
     this.validateAddress(address)
-    const characterId = await this.getContract().getPrimaryCharacterId(
+    const characterId = await this.contract.read.getPrimaryCharacterId([
       address,
-      overrides,
-    )
+    ])
+
     const exists = characterId.toString() !== '0'
     return {
       data: exists,
@@ -442,10 +442,7 @@ export class CharacterContract extends BaseContract {
     handle: string,
     overrides: CallOverrides = {},
   ): Promise<Result<boolean>> | never {
-    const data = await this.getContract().getCharacterByHandle(
-      handle,
-      overrides,
-    )
+    const data = await this.contract.read.getCharacterByHandle([handle])
     const exists = data.handle !== ''
     return {
       data: exists,

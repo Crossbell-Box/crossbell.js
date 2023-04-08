@@ -1,6 +1,6 @@
+import { BaseContract } from '../../contract/subcontracts/base'
 import { Network } from '../../network'
 import { Logger } from '../../utils'
-// import { BaseContract } from '../subcontracts/base'
 
 export function autoSwitchMainnet() {
   return (
@@ -10,14 +10,14 @@ export function autoSwitchMainnet() {
   ) => {
     const originalMethod = descriptor.value
 
-    descriptor.value = async function (...args: any[]) {
+    descriptor.value = async function (this: BaseContract, ...args: any[]) {
       const checkAndSwitch = async () => {
-        // @ts-ignore
-        const provider = this.contract.provider
-        const isMainnet = await Network.isCrossbellMainnet(provider)
+        const { walletClient } = this
+        if (!walletClient) return
+        const isMainnet = await Network.isCrossbellMainnet(walletClient)
         if (!isMainnet) {
           Logger.warn("You're not on the mainnet. Switching to mainnet.")
-          await Network.switchToCrossbellMainnet(provider)
+          await Network.switchToCrossbellMainnet(walletClient)
         }
       }
 
