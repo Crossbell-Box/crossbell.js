@@ -96,6 +96,11 @@ export class BaseContract {
     PublicClient,
     WalletClient
   >
+  protected cbtContract!: GetContractReturnType<
+    Abi.Cbt,
+    PublicClient,
+    WalletClient
+  >
 
   /**
    * This creates a new Contract instance to interact with.
@@ -175,6 +180,12 @@ export class BaseContract {
     this.peripheryContract = getContract({
       address: this.options.peripheryContractAddress,
       abi: Abi.periphery,
+      publicClient: this.publicClient,
+      walletClient: this.walletClient,
+    })
+    this.cbtContract = getContract({
+      address: this.options.cbtContractAddress,
+      abi: Abi.cbt,
       publicClient: this.publicClient,
       walletClient: this.walletClient,
     })

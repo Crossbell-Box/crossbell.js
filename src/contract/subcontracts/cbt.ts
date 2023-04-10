@@ -1,7 +1,6 @@
 import { autoSwitchMainnet } from '../decorators'
 import type { Overrides, Result } from '../../types/contract'
 import { BaseContract } from './base'
-import { CallOverrides, type BigNumberish } from 'ethers'
 
 export class CbtContract extends BaseContract {
   /**
@@ -14,13 +13,18 @@ export class CbtContract extends BaseContract {
    */
   @autoSwitchMainnet()
   async mintCbt(
-    characterId: BigNumberish,
-    tokenId: BigNumberish,
+    characterId: bigint,
+    tokenId: bigint,
     overrides: Overrides = {},
   ): Promise<Result<undefined, true>> | never {
-    const tx = await this.cbtContract.mint(characterId, tokenId, overrides)
+    const tx = await this.cbtContract.write.mint(
+      [characterId, tokenId],
+      // overrides
+    )
 
-    const receipt = await tx.wait()
+    const receipt = await this.publicClient.waitForTransactionReceipt({
+      hash: tx,
+    })
 
     return {
       data: undefined,
@@ -38,13 +42,18 @@ export class CbtContract extends BaseContract {
    */
   @autoSwitchMainnet()
   async setCbtTokenUri(
-    tokenId: BigNumberish,
+    tokenId: bigint,
     uri: string,
     overrides: Overrides = {},
   ): Promise<Result<undefined, true>> | never {
-    const tx = await this.cbtContract.setTokenURI(tokenId, uri, overrides)
+    const tx = await this.cbtContract.write.setTokenURI(
+      [tokenId, uri],
+      // overrides
+    )
 
-    const receipt = await tx.wait()
+    const receipt = await this.publicClient.waitForTransactionReceipt({
+      hash: tx,
+    })
 
     return {
       data: undefined,
@@ -59,10 +68,13 @@ export class CbtContract extends BaseContract {
    * @returns The URI of the token.
    */
   async getCbtTokenUri(
-    tokenId: BigNumberish,
-    overrides: CallOverrides = {},
+    tokenId: bigint,
+    // overrides: CallOverrides = {},
   ): Promise<Result<string>> | never {
-    const uri = await this.getCbtContract().uri(tokenId, overrides)
+    const uri = await this.cbtContract.read.uri(
+      [tokenId],
+      // overrides
+    )
 
     return {
       data: uri,
