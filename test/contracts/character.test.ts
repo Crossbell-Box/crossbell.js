@@ -1,4 +1,3 @@
-import { type BigNumberish } from 'ethers'
 import { publicKeyToAddress, generatePrivateKey } from 'viem/accounts'
 import { expect, describe, test } from 'vitest'
 import { Contract } from '../../src'
@@ -13,7 +12,7 @@ import {
 
 const contract = new Contract(mockUser.privateKey)
 
-let characterId: BigNumberish | null = null
+let characterId: bigint | null = null
 
 describe('character', () => {
   describe('create a character and check', () => {
@@ -35,7 +34,7 @@ describe('character', () => {
       ).rejects.toThrow(/Invalid handle/)
     })
 
-    test.only('check if a character exists', async () => {
+    test('check if a character exists', async () => {
       const randPrivKey = generatePrivateKey()
       const randAddr = publicKeyToAddress(randPrivKey)
       const randHandle = genRandomHandle()
@@ -49,14 +48,13 @@ describe('character', () => {
         randHandle,
       )
       expect(exists2).toBe(false)
-      
+
       // create one
       const characterId = await contract
-      .createCharacter(randAddr, randHandle, metadataUri)
-      .then(({ data }) => data)
-      
+        .createCharacter(randAddr, randHandle, metadataUri)
+        .then(({ data }) => data)
+
       expect(characterId).not.toBeNull()
-      return
 
       // should exist now
       const { data: exists3 } = await contract.existsCharacterForAddress(

@@ -1,10 +1,5 @@
 import {
-  http,
-  Transport,
-  Account,
   WalletClient,
-  createPublicClient,
-  createWalletClient,
   PublicClient,
   getContract,
   Address,
@@ -12,13 +7,12 @@ import {
   Log,
   decodeEventLog,
   DecodeEventLogReturnType,
+  GetContractReturnType,
 } from 'viem'
 import {
-  ExtractAbiEvents,
   ExtractAbiEvent,
   ExtractAbiEventNames,
   AbiTypeToPrimitiveType,
-  AbiType,
 } from 'abitype'
 import { Network } from '../../network'
 import {
@@ -27,7 +21,7 @@ import {
   createWalletClientFromCustom,
 } from '../../utils/client'
 
-import { MintOrLinkModule, MintOrLinkModuleConfig } from '../../types'
+import { MintOrLinkModuleConfig } from '../../types'
 import {
   // isAddressEqual,
   NIL_ADDRESS,
@@ -36,7 +30,6 @@ import {
 } from '../../utils'
 import * as Abi from '../abi'
 import { createDefaultPublicClient } from '../../utils/client'
-import { MaybeArray } from '../../types/utils'
 
 interface ContractOptions {
   entryContractAddress: Address
@@ -48,13 +41,13 @@ interface ContractOptions {
   linklistContractAddress: Address
 }
 
-type Inputs<T extends ExtractAbiEventNames<Abi.Entry>> = ExtractAbiEvent<
+type EventInputs<T extends ExtractAbiEventNames<Abi.Entry>> = ExtractAbiEvent<
   Abi.Entry,
   T
 >['inputs']
 type GetEventArg<T extends ExtractAbiEventNames<Abi.Entry>> = {
-  [K in Inputs<T>[number]['name']]: AbiTypeToPrimitiveType<
-    Extract<Inputs<T>[number], { name: K }>['type']
+  [K in EventInputs<T>[number]['name']]: AbiTypeToPrimitiveType<
+    Extract<EventInputs<T>[number], { name: K }>['type']
   >
 }
 type FixedEventReturn<T extends ExtractAbiEventNames<Abi.Entry>> = Omit<
@@ -65,8 +58,6 @@ type FixedEventReturn<T extends ExtractAbiEventNames<Abi.Entry>> = Omit<
 }
 
 export class BaseContract {
-  // client: PublicClient | WalletClient
-  // account: Account | undefined
   public publicClient: PublicClient = createDefaultPublicClient()
   public walletClient: WalletClient | undefined
   protected options: ContractOptions
@@ -132,13 +123,30 @@ export class BaseContract {
     }
   }
 
+  private _contractCache:
+    | GetContractReturnType<Abi.Entry, PublicClient, WalletClient>
+    | undefined = undefined
   get contract() {
-    return getContract({
+    if (this._contractCache) return this._contractCache
+    return (this._contractCache = getContract({
       address: this.options.entryContractAddress,
       abi: Abi.entry,
       publicClient: this.publicClient,
       walletClient: this.walletClient,
-    })
+    }))
+  }
+
+  private _newbieVillaContractCache:
+    | GetContractReturnType<Abi.NewbieVilla, PublicClient, WalletClient>
+    | undefined = undefined
+  get newbieVillaContract() {
+    if (this._newbieVillaContractCache) return this._newbieVillaContractCache
+    return (this._newbieVillaContractCache = getContract({
+      address: this.options.newbieVillaContractAddress,
+      abi: Abi.newbieVilla,
+      publicClient: this.publicClient,
+      walletClient: this.walletClient,
+    }))
   }
 
   protected parseLog<T extends ExtractAbiEventNames<Abi.Entry>>(

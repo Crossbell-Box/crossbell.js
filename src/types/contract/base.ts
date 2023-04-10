@@ -1,3 +1,4 @@
+import { Address } from 'abitype'
 import type {
   Overrides as Overrides_,
   CallOverrides as CallOverrides_,
@@ -8,7 +9,7 @@ import type {
  */
 export type Result<T, HasTxHash extends boolean = false> = {
   data: T
-} & (HasTxHash extends true ? { transactionHash: string } : {})
+} & (HasTxHash extends true ? { transactionHash: Address } : {})
 
 export interface Overrides extends Overrides_ {
   from?: string
