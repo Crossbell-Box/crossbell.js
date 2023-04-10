@@ -14,7 +14,7 @@ import { Network } from '../network'
 
 export function createDefaultTransport(): Transport {
   const addr = Network.getJsonRpcAddress()
-  if (addr.startsWith('ws://')) {
+  if (addr.startsWith('ws://') || addr.startsWith('wss://')) {
     return webSocket(addr, {
       timeout: 30_000,
       key: Network.getNetwork(),

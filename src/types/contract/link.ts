@@ -1,19 +1,23 @@
-export type LinkItemType =
-  | 'Character'
-  | 'Address'
-  | 'Note'
-  | 'ERC721'
-  | 'Linklist'
-  | 'AnyUri'
-// | 'CharacterLink'
-// | 'AddressLink'
-// | 'NoteLink'
-// | 'ERC721Link'
-// | 'ListLink'
-// | 'AnyLink'
+export interface LinkItemMap {
+  Character: LinkItemCharacter
+  Address: LinkItemAddress
+  Note: LinkItemNote
+  ERC721: LinkItemERC721
+  Linklist: LinkItemLinklist
+  AnyUri: LinkItemAnyUri
+  // | 'CharacterLink'
+  // | 'AddressLink'
+  // | 'NoteLink'
+  // | 'ERC721Link'
+  // | 'ListLink'
+  // | 'AnyLink'
+}
+
+export type LinkItemType = keyof LinkItemMap
+export type LinkItem = LinkItemMap[LinkItemType]
 
 export interface LinkItemCharacter {
-  characterId: number
+  characterId: bigint
 }
 
 export interface LinkItemAddress {
@@ -21,8 +25,8 @@ export interface LinkItemAddress {
 }
 
 export interface LinkItemNote {
-  characterId: number
-  noteId: number
+  characterId: bigint
+  noteId: bigint
 }
 
 export interface LinkItemERC721 {
@@ -31,17 +35,9 @@ export interface LinkItemERC721 {
 }
 
 export interface LinkItemLinklist {
-  linklistId: number
+  linklistId: bigint
 }
 
 export interface LinkItemAnyUri {
   uri: string
 }
-
-export type LinkItem =
-  | LinkItemCharacter
-  | LinkItemAddress
-  | LinkItemNote
-  | LinkItemERC721
-  | LinkItemLinklist
-  | LinkItemAnyUri

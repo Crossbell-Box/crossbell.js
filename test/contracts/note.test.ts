@@ -1,4 +1,3 @@
-import { type BigNumberish } from 'ethers'
 import { expect, describe, test, beforeAll } from 'vitest'
 import { Contract } from '../../src'
 import { mockUser } from '../mock'
@@ -6,7 +5,7 @@ import { mockUser } from '../mock'
 const contract = new Contract(mockUser.privateKey)
 
 describe('should post note', () => {
-  let characterId: BigNumberish
+  let characterId: bigint
   beforeAll(async () => {
     const { data: pid } = await contract.getPrimaryCharacterId(mockUser.address)
     characterId = pid

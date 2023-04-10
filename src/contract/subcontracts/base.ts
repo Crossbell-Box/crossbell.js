@@ -13,6 +13,7 @@ import {
   ExtractAbiEvent,
   ExtractAbiEventNames,
   AbiTypeToPrimitiveType,
+  Abi as _Abi,
 } from 'abitype'
 import { Network } from '../../network'
 import {
@@ -30,6 +31,7 @@ import {
 } from '../../utils'
 import * as Abi from '../abi'
 import { createDefaultPublicClient } from '../../utils/client'
+import { AbiType } from 'abitype'
 
 interface ContractOptions {
   entryContractAddress: Address
@@ -41,26 +43,59 @@ interface ContractOptions {
   linklistContractAddress: Address
 }
 
-type EventInputs<T extends ExtractAbiEventNames<Abi.Entry>> = ExtractAbiEvent<
-  Abi.Entry,
-  T
->['inputs']
-type GetEventArg<T extends ExtractAbiEventNames<Abi.Entry>> = {
-  [K in EventInputs<T>[number]['name']]: AbiTypeToPrimitiveType<
-    Extract<EventInputs<T>[number], { name: K }>['type']
+type EventInputs<
+  TAbi extends _Abi,
+  TName extends ExtractAbiEventNames<TAbi>,
+> = ExtractAbiEvent<TAbi, TName>['inputs']
+
+type GetAbiType<
+  TAbi extends _Abi,
+  TName extends ExtractAbiEventNames<TAbi>,
+  Key,
+> = Extract<
+  NonNullable<EventInputs<TAbi, TName>[number]>,
+  { name: Key }
+>['type']
+
+type GetEventArgs<
+  TAbi extends _Abi,
+  TName extends ExtractAbiEventNames<TAbi>,
+> = {
+  [K in NonNullable<
+    EventInputs<TAbi, TName>[number]['name']
+  >]: AbiTypeToPrimitiveType<
+    GetAbiType<TAbi, TName, K> extends AbiType
+      ? GetAbiType<TAbi, TName, K>
+      : never
   >
 }
-type FixedEventReturn<T extends ExtractAbiEventNames<Abi.Entry>> = Omit<
-  DecodeEventLogReturnType<Abi.Entry, T>,
-  'args'
-> & {
-  args: GetEventArg<T>
+
+type FixedEventReturn<
+  TAbi extends _Abi,
+  TName extends ExtractAbiEventNames<TAbi>,
+> = Omit<DecodeEventLogReturnType<TAbi, TName>, 'args'> & {
+  args: GetEventArgs<TAbi, TName>
 }
 
 export class BaseContract {
   public publicClient: PublicClient = createDefaultPublicClient()
   public walletClient: WalletClient | undefined
   protected options: ContractOptions
+  protected contract!: GetContractReturnType<
+    Abi.Entry,
+    PublicClient,
+    WalletClient
+  >
+  protected newbieVillaContract!: GetContractReturnType<
+    Abi.NewbieVilla,
+    PublicClient,
+    WalletClient
+  >
+  protected peripheryContract!: GetContractReturnType<
+    Abi.Periphery,
+    PublicClient,
+    WalletClient
+  >
 
   /**
    * This creates a new Contract instance to interact with.
@@ -98,10 +133,11 @@ export class BaseContract {
     } else if (walletClientOrPrivateKey) {
       this.walletClient = createWalletClientFromCustom(walletClientOrPrivateKey)
     }
-    this.options = this.initOptions(options)
+    this.options = this.#initOptions(options)
+    this.#initContract()
   }
 
-  private initOptions(options?: Partial<ContractOptions>): ContractOptions {
+  #initOptions(options?: Partial<ContractOptions>): ContractOptions {
     return {
       entryContractAddress:
         options?.entryContractAddress ?? Network.getContractAddress(),
@@ -123,48 +159,48 @@ export class BaseContract {
     }
   }
 
-  private _contractCache:
-    | GetContractReturnType<Abi.Entry, PublicClient, WalletClient>
-    | undefined = undefined
-  get contract() {
-    if (this._contractCache) return this._contractCache
-    return (this._contractCache = getContract({
+  #initContract() {
+    this.contract = getContract({
       address: this.options.entryContractAddress,
       abi: Abi.entry,
       publicClient: this.publicClient,
       walletClient: this.walletClient,
-    }))
-  }
-
-  private _newbieVillaContractCache:
-    | GetContractReturnType<Abi.NewbieVilla, PublicClient, WalletClient>
-    | undefined = undefined
-  get newbieVillaContract() {
-    if (this._newbieVillaContractCache) return this._newbieVillaContractCache
-    return (this._newbieVillaContractCache = getContract({
+    })
+    this.newbieVillaContract = getContract({
       address: this.options.newbieVillaContractAddress,
       abi: Abi.newbieVilla,
       publicClient: this.publicClient,
       walletClient: this.walletClient,
-    }))
+    })
+    this.peripheryContract = getContract({
+      address: this.options.peripheryContractAddress,
+      abi: Abi.periphery,
+      publicClient: this.publicClient,
+      walletClient: this.walletClient,
+    })
   }
 
-  protected parseLog<T extends ExtractAbiEventNames<Abi.Entry>>(
+  protected parseLog<TName extends ExtractAbiEventNames<Abi.Entry>>(
     logs: Log[],
-    filterTopic: T,
-    options: { throwOnMultipleLogsFound?: boolean; returnMultipleLogs: true },
-  ): FixedEventReturn<T>[]
-  protected parseLog<T extends ExtractAbiEventNames<Abi.Entry>>(
+    filterTopic: TName,
+    options: {
+      throwOnMultipleLogsFound?: boolean
+      returnMultipleLogs: true
+      abi?: Abi.Entry
+    },
+  ): FixedEventReturn<Abi.Entry, TName>[]
+  protected parseLog<TName extends ExtractAbiEventNames<Abi.Entry>>(
     logs: Log[],
-    filterTopic: T,
+    filterTopic: TName,
     options?: {
       throwOnMultipleLogsFound?: boolean
       returnMultipleLogs?: boolean
+      abi?: Abi.Entry
     },
-  ): FixedEventReturn<T>
-  protected parseLog<T extends ExtractAbiEventNames<Abi.Entry>>(
+  ): FixedEventReturn<Abi.Entry, TName>
+  protected parseLog<TName extends ExtractAbiEventNames<Abi.Entry>>(
     logs: Log[],
-    targetTopic: T,
+    targetTopic: TName,
     {
       throwOnMultipleLogsFound,
       returnMultipleLogs,
@@ -174,9 +210,11 @@ export class BaseContract {
     } = {},
   ): any {
     const parsedLogs = logs
-      .map((log) => decodeEventLog({ abi: Abi.entry, ...log }))
+      .map((log) =>
+        decodeEventLog({ abi: [...Abi.entry, ...Abi.linklist], ...log }),
+      )
       .filter(
-        (log): log is DecodeEventLogReturnType<Abi.Entry, T> =>
+        (log): log is DecodeEventLogReturnType<Abi.Entry, TName> =>
           log.eventName === targetTopic,
       )
 

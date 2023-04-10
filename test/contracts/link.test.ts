@@ -1,4 +1,4 @@
-import { type BigNumberish, Wallet } from 'ethers'
+import { generatePrivateKey, privateKeyToAccount } from 'viem/accounts'
 import { expect, describe, test } from 'vitest'
 import { Contract } from '../../src'
 import { mockUser, genRandomHandle, metadataUri } from '../mock'
@@ -7,8 +7,8 @@ const contract = new Contract(mockUser.privateKey)
 
 describe('link and check', () => {
   // create two characters first
-  let characterId1: BigNumberish | null = null
-  let characterId2: BigNumberish | null = null
+  let characterId1: bigint | null = null
+  let characterId2: bigint | null = null
   test('create two characters to link with', async () => {
     characterId1 = await contract
       .createCharacter(mockUser.address, genRandomHandle(), metadataUri)
@@ -22,7 +22,7 @@ describe('link and check', () => {
   })
 
   const linkType = 'follow'
-  let linklistId: BigNumberish | null = null
+  let linklistId: bigint | null = null
   test('linkCharacter', async () => {
     const result = await contract.linkCharacter(
       characterId1!,
@@ -70,8 +70,7 @@ describe('link and check', () => {
   })
 
   test('createThenLinkCharacter and check', async () => {
-    const wallet = Wallet.createRandom()
-    const randomAddress = wallet.address
+    const randomAddress = privateKeyToAccount(generatePrivateKey()).address
 
     const result = await contract.createThenLinkCharacter(
       characterId1!,

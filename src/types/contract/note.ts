@@ -4,9 +4,9 @@ import { MintOrLinkModuleConfig } from './module'
 
 export interface Note<T extends LinkItem | undefined = undefined> {
   /** The character id of the address who owns the note.  */
-  characterId: number
+  characterId: bigint
   /** The id of this note. Each id is unique under one character. */
-  noteId: number
+  noteId: bigint
 
   /** The content URI of this note. */
   contentUri: string

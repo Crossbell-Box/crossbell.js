@@ -1,4 +1,4 @@
-import { publicKeyToAddress, generatePrivateKey } from 'viem/accounts'
+import { generatePrivateKey, privateKeyToAccount } from 'viem/accounts'
 import { expect, describe, test } from 'vitest'
 import { Contract } from '../../src'
 import {
@@ -35,8 +35,8 @@ describe('character', () => {
     })
 
     test('check if a character exists', async () => {
-      const randPrivKey = generatePrivateKey()
-      const randAddr = publicKeyToAddress(randPrivKey)
+      const randAccount = privateKeyToAccount(generatePrivateKey())
+      const randAddr = randAccount.address
       const randHandle = genRandomHandle()
 
       // not exists if not created
