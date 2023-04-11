@@ -32,31 +32,17 @@ export class CsbContract extends BaseContract {
   ): Promise<Result<{}, true>> {
     this.validateAddress(toAddress)
 
-    console.log('do');
-    
-    this.walletClient!.sendTransaction({
+    console.log(this, this.account)
+    const hash = await this.walletClient!.sendTransaction({
       account: this.account!,
-      chain: this.walletClient?.chain,
       to: toAddress,
       value: BigInt(amount),
     })
+    const receipt = await this.publicClient.waitForTransactionReceipt({ hash })
 
-    // https://github.com/wagmi-dev/wagmi/blob/3e9145bdfc311f6eaeffe0747d03455f548d918c/packages/core/src/actions/transactions/sendTransaction.ts#L82-L100
-    // const signer = this.contract.signer
-    // const uncheckedSigner =
-    //   (signer as providers.JsonRpcSigner).connectUnchecked?.() ?? signer
-    // const tx = await uncheckedSigner.sendTransaction({
-    //   to: toAddress,
-    //   value: amount,
-    // })
-    // const receipt = await tx.wait()
-    // this.walletClient!.sendTransaction({
-    //   to: toAddress,
-    //   value: BigInt(amount),
-    // })
-    // return {
-    //   data: {},
-    //   transactionHash: receipt.transactionHash,
-    // }
+    return {
+      data: {},
+      transactionHash: receipt.transactionHash,
+    }
   }
 }

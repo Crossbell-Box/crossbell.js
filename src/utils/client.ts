@@ -39,11 +39,9 @@ export function createDefaultPublicClient(): PublicClient {
 }
 
 export function createWalletClientFromPrivateKey(privKey: Hex) {
-  const account = privateKeyToAccount(privKey)
   const transport = createDefaultTransport()
   return createWalletClient({
     transport,
-    account,
     chain: Network.getChain(),
     pollingInterval: 100,
   })
@@ -61,14 +59,10 @@ export function getProviderAddress(
   }
 }
 
-export function createWalletClientFromCustom(
-  provider: EIP1193Provider,
-  account?: Address | Account,
-) {
+export function createWalletClientFromCustom(provider: EIP1193Provider) {
   return createWalletClient({
     transport: custom(provider),
     chain: Network.getChain(),
     pollingInterval: 100,
-    account,
   })
 }

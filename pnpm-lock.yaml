@@ -20,8 +20,8 @@ importers:
         specifier: ^5.2.1
         version: 5.2.1
       eip1193-types:
-        specifier: ^0.1.1
-        version: 0.1.1
+        specifier: ^0.1.2
+        version: 0.1.2
       ethers:
         specifier: ^5.7.2
         version: 5.7.2
@@ -99,9 +99,6 @@ importers:
       '@vueuse/core':
         specifier: ^9.13.0
         version: 9.13.0(vue@3.2.47)
-      eip1193-types:
-        specifier: ^0.1.0
-        version: 0.1.0
       typescript:
         specifier: ^5.0.3
         version: 5.0.3
@@ -1682,13 +1679,8 @@ packages:
     resolution: {integrity: sha512-I88TYZWc9XiYHRQ4/3c5rjjfgkjhLyW2luGIheGERbNQ6OY7yTybanSpDXZa8y7VUP9YmDcYa+eyq4ca7iLqWA==}
     dev: true
 
-  /eip1193-types@0.1.0:
-    resolution: {integrity: sha512-XoVNo9vl06TR0KssPKnUlQWpVhdzu2lJS3Sx1CGaD3nhsJEc78kJIRQeF/cQ7czW4B8jRqbc3S3ufNVawdaUrQ==}
-    engines: {node: '>=14.19.0'}
-    dev: true
-
-  /eip1193-types@0.1.1:
-    resolution: {integrity: sha512-N3szKR1CuNrDcCN8KGvoKm3bYxYzUelle0qXY8r5emK4/4WVvHJUTFU0by4QhEplLIhyPqsvVFmEalEtHDW7XA==}
+  /eip1193-types@0.1.2:
+    resolution: {integrity: sha512-34D8wOXeNf/geGrPYcDNbKNObJkLT71MEJefzzOFs+l7bCzsg9ZfuNTmlH+ZA7dTXTvk8aRI7ED+8MBb703qKA==}
     engines: {node: '>=14.19.0'}
     dev: false
 

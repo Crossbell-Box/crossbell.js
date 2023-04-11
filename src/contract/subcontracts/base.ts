@@ -9,6 +9,8 @@ import {
   DecodeEventLogReturnType,
   GetContractReturnType,
   Account,
+  Transport,
+  Chain,
 } from 'viem'
 import {
   ExtractAbiEvent,
@@ -29,6 +31,7 @@ import { createDefaultPublicClient } from '../../utils/client'
 import { Overwrite } from '../../types/utils'
 import { AbiType } from 'abitype'
 import type { EIP1193Provider } from 'eip1193-types'
+import { privateKeyToAccount } from 'viem/accounts'
 
 interface AccountOptions {
   account: Account | Address
@@ -87,9 +90,9 @@ type FixedEventReturn<
 
 export class BaseContract {
   publicClient: PublicClient = createDefaultPublicClient()
-  walletClient: WalletClient | undefined
+  walletClient: WalletClient<Transport, Chain> | undefined
 
-  account: Address | undefined
+  account: Address | Account | undefined
   protected options: ResolvedContractOptions
 
   protected contract!: GetContractReturnType<
@@ -145,14 +148,20 @@ export class BaseContract {
     options?: Partial<ContractOptions>,
   ) {
     if (typeof providerOrPrivateKey === 'string') {
+      this.account = privateKeyToAccount(providerOrPrivateKey)
       this.walletClient = createWalletClientFromPrivateKey(providerOrPrivateKey)
     } else if (providerOrPrivateKey) {
       const provider = providerOrPrivateKey
-      this.account = getProviderAddress(provider)
-      this.walletClient = createWalletClientFromCustom(provider, this.account)
+      this.account = options?.account || getProviderAddress(provider)
+      this.walletClient = createWalletClientFromCustom(provider)
+      provider.on('accountsChanged', (accounts: Address[]) => {
+        this.account = accounts[0]
+        console.log('accountsChanged', this, this.account)
+      })
     }
     this.options = this.#resolveOptions(options)
     this.#initContract()
+    console.log(this)
   }
 
   #resolveOptions(options?: ContractOptions): ResolvedContractOptions {

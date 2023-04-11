@@ -19,7 +19,8 @@ async function init() {
 async function withResult(p: Promise<any>) {
   result.value = JSON.stringify(
     await p,
-    (key, value) => (typeof value === 'bigint' ? value.toString() : value),
+    (key: string, value: any) =>
+      typeof value === 'bigint' ? value.toString() : value,
     2,
   )
 }
