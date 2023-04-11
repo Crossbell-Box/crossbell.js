@@ -1,7 +1,7 @@
 import { BaseContract } from './subcontracts/base'
 import { CsbContract } from './subcontracts/csb'
 import { LinkContract } from './subcontracts/link'
-// import { NoteContract } from './subcontracts/note'
+import { NoteContract } from './subcontracts/note'
 import { CharacterContract } from './subcontracts/character'
 // import { RevisionContract } from './subcontracts/revision'
 // import { OperatorContract } from './subcontracts/operator'
@@ -40,4 +40,5 @@ export class Contract extends BaseContract {
   character = new CharacterContract(this)
   link = new LinkContract(this)
   cbt = new CbtContract(this)
+  note = new NoteContract(this)
 }

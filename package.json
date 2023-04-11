@@ -44,7 +44,7 @@
     "docs:build": "typedoc",
     "docs:preview": "serve docs",
     "prepublishOnly": "npm run build",
-    "test": "vitest run",
+    "test": "vitest",
     "typecheck": "tsc --noEmit",
     "release": "bumpp",
     "watch": "npm run build-fast -- --watch"

@@ -10,10 +10,10 @@ describe('link and check', () => {
   let characterId1: bigint | null = null
   let characterId2: bigint | null = null
   test('create two characters to link with', async () => {
-    characterId1 = await contract
+    characterId1 = await contract.character
       .createCharacter(mockUser.address, genRandomHandle(), metadataUri)
       .then(({ data }) => data)
-    characterId2 = await contract
+    characterId2 = await contract.character
       .createCharacter(mockUser.address, genRandomHandle(), metadataUri)
       .then(({ data }) => data)
 
@@ -24,7 +24,7 @@ describe('link and check', () => {
   const linkType = 'follow'
   let linklistId: bigint | null = null
   test('linkCharacter', async () => {
-    const result = await contract.linkCharacter(
+    const result = await contract.link.linkCharacter(
       characterId1!,
       characterId2!,
       linkType,
@@ -32,14 +32,14 @@ describe('link and check', () => {
     linklistId = result.data
     expect(linklistId).not.toBeNull()
 
-    const linklist = await contract.getLinklistIdByTransaction(
+    const linklist = await contract.link.getLinklistIdByTransaction(
       result.transactionHash,
     )
     expect(linklist.data).toBe(linklistId)
   })
 
   test('linkCharactersInBatch', async () => {
-    const result = await contract.linkCharactersInBatch(
+    const result = await contract.link.linkCharactersInBatch(
       characterId1!,
       [characterId2!],
       [],
@@ -50,7 +50,7 @@ describe('link and check', () => {
   })
 
   test('getLinkingCharacterIds', async () => {
-    const { data } = await contract.getLinkingCharacterIds(
+    const { data } = await contract.link.getLinkingCharacterIds(
       characterId1!,
       linkType,
     )
@@ -58,11 +58,11 @@ describe('link and check', () => {
   })
 
   test('unlinkCharacter and check', async () => {
-    await contract
+    await contract.link
       .unlinkCharacter(characterId1!, characterId2!, linkType)
       .then(({ data }) => data)
 
-    const { data } = await contract.getLinkingCharacterIds(
+    const { data } = await contract.link.getLinkingCharacterIds(
       characterId1!,
       linkType,
     )
@@ -72,7 +72,7 @@ describe('link and check', () => {
   test('createThenLinkCharacter and check', async () => {
     const randomAddress = privateKeyToAccount(generatePrivateKey()).address
 
-    const result = await contract.createThenLinkCharacter(
+    const result = await contract.link.createThenLinkCharacter(
       characterId1!,
       randomAddress,
       linkType,
@@ -81,7 +81,7 @@ describe('link and check', () => {
     expect(result.data.toCharacterId).not.toBeNull()
     expect(linklistId).not.toBeNull()
 
-    const { data } = await contract.getLinkingCharacterIds(
+    const { data } = await contract.link.getLinkingCharacterIds(
       characterId1!,
       linkType,
     )
@@ -89,22 +89,23 @@ describe('link and check', () => {
 
     const {
       data: { handle },
-    } = await contract.getCharacterByHandle(randomAddress)
+    } = await contract.character.getCharacterByHandle(randomAddress)
     expect(handle).toBe(randomAddress.toLowerCase())
 
     // should also able to get character by transaction
-    const { data: character } = await contract.getCharacterByTransaction(
-      result.transactionHash,
-    )
+    const { data: character } =
+      await contract.character.getCharacterByTransaction(result.transactionHash)
     expect(character.characterId).toBe(result.data.toCharacterId)
   })
 
   // link note
   test('create a note and link it', async () => {
-    const note = await contract.postNote(characterId1!, { content: 'test' })
+    const note = await contract.note.postNote(characterId1!, {
+      content: 'test',
+    })
 
     // like this note
-    const result1 = await contract.linkNote(
+    const result1 = await contract.link.linkNote(
       characterId1!,
       characterId1!,
       note.data.noteId,
@@ -113,7 +114,7 @@ describe('link and check', () => {
     expect(result1.data).not.toBeNull()
 
     // unlike this note
-    const result2 = await contract.unlinkNote(
+    const result2 = await contract.link.unlinkNote(
       characterId1!,
       characterId1!,
       note.data.noteId,
