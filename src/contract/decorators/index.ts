@@ -7,14 +7,14 @@ export function autoSwitchMainnet() {
     target: Object,
     propertyKey: string,
     descriptor: TypedPropertyDescriptor<
-      (this: BaseContract, ...args: any[]) => Promise<any>
+      (this: { base: BaseContract }, ...args: any[]) => Promise<any>
     >,
   ) => {
     const originalMethod = descriptor.value!
 
     descriptor.value = async function (...args: any[]) {
       const checkAndSwitch = async () => {
-        const { walletClient } = this
+        const { walletClient } = this.base
         if (!walletClient) return
         const isMainnet = await Network.isCrossbellMainnet(walletClient)
         if (!isMainnet) {
