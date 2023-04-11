@@ -2,6 +2,7 @@ import { defineConfig, loadEnv } from 'vite'
 import Vue from '@vitejs/plugin-vue'
 import { nodePolyfills } from 'vite-plugin-node-polyfills'
 import path from 'path'
+import UnoCSS from 'unocss/vite'
 
 export default defineConfig(async ({ mode }) => {
   const env = await loadEnv(mode, process.cwd(), '')
@@ -16,6 +17,6 @@ export default defineConfig(async ({ mode }) => {
         env.CROSSBELL_RPC_ADDRESS,
       ),
     },
-    plugins: [Vue(), nodePolyfills({ protocolImports: true })],
+    plugins: [Vue(), nodePolyfills({ protocolImports: true }), UnoCSS()],
   }
 })

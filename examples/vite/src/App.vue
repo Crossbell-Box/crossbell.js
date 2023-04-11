@@ -61,13 +61,13 @@ function setPrimaryCharacterId() {
   <div>
     <h1>Crossbell.js Demo</h1>
     <hr />
-    <div style="display: flex; gap: 4px; flex-wrap: wrap">
+    <div flex="~ gap2 wrap">
       <input type="text" v-model="address" placeholder="address" />
       <input type="text" v-model="characterId" placeholder="characterId" />
       <input type="text" v-model="handle" placeholder="handle" />
     </div>
     <hr />
-    <div style="display: flex; gap: 4px; flex-wrap: wrap">
+    <div flex="~ gap2 wrap">
       <button @click="connect">connect</button>
       <button @click="balance">balance</button>
       <button @click="transfer">transfer</button>
@@ -77,6 +77,6 @@ function setPrimaryCharacterId() {
       <button @click="setPrimaryCharacterId">setPrimaryCharacterId</button>
     </div>
     <hr />
-    <pre style="white-space: pre-wrap">{{ result }}</pre>
+    <pre whitespace-pre-wrap break-words>{{ result }}</pre>
   </div>
 </template>
