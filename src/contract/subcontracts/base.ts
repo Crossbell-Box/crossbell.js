@@ -147,8 +147,9 @@ export class BaseContract {
     options?: Partial<ContractOptions>,
   ) {
     if (typeof providerOrPrivateKey === 'string') {
-      this.#account = privateKeyToAccount(providerOrPrivateKey)
-      this.walletClient = createWalletClientFromPrivateKey(providerOrPrivateKey)
+      const account = privateKeyToAccount(providerOrPrivateKey)
+      this.#account = account
+      this.walletClient = createWalletClientFromPrivateKey(account)
     } else if (providerOrPrivateKey) {
       const provider = providerOrPrivateKey
       this.#account = options?.account || getProviderAddress(provider)

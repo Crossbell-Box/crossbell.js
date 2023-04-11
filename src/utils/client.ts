@@ -5,7 +5,7 @@ import {
   PublicClient,
   createPublicClient,
   createWalletClient,
-  Hex,
+  PrivateKeyAccount,
   custom,
   Address,
   Account,
@@ -37,11 +37,12 @@ export function createDefaultPublicClient(): PublicClient {
   })
 }
 
-export function createWalletClientFromPrivateKey(privKey: Hex) {
+export function createWalletClientFromPrivateKey(account: PrivateKeyAccount) {
   const transport = createDefaultTransport()
   return createWalletClient({
     transport,
     chain: Network.getChain(),
+    account,
     pollingInterval: 100,
   })
 }
