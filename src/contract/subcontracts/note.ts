@@ -17,7 +17,9 @@ import pLimit from 'p-limit'
 import { Address } from 'abitype'
 import { Abi } from '../..'
 
-export class NoteContract extends BaseContract {
+export class NoteContract {
+  constructor(private base: BaseContract) {}
+
   /**
    * This creates a new note.
    * @category Note
@@ -35,10 +37,10 @@ export class NoteContract extends BaseContract {
   ): Promise<Result<{ noteId: bigint }, true>> | never {
     const { uri } = await Ipfs.parseMetadataOrUri('note', metadataOrUri)
 
-    const linkModuleConfig = await this.getModuleConfig(linkModule)
-    const mintModuleConfig = await this.getModuleConfig(mintModule)
+    const linkModuleConfig = await this.base.getModuleConfig(linkModule)
+    const mintModuleConfig = await this.base.getModuleConfig(mintModule)
 
-    const tx = await this.contract.write.postNote(
+    const tx = await this.base.contract.write.postNote(
       [
         {
           characterId: characterId,
@@ -53,11 +55,11 @@ export class NoteContract extends BaseContract {
       // overrides,
     )
 
-    const receipt = await this.publicClient.waitForTransactionReceipt({
+    const receipt = await this.base.publicClient.waitForTransactionReceipt({
       hash: tx,
     })
 
-    const log = this.parseLog(receipt.logs, 'PostNote')
+    const log = this.base.parseLog(receipt.logs, 'PostNote')
 
     return {
       data: {
@@ -96,10 +98,10 @@ export class NoteContract extends BaseContract {
             'note',
             note.metadataOrUri,
           )
-          const linkModuleConfig = await this.getModuleConfig(
+          const linkModuleConfig = await this.base.getModuleConfig(
             note.options?.linkModule,
           )
-          const mintModuleConfig = await this.getModuleConfig(
+          const mintModuleConfig = await this.base.getModuleConfig(
             note.options?.mintModule,
           )
 
@@ -122,16 +124,16 @@ export class NoteContract extends BaseContract {
       }),
     )
 
-    const tx = await this.contract.write.multicall(
+    const tx = await this.base.contract.write.multicall(
       [encodedDataArr],
       // overrides
     )
 
-    const receipt = await this.publicClient.waitForTransactionReceipt({
+    const receipt = await this.base.publicClient.waitForTransactionReceipt({
       hash: tx,
     })
 
-    const logs = this.parseLog(receipt.logs, 'PostNote', {
+    const logs = this.base.parseLog(receipt.logs, 'PostNote', {
       throwOnMultipleLogsFound: false,
       returnMultipleLogs: true,
     })
@@ -165,10 +167,10 @@ export class NoteContract extends BaseContract {
   ): Promise<Result<{ noteId: bigint }, true>> | never {
     const { uri } = await Ipfs.parseMetadataOrUri('note', metadataOrUri)
 
-    const linkModuleConfig = await this.getModuleConfig(linkModule)
-    const mintModuleConfig = await this.getModuleConfig(mintModule)
+    const linkModuleConfig = await this.base.getModuleConfig(linkModule)
+    const mintModuleConfig = await this.base.getModuleConfig(mintModule)
 
-    const tx = await this.contract.write.postNote4AnyUri(
+    const tx = await this.base.contract.write.postNote4AnyUri(
       [
         {
           characterId: characterId,
@@ -184,11 +186,11 @@ export class NoteContract extends BaseContract {
       // overrides,
     )
 
-    const receipt = await this.publicClient.waitForTransactionReceipt({
+    const receipt = await this.base.publicClient.waitForTransactionReceipt({
       hash: tx,
     })
 
-    const log = this.parseLog(receipt.logs, 'PostNote')
+    const log = this.base.parseLog(receipt.logs, 'PostNote')
 
     return {
       data: {
@@ -218,10 +220,10 @@ export class NoteContract extends BaseContract {
   ): Promise<Result<{ noteId: bigint }, true>> | never {
     const { uri } = await Ipfs.parseMetadataOrUri('note', metadataOrUri)
 
-    const linkModuleConfig = await this.getModuleConfig(linkModule)
-    const mintModuleConfig = await this.getModuleConfig(mintModule)
+    const linkModuleConfig = await this.base.getModuleConfig(linkModule)
+    const mintModuleConfig = await this.base.getModuleConfig(mintModule)
 
-    const tx = await this.contract.write.postNote4Note(
+    const tx = await this.base.contract.write.postNote4Note(
       [
         {
           characterId: characterId,
@@ -240,11 +242,11 @@ export class NoteContract extends BaseContract {
       // overrides,
     )
 
-    const receipt = await this.publicClient.waitForTransactionReceipt({
+    const receipt = await this.base.publicClient.waitForTransactionReceipt({
       hash: tx,
     })
 
-    const log = this.parseLog(receipt.logs, 'PostNote')
+    const log = this.base.parseLog(receipt.logs, 'PostNote')
 
     return {
       data: {
@@ -275,12 +277,12 @@ export class NoteContract extends BaseContract {
       true,
     )
 
-    const tx = await this.contract.write.setNoteUri(
+    const tx = await this.base.contract.write.setNoteUri(
       [characterId, noteId, uri],
       // overrides,
     )
 
-    const receipt = await this.publicClient.waitForTransactionReceipt({
+    const receipt = await this.base.publicClient.waitForTransactionReceipt({
       hash: tx,
     })
 
@@ -377,7 +379,7 @@ export class NoteContract extends BaseContract {
     linkItemType?: T,
     overrides: CallOverrides = {},
   ): Promise<Result<Note<LinkItemMap[T]>>> | never {
-    const data = await this.contract.read.getNote(
+    const data = await this.base.contract.read.getNote(
       [characterId, noteId],
       // overrides,
     )
@@ -389,7 +391,7 @@ export class NoteContract extends BaseContract {
       : undefined
 
     let linkItem: LinkItemMap[T]
-    const pc = this.peripheryContract.read
+    const pc = this.base.peripheryContract.read
     if (linkItemType === 'AnyUri') {
       const uri = await pc.getLinkingAnyUri([data.linkKey])
       linkItem = { uri: uri } satisfies LinkItemMap['AnyUri'] as LinkItemMap[T]
@@ -459,12 +461,12 @@ export class NoteContract extends BaseContract {
     noteId: bigint,
     overrides: Overrides = {},
   ): Promise<Result<undefined, true>> | never {
-    const tx = await this.contract.write.deleteNote(
+    const tx = await this.base.contract.write.deleteNote(
       [characterId, noteId],
       // overrides
     )
 
-    const receipt = await this.publicClient.waitForTransactionReceipt({
+    const receipt = await this.base.publicClient.waitForTransactionReceipt({
       hash: tx,
     })
 
@@ -493,12 +495,12 @@ export class NoteContract extends BaseContract {
     noteId: bigint,
     overrides: Overrides = {},
   ): Promise<Result<undefined, true>> | never {
-    const tx = await this.contract.write.lockNote(
+    const tx = await this.base.contract.write.lockNote(
       [characterId, noteId],
       // overrides
     )
 
-    const receipt = await this.publicClient.waitForTransactionReceipt({
+    const receipt = await this.base.publicClient.waitForTransactionReceipt({
       hash: tx,
     })
 
@@ -525,9 +527,9 @@ export class NoteContract extends BaseContract {
   ):
     | Promise<Result<{ contractAddress: string; tokenId: bigint }, true>>
     | never {
-    this.validateAddress(toAddress)
+    this.base.validateAddress(toAddress)
 
-    const tx = await this.contract.write.mintNote(
+    const tx = await this.base.contract.write.mintNote(
       [
         {
           characterId: characterId,
@@ -539,11 +541,11 @@ export class NoteContract extends BaseContract {
       // overrides,
     )
 
-    const receipt = await this.publicClient.waitForTransactionReceipt({
+    const receipt = await this.base.publicClient.waitForTransactionReceipt({
       hash: tx,
     })
 
-    const log = this.parseLog(receipt.logs, 'MintNote')
+    const log = this.base.parseLog(receipt.logs, 'MintNote')
 
     return {
       data: {
@@ -573,7 +575,7 @@ export class NoteContract extends BaseContract {
    * @returns The linkKey of the note.
    */
   getLinkKeyForAddress(toAddress: Address): string {
-    this.validateAddress(toAddress)
+    this.base.validateAddress(toAddress)
 
     return keccak256(
       encodePacked(['string', 'address'], ['Address', toAddress]),

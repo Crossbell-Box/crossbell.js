@@ -2,7 +2,9 @@ import { autoSwitchMainnet } from '../decorators'
 import type { Overrides, Result } from '../../types/contract'
 import { BaseContract } from './base'
 
-export class CbtContract extends BaseContract {
+export class CbtContract {
+  constructor(private base: BaseContract) {}
+
   /**
    * This mint a new CBT token to a character.
    *
@@ -17,12 +19,12 @@ export class CbtContract extends BaseContract {
     tokenId: bigint,
     overrides: Overrides = {},
   ): Promise<Result<undefined, true>> | never {
-    const tx = await this.cbtContract.write.mint(
+    const tx = await this.base.cbtContract.write.mint(
       [characterId, tokenId],
       // overrides
     )
 
-    const receipt = await this.publicClient.waitForTransactionReceipt({
+    const receipt = await this.base.publicClient.waitForTransactionReceipt({
       hash: tx,
     })
 
@@ -46,12 +48,12 @@ export class CbtContract extends BaseContract {
     uri: string,
     overrides: Overrides = {},
   ): Promise<Result<undefined, true>> | never {
-    const tx = await this.cbtContract.write.setTokenURI(
+    const tx = await this.base.cbtContract.write.setTokenURI(
       [tokenId, uri],
       // overrides
     )
 
-    const receipt = await this.publicClient.waitForTransactionReceipt({
+    const receipt = await this.base.publicClient.waitForTransactionReceipt({
       hash: tx,
     })
 
@@ -71,7 +73,7 @@ export class CbtContract extends BaseContract {
     tokenId: bigint,
     // overrides: CallOverrides = {},
   ): Promise<Result<string>> | never {
-    const uri = await this.cbtContract.read.uri(
+    const uri = await this.base.cbtContract.read.uri(
       [tokenId],
       // overrides
     )

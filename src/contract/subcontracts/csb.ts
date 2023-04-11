@@ -3,7 +3,9 @@ import { BaseContract } from './base'
 import { autoSwitchMainnet } from '../decorators'
 import type { Result } from '../../types/contract'
 
-export class CsbContract extends BaseContract {
+export class CsbContract {
+  constructor(private base: BaseContract) {}
+
   /**
    * It returns the $CSB balance of the owner.
    * @category CSB
@@ -11,8 +13,8 @@ export class CsbContract extends BaseContract {
    * @returns The $CSB balance of the owner.
    */
   async getBalance(owner: Address): Promise<Result<bigint>> | never {
-    this.validateAddress(owner)
-    const balance = await this.publicClient.getBalance({ address: owner })
+    this.base.validateAddress(owner)
+    const balance = await this.base.publicClient.getBalance({ address: owner })
     return {
       data: balance,
     }
@@ -30,15 +32,16 @@ export class CsbContract extends BaseContract {
     toAddress: Hex,
     amount: bigint | number,
   ): Promise<Result<{}, true>> {
-    this.validateAddress(toAddress)
+    this.base.validateAddress(toAddress)
 
-    console.log(this, this.account)
-    const hash = await this.walletClient!.sendTransaction({
-      account: this.account!,
+    const hash = await this.base.walletClient!.sendTransaction({
+      account: this.base.account!,
       to: toAddress,
       value: BigInt(amount),
     })
-    const receipt = await this.publicClient.waitForTransactionReceipt({ hash })
+    const receipt = await this.base.publicClient.waitForTransactionReceipt({
+      hash,
+    })
 
     return {
       data: {},

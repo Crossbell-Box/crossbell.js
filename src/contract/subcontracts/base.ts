@@ -91,30 +91,31 @@ type FixedEventReturn<
 export class BaseContract {
   publicClient: PublicClient = createDefaultPublicClient()
   walletClient: WalletClient<Transport, Chain> | undefined
+  #account: Address | Account | undefined
 
-  account: Address | Account | undefined
+  get account() {
+    return this.#account
+  }
+  set account(value) {
+    this.#account = value
+    if (this.walletClient)
+      this.walletClient.account =
+        typeof value === 'string' ? { type: 'json-rpc', address: value } : value
+  }
   protected options: ResolvedContractOptions
 
-  protected contract!: GetContractReturnType<
-    Abi.Entry,
-    PublicClient,
-    WalletClient
-  >
-  protected newbieVillaContract!: GetContractReturnType<
+  contract!: GetContractReturnType<Abi.Entry, PublicClient, WalletClient>
+  newbieVillaContract!: GetContractReturnType<
     Abi.NewbieVilla,
     PublicClient,
     WalletClient
   >
-  protected peripheryContract!: GetContractReturnType<
+  peripheryContract!: GetContractReturnType<
     Abi.Periphery,
     PublicClient,
     WalletClient
   >
-  protected cbtContract!: GetContractReturnType<
-    Abi.Cbt,
-    PublicClient,
-    WalletClient
-  >
+  cbtContract!: GetContractReturnType<Abi.Cbt, PublicClient, WalletClient>
 
   /**
    * This creates a new Contract instance to interact with.
@@ -141,23 +142,22 @@ export class BaseContract {
    * const contract = new Contract() // readonly contract
    * ```
    */
-  constructor(provider: EIP1193Provider, options?: Partial<ContractOptions>)
-  constructor(privateKey?: Hex, options?: Partial<ContractOptions>)
   constructor(
     providerOrPrivateKey?: Hex | EIP1193Provider,
     options?: Partial<ContractOptions>,
   ) {
     if (typeof providerOrPrivateKey === 'string') {
-      this.account = privateKeyToAccount(providerOrPrivateKey)
+      this.#account = privateKeyToAccount(providerOrPrivateKey)
       this.walletClient = createWalletClientFromPrivateKey(providerOrPrivateKey)
     } else if (providerOrPrivateKey) {
       const provider = providerOrPrivateKey
-      this.account = options?.account || getProviderAddress(provider)
-      this.walletClient = createWalletClientFromCustom(provider)
-      provider.on('accountsChanged', (accounts: Address[]) => {
-        this.account = accounts[0]
-        console.log('accountsChanged', this, this.account)
-      })
+      this.#account = options?.account || getProviderAddress(provider)
+      if (!options?.account) {
+        provider.on('accountsChanged', (accounts) => {
+          this.account = accounts[0]
+        })
+      }
+      this.walletClient = createWalletClientFromCustom(provider, this.account)
     }
     this.options = this.#resolveOptions(options)
     this.#initContract()
@@ -207,7 +207,8 @@ export class BaseContract {
     })
   }
 
-  protected parseLog<TName extends ExtractAbiEventNames<Abi.Entry>>(
+  // TODO refactor
+  parseLog<TName extends ExtractAbiEventNames<Abi.Entry>>(
     logs: Log[],
     filterTopic: TName,
     options: {
@@ -216,7 +217,7 @@ export class BaseContract {
       abi?: Abi.Entry
     },
   ): FixedEventReturn<Abi.Entry, TName>[]
-  protected parseLog<TName extends ExtractAbiEventNames<Abi.Entry>>(
+  parseLog<TName extends ExtractAbiEventNames<Abi.Entry>>(
     logs: Log[],
     filterTopic: TName,
     options?: {
@@ -225,7 +226,7 @@ export class BaseContract {
       abi?: Abi.Entry
     },
   ): FixedEventReturn<Abi.Entry, TName>
-  protected parseLog<TName extends ExtractAbiEventNames<Abi.Entry>>(
+  parseLog<TName extends ExtractAbiEventNames<Abi.Entry>>(
     logs: Log[],
     targetTopic: TName,
     {
@@ -258,7 +259,8 @@ export class BaseContract {
     return parsedLogs[0]
   }
 
-  protected validateAddress(address: string | string[]) {
+  // TODO: refactor function
+  validateAddress(address: string | string[]) {
     if (Array.isArray(address)) {
       address.forEach((addr) => this.validateAddress(addr))
     } else {
@@ -327,7 +329,7 @@ export class BaseContract {
   //   )
   // }
 
-  protected async getModuleConfig(m?: MintOrLinkModuleConfig) {
+  async getModuleConfig(m?: MintOrLinkModuleConfig) {
     //   if (!m) {
     return {
       address: NIL_ADDRESS,

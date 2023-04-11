@@ -11,7 +11,9 @@ import { CharacterMetadata } from '../../types/metadata'
 import { Ipfs } from '../../ipfs'
 import { Address } from 'viem'
 
-export class CharacterContract extends BaseContract {
+export class CharacterContract {
+  constructor(private base: BaseContract) {}
+
   /**
    * This creates a new character for an address, and returns the ID of the newly created character.
    * When the character is the first character created for an address, the address will be set as the primary character.
@@ -33,14 +35,14 @@ export class CharacterContract extends BaseContract {
     } = {},
     overrides: Overrides = {},
   ): Promise<Result<bigint, true>> | never {
-    this.validateAddress(owner)
+    this.base.validateAddress(owner)
     this.validateHandleFormat(handle)
 
     const { uri } = await Ipfs.parseMetadataOrUri('character', metadataOrUri)
 
-    const moduleConfig = await this.getModuleConfig(linkModule)
+    const moduleConfig = await this.base.getModuleConfig(linkModule)
 
-    const hash = await this.contract.write.createCharacter([
+    const hash = await this.base.contract.write.createCharacter([
       {
         to: owner,
         handle: handle,
@@ -50,9 +52,11 @@ export class CharacterContract extends BaseContract {
       },
     ])
 
-    const receipt = await this.publicClient.waitForTransactionReceipt({ hash })
+    const receipt = await this.base.publicClient.waitForTransactionReceipt({
+      hash,
+    })
 
-    const parser = this.parseLog(receipt.logs, 'CharacterCreated')
+    const parser = this.base.parseLog(receipt.logs, 'CharacterCreated')
 
     return {
       data: parser.args.characterId,
@@ -75,11 +79,11 @@ export class CharacterContract extends BaseContract {
   ): Promise<Result<undefined, true>> | never {
     this.validateHandleFormat(handle)
 
-    const tx = await this.contract.write.setHandle(
+    const tx = await this.base.contract.write.setHandle(
       [characterId, handle],
       // overrides,
     )
-    const receipt = await this.publicClient.waitForTransactionReceipt({
+    const receipt = await this.base.publicClient.waitForTransactionReceipt({
       hash: tx,
     })
     return {
@@ -109,11 +113,11 @@ export class CharacterContract extends BaseContract {
       true,
     )
 
-    const tx = await this.contract.write.setCharacterUri(
+    const tx = await this.base.contract.write.setCharacterUri(
       [characterId, uri],
       // overrides
     )
-    const receipt = await this.publicClient.waitForTransactionReceipt({
+    const receipt = await this.base.publicClient.waitForTransactionReceipt({
       hash: tx,
     })
 
@@ -207,11 +211,11 @@ export class CharacterContract extends BaseContract {
     socialToken: Address,
     overrides: Overrides = {},
   ): Promise<Result<undefined, true>> | never {
-    const tx = await this.contract.write.setSocialToken(
+    const tx = await this.base.contract.write.setSocialToken(
       [characterId, socialToken],
       // overrides,
     )
-    const receipt = await this.publicClient.waitForTransactionReceipt({
+    const receipt = await this.base.publicClient.waitForTransactionReceipt({
       hash: tx,
     })
     return {
@@ -231,11 +235,11 @@ export class CharacterContract extends BaseContract {
     characterId: bigint | number,
     overrides: Overrides = {},
   ): Promise<Result<undefined, true>> | never {
-    const hash = await this.contract.write.setPrimaryCharacterId(
+    const hash = await this.base.contract.write.setPrimaryCharacterId(
       [BigInt(characterId)],
       // overrides
     )
-    const receipt = await this.publicClient.waitForTransactionReceipt({
+    const receipt = await this.base.publicClient.waitForTransactionReceipt({
       hash,
     })
     return {
@@ -255,12 +259,12 @@ export class CharacterContract extends BaseContract {
     characterId: bigint,
     overrides: Overrides = {},
   ): Promise<Result<undefined, true>> | never {
-    const tx = await this.contract.write.burn(
+    const tx = await this.base.contract.write.burn(
       [characterId],
       // overrides
     )
 
-    const receipt = await this.publicClient.waitForTransactionReceipt({
+    const receipt = await this.base.publicClient.waitForTransactionReceipt({
       hash: tx,
     })
 
@@ -280,9 +284,9 @@ export class CharacterContract extends BaseContract {
     address: Address,
     overrides: CallOverrides = {},
   ): Promise<Result<bigint>> | never {
-    this.validateAddress(address)
+    this.base.validateAddress(address)
 
-    const characterId = await this.contract.read.getPrimaryCharacterId(
+    const characterId = await this.base.contract.read.getPrimaryCharacterId(
       [address],
       // overrides,
     )
@@ -302,7 +306,7 @@ export class CharacterContract extends BaseContract {
     characterId: bigint,
     overrides: CallOverrides = {},
   ): Promise<Result<boolean>> | never {
-    const isPrimary = await this.contract.read.isPrimaryCharacter(
+    const isPrimary = await this.base.contract.read.isPrimaryCharacter(
       [characterId],
       // overrides,
     )
@@ -323,7 +327,7 @@ export class CharacterContract extends BaseContract {
   ): Promise<Result<Character>> | never {
     handle = handle.toLowerCase()
 
-    const character = await this.contract.read.getCharacterByHandle(
+    const character = await this.base.contract.read.getCharacterByHandle(
       [handle],
       // overrides,
     )
@@ -354,7 +358,7 @@ export class CharacterContract extends BaseContract {
     characterId: bigint | number,
     overrides: CallOverrides = {},
   ): Promise<Result<Character>> | never {
-    const character = await this.contract.read.getCharacter([
+    const character = await this.base.contract.read.getCharacter([
       BigInt(characterId),
     ])
 
@@ -386,7 +390,7 @@ export class CharacterContract extends BaseContract {
     characterId: bigint | number,
     overrides: CallOverrides = {},
   ): Promise<Result<string>> | never {
-    const handle = await this.contract.read.getHandle(
+    const handle = await this.base.contract.read.getHandle(
       [BigInt(characterId)],
       // overrides
     )
@@ -405,7 +409,7 @@ export class CharacterContract extends BaseContract {
     characterId: bigint,
     overrides: CallOverrides = {},
   ): Promise<Result<string>> | never {
-    const uri = await this.contract.read.getCharacterUri(
+    const uri = await this.base.contract.read.getCharacterUri(
       [characterId],
       // overrides
     )
@@ -424,11 +428,11 @@ export class CharacterContract extends BaseContract {
     txHash: Address,
     overrides: CallOverrides = {},
   ): Promise<Result<Character>> | never {
-    const receipt = await this.publicClient.waitForTransactionReceipt({
+    const receipt = await this.base.publicClient.waitForTransactionReceipt({
       hash: txHash,
     })
 
-    const parser = this.parseLog(receipt.logs, 'CharacterCreated')
+    const parser = this.base.parseLog(receipt.logs, 'CharacterCreated')
     const result = await this.getCharacter(parser.args.characterId, overrides)
 
     return result
@@ -444,8 +448,8 @@ export class CharacterContract extends BaseContract {
     address: Address,
     overrides: CallOverrides = {},
   ): Promise<Result<boolean>> | never {
-    this.validateAddress(address)
-    const characterId = await this.contract.read.getPrimaryCharacterId([
+    this.base.validateAddress(address)
+    const characterId = await this.base.contract.read.getPrimaryCharacterId([
       address,
     ])
 
@@ -465,7 +469,7 @@ export class CharacterContract extends BaseContract {
     handle: string,
     overrides: CallOverrides = {},
   ): Promise<Result<boolean>> | never {
-    const data = await this.contract.read.getCharacterByHandle([handle])
+    const data = await this.base.contract.read.getCharacterByHandle([handle])
     const exists = data.handle !== ''
     return {
       data: exists,
@@ -491,14 +495,14 @@ export class CharacterContract extends BaseContract {
     proof: Address,
     overrides: Overrides = {},
   ): Promise<Result<undefined, true>> | never {
-    this.validateAddress(toAddress)
+    this.base.validateAddress(toAddress)
 
-    const tx = await this.newbieVillaContract.write.withdraw(
+    const tx = await this.base.newbieVillaContract.write.withdraw(
       [toAddress, characterId, nonce, expires, proof],
       // overrides,
     )
 
-    const receipt = await this.publicClient.waitForTransactionReceipt({
+    const receipt = await this.base.publicClient.waitForTransactionReceipt({
       hash: tx,
     })
 

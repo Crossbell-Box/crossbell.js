@@ -8,9 +8,10 @@ import type {
   Result,
 } from '../../types/contract'
 import { Address, Hex, pad, toHex } from 'viem'
-import { Abi } from '../..'
 
-export class LinkContract extends BaseContract {
+export class LinkContract {
+  constructor(private base: BaseContract) {}
+
   /**
    * This links a character to another character with a given link type.
    * @category Link
@@ -28,7 +29,7 @@ export class LinkContract extends BaseContract {
     data?: Hex,
     overrides: Overrides = {},
   ): Promise<Result<bigint, true>> | never {
-    const hash = await this.contract.write.linkCharacter(
+    const hash = await this.base.contract.write.linkCharacter(
       [
         {
           fromCharacterId: fromCharacterId,
@@ -40,11 +41,11 @@ export class LinkContract extends BaseContract {
       // overrides,
     )
 
-    const receipt = await this.publicClient.waitForTransactionReceipt({
+    const receipt = await this.base.publicClient.waitForTransactionReceipt({
       hash,
     })
 
-    const parser = this.parseLog(receipt.logs, 'LinkCharacter')
+    const parser = this.base.parseLog(receipt.logs, 'LinkCharacter')
 
     return {
       data: parser.args.linklistId,
@@ -75,10 +76,10 @@ export class LinkContract extends BaseContract {
     overrides: Overrides = {},
   ): Promise<Result<bigint, true>> | never {
     toAddresses.forEach((address) => {
-      this.validateAddress(address)
+      this.base.validateAddress(address)
     })
 
-    const tx = await this.peripheryContract.write.linkCharactersInBatch(
+    const tx = await this.base.peripheryContract.write.linkCharactersInBatch(
       [
         {
           fromCharacterId: fromCharacterId,
@@ -91,11 +92,11 @@ export class LinkContract extends BaseContract {
       // overrides,
     )
 
-    const receipt = await this.publicClient.waitForTransactionReceipt({
+    const receipt = await this.base.publicClient.waitForTransactionReceipt({
       hash: tx,
     })
 
-    const log = this.parseLog(receipt.logs, 'LinkCharacter', {
+    const log = this.base.parseLog(receipt.logs, 'LinkCharacter', {
       throwOnMultipleLogsFound: false,
     })
 
@@ -114,8 +115,8 @@ export class LinkContract extends BaseContract {
   async getLinklistIdByTransaction(
     hash: Address,
   ): Promise<Result<bigint>> | never {
-    const receipt = await this.publicClient.getTransactionReceipt({ hash })
-    const parser = this.parseLog(receipt.logs, 'LinkCharacter')
+    const receipt = await this.base.publicClient.getTransactionReceipt({ hash })
+    const parser = this.base.parseLog(receipt.logs, 'LinkCharacter')
 
     return {
       data: parser.args.linklistId,
@@ -146,9 +147,9 @@ export class LinkContract extends BaseContract {
   ):
     | Promise<Result<{ toCharacterId: bigint; linklistId: bigint }, true>>
     | never {
-    this.validateAddress(toAddress)
+    this.base.validateAddress(toAddress)
 
-    const tx = await this.contract.write.createThenLinkCharacter(
+    const tx = await this.base.contract.write.createThenLinkCharacter(
       [
         {
           fromCharacterId: fromCharacterId,
@@ -159,15 +160,18 @@ export class LinkContract extends BaseContract {
       // overrides,
     )
 
-    const receipt = await this.publicClient.waitForTransactionReceipt({
+    const receipt = await this.base.publicClient.waitForTransactionReceipt({
       hash: tx,
     })
 
-    const createCharacterParser = this.parseLog(
+    const createCharacterParser = this.base.parseLog(
       receipt.logs,
       'CharacterCreated',
     )
-    const linkCharacterParser = this.parseLog(receipt.logs, 'LinkCharacter')
+    const linkCharacterParser = this.base.parseLog(
+      receipt.logs,
+      'LinkCharacter',
+    )
 
     return {
       data: {
@@ -193,7 +197,7 @@ export class LinkContract extends BaseContract {
     linkType: string,
     overrides: Overrides = {},
   ): Promise<Result<undefined, true>> | never {
-    const tx = await this.contract.write.unlinkCharacter(
+    const tx = await this.base.contract.write.unlinkCharacter(
       [
         {
           fromCharacterId: fromCharacterId,
@@ -203,7 +207,7 @@ export class LinkContract extends BaseContract {
       ],
       // overrides,
     )
-    const receipt = await this.publicClient.waitForTransactionReceipt({
+    const receipt = await this.base.publicClient.waitForTransactionReceipt({
       hash: tx,
     })
     return {
@@ -224,10 +228,11 @@ export class LinkContract extends BaseContract {
     linkType: string,
     overrides: CallOverrides = {},
   ): Promise<Result<bigint[]>> | never {
-    const linkList = await this.peripheryContract.read.getLinkingCharacterIds(
-      [fromCharacterId, pad(toHex(linkType), { dir: 'right' })],
-      // overrides,
-    )
+    const linkList =
+      await this.base.peripheryContract.read.getLinkingCharacterIds(
+        [fromCharacterId, pad(toHex(linkType), { dir: 'right' })],
+        // overrides,
+      )
     return {
       data: linkList.map((link) => link),
     }
@@ -245,7 +250,7 @@ export class LinkContract extends BaseContract {
     linkType: string,
     overrides: CallOverrides = {},
   ): Promise<Result<Character[]>> | never {
-    const ids = await this.peripheryContract.read.getLinkingCharacterIds(
+    const ids = await this.base.peripheryContract.read.getLinkingCharacterIds(
       [fromCharacterId, pad(toHex(linkType), { dir: 'right' })],
       // overrides,
     )
@@ -277,7 +282,7 @@ export class LinkContract extends BaseContract {
     data: Address = NIL_ADDRESS,
     overrides: Overrides = {},
   ): Promise<Result<bigint, true>> | never {
-    const tx = await this.contract.write.linkAddress(
+    const tx = await this.base.contract.write.linkAddress(
       [
         {
           fromCharacterId,
@@ -289,11 +294,11 @@ export class LinkContract extends BaseContract {
       // overrides,
     )
 
-    const receipt = await this.publicClient.waitForTransactionReceipt({
+    const receipt = await this.base.publicClient.waitForTransactionReceipt({
       hash: tx,
     })
 
-    const parser = this.parseLog(receipt.logs, 'LinkAddress')
+    const parser = this.base.parseLog(receipt.logs, 'LinkAddress')
 
     return {
       data: parser.args.linklistId,
@@ -316,7 +321,7 @@ export class LinkContract extends BaseContract {
     linkType: string,
     overrides: Overrides = {},
   ): Promise<Result<undefined, true>> | never {
-    const tx = await this.contract.write.unlinkAddress(
+    const tx = await this.base.contract.write.unlinkAddress(
       [
         {
           fromCharacterId: fromCharacterId,
@@ -326,7 +331,7 @@ export class LinkContract extends BaseContract {
       ],
       // overrides,
     )
-    const receipt = await this.publicClient.waitForTransactionReceipt({
+    const receipt = await this.base.publicClient.waitForTransactionReceipt({
       hash: tx,
     })
     return {
@@ -354,7 +359,7 @@ export class LinkContract extends BaseContract {
     data: Address = NIL_ADDRESS,
     overrides: Overrides = {},
   ): Promise<Result<bigint, true>> | never {
-    const tx = await this.contract.write.linkAnyUri(
+    const tx = await this.base.contract.write.linkAnyUri(
       [
         {
           fromCharacterId,
@@ -366,11 +371,11 @@ export class LinkContract extends BaseContract {
       // overrides,
     )
 
-    const receipt = await this.publicClient.waitForTransactionReceipt({
+    const receipt = await this.base.publicClient.waitForTransactionReceipt({
       hash: tx,
     })
 
-    const parser = this.parseLog(receipt.logs, 'LinkAnyUri')
+    const parser = this.base.parseLog(receipt.logs, 'LinkAnyUri')
 
     return {
       data: parser.args.linklistId,
@@ -393,7 +398,7 @@ export class LinkContract extends BaseContract {
     linkType: string,
     overrides: Overrides = {},
   ): Promise<Result<undefined, true>> | never {
-    const tx = await this.contract.write.unlinkAnyUri(
+    const tx = await this.base.contract.write.unlinkAnyUri(
       [
         {
           fromCharacterId,
@@ -403,7 +408,7 @@ export class LinkContract extends BaseContract {
       ],
       // overrides,
     )
-    const receipt = await this.publicClient.waitForTransactionReceipt({
+    const receipt = await this.base.publicClient.waitForTransactionReceipt({
       hash: tx,
     })
     return {
@@ -433,7 +438,7 @@ export class LinkContract extends BaseContract {
     data: Address = NIL_ADDRESS,
     overrides: Overrides = {},
   ): Promise<Result<bigint, true>> | never {
-    const tx = await this.contract.write.linkERC721(
+    const tx = await this.base.contract.write.linkERC721(
       [
         {
           fromCharacterId,
@@ -446,11 +451,11 @@ export class LinkContract extends BaseContract {
       // overrides,
     )
 
-    const receipt = await this.publicClient.waitForTransactionReceipt({
+    const receipt = await this.base.publicClient.waitForTransactionReceipt({
       hash: tx,
     })
 
-    const parser = this.parseLog(receipt.logs, 'LinkAnyUri')
+    const parser = this.base.parseLog(receipt.logs, 'LinkAnyUri')
 
     return {
       data: parser.args.linklistId,
@@ -475,7 +480,7 @@ export class LinkContract extends BaseContract {
     linkType: string,
     overrides: Overrides = {},
   ): Promise<Result<undefined, true>> | never {
-    const tx = await this.contract.write.unlinkERC721(
+    const tx = await this.base.contract.write.unlinkERC721(
       [
         {
           fromCharacterId,
@@ -486,7 +491,7 @@ export class LinkContract extends BaseContract {
       ],
       // overrides,
     )
-    const receipt = await this.publicClient.waitForTransactionReceipt({
+    const receipt = await this.base.publicClient.waitForTransactionReceipt({
       hash: tx,
     })
     return {
@@ -516,7 +521,7 @@ export class LinkContract extends BaseContract {
     data?: Address,
     overrides: Overrides = {},
   ): Promise<Result<bigint, true>> | never {
-    const tx = await this.contract.write.linkNote(
+    const tx = await this.base.contract.write.linkNote(
       [
         {
           fromCharacterId: fromCharacterId,
@@ -529,11 +534,11 @@ export class LinkContract extends BaseContract {
       // overrides,
     )
 
-    const receipt = await this.publicClient.waitForTransactionReceipt({
+    const receipt = await this.base.publicClient.waitForTransactionReceipt({
       hash: tx,
     })
 
-    const parser = this.parseLog(receipt.logs, 'LinkNote')
+    const parser = this.base.parseLog(receipt.logs, 'LinkNote')
 
     return {
       data: parser.args.linklistId,
@@ -558,7 +563,7 @@ export class LinkContract extends BaseContract {
     linkType: string,
     overrides: Overrides = {},
   ): Promise<Result<undefined, true>> | never {
-    const tx = await this.contract.write.unlinkNote(
+    const tx = await this.base.contract.write.unlinkNote(
       [
         {
           fromCharacterId: fromCharacterId,
@@ -570,7 +575,7 @@ export class LinkContract extends BaseContract {
       // overrides,
     )
 
-    const receipt = await this.publicClient.waitForTransactionReceipt({
+    const receipt = await this.base.publicClient.waitForTransactionReceipt({
       hash: tx,
     })
 
@@ -599,7 +604,7 @@ export class LinkContract extends BaseContract {
     data: Address = NIL_ADDRESS,
     overrides: Overrides = {},
   ): Promise<Result<bigint, true>> | never {
-    const tx = await this.contract.write.linkLinklist(
+    const tx = await this.base.contract.write.linkLinklist(
       [
         {
           fromCharacterId,
@@ -611,11 +616,11 @@ export class LinkContract extends BaseContract {
       // overrides,
     )
 
-    const receipt = await this.publicClient.waitForTransactionReceipt({
+    const receipt = await this.base.publicClient.waitForTransactionReceipt({
       hash: tx,
     })
 
-    const parser = this.parseLog(receipt.logs, 'LinkNote')
+    const parser = this.base.parseLog(receipt.logs, 'LinkNote')
 
     return {
       data: parser.args.linklistId,
@@ -638,7 +643,7 @@ export class LinkContract extends BaseContract {
     linkType: string,
     overrides: Overrides = {},
   ): Promise<Result<undefined, true>> | never {
-    const tx = await this.contract.write.unlinkLinklist(
+    const tx = await this.base.contract.write.unlinkLinklist(
       [
         {
           fromCharacterId,
@@ -649,7 +654,7 @@ export class LinkContract extends BaseContract {
       // overrides,
     )
 
-    const receipt = await this.publicClient.waitForTransactionReceipt({
+    const receipt = await this.base.publicClient.waitForTransactionReceipt({
       hash: tx,
     })
 
@@ -666,8 +671,8 @@ export class LinkContract extends BaseContract {
   //   fromCharacterId: string,
   //   uri: string, // Name: Atlas's follow links
   // ): Promise<Result<undefined>> | never {
-  //   const tx = await this.contract.setLinklistUri(fromCharacterId, uri)
-  //   const receipt = await this.publicClient.waitForTransactionReceipt({hash:tx})
+  //   const tx = await this.base.contract.setLinklistUri(fromCharacterId, uri)
+  //   const receipt = await this.base.publicClient.waitForTransactionReceipt({hash:tx})
   //   return {
   //     data: undefined,
   //     transactionHash: receipt.transactionHash,
@@ -679,7 +684,7 @@ export class LinkContract extends BaseContract {
   //   fromCharacterId: string,
   //   linkType: string,
   // ): Promise<Result<string>> | never {
-  //   const uri = await this.contract.getLinklistUri(fromCharacterId, linkType)
+  //   const uri = await this.base.contract.getLinklistUri(fromCharacterId, linkType)
   //   return {
   //     data: uri,
   //     transactionHash: undefined,

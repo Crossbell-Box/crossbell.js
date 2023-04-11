@@ -10,7 +10,6 @@ import {
   Address,
   Account,
 } from 'viem'
-import { privateKeyToAccount } from 'viem/accounts'
 import { Network } from '../network'
 import type { EIP1193Provider } from 'eip1193-types'
 
@@ -59,10 +58,14 @@ export function getProviderAddress(
   }
 }
 
-export function createWalletClientFromCustom(provider: EIP1193Provider) {
+export function createWalletClientFromCustom(
+  provider: EIP1193Provider,
+  account?: Address | Account,
+) {
   return createWalletClient({
     transport: custom(provider),
     chain: Network.getChain(),
+    account,
     pollingInterval: 100,
   })
 }

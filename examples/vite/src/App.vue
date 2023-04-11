@@ -5,15 +5,15 @@ import { useLocalStorage } from '@vueuse/core'
 import { type Address } from 'abitype'
 
 const metamask = window.ethereum
-let contract: Contract
 
+let contract: Contract
 const address = useLocalStorage<Address>('address', '0x')
 const characterId = useLocalStorage('characterId', '')
 const result = ref('')
 
 async function init() {
-  await withResult(metamask.request({ method: 'eth_requestAccounts' }))
   contract = new Contract(metamask)
+  await contract.walletClient!.requestAddresses()
 }
 
 async function withResult(p: Promise<any>) {
@@ -26,21 +26,21 @@ async function withResult(p: Promise<any>) {
 }
 
 function balance() {
-  withResult(contract.getBalance(address.value))
+  withResult(contract.csb.getBalance(address.value))
 }
 
 function transfer() {
-  withResult(contract.transferCsb(address.value, 0))
+  withResult(contract.csb.transferCsb(address.value, 0))
 }
 
 function getPrimaryHandle() {
-  withResult(contract.getPrimaryCharacterId(address.value))
+  withResult(contract.character.getPrimaryCharacterId(address.value))
 }
 function getCharacter() {
-  withResult(contract.getCharacter(BigInt(characterId.value)))
+  withResult(contract.character.getCharacter(BigInt(characterId.value)))
 }
 function setPrimaryCharacterId() {
-  withResult(contract.setPrimaryCharacterId(+characterId.value))
+  withResult(contract.character.setPrimaryCharacterId(+characterId.value))
 }
 </script>
 
@@ -48,8 +48,10 @@ function setPrimaryCharacterId() {
   <div>
     <h1>Crossbell.js Demo</h1>
     <hr />
-    <div>Address: <input type="text" v-model="address" /></div>
-    <div>CharacterId: <input type="text" v-model="characterId" /></div>
+    <div><input type="text" v-model="address" placeholder="Address" /></div>
+    <div>
+      <input type="text" v-model="characterId" placeholder="CharacterId" />
+    </div>
     <hr />
     <button @click="init">init</button>
     <button @click="balance">balance</button>

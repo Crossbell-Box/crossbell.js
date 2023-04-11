@@ -1,27 +1,14 @@
-import { Mixin } from 'ts-mixer'
+import { BaseContract } from './subcontracts/base'
 import { CsbContract } from './subcontracts/csb'
 import { LinkContract } from './subcontracts/link'
-import { NoteContract } from './subcontracts/note'
+// import { NoteContract } from './subcontracts/note'
 import { CharacterContract } from './subcontracts/character'
-import { RevisionContract } from './subcontracts/revision'
-import { OperatorContract } from './subcontracts/operator'
+// import { RevisionContract } from './subcontracts/revision'
+// import { OperatorContract } from './subcontracts/operator'
 import { CbtContract } from './subcontracts/cbt'
-import { TipsContract } from './subcontracts/tips'
-import { LinkModuleContract } from './subcontracts/link_module'
-import { MintModuleContract } from './subcontracts/mint_module'
-
-const Contracts = Mixin(
-  CharacterContract,
-  LinkContract,
-  NoteContract,
-  OperatorContract,
-  CsbContract,
-  RevisionContract,
-  CbtContract,
-  TipsContract,
-  LinkModuleContract,
-  MintModuleContract,
-)
+// import { TipsContract } from './subcontracts/tips'
+// import { LinkModuleContract } from './subcontracts/link_module'
+// import { MintModuleContract } from './subcontracts/mint_module'
 
 /**
  * This class is used to interact with the contract.
@@ -48,4 +35,9 @@ const Contracts = Mixin(
  * }
  * ```
  */
-export class Contract extends Contracts {}
+export class Contract extends BaseContract {
+  csb = new CsbContract(this)
+  character = new CharacterContract(this)
+  link = new LinkContract(this)
+  cbt = new CbtContract(this)
+}
