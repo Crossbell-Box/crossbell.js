@@ -1,5 +1,5 @@
 /// <reference types="vite/client" />
 
 declare interface Window {
-  ethereum: any
+  ethereum: import('crossbell.js').utils.CustomProvider
 }
