@@ -1,5 +1,6 @@
-export * from './csb_uri'
 export * from './address'
+export * from './client'
+export * from './csb_uri'
 export * from './logger'
 export * from './query_string'
 export * from './sdn'

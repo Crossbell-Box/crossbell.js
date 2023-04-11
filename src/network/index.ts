@@ -1,4 +1,4 @@
-import { Address, Chain, Client } from 'viem'
+import { Address, Chain, WalletClient } from 'viem'
 
 export type AvailableNetwork = 'crossbell'
 
@@ -172,43 +172,9 @@ export class Network {
    * @param client - The provider to check if it's the Crossbell mainnet.
    * @returns A boolean value indicating if the current network is the Crossbell mainnet.
    */
-  static async isCrossbellMainnet(client: Client) {
-    const { chainId } = this.getCrossbellMainnetInfo()
-    return client.chain?.id === chainId
-  }
-
-  /**
-   * This adds the Crossbell chain to the wallet if it's not already there, and then switches to it.
-   * @param client - The provider that the wallet is connected to
-   */
-  static async switchToCrossbellMainnet(client: Client) {
-    const { chainIdHex, chainName, tokenName, tokenSymbol, rpc, explorer } =
-      this.getCrossbellMainnetInfo()
-
-    try {
-      await client.request({
-        method: 'wallet_switchEthereumChain',
-        params: [{ chainId: chainIdHex }],
-      })
-    } catch (e) {
-      // if (e.code === 4902) {
-      await client.request({
-        method: 'wallet_addEthereumChain',
-        params: [
-          {
-            chainId: chainIdHex,
-            chainName: chainName,
-            nativeCurrency: {
-              name: tokenName,
-              symbol: tokenSymbol,
-              decimals: 18,
-            },
-            rpcUrls: [rpc],
-            blockExplorerUrls: [explorer],
-          },
-        ],
-      })
-      // }
-    }
+  static async isCrossbellMainnet(client: WalletClient) {
+    return (
+      (await client.getChainId()) === this.getCrossbellMainnetInfo().chainId
+    )
   }
 }

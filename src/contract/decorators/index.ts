@@ -2,29 +2,31 @@ import { BaseContract } from '../../contract/subcontracts/base'
 import { Network } from '../../network'
 import { Logger } from '../../utils'
 
-// TODO: Refactor ES Decorator (Wait esbuild)
 export function autoSwitchMainnet() {
   return (
     target: Object,
     propertyKey: string,
-    descriptor: TypedPropertyDescriptor<any>,
+    descriptor: TypedPropertyDescriptor<
+      (this: BaseContract, ...args: any[]) => Promise<any>
+    >,
   ) => {
-    const originalMethod = descriptor.value
+    const originalMethod = descriptor.value!
 
-    descriptor.value = async function (this: BaseContract, ...args: any[]) {
+    descriptor.value = async function (...args: any[]) {
       const checkAndSwitch = async () => {
         const { walletClient } = this
         if (!walletClient) return
         const isMainnet = await Network.isCrossbellMainnet(walletClient)
         if (!isMainnet) {
           Logger.warn("You're not on the mainnet. Switching to mainnet.")
-          await Network.switchToCrossbellMainnet(walletClient)
+          await walletClient.switchChain({ id: Network.getChain().id })
+          console.log(await walletClient.getChainId())
         }
       }
 
       try {
         await checkAndSwitch()
-      } catch {
+      } catch (e) {
         // we may need to connect again if the user switch network on the halfway
         await checkAndSwitch()
       }

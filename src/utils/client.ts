@@ -4,10 +4,11 @@ import {
   http,
   PublicClient,
   createPublicClient,
-  WalletClient,
   createWalletClient,
   Hex,
   custom,
+  Address,
+  Account,
 } from 'viem'
 import { privateKeyToAccount } from 'viem/accounts'
 import { Network } from '../network'
@@ -36,7 +37,7 @@ export function createDefaultPublicClient(): PublicClient {
   })
 }
 
-export function createWalletClientFromPrivateKey(privKey: Hex): WalletClient {
+export function createWalletClientFromPrivateKey(privKey: Hex) {
   const account = privateKeyToAccount(privKey)
   const transport = createDefaultTransport()
   return createWalletClient({
@@ -49,12 +50,26 @@ export function createWalletClientFromPrivateKey(privKey: Hex): WalletClient {
 
 export type CustomProvider = Parameters<typeof custom>[0]
 
+export function getProviderAddress(
+  provider: CustomProvider,
+): Address | undefined {
+  if ('selectedAddress' in provider && provider.selectedAddress) {
+    return provider.selectedAddress as Address
+  }
+  if ('send' in provider && typeof provider.send === 'function') {
+    const result = provider.send({ method: 'eth_accounts' })
+    if (result?.result?.[0]) return result.result[0]
+  }
+}
+
 export function createWalletClientFromCustom(
   provider: CustomProvider,
-): WalletClient {
+  account?: Address | Account,
+) {
   return createWalletClient({
     transport: custom(provider),
     chain: Network.getChain(),
     pollingInterval: 100,
+    account,
   })
 }
