@@ -7,24 +7,26 @@ const contract = new Contract(mockUser.privateKey)
 describe('should post note', () => {
   let characterId: bigint
   beforeAll(async () => {
-    const { data: pid } = await contract.getPrimaryCharacterId(mockUser.address)
+    const { data: pid } = await contract.character.getPrimaryCharacterId(
+      mockUser.address,
+    )
     characterId = pid
   })
 
   test('postNote and check', async () => {
-    const { data } = await contract.postNote(characterId, {
+    const { data } = await contract.note.postNote(characterId, {
       title: 'test',
       content: 'test',
     })
 
     expect(data.noteId).toBeDefined()
 
-    const { data: note } = await contract.getNote(characterId, data.noteId)
+    const { data: note } = await contract.note.getNote(characterId, data.noteId)
     expect(note.metadata?.title).toBe('test')
   })
 
   test('postNotes and check', async () => {
-    const { data } = await contract.postNotes([
+    const { data } = await contract.note.postNotes([
       {
         characterId,
         metadataOrUri: {
@@ -43,22 +45,28 @@ describe('should post note', () => {
 
     expect(data.noteIds).toHaveLength(2)
 
-    const { data: note1 } = await contract.getNote(characterId, data.noteIds[0])
+    const { data: note1 } = await contract.note.getNote(
+      characterId,
+      data.noteIds[0],
+    )
     expect(note1.metadata?.title).toBe('test1')
 
-    const { data: note2 } = await contract.getNote(characterId, data.noteIds[1])
+    const { data: note2 } = await contract.note.getNote(
+      characterId,
+      data.noteIds[1],
+    )
     expect(note2.metadata?.title).toBe('test2')
   })
 
   test('mintNote', async () => {
-    const { data } = await contract.postNote(characterId, {
+    const { data } = await contract.note.postNote(characterId, {
       title: 'test',
       content: 'test',
     })
 
     expect(data.noteId).toBeDefined()
 
-    const { transactionHash: mintHash } = await contract.mintNote(
+    const { transactionHash: mintHash } = await contract.note.mintNote(
       characterId,
       data.noteId,
       mockUser.address,
@@ -70,26 +78,26 @@ describe('should post note', () => {
   })
 
   test('deleteNote', async () => {
-    const { data } = await contract.postNote(characterId, {
+    const { data } = await contract.note.postNote(characterId, {
       title: 'test',
       content: 'test',
     })
 
     expect(data.noteId).toBeDefined()
 
-    const { transactionHash: deleteHash } = await contract.deleteNote(
+    const { transactionHash: deleteHash } = await contract.note.deleteNote(
       characterId,
       data.noteId,
     )
 
     expect(deleteHash).toBeDefined()
 
-    const { data: note } = await contract.getNote(characterId, data.noteId)
+    const { data: note } = await contract.note.getNote(characterId, data.noteId)
     expect(note.deleted).toBeTruthy()
   })
 
   test('postNoteForAnyUri', async () => {
-    const { data } = await contract.postNoteForAnyUri(
+    const { data } = await contract.note.postNoteForAnyUri(
       characterId,
       { title: 'test', content: 'test' },
       'https://example.com',
@@ -97,9 +105,9 @@ describe('should post note', () => {
 
     expect(data.noteId).toBeDefined()
 
-    const { data: note } = await contract.getNote(characterId, data.noteId)
+    const { data: note } = await contract.note.getNote(characterId, data.noteId)
     expect(note.linkKey).toBe(
-      contract.getLinkKeyForAnyUri('https://example.com'),
+      contract.note.getLinkKeyForAnyUri('https://example.com'),
     )
   })
 })
