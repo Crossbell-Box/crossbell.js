@@ -161,7 +161,6 @@ export class BaseContract {
     }
     this.options = this.#resolveOptions(options)
     this.#initContract()
-    console.log(this)
   }
 
   #resolveOptions(options?: ContractOptions): ResolvedContractOptions {
