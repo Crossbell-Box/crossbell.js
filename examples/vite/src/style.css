@@ -1,0 +1,11 @@
+input {
+  --at-apply: 'p2 w-250px bg-transparent border rounded border-gray-200 dark:border-gray-700 outline-none active:outline-none';
+}
+
+button {
+  --at-apply: 'px-4 py-1 rounded inline-block bg-yellow-600 text-white cursor-pointer hover:bg-yellow-700 disabled:cursor-default disabled:bg-gray-600 disabled:opacity-50';
+}
+
+hr {
+  --at-apply: 'my-3';
+}

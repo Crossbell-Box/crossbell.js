@@ -93,6 +93,12 @@ importers:
         specifier: ^3.2.47
         version: 3.2.47
     devDependencies:
+      '@unocss/reset':
+        specifier: ^0.51.4
+        version: 0.51.4
+      '@unocss/transformer-directives':
+        specifier: ^0.51.4
+        version: 0.51.4
       '@vitejs/plugin-vue':
         specifier: ^4.1.0
         version: 4.1.0(vite@4.2.1)(vue@3.2.47)

@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { Contract } from 'crossbell.js'
 import { ref, onErrorCaptured } from 'vue'
-import { useLocalStorage, useEventListener } from '@vueuse/core'
+import { useLocalStorage, useEventListener, useDark } from '@vueuse/core'
 import { type Address } from 'abitype'
 
+useDark()
 useEventListener(window, 'error', (event) => showResult(event))
 useEventListener(window, 'unhandledrejection', (event) =>
   showResult(event.reason.toString()),
@@ -58,25 +59,25 @@ function setPrimaryCharacterId() {
 </script>
 
 <template>
-  <div>
-    <h1>Crossbell.js Demo</h1>
-    <hr />
-    <div flex="~ gap2 wrap">
-      <input type="text" v-model="address" placeholder="address" />
-      <input type="text" v-model="characterId" placeholder="characterId" />
-      <input type="text" v-model="handle" placeholder="handle" />
-    </div>
-    <hr />
-    <div flex="~ gap2 wrap">
-      <button @click="connect">connect</button>
-      <button @click="balance">balance</button>
-      <button @click="transfer">transfer</button>
-      <button @click="getPrimaryHandle">getPrimaryHandle</button>
-      <button @click="getCharacter">getCharacter</button>
-      <button @click="getCharacterByHandle">getCharacterByHandle</button>
-      <button @click="setPrimaryCharacterId">setPrimaryCharacterId</button>
-    </div>
-    <hr />
-    <pre whitespace-pre-wrap break-words>{{ result }}</pre>
+  <h1 text="3xl" py4>Crossbell.js Demo</h1>
+  <hr />
+  <div flex="~ gap2 wrap" font-mono>
+    <input type="text" v-model="address" placeholder="address" />
+    <input type="text" v-model="characterId" placeholder="characterId" />
+    <input type="text" v-model="handle" placeholder="handle" />
   </div>
+  <hr />
+  <div flex="~ gap2 wrap">
+    <button @click="connect">connect</button>
+    <button @click="balance">balance</button>
+    <button @click="transfer">transfer</button>
+    <button @click="getPrimaryHandle">getPrimaryHandle</button>
+    <button @click="getCharacter">getCharacter</button>
+    <button @click="getCharacterByHandle">getCharacterByHandle</button>
+    <button @click="setPrimaryCharacterId">setPrimaryCharacterId</button>
+  </div>
+  <hr />
+  <pre whitespace-pre-wrap break-words bg="gray/80" p4 rounded-4>{{
+    result
+  }}</pre>
 </template>
