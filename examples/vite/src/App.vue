@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { Contract } from 'crossbell.js'
 import { ref, onErrorCaptured } from 'vue'
-import { useLocalStorage } from '@vueuse/core'
+import { useLocalStorage, useEventListener } from '@vueuse/core'
 import { type Address } from 'abitype'
 
-window.addEventListener('error', (event) => showResult(event))
-window.addEventListener('unhandledrejection', (event) =>
+useEventListener(window, 'error', (event) => showResult(event))
+useEventListener(window, 'unhandledrejection', (event) =>
   showResult(event.reason.toString()),
 )
 onErrorCaptured((err) => {
@@ -17,6 +17,7 @@ const metamask = window.ethereum
 const contract = new Contract(metamask)
 const address = useLocalStorage<Address>('address', '0x')
 const characterId = useLocalStorage('characterId', '')
+const handle = useLocalStorage('handle', '')
 const result = ref('')
 
 async function connect() {
@@ -43,6 +44,11 @@ function transfer() {
 function getPrimaryHandle() {
   showResult(contract.character.getPrimaryCharacterId(address.value))
 }
+
+function getCharacterByHandle() {
+  showResult(contract.character.getCharacterByHandle(handle.value))
+}
+
 function getCharacter() {
   showResult(contract.character.getCharacter(BigInt(characterId.value)))
 }
@@ -55,9 +61,10 @@ function setPrimaryCharacterId() {
   <div>
     <h1>Crossbell.js Demo</h1>
     <hr />
-    <div><input type="text" v-model="address" placeholder="Address" /></div>
-    <div>
-      <input type="text" v-model="characterId" placeholder="CharacterId" />
+    <div style="display: flex; gap: 4px; flex-wrap: wrap">
+      <input type="text" v-model="address" placeholder="address" />
+      <input type="text" v-model="characterId" placeholder="characterId" />
+      <input type="text" v-model="handle" placeholder="handle" />
     </div>
     <hr />
     <div style="display: flex; gap: 4px; flex-wrap: wrap">
@@ -66,6 +73,7 @@ function setPrimaryCharacterId() {
       <button @click="transfer">transfer</button>
       <button @click="getPrimaryHandle">getPrimaryHandle</button>
       <button @click="getCharacter">getCharacter</button>
+      <button @click="getCharacterByHandle">getCharacterByHandle</button>
       <button @click="setPrimaryCharacterId">setPrimaryCharacterId</button>
     </div>
     <hr />
