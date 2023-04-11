@@ -228,11 +228,11 @@ export class CharacterContract extends BaseContract {
    */
   @autoSwitchMainnet()
   async setPrimaryCharacterId(
-    characterId: bigint,
+    characterId: bigint | number,
     overrides: Overrides = {},
   ): Promise<Result<undefined, true>> | never {
     const hash = await this.contract.write.setPrimaryCharacterId(
-      [characterId],
+      [BigInt(characterId)],
       // overrides
     )
     const receipt = await this.publicClient.waitForTransactionReceipt({

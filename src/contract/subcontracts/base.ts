@@ -8,6 +8,7 @@ import {
   decodeEventLog,
   DecodeEventLogReturnType,
   GetContractReturnType,
+  Account,
 } from 'viem'
 import {
   ExtractAbiEvent,
@@ -18,30 +19,37 @@ import {
 import { Network } from '../../network'
 import {
   createWalletClientFromPrivateKey,
-  CustomProvider,
   createWalletClientFromCustom,
+  getProviderAddress,
 } from '../../utils/client'
-
 import { MintOrLinkModuleConfig } from '../../types'
-import {
-  // isAddressEqual,
-  NIL_ADDRESS,
-  // Logger,
-  validateIsInSdn,
-} from '../../utils'
+import { NIL_ADDRESS, validateIsInSdn } from '../../utils'
 import * as Abi from '../abi'
 import { createDefaultPublicClient } from '../../utils/client'
+import { Overwrite } from '../../types/utils'
 import { AbiType } from 'abitype'
+import type { EIP1193Provider } from 'eip1193-types'
 
-interface ContractOptions {
-  entryContractAddress: Address
-  peripheryContractAddress: Address
-  cbtContractAddress: Address
-  newbieVillaContractAddress: Address
-  tipsContractAddress: Address
-  miraContractAddress: Address
-  linklistContractAddress: Address
+interface AccountOptions {
+  account: Account | Address
 }
+interface AddressOptions {
+  entryContract: Address
+  peripheryContract: Address
+  cbtContract: Address
+  newbieVillaContract: Address
+  tipsContract: Address
+  miraContract: Address
+  linklistContract: Address
+}
+export interface ContractOptions extends Partial<AccountOptions> {
+  address?: Partial<AddressOptions>
+}
+
+export type ResolvedContractOptions = Overwrite<
+  ContractOptions,
+  { address: AddressOptions }
+>
 
 type EventInputs<
   TAbi extends _Abi,
@@ -78,9 +86,12 @@ type FixedEventReturn<
 }
 
 export class BaseContract {
-  public publicClient: PublicClient = createDefaultPublicClient()
-  public walletClient: WalletClient | undefined
-  protected options: ContractOptions
+  publicClient: PublicClient = createDefaultPublicClient()
+  walletClient: WalletClient | undefined
+
+  account: Address | undefined
+  protected options: ResolvedContractOptions
+
   protected contract!: GetContractReturnType<
     Abi.Entry,
     PublicClient,
@@ -127,64 +138,60 @@ export class BaseContract {
    * const contract = new Contract() // readonly contract
    * ```
    */
+  constructor(provider: EIP1193Provider, options?: Partial<ContractOptions>)
+  constructor(privateKey?: Hex, options?: Partial<ContractOptions>)
   constructor(
-    walletClientOrPrivateKey?: Hex | CustomProvider,
+    providerOrPrivateKey?: Hex | EIP1193Provider,
     options?: Partial<ContractOptions>,
   ) {
-    if (typeof walletClientOrPrivateKey === 'string') {
-      this.walletClient = createWalletClientFromPrivateKey(
-        walletClientOrPrivateKey,
-      )
-    } else if (walletClientOrPrivateKey) {
-      this.walletClient = createWalletClientFromCustom(walletClientOrPrivateKey)
+    if (typeof providerOrPrivateKey === 'string') {
+      this.walletClient = createWalletClientFromPrivateKey(providerOrPrivateKey)
+    } else if (providerOrPrivateKey) {
+      const provider = providerOrPrivateKey
+      this.account = getProviderAddress(provider)
+      this.walletClient = createWalletClientFromCustom(provider, this.account)
     }
-    this.options = this.#initOptions(options)
+    this.options = this.#resolveOptions(options)
     this.#initContract()
   }
 
-  #initOptions(options?: Partial<ContractOptions>): ContractOptions {
+  #resolveOptions(options?: ContractOptions): ResolvedContractOptions {
     return {
-      entryContractAddress:
-        options?.entryContractAddress ?? Network.getContractAddress(),
-      peripheryContractAddress:
-        options?.peripheryContractAddress ??
-        Network.getPeripheryContractAddress(),
-      cbtContractAddress:
-        options?.cbtContractAddress ?? Network.getCbtContractAddress(),
-      tipsContractAddress:
-        options?.tipsContractAddress ?? Network.getTipsContractAddress(),
-      miraContractAddress:
-        options?.miraContractAddress ?? Network.getMiraContractAddress(),
-      newbieVillaContractAddress:
-        options?.newbieVillaContractAddress ??
-        Network.getNewbieVillaContractAddress(),
-      linklistContractAddress:
-        options?.linklistContractAddress ??
-        Network.getLinklistContractAddress(),
+      account: this.account,
+      address: {
+        entryContract: Network.getContractAddress(),
+        peripheryContract: Network.getPeripheryContractAddress(),
+        cbtContract: Network.getCbtContractAddress(),
+        tipsContract: Network.getTipsContractAddress(),
+        miraContract: Network.getMiraContractAddress(),
+        newbieVillaContract: Network.getNewbieVillaContractAddress(),
+        linklistContract: Network.getLinklistContractAddress(),
+        ...options?.address,
+      },
     }
   }
 
   #initContract() {
     this.contract = getContract({
-      address: this.options.entryContractAddress,
+      address: this.options.address.entryContract,
       abi: Abi.entry,
       publicClient: this.publicClient,
       walletClient: this.walletClient,
     })
     this.newbieVillaContract = getContract({
-      address: this.options.newbieVillaContractAddress,
+      address: this.options.address.newbieVillaContract,
       abi: Abi.newbieVilla,
       publicClient: this.publicClient,
       walletClient: this.walletClient,
     })
     this.peripheryContract = getContract({
-      address: this.options.peripheryContractAddress,
+      address: this.options.address.peripheryContract,
       abi: Abi.periphery,
       publicClient: this.publicClient,
       walletClient: this.walletClient,
     })
     this.cbtContract = getContract({
-      address: this.options.cbtContractAddress,
+      address: this.options.address.cbtContract,
       abi: Abi.cbt,
       publicClient: this.publicClient,
       walletClient: this.walletClient,

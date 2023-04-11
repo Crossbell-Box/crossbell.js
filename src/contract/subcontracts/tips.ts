@@ -2,7 +2,7 @@ import { autoSwitchMainnet } from '../decorators'
 import type { Overrides, Result } from '../../types/contract'
 import { BaseContract } from './base'
 import { CallOverrides, type BigNumberish } from 'ethers'
-import { isAddressEqual } from '../../utils'
+import { isAddressEqual } from 'viem'
 
 export class TipsContract extends BaseContract {
   /**
