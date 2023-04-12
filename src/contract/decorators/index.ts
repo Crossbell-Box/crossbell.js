@@ -2,6 +2,8 @@ import { BaseContract } from '../../contract/subcontracts/base'
 import { Network } from '../../network'
 import { Logger } from '../../utils'
 
+// TODO: refactor this to ES standard decorator
+// Wait for esbuild
 export function autoSwitchMainnet() {
   return (
     target: Object,
