@@ -23,11 +23,11 @@ import {
   createWalletClientFromPrivateKey,
   createWalletClientFromCustom,
   getProviderAddress,
-} from '../../utils/client'
+  createDefaultPublicClient,
+} from '../../utils/viem'
 import { MintOrLinkModuleConfig } from '../../types'
 import { NIL_ADDRESS } from '../../utils'
 import * as Abi from '../abi'
-import { createDefaultPublicClient } from '../../utils/client'
 import { Overwrite } from '../../types/utils'
 import { AbiType } from 'abitype'
 import type { EIP1193Provider } from 'eip1193-types'
