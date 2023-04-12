@@ -5,20 +5,16 @@
 import { writeFile, readFile } from 'fs/promises'
 import { resolve } from 'path'
 import { fileURLToPath } from 'url'
-;(async () => {
-  const fileLoc = resolve(
-    fileURLToPath(import.meta.url),
-    '../../dist/index.mjs',
-  )
 
-  let content = await readFile(fileLoc, 'utf8')
+const fileLoc = resolve(fileURLToPath(import.meta.url), '../../dist/index.mjs')
 
-  content = content.replace(
-    /globalThis\.fetch=\w+\(\"undici\"\)\.fetch/,
-    'globalThis.fetch=await import("undici").then(mod => mod.fetch)',
-  )
+let content = await readFile(fileLoc, 'utf8')
 
-  await writeFile(fileLoc, content)
+content = content.replace(
+  /globalThis\.fetch=\w+\(\"undici\"\)\.fetch/,
+  'globalThis.fetch=await import("undici").then(mod => mod.fetch)',
+)
 
-  console.log('done')
-})()
+await writeFile(fileLoc, content)
+
+console.log('done')
