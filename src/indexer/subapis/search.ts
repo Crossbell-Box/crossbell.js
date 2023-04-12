@@ -57,6 +57,10 @@ export class SearchIndexer extends BaseIndexer {
       limit?: number
       /** Used for pagination. */
       cursor?: string
+      /** Whether to include character metadata */
+      includeCharacterMetadata?: boolean
+      /** The order of the returned list. */
+      orderBy?: 'createdAt' | 'updatedAt' | 'publishedAt' | 'viewCount'
     },
   ): Promise<ListResponse<NoteEntity>> {
     let url = `${this.endpoint}/notes/search?`

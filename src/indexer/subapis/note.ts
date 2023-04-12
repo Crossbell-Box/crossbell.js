@@ -55,7 +55,7 @@ type NoteQueryOptions = {
   /** How many nested notes to include per note */
   nestedNotesLimit?: number
   /** The order of the returned list. */
-  orderBy?: 'createdAt' | 'updatedAt' | 'publishedAt'
+  orderBy?: 'createdAt' | 'updatedAt' | 'publishedAt' | 'viewCount'
 }
 
 export class NoteIndexer extends BaseIndexer {
