@@ -90,11 +90,11 @@ type FixedEventReturn<
 
 export class BaseContract {
   publicClient: PublicClient = createDefaultPublicClient()
-  walletClient: WalletClient<Transport, Chain> | undefined
+  walletClient: WalletClient<Transport, Chain, Account> | undefined
   #account: Address | Account | undefined
 
   get account() {
-    return this.#account
+    return this.#account!
   }
   set account(value) {
     this.#account = value
@@ -104,20 +104,36 @@ export class BaseContract {
   }
   options: ResolvedContractOptions
 
-  contract!: GetContractReturnType<Abi.Entry, PublicClient, WalletClient>
+  contract!: GetContractReturnType<
+    Abi.Entry,
+    PublicClient,
+    WalletClient<Transport, Chain, Account>
+  >
   newbieVillaContract!: GetContractReturnType<
     Abi.NewbieVilla,
     PublicClient,
-    WalletClient
+    WalletClient<Transport, Chain, Account>
   >
   peripheryContract!: GetContractReturnType<
     Abi.Periphery,
     PublicClient,
-    WalletClient
+    WalletClient<Transport, Chain, Account>
   >
-  cbtContract!: GetContractReturnType<Abi.Cbt, PublicClient, WalletClient>
-  miraContract!: GetContractReturnType<Abi.Mira, PublicClient, WalletClient>
-  tipsContract!: GetContractReturnType<Abi.Tips, PublicClient, WalletClient>
+  cbtContract!: GetContractReturnType<
+    Abi.Cbt,
+    PublicClient,
+    WalletClient<Transport, Chain, Account>
+  >
+  miraContract!: GetContractReturnType<
+    Abi.Mira,
+    PublicClient,
+    WalletClient<Transport, Chain, Account>
+  >
+  tipsContract!: GetContractReturnType<
+    Abi.Tips,
+    PublicClient,
+    WalletClient<Transport, Chain, Account>
+  >
 
   /**
    * This creates a new Contract instance to interact with.
