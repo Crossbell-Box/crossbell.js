@@ -1,6 +1,6 @@
 import { BaseContract } from './base'
 import { autoSwitchMainnet } from '../decorators'
-import { NIL_ADDRESS } from '../../utils'
+import { NIL_ADDRESS, validateAddress } from '../../utils'
 import type {
   CallOverrides,
   Character,
@@ -76,7 +76,7 @@ export class LinkContract {
     overrides: Overrides = {},
   ): Promise<Result<bigint, true>> | never {
     toAddresses.forEach((address) => {
-      this.base.validateAddress(address)
+      validateAddress(address)
     })
 
     const tx = await this.base.peripheryContract.write.linkCharactersInBatch(
@@ -147,7 +147,7 @@ export class LinkContract {
   ):
     | Promise<Result<{ toCharacterId: bigint; linklistId: bigint }, true>>
     | never {
-    this.base.validateAddress(toAddress)
+    validateAddress(toAddress)
 
     const tx = await this.base.contract.write.createThenLinkCharacter(
       [

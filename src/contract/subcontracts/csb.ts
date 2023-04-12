@@ -2,6 +2,7 @@ import { Address, Hex } from 'viem'
 import { BaseContract } from './base'
 import { autoSwitchMainnet } from '../decorators'
 import type { Result } from '../../types/contract'
+import { validateAddress } from '../../utils'
 
 export class CsbContract {
   constructor(private base: BaseContract) {}
@@ -13,7 +14,7 @@ export class CsbContract {
    * @returns The $CSB balance of the owner.
    */
   async getBalance(owner: Address): Promise<Result<bigint>> | never {
-    this.base.validateAddress(owner)
+    validateAddress(owner)
     const balance = await this.base.publicClient.getBalance({ address: owner })
     return {
       data: balance,
@@ -32,7 +33,7 @@ export class CsbContract {
     toAddress: Hex,
     amount: bigint | number,
   ): Promise<Result<{}, true>> {
-    this.base.validateAddress(toAddress)
+    validateAddress(toAddress)
 
     const hash = await this.base.walletClient!.sendTransaction({
       account: this.base.account!,

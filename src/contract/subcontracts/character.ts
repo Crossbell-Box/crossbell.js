@@ -10,6 +10,7 @@ import type {
 import { CharacterMetadata } from '../../types/metadata'
 import { Ipfs } from '../../ipfs'
 import { Address } from 'viem'
+import { validateAddress } from '../../utils'
 
 export class CharacterContract {
   constructor(private base: BaseContract) {}
@@ -35,7 +36,7 @@ export class CharacterContract {
     } = {},
     overrides: Overrides = {},
   ): Promise<Result<bigint, true>> | never {
-    this.base.validateAddress(owner)
+    validateAddress(owner)
     this.validateHandleFormat(handle)
 
     const { uri } = await Ipfs.parseMetadataOrUri('character', metadataOrUri)
@@ -284,7 +285,7 @@ export class CharacterContract {
     address: Address,
     overrides: CallOverrides = {},
   ): Promise<Result<bigint>> | never {
-    this.base.validateAddress(address)
+    validateAddress(address)
 
     const characterId = await this.base.contract.read.getPrimaryCharacterId(
       [address],
@@ -448,7 +449,7 @@ export class CharacterContract {
     address: Address,
     overrides: CallOverrides = {},
   ): Promise<Result<boolean>> | never {
-    this.base.validateAddress(address)
+    validateAddress(address)
     const characterId = await this.base.contract.read.getPrimaryCharacterId([
       address,
     ])
@@ -495,7 +496,7 @@ export class CharacterContract {
     proof: Address,
     overrides: Overrides = {},
   ): Promise<Result<undefined, true>> | never {
-    this.base.validateAddress(toAddress)
+    validateAddress(toAddress)
 
     const tx = await this.base.newbieVillaContract.write.withdraw(
       [toAddress, characterId, nonce, expires, proof],

@@ -25,7 +25,7 @@ import {
   getProviderAddress,
 } from '../../utils/client'
 import { MintOrLinkModuleConfig } from '../../types'
-import { NIL_ADDRESS, validateIsInSdn } from '../../utils'
+import { NIL_ADDRESS } from '../../utils'
 import * as Abi from '../abi'
 import { createDefaultPublicClient } from '../../utils/client'
 import { Overwrite } from '../../types/utils'
@@ -287,15 +287,6 @@ export class BaseContract {
     if (returnMultipleLogs) return parsedLogs
 
     return parsedLogs[0]
-  }
-
-  // TODO: refactor function
-  validateAddress(address: string | string[]) {
-    if (Array.isArray(address)) {
-      address.forEach((addr) => this.validateAddress(addr))
-    } else {
-      validateIsInSdn(address)
-    }
   }
 
   //// module

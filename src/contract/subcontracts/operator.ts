@@ -1,7 +1,7 @@
 import { autoSwitchMainnet } from '../decorators'
 import type { Overrides, Result } from '../../types/contract'
 import { CharacterPermissionKey } from '../../types'
-import { Logger } from '../../utils'
+import { Logger, validateAddress } from '../../utils'
 import { BaseContract } from './base'
 import { Address } from 'viem'
 
@@ -34,7 +34,7 @@ export class OperatorContract {
     permissions: CharacterPermissionKey[],
     overrides: Overrides = {},
   ): Promise<Result<{ bitmapUint256: bigint }, true>> | never {
-    this.base.validateAddress(operator)
+    validateAddress(operator)
 
     const permissionUint256 =
       this.convertPermissionsToUint256ForCharacter(permissions)
@@ -85,8 +85,8 @@ export class OperatorContract {
     blocklist: Address[] = [],
     overrides: Overrides = {},
   ): Promise<Result<{}, true>> | never {
-    this.base.validateAddress(allowlist)
-    this.base.validateAddress(blocklist)
+    validateAddress(allowlist)
+    validateAddress(blocklist)
 
     const tx = await this.base.contract.write.grantOperators4Note(
       [characterId, noteId, blocklist, allowlist],

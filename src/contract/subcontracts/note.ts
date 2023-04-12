@@ -11,7 +11,7 @@ import {
   LinkItemMap,
 } from '../../types'
 import { Ipfs } from '../../ipfs'
-import { NIL_ADDRESS } from '../../utils'
+import { NIL_ADDRESS, validateAddress } from '../../utils'
 import { autoSwitchMainnet } from '../decorators'
 import pLimit from 'p-limit'
 import { Address } from 'abitype'
@@ -527,7 +527,7 @@ export class NoteContract {
   ):
     | Promise<Result<{ contractAddress: string; tokenId: bigint }, true>>
     | never {
-    this.base.validateAddress(toAddress)
+    validateAddress(toAddress)
 
     const tx = await this.base.contract.write.mintNote(
       [
@@ -575,7 +575,7 @@ export class NoteContract {
    * @returns The linkKey of the note.
    */
   getLinkKeyForAddress(toAddress: Address): string {
-    this.base.validateAddress(toAddress)
+    validateAddress(toAddress)
 
     return keccak256(
       encodePacked(['string', 'address'], ['Address', toAddress]),
