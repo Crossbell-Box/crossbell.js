@@ -26,12 +26,16 @@ async function connect() {
 }
 
 async function showResult(p: any) {
-  result.value = JSON.stringify(
-    await p,
-    (key: string, value: any) =>
-      typeof value === 'bigint' ? value.toString() : value,
-    2,
-  )
+  try {
+    result.value = JSON.stringify(
+      await p,
+      (key: string, value: any) =>
+        typeof value === 'bigint' ? value.toString() : value,
+      2,
+    )
+  } catch (err: any) {
+    result.value = err
+  }
 }
 
 function balance() {
