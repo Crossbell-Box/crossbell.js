@@ -1,9 +1,7 @@
 #!/usr/bin/env node
 
-const { execSync } = require('child_process')
 const { writeFile, readFile } = require('fs/promises')
 const { resolve } = require('path')
-const { fetch } = require('undici')
 
 ;(async () => {
   const fileLoc = resolve(__dirname, '../dist/index.mjs')

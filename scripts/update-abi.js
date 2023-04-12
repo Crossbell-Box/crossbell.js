@@ -5,7 +5,7 @@ const { promisify } = require('util')
 const execAsync = promisify(exec)
 const { writeFile, readFile, mkdir } = require('fs/promises')
 const { resolve } = require('path')
-const { fetch } = require('undici')
+const { fetch } = require('fetch-undici')
 const { existsSync } = require('fs')
 
 const getAbi = (name) =>
