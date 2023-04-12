@@ -13,9 +13,15 @@ jobs:
         with:
           fetch-depth: 0
 
+      - uses: pnpm/action-setup@v2
+
       - uses: actions/setup-node@v3
         with:
           node-version: lts/*
+          cache: pnpm
+
+      - name: Install deps
+        run: pnpm i --frozen-lockfile
 
       - id: publish
         uses: JS-DevTools/npm-publish@v1
