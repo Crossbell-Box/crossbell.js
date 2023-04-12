@@ -102,7 +102,7 @@ export class BaseContract {
       this.walletClient.account =
         typeof value === 'string' ? { type: 'json-rpc', address: value } : value
   }
-  protected options: ResolvedContractOptions
+  options: ResolvedContractOptions
 
   contract!: GetContractReturnType<Abi.Entry, PublicClient, WalletClient>
   newbieVillaContract!: GetContractReturnType<
@@ -116,6 +116,8 @@ export class BaseContract {
     WalletClient
   >
   cbtContract!: GetContractReturnType<Abi.Cbt, PublicClient, WalletClient>
+  miraContract!: GetContractReturnType<Abi.Mira, PublicClient, WalletClient>
+  tipsContract!: GetContractReturnType<Abi.Tips, PublicClient, WalletClient>
 
   /**
    * This creates a new Contract instance to interact with.
@@ -202,6 +204,18 @@ export class BaseContract {
     this.cbtContract = getContract({
       address: this.options.address.cbtContract,
       abi: Abi.cbt,
+      publicClient: this.publicClient,
+      walletClient: this.walletClient,
+    })
+    this.miraContract = getContract({
+      address: this.options.address.miraContract,
+      abi: Abi.mira,
+      publicClient: this.publicClient,
+      walletClient: this.walletClient,
+    })
+    this.tipsContract = getContract({
+      address: this.options.address.tipsContract,
+      abi: Abi.tips,
       publicClient: this.publicClient,
       walletClient: this.walletClient,
     })
