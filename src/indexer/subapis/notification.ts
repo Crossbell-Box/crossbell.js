@@ -4,7 +4,6 @@ import type {
   NotificationEntity,
   NotificationTypeKey,
 } from '../../types/indexer'
-import { type BigNumberish } from 'ethers'
 import { createSearchParamsString } from '../../utils'
 
 export class NotificationIndexer extends BaseIndexer {
@@ -17,7 +16,7 @@ export class NotificationIndexer extends BaseIndexer {
    * @returns The list of notifications.
    */
   async getNotificationsOfCharacter(
-    characterId: BigNumberish,
+    characterId: bigint,
     {
       type,
       includeCharacterMetadata,
@@ -67,7 +66,7 @@ export class NotificationIndexer extends BaseIndexer {
    * @returns The latest notification date string.
    */
   async markNotificationsAsRead(
-    characterId: BigNumberish,
+    characterId: bigint,
   ): Promise<{ data: string }> {
     const url = `${this.endpoint}/characters/${characterId}/notifications/read`
     const res = await this.fetch(url, {
@@ -87,9 +86,9 @@ export class NotificationIndexer extends BaseIndexer {
    * @returns The feed.
    */
   async getNotification(
-    characterId: BigNumberish,
+    characterId: bigint,
     transactionHash: string,
-    logIndex: BigNumberish,
+    logIndex: bigint,
     {
       includeCharacterMetadata,
     }: {

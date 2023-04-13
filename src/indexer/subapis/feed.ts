@@ -1,6 +1,5 @@
 import { BaseIndexer } from './base'
 import type { FeedEntity, FeedTypeKey, ListResponse } from '../../types/indexer'
-import { type BigNumberish } from 'ethers'
 import { createSearchParamsString } from '../../utils'
 
 export class FeedIndexer extends BaseIndexer {
@@ -13,7 +12,7 @@ export class FeedIndexer extends BaseIndexer {
    * @returns The list of feeds.
    */
   async getFeedsOfCharacter(
-    characterId: BigNumberish,
+    characterId: bigint,
     {
       type,
       limit,
@@ -50,7 +49,7 @@ export class FeedIndexer extends BaseIndexer {
    * @returns The list of feeds.
    */
   async getFollowingFeedsOfCharacter(
-    characterId: BigNumberish,
+    characterId: bigint,
     {
       type,
       limit,
@@ -80,7 +79,7 @@ export class FeedIndexer extends BaseIndexer {
    * @returns The list of feeds.
    */
   async getFeedsOfCharacterFollowing(
-    characterId: BigNumberish,
+    characterId: bigint,
     {
       type,
       limit,
@@ -116,7 +115,7 @@ export class FeedIndexer extends BaseIndexer {
    */
   async getFeed(
     transactionHash: string,
-    logIndex: BigNumberish,
+    logIndex: bigint,
   ): Promise<FeedEntity | null> {
     const url = `${this.endpoint}/feed/${transactionHash}/${logIndex}`
     const res = await this.fetch(url).then((res) => res.json())

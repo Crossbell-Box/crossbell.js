@@ -1,5 +1,4 @@
 import { BaseIndexer } from './base'
-import { type BigNumberish } from 'ethers'
 import { CharacterStatEntity, NoteStatEntity } from '../../types'
 
 export class StatIndexer extends BaseIndexer {
@@ -10,7 +9,7 @@ export class StatIndexer extends BaseIndexer {
    * @returns The stat of the character.
    */
   async getStatOfCharacter(
-    characterId: BigNumberish,
+    characterId: bigint,
   ): Promise<CharacterStatEntity> {
     let url = `${this.endpoint}/stat/characters/${characterId}?`
 
@@ -27,8 +26,8 @@ export class StatIndexer extends BaseIndexer {
    * @returns The stat of the note.
    */
   async getStatOfNote(
-    characterId: BigNumberish,
-    noteId: BigNumberish,
+    characterId: bigint,
+    noteId: bigint,
   ): Promise<NoteStatEntity> {
     let url = `${this.endpoint}/stat/notes/${characterId}/${noteId}?`
 

@@ -4,7 +4,6 @@ import type {
   LinkModuleTargetItemType,
   ListResponse,
 } from '../../types/indexer'
-import { type BigNumberish } from 'ethers'
 import { createSearchParamsString } from '../../utils'
 
 export class LinkModuleIndexer extends BaseIndexer {
@@ -31,15 +30,15 @@ export class LinkModuleIndexer extends BaseIndexer {
     /** The address of the target item. */
     toAddress?: string
     /** The character ID of the target item. */
-    toCharacterId?: BigNumberish
+    toCharacterId?: bigint
     /** The note ID of the target item. */
-    toNoteId?: BigNumberish
+    toNoteId?: bigint
     /** The contract address of the target item. */
     toContractAddress?: string
     /** The token ID of the target item. */
-    toTokenId?: BigNumberish
+    toTokenId?: bigint
     /** The linklist ID of the target item. */
-    toLinklistId?: BigNumberish
+    toLinklistId?: bigint
     /** The limit of the number of items to return. */
     limit?: number
     /** Used for pagination. */
@@ -73,7 +72,7 @@ export class LinkModuleIndexer extends BaseIndexer {
    */
   async getLinkModule(
     targetItemType: LinkModuleTargetItemType,
-    linkValue: BigNumberish,
+    linkValue: bigint,
   ): Promise<LinkModuleEntity | null> {
     const url = `${this.endpoint}/link-modules/${targetItemType}/${linkValue}`
     const res = await this.fetch(url).then((res) => res.json())

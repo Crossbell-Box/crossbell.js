@@ -1,7 +1,6 @@
 import { BaseIndexer } from './base'
 import type { LinkEntity, ListResponse } from '../../types/indexer'
 import type { LinkItemType } from '../../types/contract'
-import { type BigNumberish } from 'ethers'
 import { createSearchParamsString } from '../../utils'
 
 export class LinkIndexer extends BaseIndexer {
@@ -16,7 +15,7 @@ export class LinkIndexer extends BaseIndexer {
    * @returns The list of links.
    */
   async getLinks(
-    characterId: BigNumberish,
+    characterId: bigint,
     {
       limit = 20,
       cursor,
@@ -43,17 +42,17 @@ export class LinkIndexer extends BaseIndexer {
       /** The fromCharacterId to filter by. */
       fromCharacterId?: string
       /** The toCharacterId to filter by. */
-      toCharacterId?: BigNumberish
+      toCharacterId?: bigint
       /** The toAddress to filter by. */
       toAddress?: string
       /** The toNoteId to filter by. */
-      toNoteId?: BigNumberish
+      toNoteId?: bigint
       /** The toContractAddress to filter by. */
       toContractAddress?: string
       /** The toTokenId to filter by. */
-      toTokenId?: BigNumberish
+      toTokenId?: bigint
       /** The toLinklistId to filter by. */
-      toLinklistId?: BigNumberish
+      toLinklistId?: bigint
       /** The toUri to filter by. */
       toUri?: string
       /** The order to sort by. */
@@ -91,7 +90,7 @@ export class LinkIndexer extends BaseIndexer {
    * @return The list of links.
    */
   async getBacklinksOfCharacter(
-    characterId: BigNumberish,
+    characterId: bigint,
     {
       limit = 20,
       cursor,
@@ -160,8 +159,8 @@ export class LinkIndexer extends BaseIndexer {
    * @return The list of links.
    */
   async getBacklinksOfNote(
-    characterId: BigNumberish,
-    noteId: BigNumberish,
+    characterId: bigint,
+    noteId: bigint,
     {
       limit = 20,
       cursor,
@@ -196,8 +195,8 @@ export class LinkIndexer extends BaseIndexer {
    * @return The list of links.
    */
   async getBacklinksOfErc721(
-    contractAddress: BigNumberish,
-    tokenId: BigNumberish,
+    contractAddress: bigint,
+    tokenId: bigint,
     {
       limit = 20,
       cursor,
@@ -231,7 +230,7 @@ export class LinkIndexer extends BaseIndexer {
    * @return The list of links.
    */
   async getBacklinksOfLinklist(
-    linklistId: BigNumberish,
+    linklistId: bigint,
     {
       limit = 20,
       cursor,
