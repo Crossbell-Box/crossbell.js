@@ -10,7 +10,7 @@ import type {
 import { CharacterMetadata } from '../../types/metadata'
 import { Ipfs } from '../../ipfs'
 import { Address } from 'viem'
-import { parseLog, validateAddress } from '../../utils'
+import { getModuleConfig, parseLog, validateAddress } from '../../utils'
 
 export class CharacterContract {
   constructor(private base: BaseContract) {}
@@ -41,7 +41,7 @@ export class CharacterContract {
 
     const { uri } = await Ipfs.parseMetadataOrUri('character', metadataOrUri)
 
-    const moduleConfig = await this.base.getModuleConfig(linkModule)
+    const moduleConfig = await getModuleConfig(linkModule)
 
     const hash = await this.base.contract.write.createCharacter([
       {

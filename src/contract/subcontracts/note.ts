@@ -11,7 +11,12 @@ import {
   LinkItemMap,
 } from '../../types'
 import { Ipfs } from '../../ipfs'
-import { NIL_ADDRESS, parseLog, validateAddress } from '../../utils'
+import {
+  NIL_ADDRESS,
+  getModuleConfig,
+  parseLog,
+  validateAddress,
+} from '../../utils'
 import { autoSwitchMainnet } from '../decorators'
 import pLimit from 'p-limit'
 import { Address } from 'abitype'
@@ -37,8 +42,8 @@ export class NoteContract {
   ): Promise<Result<{ noteId: bigint }, true>> | never {
     const { uri } = await Ipfs.parseMetadataOrUri('note', metadataOrUri)
 
-    const linkModuleConfig = await this.base.getModuleConfig(linkModule)
-    const mintModuleConfig = await this.base.getModuleConfig(mintModule)
+    const linkModuleConfig = await getModuleConfig(linkModule)
+    const mintModuleConfig = await getModuleConfig(mintModule)
 
     const tx = await this.base.contract.write.postNote(
       [
@@ -98,10 +103,10 @@ export class NoteContract {
             'note',
             note.metadataOrUri,
           )
-          const linkModuleConfig = await this.base.getModuleConfig(
+          const linkModuleConfig = await getModuleConfig(
             note.options?.linkModule,
           )
-          const mintModuleConfig = await this.base.getModuleConfig(
+          const mintModuleConfig = await getModuleConfig(
             note.options?.mintModule,
           )
 
@@ -167,8 +172,8 @@ export class NoteContract {
   ): Promise<Result<{ noteId: bigint }, true>> | never {
     const { uri } = await Ipfs.parseMetadataOrUri('note', metadataOrUri)
 
-    const linkModuleConfig = await this.base.getModuleConfig(linkModule)
-    const mintModuleConfig = await this.base.getModuleConfig(mintModule)
+    const linkModuleConfig = await getModuleConfig(linkModule)
+    const mintModuleConfig = await getModuleConfig(mintModule)
 
     const tx = await this.base.contract.write.postNote4AnyUri(
       [
@@ -220,8 +225,8 @@ export class NoteContract {
   ): Promise<Result<{ noteId: bigint }, true>> | never {
     const { uri } = await Ipfs.parseMetadataOrUri('note', metadataOrUri)
 
-    const linkModuleConfig = await this.base.getModuleConfig(linkModule)
-    const mintModuleConfig = await this.base.getModuleConfig(mintModule)
+    const linkModuleConfig = await getModuleConfig(linkModule)
+    const mintModuleConfig = await getModuleConfig(mintModule)
 
     const tx = await this.base.contract.write.postNote4Note(
       [

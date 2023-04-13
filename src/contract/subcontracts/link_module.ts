@@ -1,4 +1,5 @@
 import { MintOrLinkModuleConfig, Overrides, Result } from '../../types'
+import { getModuleConfig } from '../../utils'
 import { autoSwitchMainnet } from '../decorators'
 import { BaseContract } from './base'
 import { Address } from 'abitype'
@@ -19,7 +20,7 @@ export class LinkModuleContract {
     linkModule: MintOrLinkModuleConfig,
     overrides: Overrides = {},
   ): Promise<Result<undefined, true>> | never {
-    const moduleConfig = await this.base.getModuleConfig(linkModule)
+    const moduleConfig = await getModuleConfig(linkModule)
 
     const tx = await this.base.contract.write.setLinkModule4Address(
       [
@@ -55,7 +56,7 @@ export class LinkModuleContract {
     linkModule: MintOrLinkModuleConfig,
     overrides: Overrides = {},
   ): Promise<Result<undefined, true>> | never {
-    const moduleConfig = await this.base.getModuleConfig(linkModule)
+    const moduleConfig = await getModuleConfig(linkModule)
 
     const tx = await this.base.contract.write.setLinkModule4Linklist(
       [

@@ -1,4 +1,5 @@
 import { MintOrLinkModuleConfig, Overrides, Result } from '../../types'
+import { getModuleConfig } from '../../utils'
 import { autoSwitchMainnet } from '../decorators'
 import { BaseContract } from './base'
 
@@ -20,7 +21,7 @@ export class MintModuleContract {
     mintModule: MintOrLinkModuleConfig,
     overrides: Overrides = {},
   ): Promise<Result<undefined, true>> | never {
-    const moduleConfig = await this.base.getModuleConfig(mintModule)
+    const moduleConfig = await getModuleConfig(mintModule)
 
     const tx = await this.base.contract.write.setMintModule4Note(
       [
