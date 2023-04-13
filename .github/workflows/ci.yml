@@ -3,9 +3,8 @@ name: CI
 on:
   push:
     branches: [main]
-  # disable by temp
-  # pull_request:
-  #   branches: [main]
+  pull_request:
+    branches: [main]
 
 jobs:
   test:
