@@ -3,10 +3,10 @@ import { CsbContract } from './subcontracts/csb'
 import { LinkContract } from './subcontracts/link'
 import { NoteContract } from './subcontracts/note'
 import { CharacterContract } from './subcontracts/character'
-// import { RevisionContract } from './subcontracts/revision'
 import { OperatorContract } from './subcontracts/operator'
 import { CbtContract } from './subcontracts/cbt'
 import { TipsContract } from './subcontracts/tips'
+import { RevisionContract } from './subcontracts/revision'
 // import { LinkModuleContract } from './subcontracts/link_module'
 // import { MintModuleContract } from './subcontracts/mint_module'
 
@@ -43,4 +43,5 @@ export class Contract extends BaseContract {
   note = new NoteContract(this)
   operator = new OperatorContract(this)
   tips = new TipsContract(this)
+  revision = new RevisionContract(this)
 }
