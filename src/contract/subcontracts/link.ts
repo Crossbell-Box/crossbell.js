@@ -164,14 +164,8 @@ export class LinkContract {
       hash: tx,
     })
 
-    const createCharacterParser = parseLog(
-      receipt.logs,
-      'CharacterCreated',
-    )
-    const linkCharacterParser = parseLog(
-      receipt.logs,
-      'LinkCharacter',
-    )
+    const createCharacterParser = parseLog(receipt.logs, 'CharacterCreated')
+    const linkCharacterParser = parseLog(receipt.logs, 'LinkCharacter')
 
     return {
       data: {

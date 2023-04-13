@@ -14,7 +14,7 @@ export class CbtContract {
    * @returns The transaction hash.
    */
   @autoSwitchMainnet()
-  async mintCbt(
+  async mint(
     characterId: bigint,
     tokenId: bigint,
     overrides: Overrides = {},
@@ -43,7 +43,7 @@ export class CbtContract {
    * @returns The transaction hash.
    */
   @autoSwitchMainnet()
-  async setCbtTokenUri(
+  async setTokenUri(
     tokenId: bigint,
     uri: string,
     overrides: Overrides = {},
@@ -69,7 +69,7 @@ export class CbtContract {
    * @param tokenId - The id of the token.
    * @returns The URI of the token.
    */
-  async getCbtTokenUri(
+  async getTokenUri(
     tokenId: bigint,
     // overrides: CallOverrides = {},
   ): Promise<Result<string>> | never {

@@ -1,16 +1,15 @@
-import { type BigNumberish } from 'ethers'
 import { expect, describe, test, beforeAll } from 'vitest'
 import { Contract } from '../../src'
 import { mockUser, NIL_ADDRESS } from '../mock'
 
 const contract = new Contract(mockUser.privateKey)
 
-let characterId: BigNumberish | null = null
+let characterId: bigint | null = null
 
-describe('permission', () => {
+describe('operator', () => {
   beforeAll(async () => {
-    characterId = await contract
-      .getPrimaryCharacterId(mockUser.address)
+    characterId = await contract.character
+      .getPrimaryId(mockUser.address)
       .then((res) => res.data)
 
     expect(characterId).not.toBe(null)
@@ -18,7 +17,7 @@ describe('permission', () => {
 
   describe('grant a permission and check', () => {
     test('grant permission', async () => {
-      const res = await contract.grantOperatorPermissionsForCharacter(
+      const res = await contract.operator.grantForCharacter(
         characterId!,
         NIL_ADDRESS,
         ['POST_NOTE', 'SET_NOTE_URI', 'LINK_CHARACTER'],
@@ -28,7 +27,7 @@ describe('permission', () => {
     })
 
     test('check permission', async () => {
-      const res = await contract.getOperatorPermissionsForCharacter(
+      const res = await contract.operator.getPermissionsForCharacter(
         characterId!,
         NIL_ADDRESS,
       )

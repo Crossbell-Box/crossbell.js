@@ -29,7 +29,7 @@ export class NoteContract {
    * @returns The id of the new note.
    */
   @autoSwitchMainnet()
-  async postNote(
+  async post(
     characterId: bigint,
     metadataOrUri: NoteMetadata | string,
     { locked = false, linkModule, mintModule }: PostNoteOptions = {},
@@ -82,7 +82,7 @@ export class NoteContract {
    * @returns The id of the new note.
    */
   @autoSwitchMainnet()
-  async postNotes(
+  async postMulti(
     notes: {
       characterId: bigint
       metadataOrUri: NoteMetadata | string
@@ -158,7 +158,7 @@ export class NoteContract {
    * @returns The id of the new note.
    */
   @autoSwitchMainnet()
-  async postNoteForAnyUri(
+  async postForAnyUri(
     characterId: bigint,
     metadataOrUri: NoteMetadata | string,
     targetUri: string,
@@ -210,7 +210,7 @@ export class NoteContract {
    * @returns The id of the new note.
    */
   @autoSwitchMainnet()
-  async postNoteForNote(
+  async postForNote(
     characterId: bigint,
     metadataOrUri: NoteMetadata | string,
     targetCharacterId: bigint,
@@ -265,7 +265,7 @@ export class NoteContract {
    * @returns The transaction hash of the transaction.
    */
   @autoSwitchMainnet()
-  async setNoteUri(
+  async setUri(
     characterId: bigint,
     noteId: bigint,
     metadataOrUri: NoteMetadata | string,
@@ -333,13 +333,13 @@ export class NoteContract {
    * ```
    */
   @autoSwitchMainnet()
-  async changeNoteMetadata(
+  async changeMetadata(
     characterId: bigint,
     noteId: bigint,
     modifier: (metadata?: NoteMetadata) => NoteMetadata,
     overrides: Overrides = {},
   ) {
-    const note = await this.getNote(characterId, noteId)
+    const note = await this.get(characterId, noteId)
 
     const metadata = modifier(note.data.metadata)
     if (typeof metadata === 'undefined') {
@@ -350,20 +350,20 @@ export class NoteContract {
       metadata.type = 'note'
     }
 
-    return this.setNoteMetadata(characterId, noteId, metadata, overrides)
+    return this.setMetadata(characterId, noteId, metadata, overrides)
   }
 
   /**
-   * This is the same as {@link setNoteUri}
+   * This is the same as {@link setUri}
    * @category Note
    */
-  async setNoteMetadata(
+  async setMetadata(
     characterId: bigint,
     noteId: bigint,
     metadata: NoteMetadata,
     overrides: Overrides = {},
   ) {
-    return this.setNoteUri(characterId, noteId, metadata, overrides)
+    return this.setUri(characterId, noteId, metadata, overrides)
   }
 
   /**
@@ -373,7 +373,7 @@ export class NoteContract {
    * @param noteId - The id of the note you want to get the info for.
    * @returns The info of the note.
    */
-  async getNote<T extends LinkItemType>(
+  async get<T extends LinkItemType>(
     characterId: bigint,
     noteId: bigint,
     linkItemType?: T,
@@ -456,7 +456,7 @@ export class NoteContract {
    * @returns The transaction hash of the transaction.
    */
   @autoSwitchMainnet()
-  async deleteNote(
+  async delete(
     characterId: bigint,
     noteId: bigint,
     overrides: Overrides = {},
@@ -480,9 +480,9 @@ export class NoteContract {
    * This locks a note.
    *
    * When a note is locked, it can't be edited and unlocked anymore.
-   * I.e., you can't change the content of the note using {@link setNoteUri} {@link setNoteMetadata} {@link changeNoteMetadata}.
+   * I.e., you can't change the content of the note using {@link setUri} {@link setMetadata} {@link changeMetadata}.
    *
-   * You can still delete the note using {@link deleteNote}.
+   * You can still delete the note using {@link delete}.
    *
    * @category Note
    * @param characterId  - The character ID of the owner who post this note. Must be your own character, otherwise it will be rejected.
@@ -490,7 +490,7 @@ export class NoteContract {
    * @returns The transaction hash of the transaction.
    */
   @autoSwitchMainnet()
-  async lockNote(
+  async lock(
     characterId: bigint,
     noteId: bigint,
     overrides: Overrides = {},
@@ -519,7 +519,7 @@ export class NoteContract {
    * @returns The transaction hash of the transaction.
    */
   @autoSwitchMainnet()
-  async mintNote(
+  async mint(
     characterId: bigint,
     noteId: bigint,
     toAddress: Address,

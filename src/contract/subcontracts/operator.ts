@@ -28,7 +28,7 @@ export class OperatorContract {
    * @returns The transaction hash.
    */
   @autoSwitchMainnet()
-  async grantOperatorPermissionsForCharacter(
+  async grantForCharacter(
     characterId: bigint,
     operator: Address,
     permissions: CharacterPermissionKey[],
@@ -78,7 +78,7 @@ export class OperatorContract {
    * @returns The transaction hash.
    */
   @autoSwitchMainnet()
-  async grantOperatorsForNote(
+  async grantForNote(
     characterId: bigint,
     noteId: bigint,
     allowlist: Address[],
@@ -112,7 +112,7 @@ export class OperatorContract {
    * @param characterId - The id of the character.
    * @returns The operators of the character.
    */
-  async getOperatorsForCharacter(
+  async getForCharacter(
     characterId: bigint,
     // overrides: CallOverrides = {},
   ): Promise<Result<readonly Address[], false>> | never {
@@ -132,7 +132,7 @@ export class OperatorContract {
    * @param characterId - The id of the character.
    * @param noteId - The id of the note.
    */
-  async getOperatorsForNote(
+  async getForNote(
     characterId: bigint,
     noteId: bigint,
     // overrides: CallOverrides = {},
@@ -166,7 +166,7 @@ export class OperatorContract {
    * @param operator - The address of the operator.
    * @returns Whether the operator is allowed to operate the note.
    */
-  async isOperatorAllowedForNote(
+  async isAllowedForNote(
     characterId: bigint,
     noteId: bigint,
     operator: Address,
@@ -189,7 +189,7 @@ export class OperatorContract {
    * @param operator - The address of the operator.
    * @returns The permissions of the operator.
    */
-  async getOperatorPermissionsForCharacter(
+  async getPermissionsForCharacter(
     characterId: bigint,
     operator: Address,
     // overrides: CallOverrides = {},
@@ -254,7 +254,7 @@ export class OperatorContract {
       .reverse()
       .map((bit, index) => {
         if (bit === 1) {
-          if (this.isPermissionBitForCharacter(index)) {
+          if (this.#isPermissionBitForCharacter(index)) {
             return CHARACTER_PERMISSION_BITMAP[index]
           } else {
             Logger.warn('Found invalid permission bit.', index)
@@ -313,7 +313,7 @@ export class OperatorContract {
    * @param bit - The permission bit.
    * @returns true if the permission bit is for character; otherwise, false.
    */
-  private isPermissionBitForCharacter(
+  #isPermissionBitForCharacter(
     bit: number,
   ): bit is keyof typeof CHARACTER_PERMISSION_BITMAP {
     return Object.keys(CHARACTER_PERMISSION_BITMAP).includes(bit.toString())

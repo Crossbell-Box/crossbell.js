@@ -43,22 +43,22 @@ function balance() {
 }
 
 function transfer() {
-  showResult(contract.csb.transferCsb(address.value, 0))
+  showResult(contract.csb.transfer(address.value, 0))
 }
 
 function getPrimaryHandle() {
-  showResult(contract.character.getPrimaryCharacterId(address.value))
+  showResult(contract.character.getPrimaryId(address.value))
 }
 
 function getCharacterByHandle() {
-  showResult(contract.character.getCharacterByHandle(handle.value))
+  showResult(contract.character.getByHandle(handle.value))
 }
 
 function getCharacter() {
-  showResult(contract.character.getCharacter(BigInt(characterId.value)))
+  showResult(contract.character.get(BigInt(characterId.value)))
 }
 function setPrimaryCharacterId() {
-  showResult(contract.character.setPrimaryCharacterId(+characterId.value))
+  showResult(contract.character.setPrimaryId(+characterId.value))
 }
 </script>
 

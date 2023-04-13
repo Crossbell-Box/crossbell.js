@@ -29,7 +29,7 @@ export class CsbContract {
    * @returns The $CSB balance of the owner.
    */
   @autoSwitchMainnet()
-  async transferCsb(
+  async transfer(
     toAddress: Hex,
     amount: bigint | number,
   ): Promise<Result<{}, true>> {

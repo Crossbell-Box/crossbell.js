@@ -25,7 +25,7 @@ export class CharacterContract {
    * @returns The transaction hash and the character ID.
    */
   @autoSwitchMainnet()
-  async createCharacter(
+  async create(
     owner: Address,
     handle: string,
     metadataOrUri: CharacterMetadata | string,
@@ -37,7 +37,7 @@ export class CharacterContract {
     overrides: Overrides = {},
   ): Promise<Result<bigint, true>> | never {
     validateAddress(owner)
-    this.validateHandleFormat(handle)
+    this.#validateHandleFormat(handle)
 
     const { uri } = await Ipfs.parseMetadataOrUri('character', metadataOrUri)
 
@@ -78,7 +78,7 @@ export class CharacterContract {
     handle: string,
     overrides: Overrides = {},
   ): Promise<Result<undefined, true>> | never {
-    this.validateHandleFormat(handle)
+    this.#validateHandleFormat(handle)
 
     const tx = await this.base.contract.write.setHandle(
       [characterId, handle],
@@ -101,7 +101,7 @@ export class CharacterContract {
    * @returns The transaction hash of the transaction that was sent to the blockchain.
    */
   @autoSwitchMainnet()
-  async setCharacterUri(
+  async setUri(
     characterId: bigint,
     metadataOrUri: CharacterMetadata | string,
     overrides: Overrides = {},
@@ -132,15 +132,15 @@ export class CharacterContract {
   }
 
   /**
-   * This is the same as {@link setCharacterUri}
+   * This is the same as {@link setUri}
    * @category Character
    */
-  async setCharacterMetadata(
+  async setMetadata(
     characterId: bigint,
     metadata: CharacterMetadata,
     overrides: Overrides = {},
   ) {
-    return this.setCharacterUri(characterId, metadata, overrides)
+    return this.setUri(characterId, metadata, overrides)
   }
 
   /**
@@ -149,9 +149,9 @@ export class CharacterContract {
    * @param characterId - The character ID of the user you want to set the URI for.
    * @param modifier - The callback function that modifies the metadata.
    * @returns The transaction hash of the transaction that was sent to the blockchain.
-   * @example change a character's metadata name and bio
-   *
+   * @example
    * ```js
+   * // change a character's metadata name and bio
    * await contract.changeCharacterMetadata('42', metadata => {
    *   if (metadata !== undefined) {
    *     metadata.name = 'John Doe'
@@ -166,9 +166,9 @@ export class CharacterContract {
    * })
    * ```
    *
-   * @example change a character's metadata name and bio (using spread operator)
-   *
-   * ```js
+   * @example
+   * ```ts
+   * // change a character's metadata name and bio (using spread operator)
    * await contract.changeCharacterMetadata('42', metadata => {
    *   metadata = {
    *     ...metadata,
@@ -180,12 +180,12 @@ export class CharacterContract {
    * ```
    */
   @autoSwitchMainnet()
-  async changeCharacterMetadata(
+  async changeMetadata(
     characterId: bigint,
     modifier: (metadata?: CharacterMetadata) => CharacterMetadata,
     overrides: Overrides = {},
   ) {
-    const character = await this.getCharacter(characterId)
+    const character = await this.get(characterId)
 
     const metadata = modifier(character.data.metadata)
     if (typeof metadata === 'undefined') {
@@ -196,7 +196,7 @@ export class CharacterContract {
       metadata.type = 'character'
     }
 
-    return this.setCharacterMetadata(characterId, metadata, overrides)
+    return this.setMetadata(characterId, metadata, overrides)
   }
 
   /**
@@ -232,7 +232,7 @@ export class CharacterContract {
    * @returns The transaction hash of the transaction that was sent to the blockchain.
    */
   @autoSwitchMainnet()
-  async setPrimaryCharacterId(
+  async setPrimaryId(
     characterId: bigint | number,
     overrides: Overrides = {},
   ): Promise<Result<undefined, true>> | never {
@@ -256,7 +256,7 @@ export class CharacterContract {
    * @returns The transaction hash.
    */
   @autoSwitchMainnet()
-  async burnCharacter(
+  async burn(
     characterId: bigint,
     overrides: Overrides = {},
   ): Promise<Result<undefined, true>> | never {
@@ -281,7 +281,7 @@ export class CharacterContract {
    * @param address - The address of the user you want to get the primary character ID for.
    * @returns The characterId of the primary character of the address.
    */
-  async getPrimaryCharacterId(
+  async getPrimaryId(
     address: Address,
     overrides: CallOverrides = {},
   ): Promise<Result<bigint>> | never {
@@ -303,7 +303,7 @@ export class CharacterContract {
    * @param characterId - The character ID of the character you want to check.
    * @returns A boolean value.
    */
-  async isPrimaryCharacterId(
+  async isPrimaryId(
     characterId: bigint,
     overrides: CallOverrides = {},
   ): Promise<Result<boolean>> | never {
@@ -322,7 +322,7 @@ export class CharacterContract {
    * @param handle - The handle of the character you want to get the content of.
    * @returns The character with the given handle.
    */
-  async getCharacterByHandle(
+  async getByHandle(
     handle: string,
     overrides: CallOverrides = {},
   ): Promise<Result<Character>> | never {
@@ -355,7 +355,7 @@ export class CharacterContract {
    * @param characterId - The character ID of the character you want to get.
    * @returns The character with the given characterId.
    */
-  async getCharacter(
+  async get(
     characterId: bigint | number,
     overrides: CallOverrides = {},
   ): Promise<Result<Character>> | never {
@@ -406,7 +406,7 @@ export class CharacterContract {
    * @param characterId - The character ID of the character you want to get the URI for.
    * @returns The URI of the character.
    */
-  async getCharacterUri(
+  async getUri(
     characterId: bigint,
     overrides: CallOverrides = {},
   ): Promise<Result<string>> | never {
@@ -420,12 +420,12 @@ export class CharacterContract {
   }
 
   /**
-   * This returns the character given a {@link createCharacter} transaction hash.
+   * This returns the character given a {@link create} transaction hash.
    * @category Character
-   * @param txHash - The transaction hash of the {@link createCharacter} transaction.
+   * @param txHash - The transaction hash of the {@link create} transaction.
    * @returns The characterId of the character that was created.
    */
-  async getCharacterByTransaction(
+  async getByTransaction(
     txHash: Address,
     overrides: CallOverrides = {},
   ): Promise<Result<Character>> | never {
@@ -434,7 +434,7 @@ export class CharacterContract {
     })
 
     const parser = parseLog(receipt.logs, 'CharacterCreated')
-    const result = await this.getCharacter(parser.args.characterId, overrides)
+    const result = await this.get(parser.args.characterId, overrides)
 
     return result
   }
@@ -445,7 +445,7 @@ export class CharacterContract {
    * @param address - The address of a user.
    * @returns A boolean indicating whether the character exists.
    */
-  async existsCharacterForAddress(
+  async existsForAddress(
     address: Address,
     overrides: CallOverrides = {},
   ): Promise<Result<boolean>> | never {
@@ -466,7 +466,7 @@ export class CharacterContract {
    * @param handle - The handle of a character.
    * @returns A boolean indicating whether the character exists.
    */
-  async existsCharacterForHandle(
+  async existsForHandle(
     handle: string,
     overrides: CallOverrides = {},
   ): Promise<Result<boolean>> | never {
@@ -488,7 +488,7 @@ export class CharacterContract {
    * @returns The transaction hash.
    */
   @autoSwitchMainnet()
-  async withdrawCharacterFromNewbieVilla(
+  async withdrawFromNewbieVilla(
     toAddress: Address,
     characterId: bigint,
     nonce: bigint,
@@ -517,7 +517,7 @@ export class CharacterContract {
    * This validates if a handle is in a correct format.
    * @param handle - The handle of the character you want to get the social token for.
    */
-  private validateHandleFormat(handle: string): void | never {
+  #validateHandleFormat(handle: string): void | never {
     if (handle.length >= 32 || handle.length <= 2) {
       throw new Error(
         `Invalid handle: handle must be between 3 and 31 characters.`,

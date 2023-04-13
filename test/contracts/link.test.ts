@@ -11,10 +11,10 @@ describe('link and check', () => {
   let characterId2: bigint | null = null
   test('create two characters to link with', async () => {
     characterId1 = await contract.character
-      .createCharacter(mockUser.address, genRandomHandle(), metadataUri)
+      .create(mockUser.address, genRandomHandle(), metadataUri)
       .then(({ data }) => data)
     characterId2 = await contract.character
-      .createCharacter(mockUser.address, genRandomHandle(), metadataUri)
+      .create(mockUser.address, genRandomHandle(), metadataUri)
       .then(({ data }) => data)
 
     expect(characterId1).not.toBeNull()
@@ -89,18 +89,18 @@ describe('link and check', () => {
 
     const {
       data: { handle },
-    } = await contract.character.getCharacterByHandle(randomAddress)
+    } = await contract.character.getByHandle(randomAddress)
     expect(handle).toBe(randomAddress.toLowerCase())
 
     // should also able to get character by transaction
     const { data: character } =
-      await contract.character.getCharacterByTransaction(result.transactionHash)
+      await contract.character.getByTransaction(result.transactionHash)
     expect(character.characterId).toBe(result.data.toCharacterId)
   })
 
   // link note
   test('create a note and link it', async () => {
-    const note = await contract.note.postNote(characterId1!, {
+    const note = await contract.note.post(characterId1!, {
       content: 'test',
     })
 
