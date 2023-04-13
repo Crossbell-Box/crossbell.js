@@ -12,7 +12,7 @@ export class RevisionContract {
    * @returns The remote latest revision of the contract.
    */
   @autoSwitchMainnet()
-  async getLatestRevision(): Promise<Result<bigint, false>> | never {
+  async getLatest(): Promise<Result<bigint, false>> | never {
     const revision = await this.base.contract.read.getRevision()
 
     return {
@@ -25,7 +25,7 @@ export class RevisionContract {
    * @category Revision
    * @returns The local SDK revision of the contract.
    */
-  async getCurrentRevision(): Promise<Result<bigint, false>> | never {
+  async getCurrent(): Promise<Result<bigint, false>> | never {
     return {
       data: CURRENT_SDK_REVISION,
     }
@@ -41,7 +41,7 @@ export class RevisionContract {
    * @category Revision
    * @returns Whether the SDK is up-to-date with the contract and the local/remote revision.
    */
-  async checkRevision():
+  async check():
     | Promise<
         Result<
           {
@@ -53,7 +53,7 @@ export class RevisionContract {
         >
       >
     | never {
-    const { data: latestRevision } = await this.getLatestRevision()
+    const { data: latestRevision } = await this.getLatest()
     const currentRevision = CURRENT_SDK_REVISION
     const isUpToDate = latestRevision === currentRevision
 

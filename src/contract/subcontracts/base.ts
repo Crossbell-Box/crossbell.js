@@ -8,6 +8,8 @@ import {
   Account,
   Transport,
   Chain,
+  isAddressEqual,
+  encodeAbiParameters,
 } from 'viem'
 import { Network } from '../../network'
 import {
@@ -16,12 +18,13 @@ import {
   getProviderAddress,
   createDefaultPublicClient,
 } from '../../utils/viem'
-import { MintOrLinkModuleConfig } from '../../types'
+import { MintOrLinkModule, MintOrLinkModuleConfig } from '../../types'
 import { NIL_ADDRESS } from '../../utils'
 import * as Abi from '../abi'
 import { Overwrite } from '../../types/utils'
 import type { EIP1193Provider } from 'eip1193-types'
 import { privateKeyToAccount } from 'viem/accounts'
+import { decodeAbiParameters } from 'viem'
 
 interface AccountOptions {
   account: Account | Address
@@ -193,42 +196,40 @@ export class BaseContract {
     })
   }
 
-  //// module
+  // module
 
-  // private _moduleResponseCache = undefined as MintOrLinkModule[] | undefined
-  // private _lastModuleResponseCacheTime = 0
+  #moduleResponseCache: MintOrLinkModule[] | undefined = undefined
+  #lastModuleResponseCacheTime = 0
 
-  // protected async getModules<T extends MintOrLinkModule['type']>({
-  //   type,
-  // }: {
-  //   type?: T
-  // } = {}): Promise<MintOrLinkModule<T>[]> {
-  //   const now = Date.now()
-  //   const isMoreThanOneMinute =
-  //     now - this._lastModuleResponseCacheTime > 60 * 1000
+  protected async getModules<T extends MintOrLinkModule['type']>({
+    type,
+  }: { type?: T } = {}): Promise<MintOrLinkModule<T>[]> {
+    const now = Date.now()
+    const isMoreThanOneMinute =
+      now - this.#lastModuleResponseCacheTime > 60 * 1000
 
-  //   let res: MintOrLinkModule<T>[] = []
-  //   if (!this._moduleResponseCache || isMoreThanOneMinute) {
-  //     res = (await fetch(
-  //       'https://raw.githubusercontent.com/Crossbell-Box/Crossbell-Contracts/main/deployments/modules.json',
-  //     ).then((res) => res.json())) as MintOrLinkModule<T>[]
-  //     this._moduleResponseCache = res
-  //     this._lastModuleResponseCacheTime = now
-  //   } else {
-  //     res = this._moduleResponseCache as MintOrLinkModule<T>[]
-  //   }
+    let res: MintOrLinkModule<T>[] = []
+    if (!this.#moduleResponseCache || isMoreThanOneMinute) {
+      res = (await fetch(
+        'https://raw.githubusercontent.com/Crossbell-Box/Crossbell-Contracts/main/deployments/modules.json',
+      ).then((res) => res.json())) as MintOrLinkModule<T>[]
+      this.#moduleResponseCache = res
+      this.#lastModuleResponseCacheTime = now
+    } else {
+      res = this.#moduleResponseCache as MintOrLinkModule<T>[]
+    }
 
-  //   if (type) {
-  //     return res.filter((module) => module.type === type)
-  //   }
+    if (type) {
+      return res.filter((module) => module.type === type)
+    }
 
-  //   return res
-  // }
+    return res
+  }
 
-  // protected async getModule(address: string) {
-  //   const modules = await this.getModules()
-  //   return modules.find((module) => isAddressEqual(module.address, address))
-  // }
+  protected async getModule(address: Address) {
+    const modules = await this.getModules()
+    return modules.find((module) => isAddressEqual(module.address, address))
+  }
 
   // async getLinkModules() {
   //   return this.getModules({ type: 'link' })
@@ -255,54 +256,56 @@ export class BaseContract {
   // }
 
   async getModuleConfig(m?: MintOrLinkModuleConfig) {
-    //   if (!m) {
-    return {
-      address: NIL_ADDRESS,
-      initData: NIL_ADDRESS,
+    if (!m) {
+      return {
+        address: NIL_ADDRESS,
+        initData: NIL_ADDRESS,
+      }
     }
-    //   }
 
-    //   const module = await this.getModule(m.address)
-    //   if (!module) {
-    //     throw new Error('Invalid module address ' + m.address)
-    //   }
+    const module = await this.getModule(m.address)
+    if (!module) {
+      throw new Error('Invalid module address ' + m.address)
+    }
 
-    //   const initData = this.contract.interface._abiCoder.encode(
-    //     module.initDataStructure.map((item) => item.type),
-    //     m.data,
-    //   )
+    const initData = encodeAbiParameters(
+      module.initDataStructure.map((item) => ({
+        type: item.type,
+      })),
+      m.data,
+    )
 
-    //   return {
-    //     address: m.address,
-    //     initData,
-    //   }
+    return {
+      address: m.address,
+      initData,
+    }
   }
 
-  // async encodeModuleInitData(moduleAddress: string, data: any[]) {
-  //   const module = await this.getModule(moduleAddress)
-  //   if (!module) {
-  //     throw new Error('Invalid module address ' + moduleAddress)
-  //   }
+  async encodeModuleInitData(moduleAddress: Address, data: any[]) {
+    const module = await this.getModule(moduleAddress)
+    if (!module) {
+      throw new Error('Invalid module address ' + moduleAddress)
+    }
 
-  //   const result = this.contract.interface._abiCoder.encode(
-  //     module.initDataStructure.map((item) => item.type),
-  //     data,
-  //   )
+    const result = encodeAbiParameters(
+      module.initDataStructure.map((item) => ({ type: item.type })),
+      data,
+    )
 
-  //   return result
-  // }
+    return result
+  }
 
-  // async decodeModuleInitData(moduleAddress: string, initData: string) {
-  //   const module = await this.getModule(moduleAddress)
-  //   if (!module) {
-  //     throw new Error('Invalid module address ' + moduleAddress)
-  //   }
+  async decodeModuleInitData(moduleAddress: Address, initData: Hex) {
+    const module = await this.getModule(moduleAddress)
+    if (!module) {
+      throw new Error('Invalid module address ' + moduleAddress)
+    }
 
-  //   const result = this.contract.interface._abiCoder.decode(
-  //     module.initDataStructure.map((item) => item.type),
-  //     initData,
-  //   )
+    const result = decodeAbiParameters(
+      module.initDataStructure.map((item) => ({ type: item.type })),
+      initData,
+    )
 
-  //   return result
-  // }
+    return result
+  }
 }

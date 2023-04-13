@@ -7,8 +7,8 @@ import { OperatorContract } from './subcontracts/operator'
 import { CbtContract } from './subcontracts/cbt'
 import { TipsContract } from './subcontracts/tips'
 import { RevisionContract } from './subcontracts/revision'
-// import { LinkModuleContract } from './subcontracts/link_module'
-// import { MintModuleContract } from './subcontracts/mint_module'
+import { LinkModuleContract } from './subcontracts/link_module'
+import { MintModuleContract } from './subcontracts/mint_module'
 
 /**
  * This class is used to interact with the contract.
@@ -44,4 +44,6 @@ export class Contract extends BaseContract {
   operator = new OperatorContract(this)
   tips = new TipsContract(this)
   revision = new RevisionContract(this)
+  linkModule = new LinkModuleContract(this)
+  mintModule = new MintModuleContract(this)
 }

@@ -1,9 +1,10 @@
-import { BigNumberish } from 'ethers'
 import { MintOrLinkModuleConfig, Overrides, Result } from '../../types'
 import { autoSwitchMainnet } from '../decorators'
 import { BaseContract } from './base'
 
-export class MintModuleContract extends BaseContract {
+export class MintModuleContract {
+  constructor(private base: BaseContract) {}
+
   /**
    * This sets the mint module for a note.
    * @category MintModule
@@ -13,25 +14,29 @@ export class MintModuleContract extends BaseContract {
    * @returns The transaction hash.
    */
   @autoSwitchMainnet()
-  async setMintModuleForNote(
-    characterId: BigNumberish,
-    noteId: BigNumberish,
+  async setForNote(
+    characterId: bigint,
+    noteId: bigint,
     mintModule: MintOrLinkModuleConfig,
     overrides: Overrides = {},
   ): Promise<Result<undefined, true>> | never {
-    const moduleConfig = await this.getModuleConfig(mintModule)
+    const moduleConfig = await this.base.getModuleConfig(mintModule)
 
-    const tx = await this.contract.setMintModule4Note(
-      {
-        characterId,
-        noteId,
-        mintModule: moduleConfig.address,
-        mintModuleInitData: moduleConfig.initData,
-      },
-      overrides,
+    const tx = await this.base.contract.write.setMintModule4Note(
+      [
+        {
+          characterId,
+          noteId,
+          mintModule: moduleConfig.address,
+          mintModuleInitData: moduleConfig.initData,
+        },
+      ],
+      // overrides,
     )
 
-    const receipt = await tx.wait()
+    const receipt = await this.base.publicClient.waitForTransactionReceipt({
+      hash: tx,
+    })
 
     return {
       data: undefined,
