@@ -24,7 +24,7 @@ export default defineConfig((options) => [
     minify: !options.watch,
     platform: 'browser',
     dts: false,
-    target: 'es2018',
+    target: 'es2020',
     esbuildPlugins: [NodeModulesPolyfillPlugin()],
   },
 ])

@@ -1,14 +1,14 @@
 import {
-  Transport,
+  type Transport,
+  type PublicClient,
+  type PrivateKeyAccount,
+  type DecodeEventLogReturnType,
   webSocket,
   http,
-  PublicClient,
   createPublicClient,
   createWalletClient,
-  PrivateKeyAccount,
   custom,
   Address,
-  DecodeEventLogReturnType,
   Account,
   Log,
   decodeEventLog,
@@ -23,6 +23,8 @@ import {
 } from 'abitype'
 import { Network } from '../network'
 import * as Abi from '../contract/abi'
+import { WalletClient } from 'viem'
+import { Chain } from 'viem'
 
 export function createDefaultTransport(): Transport {
   const addr = Network.getJsonRpcAddress()
@@ -48,7 +50,9 @@ export function createDefaultPublicClient(): PublicClient {
   })
 }
 
-export function createWalletClientFromPrivateKey(account: PrivateKeyAccount) {
+export function createWalletClientFromPrivateKey(
+  account: PrivateKeyAccount,
+): WalletClient<Transport, Chain, Account> {
   const transport = createDefaultTransport()
   return createWalletClient({
     transport,
@@ -73,7 +77,7 @@ export function getProviderAddress(
 export function createWalletClientFromCustom(
   provider: EIP1193Provider,
   account?: Address | Account,
-) {
+): WalletClient<Transport, Chain, Account> {
   return createWalletClient({
     transport: custom(provider),
     chain: Network.getChain(),
