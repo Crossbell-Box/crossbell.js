@@ -1,5 +1,5 @@
 import { expect, describe, test } from 'vitest'
-import { parseCsbUri } from '../../src/utils/csb_uri'
+import { parseCsbUri } from '../../src/utils/csb'
 
 describe.concurrent('csb uri', () => {
   test.concurrent('parseCsbUri', async () => {
