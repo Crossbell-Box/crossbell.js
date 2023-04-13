@@ -10,7 +10,7 @@ import type {
 import { CharacterMetadata } from '../../types/metadata'
 import { Ipfs } from '../../ipfs'
 import { Address } from 'viem'
-import { validateAddress } from '../../utils'
+import { parseLog, validateAddress } from '../../utils'
 
 export class CharacterContract {
   constructor(private base: BaseContract) {}
@@ -57,7 +57,7 @@ export class CharacterContract {
       hash,
     })
 
-    const parser = this.base.parseLog(receipt.logs, 'CharacterCreated')
+    const parser = parseLog(receipt.logs, 'CharacterCreated')
 
     return {
       data: parser.args.characterId,
@@ -433,7 +433,7 @@ export class CharacterContract {
       hash: txHash,
     })
 
-    const parser = this.base.parseLog(receipt.logs, 'CharacterCreated')
+    const parser = parseLog(receipt.logs, 'CharacterCreated')
     const result = await this.getCharacter(parser.args.characterId, overrides)
 
     return result

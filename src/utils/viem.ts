@@ -8,10 +8,21 @@ import {
   PrivateKeyAccount,
   custom,
   Address,
+  DecodeEventLogReturnType,
   Account,
+  Log,
+  decodeEventLog,
 } from 'viem'
-import { Network } from '../network'
 import type { EIP1193Provider } from 'eip1193-types'
+import {
+  ExtractAbiEvent,
+  AbiTypeToPrimitiveType,
+  ExtractAbiEventNames,
+  Abi as _Abi,
+  AbiType,
+} from 'abitype'
+import { Network } from '../network'
+import * as Abi from '../contract/abi'
 
 export function createDefaultTransport(): Transport {
   const addr = Network.getJsonRpcAddress()
@@ -69,4 +80,89 @@ export function createWalletClientFromCustom(
     account,
     pollingInterval: 100,
   })
+}
+
+type EventInputs<
+  TAbi extends _Abi,
+  TName extends ExtractAbiEventNames<TAbi>,
+> = ExtractAbiEvent<TAbi, TName>['inputs']
+
+type GetAbiType<
+  TAbi extends _Abi,
+  TName extends ExtractAbiEventNames<TAbi>,
+  Key,
+> = Extract<
+  NonNullable<EventInputs<TAbi, TName>[number]>,
+  { name: Key }
+>['type']
+
+type GetEventArgs<
+  TAbi extends _Abi,
+  TName extends ExtractAbiEventNames<TAbi>,
+> = {
+  [K in NonNullable<
+    EventInputs<TAbi, TName>[number]['name']
+  >]: AbiTypeToPrimitiveType<
+    GetAbiType<TAbi, TName, K> extends AbiType
+      ? GetAbiType<TAbi, TName, K>
+      : never
+  >
+}
+
+type FixedEventReturn<
+  TAbi extends _Abi,
+  TName extends ExtractAbiEventNames<TAbi>,
+> = Omit<DecodeEventLogReturnType<TAbi, TName>, 'args'> & {
+  args: GetEventArgs<TAbi, TName>
+}
+
+export function parseLog<TName extends ExtractAbiEventNames<Abi.Entry>>(
+  logs: Log[],
+  filterTopic: TName,
+  options: {
+    throwOnMultipleLogsFound?: boolean
+    returnMultipleLogs: true
+    abi?: Abi.Entry
+  },
+): FixedEventReturn<Abi.Entry, TName>[]
+export function parseLog<TName extends ExtractAbiEventNames<Abi.Entry>>(
+  logs: Log[],
+  filterTopic: TName,
+  options?: {
+    throwOnMultipleLogsFound?: boolean
+    returnMultipleLogs?: boolean
+    abi?: Abi.Entry
+  },
+): FixedEventReturn<Abi.Entry, TName>
+export function parseLog<TName extends ExtractAbiEventNames<Abi.Entry>>(
+  logs: Log[],
+  targetTopic: TName,
+  {
+    throwOnMultipleLogsFound,
+    returnMultipleLogs,
+  }: {
+    throwOnMultipleLogsFound?: boolean
+    returnMultipleLogs?: boolean
+  } = {},
+): any {
+  const parsedLogs = logs
+    .map((log) =>
+      decodeEventLog({ abi: [...Abi.entry, ...Abi.linklist], ...log }),
+    )
+    .filter(
+      (log): log is DecodeEventLogReturnType<Abi.Entry, TName> =>
+        log.eventName === targetTopic,
+    )
+
+  if (parsedLogs.length === 0) {
+    throw new Error(`Log with topic ${targetTopic} not found`)
+  }
+
+  if (throwOnMultipleLogsFound && parsedLogs.length > 1) {
+    throw new Error(`More than one log with topic ${parsedLogs} found`)
+  }
+
+  if (returnMultipleLogs) return parsedLogs
+
+  return parsedLogs[0]
 }

@@ -1,7 +1,7 @@
 import { autoSwitchMainnet } from '../decorators'
 import type { Overrides, Result } from '../../types/contract'
 import { CharacterPermissionKey } from '../../types'
-import { Logger, validateAddress } from '../../utils'
+import { Logger, parseLog, validateAddress } from '../../utils'
 import { BaseContract } from './base'
 import { Address } from 'viem'
 
@@ -48,7 +48,7 @@ export class OperatorContract {
       hash: tx,
     })
 
-    const log = this.base.parseLog(receipt.logs, 'GrantOperatorPermissions')
+    const log = parseLog(receipt.logs, 'GrantOperatorPermissions')
 
     return {
       data: {
@@ -97,7 +97,7 @@ export class OperatorContract {
       hash: tx,
     })
 
-    // const log = this.base. parseLog(receipt.logs, 'grantOperators4Note')
+    // const log = parseLog(receipt.logs, 'grantOperators4Note')
 
     return {
       data: {},

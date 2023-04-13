@@ -1,6 +1,6 @@
 import { BaseContract } from './base'
 import { autoSwitchMainnet } from '../decorators'
-import { NIL_ADDRESS, validateAddress } from '../../utils'
+import { NIL_ADDRESS, parseLog, validateAddress } from '../../utils'
 import type {
   CallOverrides,
   Character,
@@ -45,7 +45,7 @@ export class LinkContract {
       hash,
     })
 
-    const parser = this.base.parseLog(receipt.logs, 'LinkCharacter')
+    const parser = parseLog(receipt.logs, 'LinkCharacter')
 
     return {
       data: parser.args.linklistId,
@@ -96,7 +96,7 @@ export class LinkContract {
       hash: tx,
     })
 
-    const log = this.base.parseLog(receipt.logs, 'LinkCharacter', {
+    const log = parseLog(receipt.logs, 'LinkCharacter', {
       throwOnMultipleLogsFound: false,
     })
 
@@ -116,7 +116,7 @@ export class LinkContract {
     hash: Address,
   ): Promise<Result<bigint>> | never {
     const receipt = await this.base.publicClient.getTransactionReceipt({ hash })
-    const parser = this.base.parseLog(receipt.logs, 'LinkCharacter')
+    const parser = parseLog(receipt.logs, 'LinkCharacter')
 
     return {
       data: parser.args.linklistId,
@@ -164,11 +164,11 @@ export class LinkContract {
       hash: tx,
     })
 
-    const createCharacterParser = this.base.parseLog(
+    const createCharacterParser = parseLog(
       receipt.logs,
       'CharacterCreated',
     )
-    const linkCharacterParser = this.base.parseLog(
+    const linkCharacterParser = parseLog(
       receipt.logs,
       'LinkCharacter',
     )
@@ -298,7 +298,7 @@ export class LinkContract {
       hash: tx,
     })
 
-    const parser = this.base.parseLog(receipt.logs, 'LinkAddress')
+    const parser = parseLog(receipt.logs, 'LinkAddress')
 
     return {
       data: parser.args.linklistId,
@@ -375,7 +375,7 @@ export class LinkContract {
       hash: tx,
     })
 
-    const parser = this.base.parseLog(receipt.logs, 'LinkAnyUri')
+    const parser = parseLog(receipt.logs, 'LinkAnyUri')
 
     return {
       data: parser.args.linklistId,
@@ -455,7 +455,7 @@ export class LinkContract {
       hash: tx,
     })
 
-    const parser = this.base.parseLog(receipt.logs, 'LinkAnyUri')
+    const parser = parseLog(receipt.logs, 'LinkAnyUri')
 
     return {
       data: parser.args.linklistId,
@@ -538,7 +538,7 @@ export class LinkContract {
       hash: tx,
     })
 
-    const parser = this.base.parseLog(receipt.logs, 'LinkNote')
+    const parser = parseLog(receipt.logs, 'LinkNote')
 
     return {
       data: parser.args.linklistId,
@@ -620,7 +620,7 @@ export class LinkContract {
       hash: tx,
     })
 
-    const parser = this.base.parseLog(receipt.logs, 'LinkNote')
+    const parser = parseLog(receipt.logs, 'LinkNote')
 
     return {
       data: parser.args.linklistId,

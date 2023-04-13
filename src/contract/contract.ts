@@ -13,8 +13,8 @@ import { CbtContract } from './subcontracts/cbt'
 /**
  * This class is used to interact with the contract.
  *
- * @example Connect with Metamask
- * ```
+ * @example
+ * ```ts
  * import { Contract } from 'crossbell.js'
  *
  * // Create a new contract instance with metamask provider
@@ -23,7 +23,7 @@ import { CbtContract } from './subcontracts/cbt'
  *
  * // Example API: Create a new character for an address
  * try {
- *   const result = await contract.createCharacter(
+ *   const result = await contract.character.create(
  *     '0x1234567890123456789012345678901234567890',
  *     'Jason',
  *     'ipfs://xxxx/metadata.json',

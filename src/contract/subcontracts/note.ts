@@ -11,7 +11,7 @@ import {
   LinkItemMap,
 } from '../../types'
 import { Ipfs } from '../../ipfs'
-import { NIL_ADDRESS, validateAddress } from '../../utils'
+import { NIL_ADDRESS, parseLog, validateAddress } from '../../utils'
 import { autoSwitchMainnet } from '../decorators'
 import pLimit from 'p-limit'
 import { Address } from 'abitype'
@@ -59,7 +59,7 @@ export class NoteContract {
       hash: tx,
     })
 
-    const log = this.base.parseLog(receipt.logs, 'PostNote')
+    const log = parseLog(receipt.logs, 'PostNote')
 
     return {
       data: {
@@ -133,7 +133,7 @@ export class NoteContract {
       hash: tx,
     })
 
-    const logs = this.base.parseLog(receipt.logs, 'PostNote', {
+    const logs = parseLog(receipt.logs, 'PostNote', {
       throwOnMultipleLogsFound: false,
       returnMultipleLogs: true,
     })
@@ -190,7 +190,7 @@ export class NoteContract {
       hash: tx,
     })
 
-    const log = this.base.parseLog(receipt.logs, 'PostNote')
+    const log = parseLog(receipt.logs, 'PostNote')
 
     return {
       data: {
@@ -246,7 +246,7 @@ export class NoteContract {
       hash: tx,
     })
 
-    const log = this.base.parseLog(receipt.logs, 'PostNote')
+    const log = parseLog(receipt.logs, 'PostNote')
 
     return {
       data: {
@@ -545,7 +545,7 @@ export class NoteContract {
       hash: tx,
     })
 
-    const log = this.base.parseLog(receipt.logs, 'MintNote')
+    const log = parseLog(receipt.logs, 'MintNote')
 
     return {
       data: {
