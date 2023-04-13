@@ -19,6 +19,7 @@ export class Network {
   static #currentNetwork: AvailableNetwork = 'crossbell'
   static #ipfsGateway = 'https://w3s.link/ipfs/'
   static jsonRpcAddress =
+    // @ts-ignore
     globalThis.process?.env.CROSSBELL_RPC_ADDRESS ?? 'https://rpc.crossbell.io'
 
   /**
