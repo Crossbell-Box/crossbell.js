@@ -40,7 +40,7 @@ import {
 export class Contract extends BaseContract {
   csb = new CsbContract(this)
   character = new CharacterContract(this)
-  link = new LinkContract(this)
+  link = new LinkContract(this, this.character)
   cbt = new CbtContract(this)
   note = new NoteContract(this)
   operator = new OperatorContract(this)

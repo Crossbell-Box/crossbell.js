@@ -1,7 +1,12 @@
 import { autoSwitchMainnet } from '../decorators'
-import type { Overrides, Result } from '../../types/contract'
+import type {
+  WriteOverrides,
+  Result,
+  ReadOverrides,
+} from '../../types/contract'
 import { BaseContract } from './base'
 import { Address, encodeAbiParameters, isAddressEqual } from 'viem'
+import { Entry, Mira, Tips } from '../abi'
 
 export class TipsContract {
   constructor(private base: BaseContract) {}
@@ -20,7 +25,7 @@ export class TipsContract {
     fromCharacterId: bigint,
     toCharacterId: bigint,
     amount: bigint | number,
-    overrides: Overrides = {},
+    overrides: WriteOverrides<Mira, 'send'> = {},
   ): Promise<Result<undefined, true>> | never {
     const data = encodeAbiParameters(
       [{ type: 'uint256' }, { type: 'uint256' }],
@@ -29,7 +34,7 @@ export class TipsContract {
 
     const tx = await this.base.miraContract.write.send(
       [this.base.options.address.tipsContract, BigInt(amount), data],
-      // overrides,
+      overrides,
     )
 
     const receipt = await this.base.publicClient.waitForTransactionReceipt({
@@ -58,7 +63,7 @@ export class TipsContract {
     toCharacterId: bigint,
     toNoteId: bigint,
     amount: bigint | number,
-    overrides: Overrides = {},
+    overrides: WriteOverrides<Mira, 'send'> = {},
   ): Promise<Result<undefined, true>> | never {
     const data = encodeAbiParameters(
       [{ type: 'uint256' }, { type: 'uint256' }, { type: 'uint256' }],
@@ -67,7 +72,7 @@ export class TipsContract {
 
     const tx = await this.base.miraContract.write.send(
       [this.base.options.address.tipsContract, BigInt(amount), data],
-      // overrides,
+      overrides,
     )
 
     const receipt = await this.base.publicClient.waitForTransactionReceipt({
@@ -91,13 +96,13 @@ export class TipsContract {
    * @param characterId - The character ID to get the balance of.
    * @returns The balance of $MIRA token of the address. Unit: wei.
    */
-  async getMiraBalanceOfCharacter(
+  async getBalanceOfCharacter(
     characterId: bigint,
-    // overrides: CallOverrides = {},
+    overrides: ReadOverrides<Entry, 'ownerOf' | 'balanceOf'> = {},
   ): Promise<Result<bigint>> | never {
     const address = await this.base.contract.read.ownerOf(
       [characterId],
-      // overrides
+      overrides,
     )
 
     const balance = isAddressEqual(
@@ -106,12 +111,9 @@ export class TipsContract {
     )
       ? await this.base.newbieVillaContract.read.balanceOf(
           [characterId],
-          // overrides,
+          overrides,
         )
-      : await this.base.miraContract.read.balanceOf(
-          [address],
-          // overrides
-        )
+      : await this.base.miraContract.read.balanceOf([address], overrides)
 
     return { data: balance }
   }
@@ -123,13 +125,13 @@ export class TipsContract {
    * @param address - The address to get the balance of.
    * @returns The balance of $MIRA token of the address. Unit: wei.
    */
-  async getMiraBalance(
+  async getBalance(
     address: Address,
-    // overrides: CallOverrides = {},
+    overrides: ReadOverrides<Entry, 'balanceOf'> = {},
   ): Promise<Result<bigint>> | never {
     const balance = await this.base.miraContract.read.balanceOf(
       [address],
-      // overrides
+      overrides,
     )
 
     return {
@@ -143,9 +145,10 @@ export class TipsContract {
    * @category TipsContract
    * @returns The token address of $MIRA.
    */
-  async getMiraTokenAddress(): // overrides: CallOverrides = {},
-  Promise<Result<Address>> | never {
-    const res = await this.base.tipsContract.read.getToken(/* overrides */)
+  async getTokenAddress(
+    overrides: ReadOverrides<Tips, 'getToken'> = {},
+  ): Promise<Result<Address>> | never {
+    const res = await this.base.tipsContract.read.getToken(overrides)
 
     return {
       data: res,
@@ -158,9 +161,10 @@ export class TipsContract {
    * @category TipsContract
    * @returns The token decimals of $MIRA.
    */
-  async getMiraTokenDecimals(): // overrides: CallOverrides = {},
-  Promise<Result<number>> | never {
-    const res = await this.base.miraContract.read.decimals(/* overrides */)
+  async getTokenDecimals(
+    overrides: ReadOverrides<Mira, 'decimals'> = {},
+  ): Promise<Result<number>> | never {
+    const res = await this.base.miraContract.read.decimals(overrides)
 
     return {
       data: res,

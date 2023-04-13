@@ -5,8 +5,8 @@ import {
   Note,
   NoteMetadata,
   PostNoteOptions,
-  Overrides,
-  CallOverrides,
+  ReadOverrides,
+  WriteOverrides,
   LinkItemType,
   LinkItemMap,
 } from '../../types'
@@ -21,6 +21,7 @@ import { autoSwitchMainnet } from '../decorators'
 import pLimit from 'p-limit'
 import { Address } from 'abitype'
 import { Abi } from '../..'
+import { Entry } from '../abi'
 
 export class NoteContract {
   constructor(private base: BaseContract) {}
@@ -38,7 +39,7 @@ export class NoteContract {
     characterId: bigint,
     metadataOrUri: NoteMetadata | string,
     { locked = false, linkModule, mintModule }: PostNoteOptions = {},
-    overrides: Overrides = {},
+    overrides: WriteOverrides<Entry, 'postNote'> = {},
   ): Promise<Result<{ noteId: bigint }, true>> | never {
     const { uri } = await Ipfs.parseMetadataOrUri('note', metadataOrUri)
 
@@ -57,7 +58,7 @@ export class NoteContract {
           locked: locked,
         },
       ],
-      // overrides,
+      overrides,
     )
 
     const receipt = await this.base.publicClient.waitForTransactionReceipt({
@@ -93,7 +94,7 @@ export class NoteContract {
       metadataOrUri: NoteMetadata | string
       options?: PostNoteOptions
     }[],
-    overrides: Overrides = {},
+    overrides: WriteOverrides<Entry, 'multicall'> = {},
   ): Promise<Result<{ noteIds: bigint[] }, true>> | never {
     const limitedPromise = pLimit(10)
     const encodedDataArr = await Promise.all(
@@ -131,7 +132,7 @@ export class NoteContract {
 
     const tx = await this.base.contract.write.multicall(
       [encodedDataArr],
-      // overrides
+      overrides,
     )
 
     const receipt = await this.base.publicClient.waitForTransactionReceipt({
@@ -168,7 +169,7 @@ export class NoteContract {
     metadataOrUri: NoteMetadata | string,
     targetUri: string,
     { locked = false, linkModule, mintModule }: PostNoteOptions = {},
-    overrides: Overrides = {},
+    overrides: WriteOverrides<Entry, 'postNote4AnyUri'> = {},
   ): Promise<Result<{ noteId: bigint }, true>> | never {
     const { uri } = await Ipfs.parseMetadataOrUri('note', metadataOrUri)
 
@@ -188,7 +189,7 @@ export class NoteContract {
         },
         targetUri,
       ],
-      // overrides,
+      overrides,
     )
 
     const receipt = await this.base.publicClient.waitForTransactionReceipt({
@@ -221,7 +222,7 @@ export class NoteContract {
     targetCharacterId: bigint,
     targetNoteId: bigint,
     { locked = false, linkModule, mintModule }: PostNoteOptions = {},
-    overrides: Overrides = {},
+    overrides: WriteOverrides<Entry, 'postNote4Note'> = {},
   ): Promise<Result<{ noteId: bigint }, true>> | never {
     const { uri } = await Ipfs.parseMetadataOrUri('note', metadataOrUri)
 
@@ -244,7 +245,7 @@ export class NoteContract {
           noteId: targetNoteId,
         },
       ],
-      // overrides,
+      overrides,
     )
 
     const receipt = await this.base.publicClient.waitForTransactionReceipt({
@@ -274,7 +275,7 @@ export class NoteContract {
     characterId: bigint,
     noteId: bigint,
     metadataOrUri: NoteMetadata | string,
-    overrides: Overrides = {},
+    overrides: WriteOverrides<Entry, 'setNoteUri'> = {},
   ): Promise<Result<{ uri: string; metadata: NoteMetadata }, true>> | never {
     const { uri, metadata } = await Ipfs.parseMetadataOrUri(
       'note',
@@ -284,7 +285,7 @@ export class NoteContract {
 
     const tx = await this.base.contract.write.setNoteUri(
       [characterId, noteId, uri],
-      // overrides,
+      overrides,
     )
 
     const receipt = await this.base.publicClient.waitForTransactionReceipt({
@@ -342,7 +343,7 @@ export class NoteContract {
     characterId: bigint,
     noteId: bigint,
     modifier: (metadata?: NoteMetadata) => NoteMetadata,
-    overrides: Overrides = {},
+    overrides: WriteOverrides<Entry, 'setNoteUri'> = {},
   ) {
     const note = await this.get(characterId, noteId)
 
@@ -366,7 +367,7 @@ export class NoteContract {
     characterId: bigint,
     noteId: bigint,
     metadata: NoteMetadata,
-    overrides: Overrides = {},
+    overrides: WriteOverrides<Entry, 'setNoteUri'> = {},
   ) {
     return this.setUri(characterId, noteId, metadata, overrides)
   }
@@ -382,11 +383,11 @@ export class NoteContract {
     characterId: bigint,
     noteId: bigint,
     linkItemType?: T,
-    overrides: CallOverrides = {},
+    overrides: ReadOverrides<Entry, 'getNote'> = {},
   ): Promise<Result<Note<LinkItemMap[T]>>> | never {
     const data = await this.base.contract.read.getNote(
       [characterId, noteId],
-      // overrides,
+      overrides,
     )
 
     const linkItemTypeString: LinkItemType | undefined =
@@ -464,11 +465,11 @@ export class NoteContract {
   async delete(
     characterId: bigint,
     noteId: bigint,
-    overrides: Overrides = {},
+    overrides: WriteOverrides<Entry, 'deleteNote'> = {},
   ): Promise<Result<undefined, true>> | never {
     const tx = await this.base.contract.write.deleteNote(
       [characterId, noteId],
-      // overrides
+      overrides,
     )
 
     const receipt = await this.base.publicClient.waitForTransactionReceipt({
@@ -498,11 +499,11 @@ export class NoteContract {
   async lock(
     characterId: bigint,
     noteId: bigint,
-    overrides: Overrides = {},
+    overrides: WriteOverrides<Entry, 'lockNote'> = {},
   ): Promise<Result<undefined, true>> | never {
     const tx = await this.base.contract.write.lockNote(
       [characterId, noteId],
-      // overrides
+      overrides,
     )
 
     const receipt = await this.base.publicClient.waitForTransactionReceipt({
@@ -528,7 +529,7 @@ export class NoteContract {
     characterId: bigint,
     noteId: bigint,
     toAddress: Address,
-    overrides: Overrides = {},
+    overrides: WriteOverrides<Entry, 'mintNote'> = {},
   ):
     | Promise<Result<{ contractAddress: string; tokenId: bigint }, true>>
     | never {
@@ -543,7 +544,7 @@ export class NoteContract {
           mintModuleData: NIL_ADDRESS,
         },
       ],
-      // overrides,
+      overrides,
     )
 
     const receipt = await this.base.publicClient.waitForTransactionReceipt({

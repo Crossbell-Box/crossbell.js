@@ -1,9 +1,14 @@
 import { autoSwitchMainnet } from '../decorators'
-import type { Overrides, Result } from '../../types/contract'
+import type {
+  WriteOverrides,
+  Result,
+  ReadOverrides,
+} from '../../types/contract'
 import { CharacterPermissionKey } from '../../types'
 import { Logger, parseLog, validateAddress } from '../../utils'
 import { BaseContract } from './base'
 import { Address } from 'viem'
+import { Entry } from '../abi'
 
 // https://github.com/Crossbell-Box/CIPs/blob/main/CIPs/CIP-7.md
 
@@ -32,7 +37,7 @@ export class OperatorContract {
     characterId: bigint,
     operator: Address,
     permissions: CharacterPermissionKey[],
-    overrides: Overrides = {},
+    overrides: WriteOverrides<Entry, 'grantOperatorPermissions'> = {},
   ): Promise<Result<{ bitmapUint256: bigint }, true>> | never {
     validateAddress(operator)
 
@@ -41,7 +46,7 @@ export class OperatorContract {
 
     const tx = await this.base.contract.write.grantOperatorPermissions(
       [characterId, operator, permissionUint256],
-      // overrides,
+      overrides,
     )
 
     const receipt = await this.base.publicClient.waitForTransactionReceipt({
@@ -83,14 +88,14 @@ export class OperatorContract {
     noteId: bigint,
     allowlist: Address[],
     blocklist: Address[] = [],
-    overrides: Overrides = {},
+    overrides: WriteOverrides<Entry, 'grantOperators4Note'> = {},
   ): Promise<Result<{}, true>> | never {
     validateAddress(allowlist)
     validateAddress(blocklist)
 
     const tx = await this.base.contract.write.grantOperators4Note(
       [characterId, noteId, blocklist, allowlist],
-      // overrides,
+      overrides,
     )
 
     const receipt = await this.base.publicClient.waitForTransactionReceipt({
@@ -114,11 +119,11 @@ export class OperatorContract {
    */
   async getForCharacter(
     characterId: bigint,
-    // overrides: CallOverrides = {},
+    overrides: ReadOverrides<Entry, 'getOperators'> = {},
   ): Promise<Result<readonly Address[], false>> | never {
     const operators = await this.base.contract.read.getOperators(
       [characterId],
-      // overrides,
+      overrides,
     )
     return {
       data: operators,
@@ -135,7 +140,7 @@ export class OperatorContract {
   async getForNote(
     characterId: bigint,
     noteId: bigint,
-    // overrides: CallOverrides = {},
+    overrides: ReadOverrides<Entry, 'getOperators4Note'> = {},
   ):
     | Promise<
         Result<
@@ -147,7 +152,7 @@ export class OperatorContract {
     const [allowlist, blocklist] =
       await this.base.contract.read.getOperators4Note(
         [characterId, noteId],
-        // overrides,
+        overrides,
       )
     return {
       data: {
@@ -170,12 +175,12 @@ export class OperatorContract {
     characterId: bigint,
     noteId: bigint,
     operator: Address,
+    overrides: ReadOverrides<Entry, 'isOperatorAllowedForNote'> = {},
   ): Promise<Result<boolean, false>> | never {
-    const isAllowed = await this.base.contract.read.isOperatorAllowedForNote([
-      characterId,
-      noteId,
-      operator,
-    ])
+    const isAllowed = await this.base.contract.read.isOperatorAllowedForNote(
+      [characterId, noteId, operator],
+      overrides,
+    )
     return {
       data: isAllowed,
     }
@@ -192,12 +197,12 @@ export class OperatorContract {
   async getPermissionsForCharacter(
     characterId: bigint,
     operator: Address,
-    // overrides: CallOverrides = {},
+    overrides: ReadOverrides<Entry, 'getOperatorPermissions'> = {},
   ): Promise<Result<CharacterPermissionKey[], false>> | never {
     const permissionUint256 =
       await this.base.contract.read.getOperatorPermissions(
         [characterId, operator],
-        // overrides,
+        overrides,
       )
 
     const permissions =

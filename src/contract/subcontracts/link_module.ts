@@ -1,5 +1,6 @@
-import { MintOrLinkModuleConfig, Overrides, Result } from '../../types'
+import { MintOrLinkModuleConfig, WriteOverrides, Result } from '../../types'
 import { getModuleConfig } from '../../utils'
+import { Entry } from '../abi'
 import { autoSwitchMainnet } from '../decorators'
 import { BaseContract } from './base'
 import { Address } from 'abitype'
@@ -18,7 +19,7 @@ export class LinkModuleContract {
   async setForAddress(
     address: Address,
     linkModule: MintOrLinkModuleConfig,
-    overrides: Overrides = {},
+    overrides: WriteOverrides<Entry, 'setLinkModule4Address'> = {},
   ): Promise<Result<undefined, true>> | never {
     const moduleConfig = await getModuleConfig(linkModule)
 
@@ -30,7 +31,7 @@ export class LinkModuleContract {
           linkModuleInitData: moduleConfig.initData,
         },
       ],
-      // overrides,
+      overrides,
     )
 
     const receipt = await this.base.publicClient.waitForTransactionReceipt({
@@ -54,7 +55,7 @@ export class LinkModuleContract {
   async setForLinklist(
     linklistId: bigint,
     linkModule: MintOrLinkModuleConfig,
-    overrides: Overrides = {},
+    overrides: WriteOverrides<Entry, 'setLinkModule4Linklist'> = {},
   ): Promise<Result<undefined, true>> | never {
     const moduleConfig = await getModuleConfig(linkModule)
 
@@ -66,7 +67,7 @@ export class LinkModuleContract {
           linkModuleInitData: moduleConfig.initData,
         },
       ],
-      // overrides,
+      overrides,
     )
 
     const receipt = await this.base.publicClient.waitForTransactionReceipt({

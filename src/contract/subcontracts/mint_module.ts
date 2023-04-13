@@ -1,5 +1,6 @@
-import { MintOrLinkModuleConfig, Overrides, Result } from '../../types'
+import { MintOrLinkModuleConfig, WriteOverrides, Result } from '../../types'
 import { getModuleConfig } from '../../utils'
+import { Entry } from '../abi'
 import { autoSwitchMainnet } from '../decorators'
 import { BaseContract } from './base'
 
@@ -19,7 +20,7 @@ export class MintModuleContract {
     characterId: bigint,
     noteId: bigint,
     mintModule: MintOrLinkModuleConfig,
-    overrides: Overrides = {},
+    overrides: WriteOverrides<Entry, 'setMintModule4Note'> = {},
   ): Promise<Result<undefined, true>> | never {
     const moduleConfig = await getModuleConfig(mintModule)
 
@@ -32,7 +33,7 @@ export class MintModuleContract {
           mintModuleInitData: moduleConfig.initData,
         },
       ],
-      // overrides,
+      overrides,
     )
 
     const receipt = await this.base.publicClient.waitForTransactionReceipt({
