@@ -1,4 +1,4 @@
-interface AchievementInfo {
+export interface AchievementInfo {
   tokenId: number
   name: FunctionStringCallback
   uri: string
@@ -36,7 +36,7 @@ export interface AchievementItem {
   }
 }
 
-interface AchievementItemGroup {
+export interface AchievementItemGroup {
   info: {
     name: string
     title: string

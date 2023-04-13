@@ -5,7 +5,7 @@ import { type BigNumberish } from 'ethers'
 import { createSearchParamsString } from '../../utils'
 import { NoteMetadata } from '../../types'
 
-type NoteQueryOptions = {
+export type NoteQueryOptions = {
   /** The owner of this note */
   characterId?: BigNumberish
   /** The link item type to filter by. e.g. 'Character' */

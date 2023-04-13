@@ -1,14 +1,16 @@
-import { BaseContract } from './subcontracts/base'
-import { CsbContract } from './subcontracts/csb'
-import { LinkContract } from './subcontracts/link'
-import { NoteContract } from './subcontracts/note'
-import { CharacterContract } from './subcontracts/character'
-import { OperatorContract } from './subcontracts/operator'
-import { CbtContract } from './subcontracts/cbt'
-import { TipsContract } from './subcontracts/tips'
-import { RevisionContract } from './subcontracts/revision'
-import { LinkModuleContract } from './subcontracts/link_module'
-import { MintModuleContract } from './subcontracts/mint_module'
+import {
+  BaseContract,
+  CsbContract,
+  LinkContract,
+  NoteContract,
+  CharacterContract,
+  OperatorContract,
+  CbtContract,
+  TipsContract,
+  RevisionContract,
+  LinkModuleContract,
+  MintModuleContract,
+} from './subcontracts'
 
 /**
  * This class is used to interact with the contract.

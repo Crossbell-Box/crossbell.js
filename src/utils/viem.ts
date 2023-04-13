@@ -113,7 +113,7 @@ type GetEventArgs<
   >
 }
 
-type FixedEventReturn<
+export type FixedEventReturn<
   TAbi extends _Abi,
   TName extends ExtractAbiEventNames<TAbi>,
 > = Omit<DecodeEventLogReturnType<TAbi, TName>, 'args'> & {

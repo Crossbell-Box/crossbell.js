@@ -26,10 +26,10 @@ import type { EIP1193Provider } from 'eip1193-types'
 import { privateKeyToAccount } from 'viem/accounts'
 import { decodeAbiParameters } from 'viem'
 
-interface AccountOptions {
+export interface AccountOptions {
   account: Account | Address
 }
-interface AddressOptions {
+export interface AddressOptions {
   entryContract: Address
   peripheryContract: Address
   cbtContract: Address
