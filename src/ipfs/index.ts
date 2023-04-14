@@ -1,5 +1,4 @@
 import retry from 'async-retry'
-import '../utils/fetch'
 import { ipfsFetch, isIpfsUrl } from '@crossbell/ipfs-fetch'
 import { type IpfsResponse } from '../types/ipfs'
 import {

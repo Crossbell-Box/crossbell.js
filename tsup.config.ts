@@ -15,7 +15,7 @@ export default defineConfig((options) => [
     minify: !options.watch,
     platform: 'node',
     dts: options.dts,
-    target: 'node14',
+    target: 'node16',
   },
   {
     ...commonConfig,

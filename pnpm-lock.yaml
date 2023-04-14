@@ -13,9 +13,6 @@ importers:
       eip1193-types:
         specifier: ^0.2.0
         version: 0.2.0
-      fetch-undici:
-        specifier: ^3.0.1
-        version: 3.0.1
       p-limit:
         specifier: ^3.1.0
         version: 3.1.0
@@ -3116,13 +3113,6 @@ packages:
       reusify: 1.0.4
     dev: true
 
-  /fetch-undici@3.0.1:
-    resolution: {integrity: sha512-UHHu1HqW22ZhK6C/1Zmjf7mQpOwPwLYZ+xcsOgpzistONU8QqvCop6Od29p/kw1GUVoq2Ihu6ItpKLtlojx4FQ==}
-    engines: {node: '>=16'}
-    dependencies:
-      undici: 5.8.0
-    dev: false
-
   /file-entry-cache@6.0.1:
     resolution: {integrity: sha512-7Gps/XWymbLk2QLYK4NzpMOrYjMhdIxXuIvy2QBsLE6ljuodKvdkWs/cpyJJ3CVIVpH0Oi1Hvg1ovbMzLdFBBg==}
     engines: {node: ^10.12.0 || >=12.0.0}
@@ -5301,11 +5291,6 @@ packages:
       defu: 6.1.2
       jiti: 1.18.2
     dev: true
-
-  /undici@5.8.0:
-    resolution: {integrity: sha512-1F7Vtcez5w/LwH2G2tGnFIihuWUlc58YidwLiCv+jR2Z50x0tNXpRRw7eOIJ+GvqCqIkg9SB7NWAJ/T9TLfv8Q==}
-    engines: {node: '>=12.18'}
-    dev: false
 
   /unist-util-stringify-position@2.0.3:
     resolution: {integrity: sha512-3faScn5I+hy9VleOq/qNbAd6pAx7iH5jYBMS9I1HgQVijz/4mv5Bvw5iw1sC/90CODiKo81G/ps8AJrISn687g==}
