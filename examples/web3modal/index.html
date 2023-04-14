@@ -1,176 +1,169 @@
 <html>
-  <body>
-    <script src="https://unpkg.com/@walletconnect/web3-provider@1.2.1/dist/umd/index.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.6.2/ethers.umd.min.js"></script>
-    <script src="https://unpkg.com/web3modal@1.9.7/dist/index.js"></script>
-    <script src="./../../dist/index.global.js"></script>
 
-    <p id="hint"></p>
+<body>
+  <script src="https://unpkg.com/@walletconnect/web3-provider@1.2.1/dist/umd/index.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.6.2/ethers.umd.min.js"></script>
+  <script src="https://unpkg.com/web3modal@1.9.7/dist/index.js"></script>
+  <script src="./../../dist/index.global.js"></script>
 
-    <h3>Connect</h3>
+  <p id="hint"></p>
 
-    <button onclick="connectWeb3Modal()">connect web3 modal</button>
+  <h3>Connect</h3>
 
-    <button onclick="connectContract()">connect contract</button>
+  <button onclick="connectWeb3Modal()">connect web3 modal</button>
 
-    <h3>Create Character</h3>
+  <button onclick="connectContract()">connect contract</button>
 
-    <input
-      type="text"
-      id="create-character-address"
-      placeholder="address"
-      value=""
-    />
-    <input
-      type="text"
-      id="create-character-handle"
-      placeholder="handler"
-      value="my character handle"
-    />
-    <input
-      type="text"
-      id="create-character-uri"
-      placeholder="character uri"
-      value="https://example.com"
-    />
+  <h3>Create Character</h3>
 
-    <button onclick="createCharacter()">createCharacter</button>
+  <input type="text" id="create-character-address" placeholder="address" value="" />
+  <input type="text" id="create-character-handle" placeholder="handler" value="my character handle" />
+  <input type="text" id="create-character-uri" placeholder="character uri" value="https://example.com" />
 
-    <h3>Get Character</h3>
+  <button onclick="createCharacter()">createCharacter</button>
 
-    <button onclick="getCharacterByHandle()">getCharacterByHandle</button>
+  <h3>Get Character</h3>
 
-    <script>
-      const Web3Modal = window.Web3Modal.default
-      const WalletConnectProvider = window.WalletConnectProvider.default
-      const { Contract } = window.Crossbell
+  <button onclick="getCharacterByHandle()">getCharacterByHandle</button>
 
-      const chainId = '0x' + (3737).toString(16)
+  <script>
+    const Web3Modal = window.Web3Modal.default
+    const WalletConnectProvider = window.WalletConnectProvider.default
+    const { Contract } = window.Crossbell
 
-      const providerOptions = {
-        // https://docs.walletconnect.com/quick-start/dapps/web3-provider
-        walletconnect: {
-          package: WalletConnectProvider, // required
-          options: {
-            rpc: {
-              3737: 'https://rpc.crossbell.io',
-            },
+    const chainId = '0x' + (3737).toString(16)
+
+    const providerOptions = {
+      // https://docs.walletconnect.com/quick-start/dapps/web3-provider
+      walletconnect: {
+        package: WalletConnectProvider, // required
+        options: {
+          rpc: {
+            3737: 'https://rpc.crossbell.io',
           },
         },
+      },
+    }
+
+    const web3Modal = new Web3Modal({
+      network: 'mainnet', // optional
+      cacheProvider: false, // optional
+      providerOptions, // required
+    })
+
+    updateHint('click "connect to web3modal" btn to connect to web3 modal')
+
+    let contract, provider
+    async function connectWeb3Modal() {
+      try {
+        provider = await web3Modal.connect()
+        // await switchNetwork()
+        updateHint(
+          'connected to web3 modal. click "connect to contract" btn to connect to contract',
+        )
+        contract = new Contract(provider)
+      } catch (e) {
+        console.error(e)
+        updateHint(e.message)
       }
+    }
 
-      const web3Modal = new Web3Modal({
-        network: 'mainnet', // optional
-        cacheProvider: false, // optional
-        providerOptions, // required
-      })
-
-      updateHint('click "connect to web3modal" btn to connect to web3 modal')
-
-      let contract, provider
-      async function connectWeb3Modal() {
-        try {
-          provider = await web3Modal.connect()
-          // await switchNetwork()
-          updateHint(
-            'connected to web3 modal. click "connect to contract" btn to connect to contract',
-          )
-          contract = new Contract(provider)
-        } catch (e) {
-          console.error(e)
-          updateHint(e.message)
-        }
-      }
-
-      async function switchNetwork() {
-        try {
-          await provider.request({
-            method: 'wallet_switchEthereumChain',
-            params: [{ chainId: chainId }],
-          })
-          console.log('switched network')
-        } catch (e) {
-          console.error(e)
-          // if (e.code === 4902) {
-          console.log('add network')
-          await provider.request({
-            method: 'wallet_addEthereumChain',
-            params: [
-              {
-                chainId: '0xe99',
-                chainName: 'Crossbell',
-                nativeCurrency: {
-                  name: 'CSB',
-                  symbol: 'CSB',
-                  decimals: 18,
-                },
-                rpcUrls: ['https://rpc.crossbell.io'],
-                blockExplorerUrls: ['https://scan.crossbell.io/'],
+    async function switchNetwork() {
+      try {
+        await provider.request({
+          method: 'wallet_switchEthereumChain',
+          params: [{ chainId: chainId }],
+        })
+        console.log('switched network')
+      } catch (e) {
+        console.error(e)
+        // if (e.code === 4902) {
+        console.log('add network')
+        await provider.request({
+          method: 'wallet_addEthereumChain',
+          params: [
+            {
+              chainId: '0xe99',
+              chainName: 'Crossbell',
+              nativeCurrency: {
+                name: 'CSB',
+                symbol: 'CSB',
+                decimals: 18,
               },
-            ],
-          })
-          // }
-        }
+              rpcUrls: ['https://rpc.crossbell.io'],
+              blockExplorerUrls: ['https://scan.crossbell.io/'],
+            },
+          ],
+        })
+        // }
       }
+    }
 
-      async function connectContract() {
-        console.log('connecting...')
-        updateHint('connecting')
-        try {
-          await contract.connect(provider)
-          const address = ethereum.selectedAddress
-          updateHint(`your address is ${address}`)
-          document.getElementById('create-character-address').value = address
-        } catch (e) {
-          console.error(e)
-          updateHint('connect failed')
-          return
-        }
+    async function connectContract() {
+      console.log('connecting...')
+      updateHint('connecting')
+      try {
+        await contract.walletClient.requestAddresses()
+        const address = ethereum.selectedAddress
+        updateHint(`your address is ${address}`)
+        document.getElementById('create-character-address').value = address
+      } catch (e) {
+        console.error(e)
+        updateHint('connect failed')
+        return
       }
+    }
 
-      async function createCharacter() {
-        console.log('creating character...')
-        updateHint('creating character...')
-        try {
-          const address = document.getElementById(
-            'create-character-address',
-          ).value
-          const handle = document.getElementById(
-            'create-character-handle',
-          ).value
-          const uri = document.getElementById('create-character-uri').value
-          const data = await contract.createCharacter(
-            ethereum.selectedAddress,
-            handle,
-            uri,
-          )
-          console.log(data)
-          updateHint(`character created.  ${JSON.stringify(data, null, 2)}`)
-        } catch (e) {
-          console.error(e)
-          updateHint(e.message)
-        }
+    async function createCharacter() {
+      console.log('creating character...')
+      updateHint('creating character...')
+      try {
+        const address = document.getElementById(
+          'create-character-address',
+        ).value
+        const handle = document.getElementById(
+          'create-character-handle',
+        ).value
+        const uri = document.getElementById('create-character-uri').value
+        const data = await contract.character.create(
+          ethereum.selectedAddress,
+          handle,
+          uri,
+        )
+        console.log(data)
+        updateHint(`character created.  ${JSON.stringify(data, (key, value) =>
+          typeof value === 'bigint'
+            ? value.toString()
+            : value, 2)}`)
+      } catch (e) {
+        console.error(e)
+        updateHint(e.message)
       }
+    }
 
-      async function getCharacterByHandle() {
-        console.log('getting character...')
-        updateHint('getting character...')
-        try {
-          const handle = document.getElementById(
-            'create-character-handle',
-          ).value
-          const data = await contract.getCharacterByHandle(handle)
-          console.log(data)
-          updateHint(`character: ${JSON.stringify(data, null, 2)}`)
-        } catch (e) {
-          console.error(e)
-          updateHint(e.message)
-        }
+    async function getCharacterByHandle() {
+      console.log('getting character...')
+      updateHint('getting character...')
+      try {
+        const handle = document.getElementById(
+          'create-character-handle',
+        ).value
+        const data = await contract.character.getByHandle(handle)
+        console.log(data)
+        updateHint(`character: ${JSON.stringify(data, (key, value) =>
+          typeof value === 'bigint'
+            ? value.toString()
+            : value, 2)}`)
+      } catch (e) {
+        console.error(e)
+        updateHint(e.message)
       }
+    }
 
-      function updateHint(text) {
-        document.getElementById('hint').innerText = text
-      }
-    </script>
-  </body>
+    function updateHint(text) {
+      document.getElementById('hint').innerText = text
+    }
+  </script>
+</body>
+
 </html>

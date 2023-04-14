@@ -1,87 +1,74 @@
 <html>
-  <body>
-    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/web3/1.7.3/web3.min.js"></script> -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.6.2/ethers.umd.min.js"></script>
-    <script src="./../../dist/index.global.js"></script>
 
-    <p id="hint"></p>
+<body>
+  <script src="./../../dist/index.global.js"></script>
 
-    <h3>Connect</h3>
+  <p id="hint"></p>
 
-    <button onclick="connect()">connect</button>
+  <h3>Connect</h3>
 
-    <h3>Create Character</h3>
+  <button onclick="connect()">connect</button>
 
-    <input
-      type="text"
-      id="create-character-address"
-      placeholder="address"
-      value=""
-    />
-    <input
-      type="text"
-      id="create-character-handle"
-      placeholder="handler"
-      value="my character handle"
-    />
-    <input
-      type="text"
-      id="create-character-uri"
-      placeholder="character uri"
-      value="https://example.com"
-    />
+  <h3>Create Character</h3>
 
-    <button onclick="createCharacter()">createCharacter</button>
+  <input type="text" id="create-character-address" placeholder="address" value="" />
+  <input type="text" id="create-character-handle" placeholder="handler" value="my character handle" />
+  <input type="text" id="create-character-uri" placeholder="character uri" value="https://example.com" />
 
-    <script>
-      const { Contract } = window.Crossbell
-      const metamask = window.ethereum
-      const contract = new Contract(metamask)
+  <button onclick="createCharacter()">createCharacter</button>
 
+  <script>
+    const { Contract } = window.Crossbell
+    let contract, metamask
+    function init() {
+      metamask = window.ethereum;
+      contract = new Contract(metamask)
       updateHint('click "connect" btn to connect metamask')
+    }
 
-      async function connect() {
-        console.log('connecting...')
-        updateHint('connecting')
-        try {
-          await contract.connect()
-          const address = ethereum.selectedAddress
-          updateHint(`your address is ${address}`)
-          document.getElementById('create-character-address').value = address
-        } catch (e) {
-          console.error(e)
-          updateHint('connect failed')
-          return
-        }
+    async function connect() {
+      console.log('connecting...')
+      updateHint('connecting')
+      try {
+        const [address] = await contract.walletClient.requestAddresses()
+        updateHint(`your address is ${address}`)
+        document.getElementById('create-character-address').value = address
+      } catch (e) {
+        console.error(e)
+        updateHint('connect failed')
+        return
       }
+    }
 
-      async function createCharacter() {
-        console.log('creating character...')
-        updateHint('creating character...')
-        try {
-          const address = document.getElementById(
-            'create-character-address',
-          ).value
-          const handle = document.getElementById(
-            'create-character-handle',
-          ).value
-          const uri = document.getElementById('create-character-uri').value
-          const data = await contract.createCharacter(
-            ethereum.selectedAddress,
-            handle,
-            uri,
-          )
-          console.log({ data })
-          updateHint(`character created.  ${JSON.stringify(data, null, 2)}`)
-        } catch (e) {
-          console.error(e)
-          updateHint(e.error.message)
-        }
+    async function createCharacter() {
+      console.log('creating character...')
+      updateHint('creating character...')
+      try {
+        const address = document.getElementById(
+          'create-character-address',
+        ).value
+        const handle = document.getElementById(
+          'create-character-handle',
+        ).value
+        const uri = document.getElementById('create-character-uri').value
+        const data = await contract.character.create(
+          ethereum.selectedAddress,
+          handle,
+          uri,
+        )
+        console.log({ data })
+        updateHint(`character created.  ${JSON.stringify(data, null, 2)}`)
+      } catch (e) {
+        console.error(e)
+        updateHint(e.error.message)
       }
+    }
+    function updateHint(text) {
+      document.getElementById('hint').innerText = text
+    }
 
-      function updateHint(text) {
-        document.getElementById('hint').innerText = text
-      }
-    </script>
-  </body>
+    window.addEventListener('load', init)
+  </script>
+</body>
+
 </html>
