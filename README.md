@@ -25,7 +25,7 @@ const contract = new Contract(provider)
 
 // Example API: Create a new character for an address
 try {
-  const result = await contract.createCharacter(
+  const result = await contract.character.create(
     '0x1234567890123456789012345678901234567890',
     'Jason',
     'ipfs://xxxx/metadata.json',
@@ -78,14 +78,3 @@ console.log(res.list)
 ```
 
 For more indexer api, see [docs](https://crossbell-box.github.io/crossbell.js/classes/Indexer.html).
-
-## Trouble Shooting
-
-### In Vue.js: TypeError: `get` on proxy: property `provider` is a read-only and non-configurable data property on the proxy target but the proxy did not return its actual value.
-
-To fix this in Vue.js, you need to call `makeRaw` for the Web3Provider instance.
-
-```js
-let web3provider = new Web3Provider(wallet.provider, 'any')
-web3provider = markRaw(web3provider)
-```
