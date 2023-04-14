@@ -1,10 +1,11 @@
 import { type Address } from 'viem'
-import { createSearchParamsString } from '../../utils'
 import { type NoteMetadata } from '../../types'
 import { type ListResponse, type MintedNoteEntity } from '../../types/indexer'
-import { BaseIndexer } from './base'
+import { type BaseIndexer } from './base'
 
-export class MintedNoteIndexer extends BaseIndexer {
+export class MintedNoteIndexer {
+  constructor(private base: BaseIndexer) {}
+
   /**
    * This returns a list of minted notes.
    *
@@ -13,7 +14,7 @@ export class MintedNoteIndexer extends BaseIndexer {
    * @param options - The options to send to the indexer.
    * @returns The list of minted notes.
    */
-  async getMintedNotesOfAddress(
+  getManyByAddress(
     address: Address,
     {
       noteCharacterId,
@@ -36,20 +37,18 @@ export class MintedNoteIndexer extends BaseIndexer {
       /** The order to sort by. */
       order?: 'asc' | 'desc'
     } = {},
-  ): Promise<ListResponse<MintedNoteEntity>> {
-    let url = `${this.endpoint}/addresses/${address}/minted/notes?`
-    url += createSearchParamsString({
-      noteCharacterId,
-      noteId,
-      variant,
-      limit,
-      cursor,
-      order,
+  ) {
+    const url = `/addresses/${address}/minted/notes`
+    return this.base.fetch<ListResponse<MintedNoteEntity>>(url, {
+      params: {
+        noteCharacterId,
+        noteId,
+        variant,
+        limit,
+        cursor,
+        order,
+      },
     })
-
-    const res = await this.fetch(url).then((res) => res.json())
-
-    return res as ListResponse<MintedNoteEntity>
   }
 
   /**
@@ -61,7 +60,7 @@ export class MintedNoteIndexer extends BaseIndexer {
    * @param options - The options to send to the indexer.
    * @returns The list of minted notes.
    */
-  async getMintedNotesOfNote(
+  getManyByNote(
     characterId: bigint,
     noteId: bigint,
     {
@@ -79,18 +78,16 @@ export class MintedNoteIndexer extends BaseIndexer {
       /** The order to sort by. */
       order?: 'asc' | 'desc'
     } = {},
-  ): Promise<ListResponse<MintedNoteEntity>> {
-    let url = `${this.endpoint}/notes/${characterId}/${noteId}/minted?`
-    url += createSearchParamsString({
-      owner,
-      limit,
-      cursor,
-      order,
+  ) {
+    const url = `/notes/${characterId}/${noteId}/minted`
+    return this.base.fetch<ListResponse<MintedNoteEntity>>(url, {
+      params: {
+        owner,
+        limit,
+        cursor,
+        order,
+      },
     })
-
-    const res = await this.fetch(url).then((res) => res.json())
-
-    return res as ListResponse<MintedNoteEntity>
   }
 
   /**
@@ -101,13 +98,8 @@ export class MintedNoteIndexer extends BaseIndexer {
    * @param tokenId - The tokenId of the minted note.
    * @returns The minted note.
    */
-  async getMintedNote(
-    contractAddress: Address,
-    tokenId: bigint,
-  ): Promise<MintedNoteEntity | null> {
-    const url = `${this.endpoint}/minted/notes/${contractAddress}/${tokenId}`
-    const res = await this.fetch(url).then((res) => res.json())
-
-    return res as MintedNoteEntity
+  get(contractAddress: Address, tokenId: bigint) {
+    const url = `/minted/notes/${contractAddress}/${tokenId}`
+    return this.base.fetch<MintedNoteEntity | null>(url)
   }
 }

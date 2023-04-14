@@ -1,12 +1,13 @@
-import { createSearchParamsString } from '../../utils'
 import {
   type ListResponse,
   type MintModuleEntity,
   type MintModuleTargetItemType,
-} from '../../types/indexer'
-import { BaseIndexer } from './base'
+} from '../../types'
+import { type BaseIndexer } from './base'
 
-export class MintModuleIndexer extends BaseIndexer {
+export class MintModuleIndexer {
+  constructor(private base: BaseIndexer) {}
+
   /**
    * This returns a list of mint modules.
    *
@@ -14,7 +15,7 @@ export class MintModuleIndexer extends BaseIndexer {
    * @param options - The options to send to the indexer.
    * @returns The list of mint modules.
    */
-  async getMintModules({
+  getMany({
     targetItemType,
     toCharacterId,
     toNoteId,
@@ -31,19 +32,17 @@ export class MintModuleIndexer extends BaseIndexer {
     limit?: number
     /** Used for pagination. */
     cursor?: string
-  } = {}): Promise<ListResponse<MintModuleEntity>> {
-    let url = `${this.endpoint}/mint-modules?`
-    url += createSearchParamsString({
-      targetItemType,
-      toCharacterId,
-      toNoteId,
-      limit,
-      cursor,
+  } = {}) {
+    const url = `/mint-modules`
+    return this.base.fetch<ListResponse<MintModuleEntity>>(url, {
+      params: {
+        targetItemType,
+        toCharacterId,
+        toNoteId,
+        limit,
+        cursor,
+      },
     })
-
-    const res = await this.fetch(url).then((res) => res.json())
-
-    return res as ListResponse<MintModuleEntity>
   }
 
   /**
@@ -54,13 +53,8 @@ export class MintModuleIndexer extends BaseIndexer {
    * @param linkValue - The linkValue of the mint module.
    * @returns The mint module.
    */
-  async getMintModule(
-    targetItemType: MintModuleTargetItemType,
-    linkValue: bigint,
-  ): Promise<MintModuleEntity | null> {
-    const url = `${this.endpoint}/mint-modules/${targetItemType}/${linkValue}`
-    const res = await this.fetch(url).then((res) => res.json())
-
-    return res as MintModuleEntity
+  get(targetItemType: MintModuleTargetItemType, linkValue: bigint) {
+    const url = `/mint-modules/${targetItemType}/${linkValue}`
+    return this.base.fetch<MintModuleEntity>(url)
   }
 }

@@ -1,12 +1,13 @@
-import { createSearchParamsString } from '../../utils'
 import {
   type FeedEntity,
   type FeedTypeKey,
   type ListResponse,
-} from '../../types/indexer'
-import { BaseIndexer } from './base'
+} from '../../types'
+import { type BaseIndexer } from './base'
 
-export class FeedIndexer extends BaseIndexer {
+export class FeedIndexer {
+  constructor(private base: BaseIndexer) {}
+
   /**
    * This returns a list of feeds.
    *
@@ -15,7 +16,7 @@ export class FeedIndexer extends BaseIndexer {
    * @param options - The options to send to the indexer.
    * @returns The list of feeds.
    */
-  async getFeedsOfCharacter(
+  getManyByCharacter(
     characterId: bigint,
     {
       type,
@@ -29,48 +30,14 @@ export class FeedIndexer extends BaseIndexer {
       /** Used for pagination. */
       cursor?: string
     } = {},
-  ): Promise<ListResponse<FeedEntity>> {
-    let url = `${this.endpoint}/characters/${characterId}/feed?`
-    url += createSearchParamsString({
-      type,
-      limit,
-      cursor,
-    })
-
-    const res = await this.fetch(url).then((res) => res.json())
-
-    return res as ListResponse<FeedEntity>
-  }
-
-  /**
-   * This returns a list of following's feeds.
-   *
-   * @deprecated Please use {@link getFeedsOfCharacterFollowing} instead. It has the same functionality but with a better name.
-   *
-   * @category Feed
-   * @param characterId - The characterId of the feed owner.
-   * @param options - The options to send to the indexer.
-   * @returns The list of feeds.
-   */
-  getFollowingFeedsOfCharacter(
-    characterId: bigint,
-    {
-      type,
-      limit,
-      cursor,
-    }: {
-      /** The type of feed */
-      type?: FeedTypeKey | FeedTypeKey[]
-      /** Limit the count of items returned. */
-      limit?: number
-      /** Used for pagination. */
-      cursor?: string
-    } = {},
-  ): Promise<ListResponse<FeedEntity>> {
-    return this.getFeedsOfCharacterFollowing(characterId, {
-      type,
-      limit,
-      cursor,
+  ) {
+    const url = `/characters/${characterId}/feed`
+    return this.base.fetch<ListResponse<FeedEntity>>(url, {
+      params: {
+        type,
+        limit,
+        cursor,
+      },
     })
   }
 
@@ -82,7 +49,7 @@ export class FeedIndexer extends BaseIndexer {
    * @param options - The options to send to the indexer.
    * @returns The list of feeds.
    */
-  async getFeedsOfCharacterFollowing(
+  getManyByCharacterFollowing(
     characterId: bigint,
     {
       type,
@@ -96,17 +63,15 @@ export class FeedIndexer extends BaseIndexer {
       /** Used for pagination. */
       cursor?: string
     } = {},
-  ): Promise<ListResponse<FeedEntity>> {
-    let url = `${this.endpoint}/characters/${characterId}/feed/follow?`
-    url += createSearchParamsString({
-      type,
-      limit,
-      cursor,
+  ) {
+    const url = `/characters/${characterId}/feed/follow`
+    return this.base.fetch<ListResponse<FeedEntity>>(url, {
+      params: {
+        type,
+        limit,
+        cursor,
+      },
     })
-
-    const res = await this.fetch(url).then((res) => res.json())
-
-    return res as ListResponse<FeedEntity>
   }
 
   /**
@@ -117,13 +82,8 @@ export class FeedIndexer extends BaseIndexer {
    * @param logIndex - The logIndex of the feed.
    * @returns The feed.
    */
-  async getFeed(
-    transactionHash: string,
-    logIndex: bigint,
-  ): Promise<FeedEntity | null> {
-    const url = `${this.endpoint}/feed/${transactionHash}/${logIndex}`
-    const res = await this.fetch(url).then((res) => res.json())
-
-    return res as FeedEntity
+  get(transactionHash: string, logIndex: bigint) {
+    const url = `/feed/${transactionHash}/${logIndex}`
+    return this.base.fetch<FeedEntity | null>(url)
   }
 }

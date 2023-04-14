@@ -1,9 +1,10 @@
 import { type Address } from 'viem'
-import { createSearchParamsString } from '../../utils'
-import { type CharacterEntity, type ListResponse } from '../../types/indexer'
-import { BaseIndexer } from './base'
+import { type CharacterEntity, type ListResponse } from '../../types'
+import { type BaseIndexer } from './base'
 
-export class CharacterIndexer extends BaseIndexer {
+export class CharacterIndexer {
+  constructor(private base: BaseIndexer) {}
+
   /**
    * This returns a list of characters owned by a specific address.
    * @category Character
@@ -11,7 +12,7 @@ export class CharacterIndexer extends BaseIndexer {
    * @param options - The options to send to the indexer.
    * @returns The list of characters.
    */
-  async getCharacters(
+  getMany(
     address: Address,
     {
       primary = undefined,
@@ -25,13 +26,11 @@ export class CharacterIndexer extends BaseIndexer {
       /** Used for pagination. */
       cursor?: string
     } = {},
-  ): Promise<ListResponse<CharacterEntity>> {
-    let url = `${this.endpoint}/addresses/${address}/characters?`
-    url += createSearchParamsString({ primary, limit, cursor })
-
-    const res = await this.fetch(url).then((res) => res.json())
-
-    return res as ListResponse<CharacterEntity>
+  ) {
+    const url = `/addresses/${address}/characters`
+    return this.base.fetch<ListResponse<CharacterEntity>>(url, {
+      params: { primary, limit, cursor },
+    })
   }
 
   /**
@@ -41,10 +40,9 @@ export class CharacterIndexer extends BaseIndexer {
    * @param address - The address of the character owner.
    * @returns The primary character.
    */
-  getPrimaryCharacter(address: Address): Promise<CharacterEntity | null> {
-    return this.getCharacters(address, { limit: 1, primary: true }).then(
-      (res) => res.list?.[0] ?? null,
-    )
+  async getPrimary(address: Address): Promise<CharacterEntity | null> {
+    const res = await this.getMany(address, { limit: 1, primary: true })
+    return res.list?.[0] ?? null
   }
 
   /**
@@ -53,12 +51,9 @@ export class CharacterIndexer extends BaseIndexer {
    * @param characterId - The id of the character.
    * @returns The character.
    */
-  async getCharacter(characterId: bigint): Promise<CharacterEntity | null> {
-    const url = `${this.endpoint}/characters/${characterId}`
-
-    const res = await this.fetch(url).then((res) => res.json())
-
-    return res as CharacterEntity
+  get(characterId: bigint) {
+    const url = `/characters/${characterId}`
+    return this.base.fetch<CharacterEntity | null>(url)
   }
 
   /**
@@ -67,11 +62,8 @@ export class CharacterIndexer extends BaseIndexer {
    * @param handle - The handle of the character.
    * @returns The character.
    */
-  async getCharacterByHandle(handle: string): Promise<CharacterEntity | null> {
-    const url = `${this.endpoint}/handles/${handle}/character`
-
-    const res = await this.fetch(url).then((res) => res.json())
-
-    return res as CharacterEntity
+  getByHandle(handle: string) {
+    const url = `/handles/${handle}/character`
+    return this.base.fetch<CharacterEntity | null>(url)
   }
 }

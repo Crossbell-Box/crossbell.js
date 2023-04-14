@@ -1,19 +1,18 @@
 import { type CharacterStatEntity, type NoteStatEntity } from '../../types'
-import { BaseIndexer } from './base'
+import { type BaseIndexer } from './base'
 
-export class StatIndexer extends BaseIndexer {
+export class StatIndexer {
+  constructor(private base: BaseIndexer) {}
+
   /**
    * Get stat of a character.
    * @category Stat
    * @param characterId - The id of the character.
    * @returns The stat of the character.
    */
-  async getStatOfCharacter(characterId: bigint): Promise<CharacterStatEntity> {
-    const url = `${this.endpoint}/stat/characters/${characterId}?`
-
-    const res = await this.fetch(url).then((res) => res.json())
-
-    return res as CharacterStatEntity
+  getByCharacter(characterId: bigint) {
+    const url = `/stat/characters/${characterId}`
+    return this.base.fetch<CharacterStatEntity>(url)
   }
 
   /**
@@ -23,14 +22,8 @@ export class StatIndexer extends BaseIndexer {
    * @param noteId - The id of the note.
    * @returns The stat of the note.
    */
-  async getStatOfNote(
-    characterId: bigint,
-    noteId: bigint,
-  ): Promise<NoteStatEntity> {
-    const url = `${this.endpoint}/stat/notes/${characterId}/${noteId}?`
-
-    const res = await this.fetch(url).then((res) => res.json())
-
-    return res as NoteStatEntity
+  getByNote(characterId: bigint, noteId: bigint) {
+    const url = `/stat/notes/${characterId}/${noteId}`
+    return this.base.fetch<NoteStatEntity>(url)
   }
 }

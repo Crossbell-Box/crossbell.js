@@ -1,8 +1,9 @@
-import { createSearchParamsString } from '../../utils'
 import { type LinklistEntity, type ListResponse } from '../../types/indexer'
-import { BaseIndexer } from './base'
+import { type BaseIndexer } from './base'
 
-export class LinklistIndexer extends BaseIndexer {
+export class LinklistIndexer {
+  constructor(private base: BaseIndexer) {}
+
   /**
    * This returns a list of linklists of a specific character.
    * @category Linklist
@@ -10,7 +11,7 @@ export class LinklistIndexer extends BaseIndexer {
    * @param options - The options to send to the indexer.
    * @returns The list of linklist.
    */
-  async getLinklistsOfCharacter(
+  getManyByCharacter(
     characterId: bigint,
     {
       linkType,
@@ -24,13 +25,15 @@ export class LinklistIndexer extends BaseIndexer {
       /** Used for pagination. */
       cursor?: string
     } = {},
-  ): Promise<ListResponse<LinklistEntity>> {
-    let url = `${this.endpoint}/characters/${characterId}/linklists?`
-    url += createSearchParamsString({ linkType, limit, cursor })
-
-    const res = await this.fetch(url).then((res) => res.json())
-
-    return res as ListResponse<LinklistEntity>
+  ) {
+    const url = `/characters/${characterId}/linklists`
+    return this.base.fetch<ListResponse<LinklistEntity>>(url, {
+      params: {
+        linkType,
+        limit,
+        cursor,
+      },
+    })
   }
 
   /**
@@ -39,11 +42,8 @@ export class LinklistIndexer extends BaseIndexer {
    * @param linklistId - The id of the linklist.
    * @returns The character.
    */
-  async getLinklist(linklistId: bigint): Promise<LinklistEntity | null> {
-    const url = `${this.endpoint}/linklists/${linklistId}`
-
-    const res = await this.fetch(url).then((res) => res.json())
-
-    return res as LinklistEntity
+  get(linklistId: bigint) {
+    const url = `/linklists/${linklistId}`
+    return this.base.fetch<LinklistEntity | null>(url)
   }
 }

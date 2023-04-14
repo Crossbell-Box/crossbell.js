@@ -1,4 +1,3 @@
-import { Mixin } from 'ts-mixer'
 import { LinkIndexer } from './subapis/link'
 import { LinklistIndexer } from './subapis/linklist'
 import { NoteIndexer } from './subapis/note'
@@ -13,27 +12,7 @@ import { OperatorIndexer } from './subapis/operators'
 import { TipIndexer } from './subapis/tip'
 import { LinkModuleIndexer } from './subapis/link_module'
 import { MintModuleIndexer } from './subapis/mint_module'
-
-const mixin1 = Mixin(
-  CharacterIndexer,
-  LinklistIndexer,
-  LinkIndexer,
-  NoteIndexer,
-  MintedNoteIndexer,
-  SearchIndexer,
-  FeedIndexer,
-  MetadataIndexer,
-  AchievementIndexer,
-  NotificationIndexer,
-)
-
-const mixin2 = Mixin(
-  mixin1,
-  OperatorIndexer,
-  TipIndexer,
-  LinkModuleIndexer,
-  MintModuleIndexer,
-)
+import { BaseIndexer } from './subapis/base'
 
 /**
  * This class is used to fetch data like characters, links from the indexer.
@@ -43,10 +22,25 @@ const mixin2 = Mixin(
  * import { Indexer } from 'crossbell.js'
  *
  * const indexer = new Indexer()
- * const res = await indexer.getCharacters('0x...')
+ * const res = await indexer.character.getMany('0x...')
  * console.log(res.list)
  * ```
  *
  * @see https://indexer.crossbell.io/docs The underlying APIs.
  */
-export class Indexer extends mixin2 {}
+export class Indexer extends BaseIndexer {
+  link = new LinkIndexer(this)
+  linklist = new LinklistIndexer(this)
+  note = new NoteIndexer(this)
+  character = new CharacterIndexer(this)
+  search = new SearchIndexer(this)
+  feed = new FeedIndexer(this)
+  mintedNote = new MintedNoteIndexer(this)
+  metadata = new MetadataIndexer(this)
+  achievement = new AchievementIndexer(this)
+  notification = new NotificationIndexer(this)
+  operator = new OperatorIndexer(this)
+  tip = new TipIndexer(this)
+  linkModule = new LinkModuleIndexer(this)
+  mintModule = new MintModuleIndexer(this)
+}

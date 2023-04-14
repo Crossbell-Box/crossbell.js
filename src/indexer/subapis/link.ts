@@ -1,10 +1,14 @@
 import { type Address } from 'viem'
-import { createSearchParamsString } from '../../utils'
-import { type LinkEntity, type ListResponse } from '../../types/indexer'
-import { type LinkItemType } from '../../types/contract'
-import { BaseIndexer } from './base'
+import {
+  type LinkEntity,
+  type LinkItemType,
+  type ListResponse,
+} from '../../types'
+import { type BaseIndexer } from './base'
 
-export class LinkIndexer extends BaseIndexer {
+export class LinkIndexer {
+  constructor(private base: BaseIndexer) {}
+
   /**
    * This returns a list of links starts from a specific character.
    *
@@ -15,7 +19,7 @@ export class LinkIndexer extends BaseIndexer {
    * @param options - The options to send to the indexer.
    * @returns The list of links.
    */
-  async getLinks(
+  getMany(
     characterId: bigint,
     {
       limit = 20,
@@ -59,27 +63,25 @@ export class LinkIndexer extends BaseIndexer {
       /** The order to sort by. */
       order?: 'asc' | 'desc'
     } = {},
-  ): Promise<ListResponse<LinkEntity>> {
-    let url = `${this.endpoint}/characters/${characterId}/links?`
-    url += createSearchParamsString({
-      limit,
-      cursor,
-      linkType,
-      linkItemType,
-      fromCharacterId,
-      toCharacterId,
-      toAddress,
-      toNoteId,
-      toContractAddress,
-      toTokenId,
-      toLinklistId,
-      toUri,
-      order,
+  ) {
+    const url = `/characters/${characterId}/links`
+    return this.base.fetch<ListResponse<LinkEntity>>(url, {
+      params: {
+        limit,
+        cursor,
+        linkType,
+        linkItemType,
+        fromCharacterId,
+        toCharacterId,
+        toAddress,
+        toNoteId,
+        toContractAddress,
+        toTokenId,
+        toLinklistId,
+        toUri,
+        order,
+      },
     })
-
-    const res = await this.fetch(url).then((res) => res.json())
-
-    return res as ListResponse<LinkEntity>
   }
 
   /**
@@ -90,7 +92,7 @@ export class LinkIndexer extends BaseIndexer {
    * @param options - The options to send to the indexer.
    * @return The list of links.
    */
-  async getBacklinksOfCharacter(
+  getBacklinksByCharacter(
     characterId: bigint,
     {
       limit = 20,
@@ -107,13 +109,11 @@ export class LinkIndexer extends BaseIndexer {
       /** The order to sort by. */
       order?: 'asc' | 'desc'
     } = {},
-  ): Promise<ListResponse<LinkEntity>> {
-    let url = `${this.endpoint}/characters/${characterId}/backlinks?`
-    url += createSearchParamsString({ limit, cursor, linkType, order })
-
-    const res = await this.fetch(url).then((res) => res.json())
-
-    return res as ListResponse<LinkEntity>
+  ) {
+    const url = `/characters/${characterId}/backlinks`
+    return this.base.fetch<ListResponse<LinkEntity>>(url, {
+      params: { limit, cursor, linkType, order },
+    })
   }
 
   /**
@@ -124,7 +124,7 @@ export class LinkIndexer extends BaseIndexer {
    * @param options - The options to send to the indexer.
    * @return The list of links.
    */
-  async getBacklinksOfAddress(
+  getBacklinkByAddress(
     address: Address,
     {
       limit = 20,
@@ -141,13 +141,16 @@ export class LinkIndexer extends BaseIndexer {
       /** The order to sort by. */
       order?: 'asc' | 'desc'
     } = {},
-  ): Promise<ListResponse<LinkEntity>> {
-    let url = `${this.endpoint}/addresses/${address}/backlinks?`
-    url += createSearchParamsString({ limit, cursor, linkType, order })
-
-    const res = await this.fetch(url).then((res) => res.json())
-
-    return res as ListResponse<LinkEntity>
+  ) {
+    const url = `/addresses/${address}/backlinks`
+    return this.base.fetch<ListResponse<LinkEntity>>(url, {
+      params: {
+        limit,
+        cursor,
+        linkType,
+        order,
+      },
+    })
   }
 
   /**
@@ -159,7 +162,7 @@ export class LinkIndexer extends BaseIndexer {
    * @param options - The options to send to the indexer.
    * @return The list of links.
    */
-  async getBacklinksOfNote(
+  getBacklinksByNote(
     characterId: bigint,
     noteId: bigint,
     {
@@ -177,13 +180,11 @@ export class LinkIndexer extends BaseIndexer {
       /** The order to sort by. */
       order?: 'asc' | 'desc'
     } = {},
-  ): Promise<ListResponse<LinkEntity>> {
-    let url = `${this.endpoint}/notes/${characterId}/${noteId}/backlinks?`
-    url += createSearchParamsString({ limit, cursor, linkType, order })
-
-    const res = await this.fetch(url).then((res) => res.json())
-
-    return res as ListResponse<LinkEntity>
+  ) {
+    const url = `/notes/${characterId}/${noteId}/backlinks`
+    return this.base.fetch<ListResponse<LinkEntity>>(url, {
+      params: { limit, cursor, linkType, order },
+    })
   }
 
   /**
@@ -195,7 +196,7 @@ export class LinkIndexer extends BaseIndexer {
    * @param options - The options to send to the indexer.
    * @return The list of links.
    */
-  async getBacklinksOfErc721(
+  getBacklinksByErc721(
     contractAddress: bigint,
     tokenId: bigint,
     {
@@ -213,13 +214,11 @@ export class LinkIndexer extends BaseIndexer {
       /** The order to sort by. */
       order?: 'asc' | 'desc'
     } = {},
-  ): Promise<ListResponse<LinkEntity>> {
-    let url = `${this.endpoint}/erc721s/${contractAddress}/${tokenId}/backlinks?`
-    url += createSearchParamsString({ limit, cursor, linkType, order })
-
-    const res = await this.fetch(url).then((res) => res.json())
-
-    return res as ListResponse<LinkEntity>
+  ) {
+    const url = `/erc721s/${contractAddress}/${tokenId}/backlinks`
+    return this.base.fetch<ListResponse<LinkEntity>>(url, {
+      params: { limit, cursor, linkType, order },
+    })
   }
 
   /**
@@ -230,7 +229,7 @@ export class LinkIndexer extends BaseIndexer {
    * @param options - The options to send to the indexer.
    * @return The list of links.
    */
-  async getBacklinksOfLinklist(
+  getBacklinksByLinklist(
     linklistId: bigint,
     {
       limit = 20,
@@ -247,13 +246,16 @@ export class LinkIndexer extends BaseIndexer {
       /** The order to sort by. */
       order?: 'asc' | 'desc'
     } = {},
-  ): Promise<ListResponse<LinkEntity>> {
-    let url = `${this.endpoint}/linklists/${linklistId}/backlinks?`
-    url += createSearchParamsString({ limit, cursor, linkType, order })
-
-    const res = await this.fetch(url).then((res) => res.json())
-
-    return res as ListResponse<LinkEntity>
+  ) {
+    const url = `/linklists/${linklistId}/backlinks`
+    return this.base.fetch<ListResponse<LinkEntity>>(url, {
+      params: {
+        limit,
+        cursor,
+        linkType,
+        order,
+      },
+    })
   }
 
   /**
@@ -264,7 +266,7 @@ export class LinkIndexer extends BaseIndexer {
    * @param options - The options to send to the indexer.
    * @return The list of links.
    */
-  async getBacklinksOfAnyUri(
+  getBacklinksByAnyUri(
     uri: string,
     {
       limit = 20,
@@ -281,12 +283,15 @@ export class LinkIndexer extends BaseIndexer {
       /** The order to sort by. */
       order?: 'asc' | 'desc'
     } = {},
-  ): Promise<ListResponse<LinkEntity>> {
-    let url = `${this.endpoint}/anyuris/${uri}/backlinks?`
-    url += createSearchParamsString({ limit, cursor, linkType, order })
-
-    const res = await this.fetch(url).then((res) => res.json())
-
-    return res as ListResponse<LinkEntity>
+  ) {
+    const url = `/anyuris/${uri}/backlinks`
+    return this.base.fetch<ListResponse<LinkEntity>>(url, {
+      params: {
+        limit,
+        cursor,
+        linkType,
+        order,
+      },
+    })
   }
 }
