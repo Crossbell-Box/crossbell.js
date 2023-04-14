@@ -29,11 +29,14 @@ jobs:
       - name: Install deps
         run: pnpm i --frozen-lockfile
 
+      - name: Lint
+        run: pnpm run lint
+
+      - name: Type check
+        run: pnpm run typecheck
+
       - name: Unit Test
         run: pnpm run test
         env:
           VITE_MOCK_USER_ADDRESS: ${{ secrets.VITE_MOCK_USER_ADDRESS }}
           VITE_MOCK_USER_PRIVATE_KEY: ${{ secrets.VITE_MOCK_USER_PRIVATE_KEY }}
-
-      - name: Type check
-        run: pnpm run typecheck
