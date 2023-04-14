@@ -1,3 +1,5 @@
+import { Address } from 'abitype'
+
 // https://home.treasury.gov/policy-issues/financial-sanctions/recent-actions/20220808
 const sdnList = new Set([
   '0x8589427373d6d84e98730d7795d8f6f8731fda16',
@@ -47,12 +49,11 @@ const sdnList = new Set([
   '0x4736dcf1b7a3d580672cce6e7c65cd5cc9cfba9d',
 ])
 
-const isInSdn = (address: string) => {
-  address = address.toLowerCase()
-  return sdnList.has(address)
+const isInSdn = (address: Address) => {
+  return sdnList.has(address.toLowerCase())
 }
 
-export const validateIsInSdn = (address: string) => {
+export const validateIsInSdn = (address: Address) => {
   if (isInSdn(address)) {
     throw new Error(
       `This address ${address} is in the U.S. SDN list. All transactions from this address will be rejected. Info: https://home.treasury.gov/policy-issues/financial-sanctions/recent-actions/20220808`,

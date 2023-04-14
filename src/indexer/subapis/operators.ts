@@ -5,6 +5,7 @@ import type {
   NoteOperatorEntity,
 } from '../../types/indexer'
 import { createSearchParamsString } from '../../utils'
+import { Address } from 'abitype'
 
 export class OperatorIndexer extends BaseIndexer {
   /**
@@ -62,7 +63,7 @@ export class OperatorIndexer extends BaseIndexer {
    */
   async getCharacterOperator(
     characterId: bigint,
-    address: string,
+    address: Address,
   ): Promise<CharacterOperatorEntity | null> {
     let url = `${this.endpoint}/characters/${characterId}/operators/${address}`
 
@@ -82,7 +83,7 @@ export class OperatorIndexer extends BaseIndexer {
   async getNoteOperator(
     characterId: bigint,
     noteId: bigint,
-    address: string,
+    address: Address,
   ): Promise<NoteOperatorEntity | null> {
     let url = `${this.endpoint}/characters/${characterId}/notes/${noteId}/operators/${address}`
 

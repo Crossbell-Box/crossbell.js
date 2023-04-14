@@ -2,6 +2,7 @@ import { BaseIndexer } from './base'
 import type { ListResponse, MintedNoteEntity } from '../../types/indexer'
 import { createSearchParamsString } from '../../utils'
 import { NoteMetadata } from '../../types'
+import { Address } from 'abitype'
 
 export class MintedNoteIndexer extends BaseIndexer {
   /**
@@ -13,7 +14,7 @@ export class MintedNoteIndexer extends BaseIndexer {
    * @returns The list of minted notes.
    */
   async getMintedNotesOfAddress(
-    address: string,
+    address: Address
     {
       noteCharacterId,
       noteId,
@@ -101,7 +102,7 @@ export class MintedNoteIndexer extends BaseIndexer {
    * @returns The minted note.
    */
   async getMintedNote(
-    contractAddress: string,
+    contractAddress: Address,
     tokenId: bigint,
   ): Promise<MintedNoteEntity | null> {
     const url = `${this.endpoint}/minted/notes/${contractAddress}/${tokenId}`

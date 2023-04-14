@@ -1,3 +1,4 @@
+import { Address } from 'abitype'
 import { CharacterEntity } from './character'
 import { NoteEntity } from './note'
 
@@ -9,7 +10,7 @@ export interface TipEntity {
   toNoteId: number | null
   toNote?: NoteEntity | null
   amount: string
-  tokenAddress: string
+  tokenAddress: Address
   createdAt: Date
   transactionHash: string
   blockNumber: number

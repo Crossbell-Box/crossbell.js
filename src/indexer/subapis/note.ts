@@ -3,6 +3,7 @@ import type { ListResponse, NoteEntity } from '../../types/indexer'
 import type { LinkItemType } from '../../types/contract'
 import { createSearchParamsString } from '../../utils'
 import { NoteMetadata } from '../../types'
+import { Address } from 'abitype'
 
 export type NoteQueryOptions = {
   /** The owner of this note */
@@ -12,11 +13,11 @@ export type NoteQueryOptions = {
   /** The toCharacterId to filter by. */
   toCharacterId?: bigint
   /** The toAddress to filter by. */
-  toAddress?: string
+  toAddress?: Address
   /** The toNoteId to filter by. */
   toNoteId?: bigint
   /** The toContractAddress to filter by. */
-  toContractAddress?: string
+  toContractAddress?: Address
   /** The toTokenId to filter by. */
   toTokenId?: bigint
   /** The toLinklistId to filter by. */

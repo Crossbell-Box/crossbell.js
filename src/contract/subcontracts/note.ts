@@ -531,7 +531,7 @@ export class NoteContract {
     toAddress: Address,
     overrides: WriteOverrides<Entry, 'mintNote'> = {},
   ):
-    | Promise<Result<{ contractAddress: string; tokenId: bigint }, true>>
+    | Promise<Result<{ contractAddress: Address; tokenId: bigint }, true>>
     | never {
     validateAddress(toAddress)
 

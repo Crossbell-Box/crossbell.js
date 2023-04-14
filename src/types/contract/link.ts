@@ -1,3 +1,5 @@
+import { Address } from "abitype"
+
 export interface LinkItemMap {
   Character: LinkItemCharacter
   Address: LinkItemAddress
@@ -21,7 +23,7 @@ export interface LinkItemCharacter {
 }
 
 export interface LinkItemAddress {
-  address: string
+  address: Address
 }
 
 export interface LinkItemNote {
@@ -30,7 +32,7 @@ export interface LinkItemNote {
 }
 
 export interface LinkItemERC721 {
-  contractAddress: string
+  contractAddress: Address
   tokenId: string
 }
 

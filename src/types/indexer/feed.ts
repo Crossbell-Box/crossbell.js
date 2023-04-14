@@ -6,6 +6,7 @@ import { MintedNoteEntity } from './minted_note'
 import { MintModuleEntity, MintModuleTargetItemType } from './mint_module'
 import { NoteEntity } from './note'
 import { TipEntity } from './tip'
+import { Address } from 'abitype'
 
 export enum FeedType {
   CREATE_CHARACTER = 'CREATE_CHARACTER',
@@ -50,7 +51,7 @@ export interface FeedEntity {
   note?: NoteEntity
   noteId?: number
   mintedNote?: MintedNoteEntity
-  contractAddress?: string
+  contractAddress?: Address
   tokenId?: number
   linkModuleTargetItemType?: LinkModuleTargetItemType
   linkModule?: LinkModuleEntity

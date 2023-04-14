@@ -2,6 +2,7 @@ import { BaseIndexer } from './base'
 import type { LinkEntity, ListResponse } from '../../types/indexer'
 import type { LinkItemType } from '../../types/contract'
 import { createSearchParamsString } from '../../utils'
+import { Address } from 'abitype'
 
 export class LinkIndexer extends BaseIndexer {
   /**
@@ -44,11 +45,11 @@ export class LinkIndexer extends BaseIndexer {
       /** The toCharacterId to filter by. */
       toCharacterId?: bigint
       /** The toAddress to filter by. */
-      toAddress?: string
+      toAddress?: Address
       /** The toNoteId to filter by. */
       toNoteId?: bigint
       /** The toContractAddress to filter by. */
-      toContractAddress?: string
+      toContractAddress?: Address
       /** The toTokenId to filter by. */
       toTokenId?: bigint
       /** The toLinklistId to filter by. */
@@ -124,7 +125,7 @@ export class LinkIndexer extends BaseIndexer {
    * @return The list of links.
    */
   async getBacklinksOfAddress(
-    address: string,
+    address: Address,
     {
       limit = 20,
       cursor,

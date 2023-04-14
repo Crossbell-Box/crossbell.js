@@ -5,6 +5,7 @@ import type {
   ListResponse,
 } from '../../types/indexer'
 import { createSearchParamsString } from '../../utils'
+import { Address } from 'abitype'
 
 export class LinkModuleIndexer extends BaseIndexer {
   /**
@@ -28,13 +29,13 @@ export class LinkModuleIndexer extends BaseIndexer {
     /** The target item type of the link module. */
     targetItemType?: LinkModuleTargetItemType
     /** The address of the target item. */
-    toAddress?: string
+    toAddress?: Address
     /** The character ID of the target item. */
     toCharacterId?: bigint
     /** The note ID of the target item. */
     toNoteId?: bigint
     /** The contract address of the target item. */
-    toContractAddress?: string
+    toContractAddress?: Address
     /** The token ID of the target item. */
     toTokenId?: bigint
     /** The linklist ID of the target item. */

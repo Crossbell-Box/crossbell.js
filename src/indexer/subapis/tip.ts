@@ -1,6 +1,7 @@
 import { BaseIndexer } from './base'
 import type { ListResponse, TipEntity } from '../../types/indexer'
 import { createSearchParamsString } from '../../utils'
+import { Address } from 'abitype'
 
 export class TipIndexer extends BaseIndexer {
   /**
@@ -28,7 +29,7 @@ export class TipIndexer extends BaseIndexer {
     /** The noteId of the tip receiver. */
     toNoteId?: bigint
     /** The token address of the token sent in tip. */
-    tokenAddress?: string
+    tokenAddress?: Address
     /** Whether to include tips with zero amount. */
     includeZeroAmount?: boolean
     /** Whether to include character and note metadata */

@@ -1,3 +1,4 @@
+import { Address } from 'abitype'
 import { CharacterEntity } from './character'
 import { NoteEntity } from './note'
 
@@ -6,7 +7,7 @@ export type MintModuleTargetItemType = 'Note'
 export interface MintModuleEntity {
   targetItemType: MintModuleTargetItemType
   linkValue: string
-  contractAddress: string
+  contractAddress: Address
   initData: string
   returnData: string
   toCharacterId: number | null
