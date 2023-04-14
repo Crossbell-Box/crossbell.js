@@ -22,7 +22,7 @@ import {
  * // Create a new contract instance with metamask provider
  * const provider = window.ethereum
  * const contract = new Contract(provider)
- *
+ * await contract.walletClient!.requestAddresses()
  * // Example API: Create a new character for an address
  * try {
  *   const result = await contract.character.create(
@@ -40,7 +40,7 @@ import {
 export class Contract extends BaseContract {
   csb = new CsbContract(this)
   character = new CharacterContract(this)
-  link = new LinkContract(this, this.character)
+  link = new LinkContract(this)
   cbt = new CbtContract(this)
   note = new NoteContract(this)
   operator = new OperatorContract(this)

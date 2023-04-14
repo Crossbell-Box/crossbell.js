@@ -11,8 +11,8 @@ import {
 } from 'viem'
 import { Network } from '../../network'
 import {
-  createWalletClientFromPrivateKey,
-  createWalletClientFromCustom,
+  createWalletClientFromPrivateKeyAccount,
+  createWalletClientFromProvider,
   getProviderAddress,
   createDefaultPublicClient,
 } from '../../utils/viem'
@@ -91,7 +91,7 @@ export class BaseContract {
 
   /**
    * This creates a new Contract instance to interact with.
-   * @param clientOrPrivateKey - The provider or private key to connect to the contract.
+   * @param providerOrPrivateKey - The provider or private key to connect to the contract.
    * @returns The Contract instance.
    *
    * @example Connect with Metamask
@@ -121,7 +121,7 @@ export class BaseContract {
     if (typeof providerOrPrivateKey === 'string') {
       const account = privateKeyToAccount(providerOrPrivateKey)
       this.#account = account
-      this.walletClient = createWalletClientFromPrivateKey(account)
+      this.walletClient = createWalletClientFromPrivateKeyAccount(account)
     } else if (providerOrPrivateKey) {
       const provider = providerOrPrivateKey
       this.#account = options?.account || getProviderAddress(provider)
@@ -130,7 +130,7 @@ export class BaseContract {
           this.account = accounts[0]
         })
       }
-      this.walletClient = createWalletClientFromCustom(provider, this.account)
+      this.walletClient = createWalletClientFromProvider(provider, this.account)
     }
     this.options = this.#resolveOptions(options)
     this.#initContract()

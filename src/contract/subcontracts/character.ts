@@ -156,7 +156,7 @@ export class CharacterContract {
    * @example
    * ```js
    * // change a character's metadata name and bio
-   * await contract.changeCharacterMetadata('42', metadata => {
+   * await contract.character.changeMetadata('42', metadata => {
    *   if (metadata !== undefined) {
    *     metadata.name = 'John Doe'
    *     metadata.bio = 'I am a person'
@@ -173,7 +173,7 @@ export class CharacterContract {
    * @example
    * ```ts
    * // change a character's metadata name and bio (using spread operator)
-   * await contract.changeCharacterMetadata('42', metadata => {
+   * await contract.character.changeMetadata('42', metadata => {
    *   metadata = {
    *     ...metadata,
    *     name: 'John Doe',

@@ -1,5 +1,4 @@
 import { BaseContract } from './base'
-import { autoSwitchMainnet } from '../decorators'
 import type { ReadOverrides, Result } from '../../types/contract'
 import { Entry } from '../abi'
 
@@ -12,7 +11,6 @@ export class RevisionContract {
    * @category Revision
    * @returns The remote latest revision of the contract.
    */
-  @autoSwitchMainnet()
   async getLatest(
     overrides: ReadOverrides<Entry, 'getRevision'> = {},
   ): Promise<Result<bigint, false>> | never {

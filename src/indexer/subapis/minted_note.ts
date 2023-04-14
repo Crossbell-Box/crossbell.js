@@ -14,7 +14,7 @@ export class MintedNoteIndexer extends BaseIndexer {
    * @returns The list of minted notes.
    */
   async getMintedNotesOfAddress(
-    address: Address
+    address: Address,
     {
       noteCharacterId,
       noteId,

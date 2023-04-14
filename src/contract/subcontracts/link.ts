@@ -12,10 +12,7 @@ import { Entry, Periphery } from '../abi'
 import { CharacterContract } from './character'
 
 export class LinkContract {
-  constructor(
-    private base: BaseContract,
-    private character: CharacterContract,
-  ) {}
+  constructor(private base: BaseContract & { character: CharacterContract }) {}
 
   /**
    * This links a character to another character with a given link type.
@@ -254,7 +251,7 @@ export class LinkContract {
       overrides,
     )
     const characters = await Promise.all(
-      ids.map((ids) => this.character.get(ids)),
+      ids.map((ids) => this.base.character.get(ids)),
     )
     return {
       data: characters.map((character) => character.data),

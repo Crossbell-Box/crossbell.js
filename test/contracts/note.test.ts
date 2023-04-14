@@ -26,7 +26,7 @@ describe('should post note', () => {
   })
 
   test('postNotes and check', async () => {
-    const { data } = await contract.note.postMulti([
+    const { data } = await contract.note.postMany([
       {
         characterId,
         metadataOrUri: {

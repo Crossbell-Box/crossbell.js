@@ -1,4 +1,10 @@
-import { encodeFunctionData, encodePacked, fromHex, keccak256 } from 'viem'
+import {
+  encodeFunctionData,
+  encodePacked,
+  fromHex,
+  keccak256,
+  trim,
+} from 'viem'
 import { BaseContract } from './base'
 import {
   Result,
@@ -88,7 +94,7 @@ export class NoteContract {
    * @returns The id of the new note.
    */
   @autoSwitchMainnet()
-  async postMulti(
+  async postMany(
     notes: {
       characterId: bigint
       metadataOrUri: NoteMetadata | string
@@ -391,7 +397,10 @@ export class NoteContract {
     )
 
     const linkItemTypeString: LinkItemType | undefined =
-      (fromHex(data.linkItemType, 'string') as LinkItemType) || undefined
+      (fromHex(
+        trim(data.linkItemType, { dir: 'right' }),
+        'string',
+      ) as LinkItemType) || undefined
     const metadata = data.contentUri
       ? await Ipfs.uriToMetadata<NoteMetadata>(data.contentUri)
       : undefined

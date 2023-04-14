@@ -50,7 +50,7 @@ export function createDefaultPublicClient(): PublicClient {
   })
 }
 
-export function createWalletClientFromPrivateKey(
+export function createWalletClientFromPrivateKeyAccount(
   account: PrivateKeyAccount,
 ): WalletClient<Transport, Chain, Account> {
   const transport = createDefaultTransport()
@@ -74,7 +74,7 @@ export function getProviderAddress(
   }
 }
 
-export function createWalletClientFromCustom(
+export function createWalletClientFromProvider(
   provider: EIP1193Provider,
   account?: Address | Account,
 ): WalletClient<Transport, Chain, Account> {
