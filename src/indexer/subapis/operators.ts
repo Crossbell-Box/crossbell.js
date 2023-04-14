@@ -4,7 +4,8 @@ import {
   type CharacterOperatorEntity,
   type ListResponse,
   type NoteOperatorEntity,
-} from '../../types/indexer'
+  type Numberish,
+} from '../../types'
 import { BaseIndexer } from './base'
 
 export class OperatorIndexer extends BaseIndexer {
@@ -16,7 +17,7 @@ export class OperatorIndexer extends BaseIndexer {
    * @returns The list of operators.
    */
   async getCharacterOperators(
-    characterId: bigint,
+    characterId: Numberish,
     {
       limit = 20,
       cursor,
@@ -43,8 +44,8 @@ export class OperatorIndexer extends BaseIndexer {
    * @returns The list of operators.
    */
   async getNoteOperators(
-    characterId: bigint,
-    noteId: bigint,
+    characterId: Numberish,
+    noteId: Numberish,
   ): Promise<NoteOperatorEntity> {
     const url = `${this.endpoint}/characters/${characterId}/notes/${noteId}/operators?`
     // url += createSearchParamsString()
@@ -62,7 +63,7 @@ export class OperatorIndexer extends BaseIndexer {
    * @returns The primary character.
    */
   async getCharacterOperator(
-    characterId: bigint,
+    characterId: Numberish,
     address: Address,
   ): Promise<CharacterOperatorEntity | null> {
     const url = `${this.endpoint}/characters/${characterId}/operators/${address}`
@@ -81,8 +82,8 @@ export class OperatorIndexer extends BaseIndexer {
    * @returns The primary character.
    */
   async getNoteOperator(
-    characterId: bigint,
-    noteId: bigint,
+    characterId: Numberish,
+    noteId: Numberish,
     address: Address,
   ): Promise<NoteOperatorEntity | null> {
     const url = `${this.endpoint}/characters/${characterId}/notes/${noteId}/operators/${address}`

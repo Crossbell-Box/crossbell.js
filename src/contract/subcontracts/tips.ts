@@ -2,10 +2,11 @@ import { type Address, encodeAbiParameters, isAddressEqual } from 'viem'
 import { autoSwitchMainnet } from '../decorators'
 import { type Entry, type Mira, type Tips } from '../abi'
 import {
+  type Numberish,
   type ReadOverrides,
   type Result,
   type WriteOverrides,
-} from '../../types/contract'
+} from '../../types'
 import { type BaseContract } from './base'
 
 export class TipsContract {
@@ -22,14 +23,14 @@ export class TipsContract {
    */
   @autoSwitchMainnet()
   async tipCharacter(
-    fromCharacterId: bigint,
-    toCharacterId: bigint,
-    amount: bigint | number,
+    fromCharacterId: Numberish,
+    toCharacterId: Numberish,
+    amount: Numberish,
     overrides: WriteOverrides<Mira, 'send'> = {},
   ): Promise<Result<undefined, true>> {
     const data = encodeAbiParameters(
       [{ type: 'uint256' }, { type: 'uint256' }],
-      [fromCharacterId, toCharacterId],
+      [BigInt(fromCharacterId), BigInt(toCharacterId)],
     )
 
     const tx = await this.base.miraContract.write.send(
@@ -59,15 +60,15 @@ export class TipsContract {
    */
   @autoSwitchMainnet()
   async tipCharacterForNote(
-    fromCharacterId: bigint,
-    toCharacterId: bigint,
-    toNoteId: bigint,
-    amount: bigint | number,
+    fromCharacterId: Numberish,
+    toCharacterId: Numberish,
+    toNoteId: Numberish,
+    amount: Numberish,
     overrides: WriteOverrides<Mira, 'send'> = {},
   ): Promise<Result<undefined, true>> {
     const data = encodeAbiParameters(
       [{ type: 'uint256' }, { type: 'uint256' }, { type: 'uint256' }],
-      [fromCharacterId, toCharacterId, toNoteId],
+      [BigInt(fromCharacterId), BigInt(toCharacterId), BigInt(toNoteId)],
     )
 
     const tx = await this.base.miraContract.write.send(
@@ -97,11 +98,11 @@ export class TipsContract {
    * @returns The balance of $MIRA token of the address. Unit: wei.
    */
   async getBalanceOfCharacter(
-    characterId: bigint,
+    characterId: Numberish,
     overrides: ReadOverrides<Entry, 'ownerOf' | 'balanceOf'> = {},
   ): Promise<Result<bigint>> {
     const address = await this.base.contract.read.ownerOf(
-      [characterId],
+      [BigInt(characterId)],
       overrides,
     )
 
@@ -110,7 +111,7 @@ export class TipsContract {
       this.base.options.address.newbieVillaContract,
     )
       ? await this.base.newbieVillaContract.read.balanceOf(
-          [characterId],
+          [BigInt(characterId)],
           overrides,
         )
       : await this.base.miraContract.read.balanceOf([address], overrides)

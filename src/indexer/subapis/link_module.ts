@@ -4,7 +4,8 @@ import {
   type LinkModuleEntity,
   type LinkModuleTargetItemType,
   type ListResponse,
-} from '../../types/indexer'
+  type Numberish,
+} from '../../types'
 import { BaseIndexer } from './base'
 
 export class LinkModuleIndexer extends BaseIndexer {
@@ -31,15 +32,15 @@ export class LinkModuleIndexer extends BaseIndexer {
     /** The address of the target item. */
     toAddress?: Address
     /** The character ID of the target item. */
-    toCharacterId?: bigint
+    toCharacterId?: Numberish
     /** The note ID of the target item. */
-    toNoteId?: bigint
+    toNoteId?: Numberish
     /** The contract address of the target item. */
     toContractAddress?: Address
     /** The token ID of the target item. */
-    toTokenId?: bigint
+    toTokenId?: Numberish
     /** The linklist ID of the target item. */
-    toLinklistId?: bigint
+    toLinklistId?: Numberish
     /** The limit of the number of items to return. */
     limit?: number
     /** Used for pagination. */
@@ -73,7 +74,7 @@ export class LinkModuleIndexer extends BaseIndexer {
    */
   async getLinkModule(
     targetItemType: LinkModuleTargetItemType,
-    linkValue: bigint,
+    linkValue: Numberish,
   ): Promise<LinkModuleEntity | null> {
     const url = `${this.endpoint}/link-modules/${targetItemType}/${linkValue}`
     const res = await this.fetch(url).then((res) => res.json())

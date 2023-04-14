@@ -12,6 +12,7 @@ import {
   type LinkItemType,
   type Note,
   type NoteMetadata,
+  type Numberish,
   type PostNoteOptions,
   type ReadOverrides,
   type Result,
@@ -25,8 +26,7 @@ import {
   validateAddress,
 } from '../../utils'
 import { autoSwitchMainnet } from '../decorators'
-import { Abi } from '../..'
-import { type Entry } from '../abi'
+import { type Entry, entry } from '../abi'
 import { type BaseContract } from './base'
 
 export class NoteContract {
@@ -42,7 +42,7 @@ export class NoteContract {
    */
   @autoSwitchMainnet()
   async post(
-    characterId: bigint,
+    characterId: Numberish,
     metadataOrUri: NoteMetadata | string,
     { locked = false, linkModule, mintModule }: PostNoteOptions = {},
     overrides: WriteOverrides<Entry, 'postNote'> = {},
@@ -55,7 +55,7 @@ export class NoteContract {
     const tx = await this.base.contract.write.postNote(
       [
         {
-          characterId,
+          characterId: BigInt(characterId),
           contentUri: uri,
           linkModule: linkModuleConfig.address,
           linkModuleInitData: linkModuleConfig.initData,
@@ -96,7 +96,7 @@ export class NoteContract {
   @autoSwitchMainnet()
   async postMany(
     notes: {
-      characterId: bigint
+      characterId: Numberish
       metadataOrUri: NoteMetadata | string
       options?: PostNoteOptions
     }[],
@@ -118,11 +118,11 @@ export class NoteContract {
           )
 
           return encodeFunctionData({
-            abi: Abi.entry,
+            abi: entry,
             functionName: 'postNote',
             args: [
               {
-                characterId: note.characterId,
+                characterId: BigInt(note.characterId),
                 contentUri: uri,
                 linkModule: linkModuleConfig.address,
                 linkModuleInitData: linkModuleConfig.initData,
@@ -171,7 +171,7 @@ export class NoteContract {
    */
   @autoSwitchMainnet()
   async postForAnyUri(
-    characterId: bigint,
+    characterId: Numberish,
     metadataOrUri: NoteMetadata | string,
     targetUri: string,
     { locked = false, linkModule, mintModule }: PostNoteOptions = {},
@@ -185,7 +185,7 @@ export class NoteContract {
     const tx = await this.base.contract.write.postNote4AnyUri(
       [
         {
-          characterId,
+          characterId: BigInt(characterId),
           contentUri: uri,
           linkModule: linkModuleConfig.address,
           linkModuleInitData: linkModuleConfig.initData,
@@ -223,10 +223,10 @@ export class NoteContract {
    */
   @autoSwitchMainnet()
   async postForNote(
-    characterId: bigint,
+    characterId: Numberish,
     metadataOrUri: NoteMetadata | string,
-    targetCharacterId: bigint,
-    targetNoteId: bigint,
+    targetCharacterId: Numberish,
+    targetNoteId: Numberish,
     { locked = false, linkModule, mintModule }: PostNoteOptions = {},
     overrides: WriteOverrides<Entry, 'postNote4Note'> = {},
   ): Promise<Result<{ noteId: bigint }, true>> {
@@ -238,7 +238,7 @@ export class NoteContract {
     const tx = await this.base.contract.write.postNote4Note(
       [
         {
-          characterId,
+          characterId: BigInt(characterId),
           contentUri: uri,
           linkModule: linkModuleConfig.address,
           linkModuleInitData: linkModuleConfig.initData,
@@ -247,8 +247,8 @@ export class NoteContract {
           locked,
         },
         {
-          characterId: targetCharacterId,
-          noteId: targetNoteId,
+          characterId: BigInt(targetCharacterId),
+          noteId: BigInt(targetNoteId),
         },
       ],
       overrides,
@@ -278,8 +278,8 @@ export class NoteContract {
    */
   @autoSwitchMainnet()
   async setUri(
-    characterId: bigint,
-    noteId: bigint,
+    characterId: Numberish,
+    noteId: Numberish,
     metadataOrUri: NoteMetadata | string,
     overrides: WriteOverrides<Entry, 'setNoteUri'> = {},
   ): Promise<Result<{ uri: string; metadata: NoteMetadata }, true>> {
@@ -290,7 +290,7 @@ export class NoteContract {
     )
 
     const tx = await this.base.contract.write.setNoteUri(
-      [characterId, noteId, uri],
+      [BigInt(characterId), BigInt(noteId), uri],
       overrides,
     )
 
@@ -346,8 +346,8 @@ export class NoteContract {
    */
   @autoSwitchMainnet()
   async changeMetadata(
-    characterId: bigint,
-    noteId: bigint,
+    characterId: Numberish,
+    noteId: Numberish,
     modifier: (metadata?: NoteMetadata) => NoteMetadata,
     overrides: WriteOverrides<Entry, 'setNoteUri'> = {},
   ) {
@@ -372,8 +372,8 @@ export class NoteContract {
    * @category Note
    */
   setMetadata(
-    characterId: bigint,
-    noteId: bigint,
+    characterId: Numberish,
+    noteId: Numberish,
     metadata: NoteMetadata,
     overrides: WriteOverrides<Entry, 'setNoteUri'> = {},
   ) {
@@ -388,13 +388,13 @@ export class NoteContract {
    * @returns The info of the note.
    */
   async get<T extends LinkItemType>(
-    characterId: bigint,
-    noteId: bigint,
+    characterId: Numberish,
+    noteId: Numberish,
     linkItemType?: T,
     overrides: ReadOverrides<Entry, 'getNote'> = {},
   ): Promise<Result<Note<LinkItemMap[T]>>> {
     const data = await this.base.contract.read.getNote(
-      [characterId, noteId],
+      [BigInt(characterId), BigInt(noteId)],
       overrides,
     )
 
@@ -445,8 +445,8 @@ export class NoteContract {
 
     return {
       data: {
-        characterId,
-        noteId,
+        characterId: BigInt(characterId),
+        noteId: BigInt(noteId),
         contentUri: data.contentUri,
         metadata,
         linkItemType: data.linkItemType,
@@ -474,12 +474,12 @@ export class NoteContract {
    */
   @autoSwitchMainnet()
   async delete(
-    characterId: bigint,
-    noteId: bigint,
+    characterId: Numberish,
+    noteId: Numberish,
     overrides: WriteOverrides<Entry, 'deleteNote'> = {},
   ): Promise<Result<undefined, true>> {
     const tx = await this.base.contract.write.deleteNote(
-      [characterId, noteId],
+      [BigInt(characterId), BigInt(noteId)],
       overrides,
     )
 
@@ -508,12 +508,12 @@ export class NoteContract {
    */
   @autoSwitchMainnet()
   async lock(
-    characterId: bigint,
-    noteId: bigint,
+    characterId: Numberish,
+    noteId: Numberish,
     overrides: WriteOverrides<Entry, 'lockNote'> = {},
   ): Promise<Result<undefined, true>> {
     const tx = await this.base.contract.write.lockNote(
-      [characterId, noteId],
+      [BigInt(characterId), BigInt(noteId)],
       overrides,
     )
 
@@ -537,8 +537,8 @@ export class NoteContract {
    */
   @autoSwitchMainnet()
   async mint(
-    characterId: bigint,
-    noteId: bigint,
+    characterId: Numberish,
+    noteId: Numberish,
     toAddress: Address,
     overrides: WriteOverrides<Entry, 'mintNote'> = {},
   ): Promise<Result<{ contractAddress: Address; tokenId: bigint }, true>> {
@@ -547,8 +547,8 @@ export class NoteContract {
     const tx = await this.base.contract.write.mintNote(
       [
         {
-          characterId,
-          noteId,
+          characterId: BigInt(characterId),
+          noteId: BigInt(noteId),
           to: toAddress,
           mintModuleData: NIL_ADDRESS,
         },
@@ -577,9 +577,9 @@ export class NoteContract {
    * @param toCharacterId - The character ID of the character you want to get the linkKey of.
    * @returns The linkKey of the note.
    */
-  getLinkKeyForCharacter(toCharacterId: bigint): string {
+  getLinkKeyForCharacter(toCharacterId: Numberish): string {
     return keccak256(
-      encodePacked(['string', 'uint'], ['Character', toCharacterId]),
+      encodePacked(['string', 'uint'], ['Character', BigInt(toCharacterId)]),
     )
   }
 
@@ -604,11 +604,11 @@ export class NoteContract {
    * @param toNoteId - The id of the note you want to get the linkKey of.
    * @returns The linkKey of the note.
    */
-  getLinkKeyForNote(toCharacterId: bigint, toNoteId: bigint): string {
+  getLinkKeyForNote(toCharacterId: Numberish, toNoteId: Numberish): string {
     return keccak256(
       encodePacked(
         ['string', 'uint', 'uint'],
-        ['Note', toCharacterId, toNoteId],
+        ['Note', BigInt(toCharacterId), BigInt(toNoteId)],
       ),
     )
   }
@@ -620,11 +620,14 @@ export class NoteContract {
    * @param toTokenId - The id of the ERC721 token you want to get the linkKey of.
    * @returns The linkKey of the note.
    */
-  getLinkKeyForERC721(toContractAddress: Address, toTokenId: bigint): string {
+  getLinkKeyForERC721(
+    toContractAddress: Address,
+    toTokenId: Numberish,
+  ): string {
     return keccak256(
       encodePacked(
         ['string', 'address', 'uint'],
-        ['ERC721', toContractAddress, toTokenId],
+        ['ERC721', toContractAddress, BigInt(toTokenId)],
       ),
     )
   }
@@ -635,9 +638,9 @@ export class NoteContract {
    * @param toLinkListId - The id of the linklist you want to get the linkKey of.
    * @returns The linkKey of the note.
    */
-  getLinkKeyForLinklist(toLinkListId: bigint): string {
+  getLinkKeyForLinklist(toLinkListId: Numberish): string {
     return keccak256(
-      encodePacked(['string', 'uint'], ['Linklist', toLinkListId]),
+      encodePacked(['string', 'uint'], ['Linklist', BigInt(toLinkListId)]),
     )
   }
 

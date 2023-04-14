@@ -1,6 +1,6 @@
 import { type Address, type Hex } from 'viem'
 import { autoSwitchMainnet } from '../decorators'
-import { type Result } from '../../types/contract'
+import { type Numberish, type Result } from '../../types'
 import { validateAddress } from '../../utils'
 import { type BaseContract } from './base'
 
@@ -29,10 +29,7 @@ export class CsbContract {
    * @returns The $CSB balance of the owner.
    */
   @autoSwitchMainnet()
-  async transfer(
-    toAddress: Hex,
-    amount: bigint | number,
-  ): Promise<Result<{}, true>> {
+  async transfer(toAddress: Hex, amount: Numberish): Promise<Result<{}, true>> {
     validateAddress(toAddress)
 
     const hash = await this.base.walletClient!.sendTransaction({

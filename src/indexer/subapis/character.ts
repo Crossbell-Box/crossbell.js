@@ -1,6 +1,10 @@
 import { type Address } from 'viem'
 import { createSearchParamsString } from '../../utils'
-import { type CharacterEntity, type ListResponse } from '../../types/indexer'
+import {
+  type CharacterEntity,
+  type ListResponse,
+  type Numberish,
+} from '../../types'
 import { BaseIndexer } from './base'
 
 export class CharacterIndexer extends BaseIndexer {
@@ -53,7 +57,7 @@ export class CharacterIndexer extends BaseIndexer {
    * @param characterId - The id of the character.
    * @returns The character.
    */
-  async getCharacter(characterId: bigint): Promise<CharacterEntity | null> {
+  async getCharacter(characterId: Numberish): Promise<CharacterEntity | null> {
     const url = `${this.endpoint}/characters/${characterId}`
 
     const res = await this.fetch(url).then((res) => res.json())

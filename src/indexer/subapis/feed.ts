@@ -3,7 +3,8 @@ import {
   type FeedEntity,
   type FeedTypeKey,
   type ListResponse,
-} from '../../types/indexer'
+  type Numberish,
+} from '../../types'
 import { BaseIndexer } from './base'
 
 export class FeedIndexer extends BaseIndexer {
@@ -16,7 +17,7 @@ export class FeedIndexer extends BaseIndexer {
    * @returns The list of feeds.
    */
   async getFeedsOfCharacter(
-    characterId: bigint,
+    characterId: Numberish,
     {
       type,
       limit,
@@ -53,7 +54,7 @@ export class FeedIndexer extends BaseIndexer {
    * @returns The list of feeds.
    */
   getFollowingFeedsOfCharacter(
-    characterId: bigint,
+    characterId: Numberish,
     {
       type,
       limit,
@@ -83,7 +84,7 @@ export class FeedIndexer extends BaseIndexer {
    * @returns The list of feeds.
    */
   async getFeedsOfCharacterFollowing(
-    characterId: bigint,
+    characterId: Numberish,
     {
       type,
       limit,
@@ -119,7 +120,7 @@ export class FeedIndexer extends BaseIndexer {
    */
   async getFeed(
     transactionHash: string,
-    logIndex: bigint,
+    logIndex: Numberish,
   ): Promise<FeedEntity | null> {
     const url = `${this.endpoint}/feed/${transactionHash}/${logIndex}`
     const res = await this.fetch(url).then((res) => res.json())

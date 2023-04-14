@@ -1,10 +1,7 @@
-import { type MaybeArray } from '../types/utils'
+import { type MaybeArray, type Numberish } from '../types'
 
 export function createSearchParamsString(
-  params: Record<
-    string,
-    MaybeArray<string | bigint | number> | boolean | undefined | null
-  >,
+  params: Record<string, MaybeArray<Numberish> | boolean | undefined | null>,
 ) {
   return new URLSearchParams(
     Object.entries(params)

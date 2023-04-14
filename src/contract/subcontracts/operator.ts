@@ -1,13 +1,14 @@
 import { type Address } from 'viem'
 import { autoSwitchMainnet } from '../decorators'
-import { type CharacterPermissionKey } from '../../types'
-import { Logger, parseLog, validateAddress } from '../../utils'
-import { type Entry } from '../abi'
 import {
+  type CharacterPermissionKey,
+  type Numberish,
   type ReadOverrides,
   type Result,
   type WriteOverrides,
-} from '../../types/contract'
+} from '../../types'
+import { Logger, parseLog, validateAddress } from '../../utils'
+import { type Entry } from '../abi'
 import { type BaseContract } from './base'
 
 // https://github.com/Crossbell-Box/CIPs/blob/main/CIPs/CIP-7.md
@@ -34,7 +35,7 @@ export class OperatorContract {
    */
   @autoSwitchMainnet()
   async grantForCharacter(
-    characterId: bigint,
+    characterId: Numberish,
     operator: Address,
     permissions: CharacterPermissionKey[],
     overrides: WriteOverrides<Entry, 'grantOperatorPermissions'> = {},
@@ -45,7 +46,7 @@ export class OperatorContract {
       this.convertPermissionsToUint256ForCharacter(permissions)
 
     const tx = await this.base.contract.write.grantOperatorPermissions(
-      [characterId, operator, permissionUint256],
+      [BigInt(characterId), operator, permissionUint256],
       overrides,
     )
 
@@ -84,8 +85,8 @@ export class OperatorContract {
    */
   @autoSwitchMainnet()
   async grantForNote(
-    characterId: bigint,
-    noteId: bigint,
+    characterId: Numberish,
+    noteId: Numberish,
     allowlist: Address[],
     blocklist: Address[] = [],
     overrides: WriteOverrides<Entry, 'grantOperators4Note'> = {},
@@ -94,7 +95,7 @@ export class OperatorContract {
     validateAddress(blocklist)
 
     const tx = await this.base.contract.write.grantOperators4Note(
-      [characterId, noteId, blocklist, allowlist],
+      [BigInt(characterId), BigInt(noteId), blocklist, allowlist],
       overrides,
     )
 
@@ -118,11 +119,11 @@ export class OperatorContract {
    * @returns The operators of the character.
    */
   async getForCharacter(
-    characterId: bigint,
+    characterId: Numberish,
     overrides: ReadOverrides<Entry, 'getOperators'> = {},
   ): Promise<Result<readonly Address[], false>> {
     const operators = await this.base.contract.read.getOperators(
-      [characterId],
+      [BigInt(characterId)],
       overrides,
     )
     return {
@@ -138,8 +139,8 @@ export class OperatorContract {
    * @param noteId - The id of the note.
    */
   async getForNote(
-    characterId: bigint,
-    noteId: bigint,
+    characterId: Numberish,
+    noteId: Numberish,
     overrides: ReadOverrides<Entry, 'getOperators4Note'> = {},
   ): Promise<
     Result<
@@ -149,7 +150,7 @@ export class OperatorContract {
   > {
     const [allowlist, blocklist] =
       await this.base.contract.read.getOperators4Note(
-        [characterId, noteId],
+        [BigInt(characterId), BigInt(noteId)],
         overrides,
       )
     return {
@@ -170,13 +171,13 @@ export class OperatorContract {
    * @returns Whether the operator is allowed to operate the note.
    */
   async isAllowedForNote(
-    characterId: bigint,
-    noteId: bigint,
+    characterId: Numberish,
+    noteId: Numberish,
     operator: Address,
     overrides: ReadOverrides<Entry, 'isOperatorAllowedForNote'> = {},
   ): Promise<Result<boolean, false>> {
     const isAllowed = await this.base.contract.read.isOperatorAllowedForNote(
-      [characterId, noteId, operator],
+      [BigInt(characterId), BigInt(noteId), operator],
       overrides,
     )
     return {
@@ -193,13 +194,13 @@ export class OperatorContract {
    * @returns The permissions of the operator.
    */
   async getPermissionsForCharacter(
-    characterId: bigint,
+    characterId: Numberish,
     operator: Address,
     overrides: ReadOverrides<Entry, 'getOperatorPermissions'> = {},
   ): Promise<Result<CharacterPermissionKey[], false>> {
     const permissionUint256 =
       await this.base.contract.read.getOperatorPermissions(
-        [characterId, operator],
+        [BigInt(characterId), operator],
         overrides,
       )
 

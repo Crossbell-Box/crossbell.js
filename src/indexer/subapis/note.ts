@@ -1,27 +1,31 @@
 import { type Address } from 'viem'
 import { createSearchParamsString } from '../../utils'
-import { type NoteMetadata } from '../../types'
-import { type ListResponse, type NoteEntity } from '../../types/indexer'
-import { type LinkItemType } from '../../types/contract'
+import {
+  type LinkItemType,
+  type ListResponse,
+  type NoteEntity,
+  type NoteMetadata,
+  type Numberish,
+} from '../../types'
 import { BaseIndexer } from './base'
 
 export type NoteQueryOptions = {
   /** The owner of this note */
-  characterId?: bigint
+  characterId?: Numberish
   /** The link item type to filter by. e.g. 'Character' */
   linkItemType?: LinkItemType
   /** The toCharacterId to filter by. */
-  toCharacterId?: bigint
+  toCharacterId?: Numberish
   /** The toAddress to filter by. */
   toAddress?: Address
   /** The toNoteId to filter by. */
-  toNoteId?: bigint
+  toNoteId?: Numberish
   /** The toContractAddress to filter by. */
   toContractAddress?: Address
   /** The toTokenId to filter by. */
-  toTokenId?: bigint
+  toTokenId?: Numberish
   /** The toLinklistId to filter by. */
-  toLinklistId?: bigint
+  toLinklistId?: Numberish
   /** The toUri to filter by. */
   toUri?: string
   /** Only returns locked notes or not */
@@ -90,7 +94,7 @@ export class NoteIndexer extends BaseIndexer {
    * @returns
    */
   async getNotesOfCharacterFollowing(
-    characterId: bigint,
+    characterId: Numberish,
     options: Omit<NoteQueryOptions, 'characterId'> = {},
   ): Promise<
     ListResponse<NoteEntity & { fromNotes: ListResponse<NoteEntity> }>
@@ -114,8 +118,8 @@ export class NoteIndexer extends BaseIndexer {
    * @returns The note.
    */
   async getNote(
-    characterId: bigint,
-    noteId: bigint,
+    characterId: Numberish,
+    noteId: Numberish,
   ): Promise<NoteEntity | null> {
     const url = `${this.endpoint}/characters/${characterId}/notes/${noteId}`
     const res = await this.fetch(url).then((res) => res.json())
@@ -132,7 +136,7 @@ export class NoteIndexer extends BaseIndexer {
    * @returns The list of tags.
    */
   async getDistinctNoteTagsOfCharacter(
-    characterId: bigint,
+    characterId: Numberish,
     {
       sources,
     }: {
@@ -159,7 +163,7 @@ export class NoteIndexer extends BaseIndexer {
    * @returns The list of tags.
    */
   async getDistinctNoteSourcesOfCharacter(
-    characterId: bigint,
+    characterId: Numberish,
     {
       tags,
     }: {

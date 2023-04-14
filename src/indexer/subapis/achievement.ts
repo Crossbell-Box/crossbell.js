@@ -4,7 +4,8 @@ import {
   type AchievementSection,
   type AchievementStatusKey,
   type ListResponse,
-} from '../../types/indexer'
+  type Numberish,
+} from '../../types'
 import { BaseIndexer } from './base'
 
 export class AchievementIndexer extends BaseIndexer {
@@ -16,7 +17,7 @@ export class AchievementIndexer extends BaseIndexer {
    * @returns The list of achievements.
    */
   async getAchievements(
-    characterId: bigint,
+    characterId: Numberish,
     { status }: { status?: AchievementStatusKey[] } = {},
   ): Promise<ListResponse<AchievementSection> | null> {
     let url = `${this.endpoint}/characters/${characterId}/achievements?`
@@ -36,8 +37,8 @@ export class AchievementIndexer extends BaseIndexer {
    * @returns The achievement minted.
    */
   async mintAchievement(
-    characterId: bigint,
-    achievementId: bigint,
+    characterId: Numberish,
+    achievementId: Numberish,
   ): Promise<AchievementItem> | never {
     const url = `${this.endpoint}/characters/${characterId}/achievements/${achievementId}`
 

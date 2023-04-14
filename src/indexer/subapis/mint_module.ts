@@ -3,7 +3,8 @@ import {
   type ListResponse,
   type MintModuleEntity,
   type MintModuleTargetItemType,
-} from '../../types/indexer'
+  type Numberish,
+} from '../../types'
 import { BaseIndexer } from './base'
 
 export class MintModuleIndexer extends BaseIndexer {
@@ -24,9 +25,9 @@ export class MintModuleIndexer extends BaseIndexer {
     /** The target item type of the mint module. */
     targetItemType?: MintModuleTargetItemType
     /** The character ID of the target item. */
-    toCharacterId?: bigint
+    toCharacterId?: Numberish
     /** The note ID of the target item. */
-    toNoteId?: bigint
+    toNoteId?: Numberish
     /** The limit of the number of items to return. */
     limit?: number
     /** Used for pagination. */
@@ -56,7 +57,7 @@ export class MintModuleIndexer extends BaseIndexer {
    */
   async getMintModule(
     targetItemType: MintModuleTargetItemType,
-    linkValue: bigint,
+    linkValue: Numberish,
   ): Promise<MintModuleEntity | null> {
     const url = `${this.endpoint}/mint-modules/${targetItemType}/${linkValue}`
     const res = await this.fetch(url).then((res) => res.json())
