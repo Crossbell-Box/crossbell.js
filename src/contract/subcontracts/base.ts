@@ -1,25 +1,25 @@
 import {
-  WalletClient,
-  PublicClient,
+  type Account,
+  type Address,
+  type Chain,
+  type GetContractReturnType,
+  type Hex,
+  type PublicClient,
+  type Transport,
+  type WalletClient,
   getContract,
-  Address,
-  Hex,
-  GetContractReturnType,
-  Account,
-  Transport,
-  Chain,
 } from 'viem'
+import { privateKeyToAccount } from 'viem/accounts'
+import { type EIP1193Provider } from 'eip1193-types'
 import { Network } from '../../network'
 import {
+  createDefaultPublicClient,
   createWalletClientFromPrivateKeyAccount,
   createWalletClientFromProvider,
   getProviderAddress,
-  createDefaultPublicClient,
 } from '../../utils/viem'
 import * as Abi from '../abi'
-import { Overwrite } from '../../types/utils'
-import type { EIP1193Provider } from 'eip1193-types'
-import { privateKeyToAccount } from 'viem/accounts'
+import { type Overwrite } from '../../types/utils'
 
 export interface AccountOptions {
   account: Account | Address

@@ -1,5 +1,5 @@
-import { Address } from 'abitype'
-import { MetadataEntity } from './metadata'
+import { type Address } from 'viem'
+import { type MetadataEntity } from './metadata'
 
 export interface LinklistEntity {
   linklistId: number

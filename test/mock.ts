@@ -1,4 +1,4 @@
-import { Address, Hex } from 'viem'
+import { type Address, type Hex } from 'viem'
 
 export const mockUser = {
   address: process.env.VITE_MOCK_USER_ADDRESS as Address,
@@ -18,7 +18,7 @@ export function genRandomHandle(): string {
   for (let i = 0; i < 10; i++) {
     handle += chars.charAt(Math.floor(Math.random() * chars.length))
   }
-  return 'a-random-handle-' + handle
+  return `a-random-handle-${handle}`
 }
 
 export const NIL_ADDRESS = '0x0000000000000000000000000000000000000000'

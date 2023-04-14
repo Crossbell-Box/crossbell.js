@@ -1,4 +1,4 @@
-import { CharacterMetadata } from '../metadata'
+import { type CharacterMetadata } from '../metadata'
 
 export interface Character {
   /** The id of this character. */

@@ -1,7 +1,7 @@
-import { Address } from 'abitype'
-import { NoteMetadata } from '../metadata'
-import { LinkItem, LinkItemType } from './link'
-import { MintOrLinkModuleConfig } from './module'
+import { type Address } from 'viem'
+import { type NoteMetadata } from '../metadata'
+import { type LinkItem, type LinkItemType } from './link'
+import { type MintOrLinkModuleConfig } from './module'
 
 export interface Note<T extends LinkItem | undefined = undefined> {
   /** The character id of the address who owns the note.  */

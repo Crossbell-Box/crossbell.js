@@ -1,3 +1,5 @@
+/* eslint-disable no-console */
+
 export class Logger {
   static prefix = '[crossbell.js]'
 

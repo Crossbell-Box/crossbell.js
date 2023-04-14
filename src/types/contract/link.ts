@@ -1,4 +1,4 @@
-import { Address } from "abitype"
+import { type Address } from 'viem'
 
 export interface LinkItemMap {
   Character: LinkItemCharacter

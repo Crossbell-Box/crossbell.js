@@ -2,10 +2,10 @@
 
 // @ts-check
 
-import { readFile, writeFile } from 'fs/promises'
-import path, { dirname, resolve } from 'path'
-import { fileURLToPath } from 'url'
-import { pascalCase, camelCase } from 'change-case'
+import { readFile, writeFile } from 'node:fs/promises'
+import path, { dirname, resolve } from 'node:path'
+import { fileURLToPath } from 'node:url'
+import { camelCase, pascalCase } from 'change-case'
 import { format } from 'prettier'
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..')
@@ -71,8 +71,8 @@ async function getAllAbis() {
 }
 
 /** @param name {string} */
-async function getAbi(name) {
-  return await fetch(
+function getAbi(name) {
+  return fetch(
     name.startsWith('https://')
       ? name
       : `https://raw.githubusercontent.com/Crossbell-Box/Crossbell-Contracts/main/build-info/${name}.json`,

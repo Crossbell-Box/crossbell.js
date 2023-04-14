@@ -1,17 +1,17 @@
-import { BaseContract } from './base'
-import { autoSwitchMainnet } from '../decorators'
-import type {
-  Result,
-  Character,
-  ReadOverrides,
-  WriteOverrides,
-  MintOrLinkModuleConfig,
-} from '../../types/contract'
-import { CharacterMetadata } from '../../types/metadata'
+import { type Address } from 'viem'
+import { type CharacterMetadata } from '../../types/metadata'
 import { Ipfs } from '../../ipfs'
-import { Address } from 'viem'
+import { autoSwitchMainnet } from '../decorators'
 import { getModuleConfig, parseLog, validateAddress } from '../../utils'
-import { Entry, NewbieVilla } from '../abi'
+import { type Entry, type NewbieVilla } from '../abi'
+import {
+  type Character,
+  type MintOrLinkModuleConfig,
+  type ReadOverrides,
+  type Result,
+  type WriteOverrides,
+} from '../../types/contract'
+import { type BaseContract } from './base'
 
 export class CharacterContract {
   constructor(private base: BaseContract) {}
@@ -36,7 +36,7 @@ export class CharacterContract {
       linkModule?: MintOrLinkModuleConfig
     } = {},
     overrides: WriteOverrides<Entry, 'createCharacter'> = {},
-  ): Promise<Result<bigint, true>> | never {
+  ): Promise<Result<bigint, true>> {
     validateAddress(owner)
     this.#validateHandleFormat(handle)
 
@@ -48,8 +48,8 @@ export class CharacterContract {
       [
         {
           to: owner,
-          handle: handle,
-          uri: uri,
+          handle,
+          uri,
           linkModule: moduleConfig.address,
           linkModuleInitData: moduleConfig.initData,
         },
@@ -81,7 +81,7 @@ export class CharacterContract {
     characterId: bigint,
     handle: string,
     overrides: WriteOverrides<Entry, 'setHandle'> = {},
-  ): Promise<Result<undefined, true>> | never {
+  ): Promise<Result<undefined, true>> {
     this.#validateHandleFormat(handle)
 
     const tx = await this.base.contract.write.setHandle(
@@ -109,9 +109,7 @@ export class CharacterContract {
     characterId: bigint,
     metadataOrUri: CharacterMetadata | string,
     overrides: WriteOverrides<Entry, 'setCharacterUri'> = {},
-  ):
-    | Promise<Result<{ uri: string; metadata: CharacterMetadata }, true>>
-    | never {
+  ): Promise<Result<{ uri: string; metadata: CharacterMetadata }, true>> {
     const { uri, metadata } = await Ipfs.parseMetadataOrUri(
       'character',
       metadataOrUri,
@@ -139,7 +137,7 @@ export class CharacterContract {
    * This is the same as {@link setUri}
    * @category Character
    */
-  async setMetadata(
+  setMetadata(
     characterId: bigint,
     metadata: CharacterMetadata,
     overrides: WriteOverrides<Entry, 'setCharacterUri'> = {},
@@ -193,7 +191,9 @@ export class CharacterContract {
 
     const metadata = modifier(character.data.metadata)
     if (typeof metadata === 'undefined') {
-      throw new Error('The modified metadata is undefined. Did you return it?')
+      throw new TypeError(
+        'The modified metadata is undefined. Did you return it?',
+      )
     }
 
     if (!metadata.type) {
@@ -215,7 +215,7 @@ export class CharacterContract {
     characterId: bigint,
     socialToken: Address,
     overrides: WriteOverrides<Entry, 'setSocialToken'> = {},
-  ): Promise<Result<undefined, true>> | never {
+  ): Promise<Result<undefined, true>> {
     const tx = await this.base.contract.write.setSocialToken(
       [characterId, socialToken],
       overrides,
@@ -239,7 +239,7 @@ export class CharacterContract {
   async setPrimaryId(
     characterId: bigint | number,
     overrides: WriteOverrides<Entry, 'setPrimaryCharacterId'> = {},
-  ): Promise<Result<undefined, true>> | never {
+  ): Promise<Result<undefined, true>> {
     const hash = await this.base.contract.write.setPrimaryCharacterId(
       [BigInt(characterId)],
       overrides,
@@ -263,7 +263,7 @@ export class CharacterContract {
   async burn(
     characterId: bigint,
     overrides: WriteOverrides<Entry, 'burn'> = {},
-  ): Promise<Result<undefined, true>> | never {
+  ): Promise<Result<undefined, true>> {
     const tx = await this.base.contract.write.burn([characterId], overrides)
 
     const receipt = await this.base.publicClient.waitForTransactionReceipt({
@@ -285,7 +285,7 @@ export class CharacterContract {
   async getPrimaryId(
     address: Address,
     overrides: ReadOverrides<Entry, 'getPrimaryCharacterId'> = {},
-  ): Promise<Result<bigint>> | never {
+  ): Promise<Result<bigint>> {
     validateAddress(address)
 
     const characterId = await this.base.contract.read.getPrimaryCharacterId(
@@ -307,7 +307,7 @@ export class CharacterContract {
   async isPrimaryId(
     characterId: bigint,
     overrides: ReadOverrides<Entry, 'isPrimaryCharacter'> = {},
-  ): Promise<Result<boolean>> | never {
+  ): Promise<Result<boolean>> {
     const isPrimary = await this.base.contract.read.isPrimaryCharacter(
       [characterId],
       overrides,
@@ -326,7 +326,7 @@ export class CharacterContract {
   async getByHandle(
     handle: string,
     overrides: ReadOverrides<Entry, 'getCharacterByHandle'> = {},
-  ): Promise<Result<Character>> | never {
+  ): Promise<Result<Character>> {
     handle = handle.toLowerCase()
 
     const character = await this.base.contract.read.getCharacterByHandle(
@@ -359,7 +359,7 @@ export class CharacterContract {
   async get(
     characterId: bigint | number,
     overrides: ReadOverrides<Entry, 'getCharacter'> = {},
-  ): Promise<Result<Character>> | never {
+  ): Promise<Result<Character>> {
     const character = await this.base.contract.read.getCharacter(
       [BigInt(characterId)],
       overrides,
@@ -392,7 +392,7 @@ export class CharacterContract {
   async getHandle(
     characterId: bigint | number,
     overrides: ReadOverrides<Entry, 'getHandle'> = {},
-  ): Promise<Result<string>> | never {
+  ): Promise<Result<string>> {
     const handle = await this.base.contract.read.getHandle(
       [BigInt(characterId)],
       overrides,
@@ -411,7 +411,7 @@ export class CharacterContract {
   async getUri(
     characterId: bigint,
     overrides: ReadOverrides<Entry, 'getCharacterUri'> = {},
-  ): Promise<Result<string>> | never {
+  ): Promise<Result<string>> {
     const uri = await this.base.contract.read.getCharacterUri(
       [characterId],
       overrides,
@@ -430,7 +430,7 @@ export class CharacterContract {
   async getByTransaction(
     txHash: Address,
     overrides: ReadOverrides<Entry, 'getCharacter'> = {},
-  ): Promise<Result<Character>> | never {
+  ): Promise<Result<Character>> {
     const receipt = await this.base.publicClient.waitForTransactionReceipt({
       hash: txHash,
     })
@@ -450,7 +450,7 @@ export class CharacterContract {
   async existsForAddress(
     address: Address,
     overrides: ReadOverrides<Entry, 'getPrimaryCharacterId'> = {},
-  ): Promise<Result<boolean>> | never {
+  ): Promise<Result<boolean>> {
     validateAddress(address)
     const characterId = await this.base.contract.read.getPrimaryCharacterId(
       [address],
@@ -472,7 +472,7 @@ export class CharacterContract {
   async existsForHandle(
     handle: string,
     overrides: ReadOverrides<Entry, 'getCharacterByHandle'> = {},
-  ): Promise<Result<boolean>> | never {
+  ): Promise<Result<boolean>> {
     const data = await this.base.contract.read.getCharacterByHandle(
       [handle],
       overrides,
@@ -501,7 +501,7 @@ export class CharacterContract {
     expires: bigint,
     proof: Address,
     overrides: WriteOverrides<NewbieVilla, 'withdraw'> = {},
-  ): Promise<Result<undefined, true>> | never {
+  ): Promise<Result<undefined, true>> {
     validateAddress(toAddress)
 
     const tx = await this.base.newbieVillaContract.write.withdraw(
@@ -523,14 +523,14 @@ export class CharacterContract {
    * This validates if a handle is in a correct format.
    * @param handle - The handle of the character you want to get the social token for.
    */
-  #validateHandleFormat(handle: string): void | never {
+  #validateHandleFormat(handle: string): void {
     if (handle.length >= 32 || handle.length <= 2) {
       throw new Error(
         `Invalid handle: handle must be between 3 and 31 characters.`,
       )
     }
 
-    if (!/^[a-z0-9\-\_]+$/.test(handle)) {
+    if (!/^[\d_a-z-]+$/.test(handle)) {
       throw new Error(`Invalid handle: handle must only contain [a-z0-9-_].`)
     }
   }

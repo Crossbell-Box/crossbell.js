@@ -1,15 +1,15 @@
 import {
   BaseContract,
+  CbtContract,
+  CharacterContract,
   CsbContract,
   LinkContract,
-  NoteContract,
-  CharacterContract,
-  OperatorContract,
-  CbtContract,
-  TipsContract,
-  RevisionContract,
   LinkModuleContract,
   MintModuleContract,
+  NoteContract,
+  OperatorContract,
+  RevisionContract,
+  TipsContract,
 } from './subcontracts'
 
 /**

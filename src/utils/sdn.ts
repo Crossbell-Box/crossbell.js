@@ -1,4 +1,4 @@
-import { Address } from 'abitype'
+import { type Address } from 'viem'
 
 // https://home.treasury.gov/policy-issues/financial-sanctions/recent-actions/20220808
 const sdnList = new Set([

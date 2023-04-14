@@ -1,11 +1,11 @@
 import { autoSwitchMainnet } from '../decorators'
-import type {
-  ReadOverrides,
-  WriteOverrides,
-  Result,
+import { type Cbt } from '../abi'
+import {
+  type ReadOverrides,
+  type Result,
+  type WriteOverrides,
 } from '../../types/contract'
-import { BaseContract } from './base'
-import { Cbt } from '../abi'
+import { type BaseContract } from './base'
 
 export class CbtContract {
   constructor(private base: BaseContract) {}
@@ -23,7 +23,7 @@ export class CbtContract {
     characterId: bigint,
     tokenId: bigint,
     overrides: WriteOverrides<Cbt, 'mint'> = {},
-  ): Promise<Result<undefined, true>> | never {
+  ): Promise<Result<undefined, true>> {
     const tx = await this.base.cbtContract.write.mint(
       [characterId, tokenId],
       overrides,
@@ -52,7 +52,7 @@ export class CbtContract {
     tokenId: bigint,
     uri: string,
     overrides: WriteOverrides<Cbt, 'setTokenURI'> = {},
-  ): Promise<Result<undefined, true>> | never {
+  ): Promise<Result<undefined, true>> {
     const tx = await this.base.cbtContract.write.setTokenURI(
       [tokenId, uri],
       overrides,
@@ -77,7 +77,7 @@ export class CbtContract {
   async getTokenUri(
     tokenId: bigint,
     overrides: ReadOverrides<Cbt, 'uri'> = {},
-  ): Promise<Result<string>> | never {
+  ): Promise<Result<string>> {
     const uri = await this.base.cbtContract.read.uri([tokenId], overrides)
 
     return {

@@ -1,14 +1,14 @@
+import { type Address } from 'viem'
 import { autoSwitchMainnet } from '../decorators'
-import type {
-  WriteOverrides,
-  Result,
-  ReadOverrides,
-} from '../../types/contract'
-import { CharacterPermissionKey } from '../../types'
+import { type CharacterPermissionKey } from '../../types'
 import { Logger, parseLog, validateAddress } from '../../utils'
-import { BaseContract } from './base'
-import { Address } from 'viem'
-import { Entry } from '../abi'
+import { type Entry } from '../abi'
+import {
+  type ReadOverrides,
+  type Result,
+  type WriteOverrides,
+} from '../../types/contract'
+import { type BaseContract } from './base'
 
 // https://github.com/Crossbell-Box/CIPs/blob/main/CIPs/CIP-7.md
 
@@ -38,7 +38,7 @@ export class OperatorContract {
     operator: Address,
     permissions: CharacterPermissionKey[],
     overrides: WriteOverrides<Entry, 'grantOperatorPermissions'> = {},
-  ): Promise<Result<{ bitmapUint256: bigint }, true>> | never {
+  ): Promise<Result<{ bitmapUint256: bigint }, true>> {
     validateAddress(operator)
 
     const permissionUint256 =
@@ -89,7 +89,7 @@ export class OperatorContract {
     allowlist: Address[],
     blocklist: Address[] = [],
     overrides: WriteOverrides<Entry, 'grantOperators4Note'> = {},
-  ): Promise<Result<{}, true>> | never {
+  ): Promise<Result<{}, true>> {
     validateAddress(allowlist)
     validateAddress(blocklist)
 
@@ -120,7 +120,7 @@ export class OperatorContract {
   async getForCharacter(
     characterId: bigint,
     overrides: ReadOverrides<Entry, 'getOperators'> = {},
-  ): Promise<Result<readonly Address[], false>> | never {
+  ): Promise<Result<readonly Address[], false>> {
     const operators = await this.base.contract.read.getOperators(
       [characterId],
       overrides,
@@ -141,14 +141,12 @@ export class OperatorContract {
     characterId: bigint,
     noteId: bigint,
     overrides: ReadOverrides<Entry, 'getOperators4Note'> = {},
-  ):
-    | Promise<
-        Result<
-          { allowlist: readonly Address[]; blocklist: readonly Address[] },
-          false
-        >
-      >
-    | never {
+  ): Promise<
+    Result<
+      { allowlist: readonly Address[]; blocklist: readonly Address[] },
+      false
+    >
+  > {
     const [allowlist, blocklist] =
       await this.base.contract.read.getOperators4Note(
         [characterId, noteId],
@@ -176,7 +174,7 @@ export class OperatorContract {
     noteId: bigint,
     operator: Address,
     overrides: ReadOverrides<Entry, 'isOperatorAllowedForNote'> = {},
-  ): Promise<Result<boolean, false>> | never {
+  ): Promise<Result<boolean, false>> {
     const isAllowed = await this.base.contract.read.isOperatorAllowedForNote(
       [characterId, noteId, operator],
       overrides,
@@ -198,7 +196,7 @@ export class OperatorContract {
     characterId: bigint,
     operator: Address,
     overrides: ReadOverrides<Entry, 'getOperatorPermissions'> = {},
-  ): Promise<Result<CharacterPermissionKey[], false>> | never {
+  ): Promise<Result<CharacterPermissionKey[], false>> {
     const permissionUint256 =
       await this.base.contract.read.getOperatorPermissions(
         [characterId, operator],
@@ -227,10 +225,10 @@ export class OperatorContract {
       const bit = Object.entries(CHARACTER_PERMISSION_BITMAP).find(
         ([, value]) => value === permission,
       )![0]
-      return parseInt(bit)
+      return Number.parseInt(bit)
     })
 
-    const uint256Array = Array<number>(256).fill(0)
+    const uint256Array = Array.from<number>({ length: 256 }).fill(0)
 
     bits.forEach((bit) => {
       uint256Array[bit] = 1
@@ -263,9 +261,9 @@ export class OperatorContract {
             return CHARACTER_PERMISSION_BITMAP[index]
           } else {
             Logger.warn('Found invalid permission bit.', index)
-            return
           }
         }
+        return undefined
       })
       .filter(Boolean) as CharacterPermissionKey[]
 
@@ -308,7 +306,7 @@ export class OperatorContract {
       .toString(2)
       .padStart(256, '0')
       .split('')
-      .map((bit) => parseInt(bit) as 0 | 1)
+      .map((bit) => Number.parseInt(bit) as 0 | 1)
   }
 
   /**

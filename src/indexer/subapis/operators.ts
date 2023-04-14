@@ -1,11 +1,11 @@
-import { BaseIndexer } from './base'
-import type {
-  ListResponse,
-  CharacterOperatorEntity,
-  NoteOperatorEntity,
-} from '../../types/indexer'
+import { type Address } from 'viem'
 import { createSearchParamsString } from '../../utils'
-import { Address } from 'abitype'
+import {
+  type CharacterOperatorEntity,
+  type ListResponse,
+  type NoteOperatorEntity,
+} from '../../types/indexer'
+import { BaseIndexer } from './base'
 
 export class OperatorIndexer extends BaseIndexer {
   /**
@@ -46,7 +46,7 @@ export class OperatorIndexer extends BaseIndexer {
     characterId: bigint,
     noteId: bigint,
   ): Promise<NoteOperatorEntity> {
-    let url = `${this.endpoint}/characters/${characterId}/notes/${noteId}/operators?`
+    const url = `${this.endpoint}/characters/${characterId}/notes/${noteId}/operators?`
     // url += createSearchParamsString()
 
     const res = await this.fetch(url).then((res) => res.json())
@@ -65,7 +65,7 @@ export class OperatorIndexer extends BaseIndexer {
     characterId: bigint,
     address: Address,
   ): Promise<CharacterOperatorEntity | null> {
-    let url = `${this.endpoint}/characters/${characterId}/operators/${address}`
+    const url = `${this.endpoint}/characters/${characterId}/operators/${address}`
 
     const res = await this.fetch(url).then((res) => res.json())
 
@@ -85,7 +85,7 @@ export class OperatorIndexer extends BaseIndexer {
     noteId: bigint,
     address: Address,
   ): Promise<NoteOperatorEntity | null> {
-    let url = `${this.endpoint}/characters/${characterId}/notes/${noteId}/operators/${address}`
+    const url = `${this.endpoint}/characters/${characterId}/notes/${noteId}/operators/${address}`
 
     const res = await this.fetch(url).then((res) => res.json())
 

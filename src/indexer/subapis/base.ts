@@ -2,7 +2,7 @@ import '../../utils/fetch'
 
 export class BaseIndexer {
   /** The indexer endpoint */
-  endpoint: string = 'https://indexer.crossbell.io/v1'
+  endpoint = 'https://indexer.crossbell.io/v1'
 
   /** The options to send to the fetch function. */
   fetchOptions: Omit<RequestInit, 'method'> = {}
@@ -21,7 +21,7 @@ export class BaseIndexer {
       this.endpoint = endpointOrOptions.endpoint ?? this.endpoint
       this.fetchOptions = endpointOrOptions.fetchOptions ?? this.fetchOptions
     } else if (typeof endpointOrOptions !== 'undefined') {
-      throw new Error(
+      throw new TypeError(
         `Invalid argument: ${JSON.stringify(
           endpointOrOptions,
         )}. It must be a string or an object.`,

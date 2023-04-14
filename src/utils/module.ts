@@ -1,11 +1,11 @@
 import {
+  type Address,
+  type Hex,
   decodeAbiParameters,
-  Address,
-  isAddressEqual,
   encodeAbiParameters,
-  Hex,
+  isAddressEqual,
 } from 'viem'
-import { MintOrLinkModule, MintOrLinkModuleConfig } from '../types'
+import { type MintOrLinkModule, type MintOrLinkModuleConfig } from '../types'
 import { NIL_ADDRESS } from './address'
 
 let moduleResponseCache: MintOrLinkModule[] | undefined = undefined
@@ -40,7 +40,7 @@ export async function getModule(address: Address) {
   return modules.find((module) => isAddressEqual(module.address, address))
 }
 
-export async function getLinkModules() {
+export function getLinkModules() {
   return getModules({ type: 'link' })
 }
 
@@ -52,7 +52,7 @@ export async function getLinkModule(address: Address) {
   )
 }
 
-export async function getMintModules() {
+export function getMintModules() {
   return getModules({ type: 'mint' })
 }
 
@@ -74,7 +74,7 @@ export async function getModuleConfig(m?: MintOrLinkModuleConfig) {
 
   const module = await getModule(m.address)
   if (!module) {
-    throw new Error('Invalid module address ' + m.address)
+    throw new Error(`Invalid module address ${m.address}`)
   }
 
   const initData = encodeAbiParameters(
@@ -96,7 +96,7 @@ export async function encodeModuleInitData(
 ) {
   const module = await getModule(moduleAddress)
   if (!module) {
-    throw new Error('Invalid module address ' + moduleAddress)
+    throw new Error(`Invalid module address ${moduleAddress}`)
   }
 
   const result = encodeAbiParameters(
@@ -113,7 +113,7 @@ export async function decodeModuleInitData(
 ) {
   const module = await getModule(moduleAddress)
   if (!module) {
-    throw new Error('Invalid module address ' + moduleAddress)
+    throw new Error(`Invalid module address ${moduleAddress}`)
   }
 
   const result = decodeAbiParameters(

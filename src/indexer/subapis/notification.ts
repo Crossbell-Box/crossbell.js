@@ -1,10 +1,10 @@
-import { BaseIndexer } from './base'
-import type {
-  ListResponse,
-  NotificationEntity,
-  NotificationTypeKey,
-} from '../../types/indexer'
 import { createSearchParamsString } from '../../utils'
+import {
+  type ListResponse,
+  type NotificationEntity,
+  type NotificationTypeKey,
+} from '../../types/indexer'
+import { BaseIndexer } from './base'
 
 export class NotificationIndexer extends BaseIndexer {
   /**

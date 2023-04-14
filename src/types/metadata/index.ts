@@ -1,5 +1,5 @@
-import { CharacterMetadata } from './character'
-import { NoteMetadata } from './note'
+import { type CharacterMetadata } from './character'
+import { type NoteMetadata } from './note'
 
 export type Metadata = CharacterMetadata | NoteMetadata
 

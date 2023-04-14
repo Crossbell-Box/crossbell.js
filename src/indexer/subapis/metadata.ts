@@ -1,5 +1,5 @@
+import { type CharacterMetadata, type NoteMetadata } from '../../types'
 import { BaseIndexer } from './base'
-import type { CharacterMetadata, NoteMetadata } from '../../types'
 
 export class MetadataIndexer extends BaseIndexer {
   /**
@@ -10,7 +10,7 @@ export class MetadataIndexer extends BaseIndexer {
   async syncMetadataOfCharacter(
     characterId: bigint,
   ): Promise<CharacterMetadata | never> {
-    let url = `${this.endpoint}/characters/${characterId}/metadata/sync`
+    const url = `${this.endpoint}/characters/${characterId}/metadata/sync`
 
     const res = await this.fetch(url).then((res) => res.json())
 
@@ -27,7 +27,7 @@ export class MetadataIndexer extends BaseIndexer {
     characterId: bigint,
     noteId: bigint,
   ): Promise<NoteMetadata | never> {
-    let url = `${this.endpoint}/notes/${characterId}/${noteId}/metadata/sync`
+    const url = `${this.endpoint}/notes/${characterId}/${noteId}/metadata/sync`
 
     const res = await this.fetch(url).then((res) => res.json())
 

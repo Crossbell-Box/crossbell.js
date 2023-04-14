@@ -1,8 +1,8 @@
-import { BaseIndexer } from './base'
-import type { ListResponse, MintedNoteEntity } from '../../types/indexer'
+import { type Address } from 'viem'
 import { createSearchParamsString } from '../../utils'
-import { NoteMetadata } from '../../types'
-import { Address } from 'abitype'
+import { type NoteMetadata } from '../../types'
+import { type ListResponse, type MintedNoteEntity } from '../../types/indexer'
+import { BaseIndexer } from './base'
 
 export class MintedNoteIndexer extends BaseIndexer {
   /**

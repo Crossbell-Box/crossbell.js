@@ -1,7 +1,7 @@
 import { generatePrivateKey, privateKeyToAccount } from 'viem/accounts'
-import { expect, describe, test } from 'vitest'
+import { describe, expect, test } from 'vitest'
 import { Contract } from '../../src'
-import { mockUser, genRandomHandle, metadataUri } from '../mock'
+import { genRandomHandle, metadataUri, mockUser } from '../mock'
 
 const contract = new Contract(mockUser.privateKey)
 
@@ -93,8 +93,9 @@ describe('link and check', () => {
     expect(handle).toBe(randomAddress.toLowerCase())
 
     // should also able to get character by transaction
-    const { data: character } =
-      await contract.character.getByTransaction(result.transactionHash)
+    const { data: character } = await contract.character.getByTransaction(
+      result.transactionHash,
+    )
     expect(character.characterId).toBe(result.data.toCharacterId)
   })
 

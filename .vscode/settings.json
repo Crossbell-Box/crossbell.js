@@ -1,0 +1,7 @@
+{
+  "unocss.root": ["./examples/vite"],
+  "eslint.experimental.useFlatConfig": true,
+  "eslint.options": {
+    "overrideConfigFile": "./eslint.config.mjs"
+  }
+}

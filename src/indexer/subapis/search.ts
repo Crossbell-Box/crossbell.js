@@ -1,11 +1,11 @@
-import { BaseIndexer } from './base'
-import type {
-  ListResponse,
-  NoteEntity,
-  CharacterEntity,
-} from '../../types/indexer'
-import type { LinkItemType } from '../../types/contract'
 import { createSearchParamsString } from '../../utils'
+import {
+  type CharacterEntity,
+  type ListResponse,
+  type NoteEntity,
+} from '../../types/indexer'
+import { type LinkItemType } from '../../types/contract'
+import { BaseIndexer } from './base'
 
 export class SearchIndexer extends BaseIndexer {
   /**

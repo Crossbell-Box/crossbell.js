@@ -1,4 +1,4 @@
-import { expect, describe, test, beforeAll } from 'vitest'
+import { beforeAll, describe, expect, test } from 'vitest'
 import { Contract } from '../../src'
 import { mockUser } from '../mock'
 

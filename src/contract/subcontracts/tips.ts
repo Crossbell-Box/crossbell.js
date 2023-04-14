@@ -1,12 +1,12 @@
+import { type Address, encodeAbiParameters, isAddressEqual } from 'viem'
 import { autoSwitchMainnet } from '../decorators'
-import type {
-  WriteOverrides,
-  Result,
-  ReadOverrides,
+import { type Entry, type Mira, type Tips } from '../abi'
+import {
+  type ReadOverrides,
+  type Result,
+  type WriteOverrides,
 } from '../../types/contract'
-import { BaseContract } from './base'
-import { Address, encodeAbiParameters, isAddressEqual } from 'viem'
-import { Entry, Mira, Tips } from '../abi'
+import { type BaseContract } from './base'
 
 export class TipsContract {
   constructor(private base: BaseContract) {}
@@ -26,7 +26,7 @@ export class TipsContract {
     toCharacterId: bigint,
     amount: bigint | number,
     overrides: WriteOverrides<Mira, 'send'> = {},
-  ): Promise<Result<undefined, true>> | never {
+  ): Promise<Result<undefined, true>> {
     const data = encodeAbiParameters(
       [{ type: 'uint256' }, { type: 'uint256' }],
       [fromCharacterId, toCharacterId],
@@ -64,7 +64,7 @@ export class TipsContract {
     toNoteId: bigint,
     amount: bigint | number,
     overrides: WriteOverrides<Mira, 'send'> = {},
-  ): Promise<Result<undefined, true>> | never {
+  ): Promise<Result<undefined, true>> {
     const data = encodeAbiParameters(
       [{ type: 'uint256' }, { type: 'uint256' }, { type: 'uint256' }],
       [fromCharacterId, toCharacterId, toNoteId],
@@ -99,7 +99,7 @@ export class TipsContract {
   async getBalanceOfCharacter(
     characterId: bigint,
     overrides: ReadOverrides<Entry, 'ownerOf' | 'balanceOf'> = {},
-  ): Promise<Result<bigint>> | never {
+  ): Promise<Result<bigint>> {
     const address = await this.base.contract.read.ownerOf(
       [characterId],
       overrides,
@@ -128,7 +128,7 @@ export class TipsContract {
   async getBalance(
     address: Address,
     overrides: ReadOverrides<Entry, 'balanceOf'> = {},
-  ): Promise<Result<bigint>> | never {
+  ): Promise<Result<bigint>> {
     const balance = await this.base.miraContract.read.balanceOf(
       [address],
       overrides,
@@ -147,7 +147,7 @@ export class TipsContract {
    */
   async getTokenAddress(
     overrides: ReadOverrides<Tips, 'getToken'> = {},
-  ): Promise<Result<Address>> | never {
+  ): Promise<Result<Address>> {
     const res = await this.base.tipsContract.read.getToken(overrides)
 
     return {
@@ -163,7 +163,7 @@ export class TipsContract {
    */
   async getTokenDecimals(
     overrides: ReadOverrides<Mira, 'decimals'> = {},
-  ): Promise<Result<number>> | never {
+  ): Promise<Result<number>> {
     const res = await this.base.miraContract.read.decimals(overrides)
 
     return {

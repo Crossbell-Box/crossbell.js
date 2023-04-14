@@ -1,9 +1,13 @@
-import { MintOrLinkModuleConfig, WriteOverrides, Result } from '../../types'
+import { type Address } from 'viem'
+import {
+  type MintOrLinkModuleConfig,
+  type Result,
+  type WriteOverrides,
+} from '../../types'
 import { getModuleConfig } from '../../utils'
-import { Entry } from '../abi'
+import { type Entry } from '../abi'
 import { autoSwitchMainnet } from '../decorators'
-import { BaseContract } from './base'
-import { Address } from 'abitype'
+import { type BaseContract } from './base'
 
 export class LinkModuleContract {
   constructor(private base: BaseContract) {}
@@ -20,7 +24,7 @@ export class LinkModuleContract {
     address: Address,
     linkModule: MintOrLinkModuleConfig,
     overrides: WriteOverrides<Entry, 'setLinkModule4Address'> = {},
-  ): Promise<Result<undefined, true>> | never {
+  ): Promise<Result<undefined, true>> {
     const moduleConfig = await getModuleConfig(linkModule)
 
     const tx = await this.base.contract.write.setLinkModule4Address(
@@ -56,7 +60,7 @@ export class LinkModuleContract {
     linklistId: bigint,
     linkModule: MintOrLinkModuleConfig,
     overrides: WriteOverrides<Entry, 'setLinkModule4Linklist'> = {},
-  ): Promise<Result<undefined, true>> | never {
+  ): Promise<Result<undefined, true>> {
     const moduleConfig = await getModuleConfig(linkModule)
 
     const tx = await this.base.contract.write.setLinkModule4Linklist(

@@ -1,6 +1,6 @@
-import { BaseIndexer } from './base'
-import type { LinklistEntity, ListResponse } from '../../types/indexer'
 import { createSearchParamsString } from '../../utils'
+import { type LinklistEntity, type ListResponse } from '../../types/indexer'
+import { BaseIndexer } from './base'
 
 export class LinklistIndexer extends BaseIndexer {
   /**
@@ -40,7 +40,7 @@ export class LinklistIndexer extends BaseIndexer {
    * @returns The character.
    */
   async getLinklist(linklistId: bigint): Promise<LinklistEntity | null> {
-    let url = `${this.endpoint}/linklists/${linklistId}`
+    const url = `${this.endpoint}/linklists/${linklistId}`
 
     const res = await this.fetch(url).then((res) => res.json())
 

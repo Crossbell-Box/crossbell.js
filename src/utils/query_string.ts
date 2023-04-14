@@ -1,4 +1,4 @@
-import { MaybeArray } from '../types/utils'
+import { type MaybeArray } from '../types/utils'
 
 export function createSearchParamsString(
   params: Record<

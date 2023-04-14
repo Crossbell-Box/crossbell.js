@@ -1,6 +1,10 @@
-import { BaseIndexer } from './base'
-import type { FeedEntity, FeedTypeKey, ListResponse } from '../../types/indexer'
 import { createSearchParamsString } from '../../utils'
+import {
+  type FeedEntity,
+  type FeedTypeKey,
+  type ListResponse,
+} from '../../types/indexer'
+import { BaseIndexer } from './base'
 
 export class FeedIndexer extends BaseIndexer {
   /**
@@ -48,7 +52,7 @@ export class FeedIndexer extends BaseIndexer {
    * @param options - The options to send to the indexer.
    * @returns The list of feeds.
    */
-  async getFollowingFeedsOfCharacter(
+  getFollowingFeedsOfCharacter(
     characterId: bigint,
     {
       type,

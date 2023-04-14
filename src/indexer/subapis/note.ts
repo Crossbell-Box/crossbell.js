@@ -1,9 +1,9 @@
-import { BaseIndexer } from './base'
-import type { ListResponse, NoteEntity } from '../../types/indexer'
-import type { LinkItemType } from '../../types/contract'
+import { type Address } from 'viem'
 import { createSearchParamsString } from '../../utils'
-import { NoteMetadata } from '../../types'
-import { Address } from 'abitype'
+import { type NoteMetadata } from '../../types'
+import { type ListResponse, type NoteEntity } from '../../types/indexer'
+import { type LinkItemType } from '../../types/contract'
+import { BaseIndexer } from './base'
 
 export type NoteQueryOptions = {
   /** The owner of this note */

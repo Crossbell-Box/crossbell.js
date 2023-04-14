@@ -1,7 +1,7 @@
-import { BaseIndexer } from './base'
-import type { ListResponse, TipEntity } from '../../types/indexer'
+import { type Address } from 'viem'
 import { createSearchParamsString } from '../../utils'
-import { Address } from 'abitype'
+import { type ListResponse, type TipEntity } from '../../types/indexer'
+import { BaseIndexer } from './base'
 
 export class TipIndexer extends BaseIndexer {
   /**

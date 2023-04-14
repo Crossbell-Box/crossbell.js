@@ -1,11 +1,11 @@
-import { BaseIndexer } from './base'
-import type {
-  ListResponse,
-  AchievementSection,
-  AchievementItem,
-  AchievementStatusKey,
-} from '../../types/indexer'
 import { createSearchParamsString } from '../../utils'
+import {
+  type AchievementItem,
+  type AchievementSection,
+  type AchievementStatusKey,
+  type ListResponse,
+} from '../../types/indexer'
+import { BaseIndexer } from './base'
 
 export class AchievementIndexer extends BaseIndexer {
   /**
@@ -39,7 +39,7 @@ export class AchievementIndexer extends BaseIndexer {
     characterId: bigint,
     achievementId: bigint,
   ): Promise<AchievementItem> | never {
-    let url = `${this.endpoint}/characters/${characterId}/achievements/${achievementId}`
+    const url = `${this.endpoint}/characters/${characterId}/achievements/${achievementId}`
 
     const res = await this.fetch(url, { method: 'POST' }).then((res) =>
       res.json(),

@@ -1,8 +1,12 @@
-import { MintOrLinkModuleConfig, WriteOverrides, Result } from '../../types'
+import {
+  type MintOrLinkModuleConfig,
+  type Result,
+  type WriteOverrides,
+} from '../../types'
 import { getModuleConfig } from '../../utils'
-import { Entry } from '../abi'
+import { type Entry } from '../abi'
 import { autoSwitchMainnet } from '../decorators'
-import { BaseContract } from './base'
+import { type BaseContract } from './base'
 
 export class MintModuleContract {
   constructor(private base: BaseContract) {}
@@ -21,7 +25,7 @@ export class MintModuleContract {
     noteId: bigint,
     mintModule: MintOrLinkModuleConfig,
     overrides: WriteOverrides<Entry, 'setMintModule4Note'> = {},
-  ): Promise<Result<undefined, true>> | never {
+  ): Promise<Result<undefined, true>> {
     const moduleConfig = await getModuleConfig(mintModule)
 
     const tx = await this.base.contract.write.setMintModule4Note(

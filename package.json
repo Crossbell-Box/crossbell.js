@@ -1,14 +1,15 @@
 {
   "name": "crossbell.js",
   "version": "0.19.8",
-  "description": "JavaScript SDK to interact with Crossbell",
   "packageManager": "pnpm@8.1.1",
+  "description": "JavaScript SDK to interact with Crossbell",
   "keywords": [
     "crossbell",
     "eth",
     "contract",
     "web3"
   ],
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/Crossbell-Box/crossbell.js/issues"
   },
@@ -16,7 +17,12 @@
     "type": "git",
     "url": "https://github.com/Crossbell-Box/crossbell.js.git"
   },
-  "license": "MIT",
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
   "exports": {
     "./package.json": "./package.json",
     ".": {
@@ -30,12 +36,9 @@
       "require": "./dist/index.js"
     }
   },
-  "main": "./dist/index.js",
-  "module": "./dist/index.mjs",
-  "types": "./dist/index.d.ts",
-  "files": [
-    "dist"
-  ],
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "build": "tsup --dts",
     "watch": "tsup --watch",
@@ -45,6 +48,7 @@
     "docs:preview": "serve docs",
     "prepublishOnly": "npm run build",
     "test": "vitest",
+    "lint": "ESLINT_USE_FLAT_CONFIG=true eslint -c eslint.config.mjs --max-warnings 0 .",
     "typecheck": "tsc --noEmit",
     "release": "bumpp"
   },
@@ -59,6 +63,7 @@
   },
   "devDependencies": {
     "@esbuild-plugins/node-modules-polyfill": "^0.2.2",
+    "@sxzz/eslint-config": "^3.0.0-beta.4",
     "@typechain/ethers-v5": "^10.2.0",
     "@types/async-retry": "^1.4.5",
     "@types/bn.js": "^5.1.1",
@@ -66,14 +71,12 @@
     "abitype": "^0.7.1",
     "bumpp": "^9.1.0",
     "change-case": "^4.1.2",
+    "eslint": "^8.38.0",
     "prettier": "^2.8.7",
     "tsup": "^6.7.0",
     "typechain": "^8.1.1",
     "typedoc": "^0.23.28",
     "typescript": "^5.0.3",
     "vitest": "^0.29.8"
-  },
-  "publishConfig": {
-    "access": "public"
   }
 }

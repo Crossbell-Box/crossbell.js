@@ -1,4 +1,4 @@
-import { expect, describe, test, beforeAll } from 'vitest'
+import { beforeAll, describe, expect, test } from 'vitest'
 import { Contract } from '../../src'
 import { mockUser } from '../mock'
 
@@ -37,7 +37,7 @@ describe('tips', () => {
       expect(res.transactionHash).toBeDefined()
     })
 
-    test('tip failed when amount not enough', async () => {
+    test('tip failed when amount not enough', () => {
       expect(
         contract.tips.tipCharacterForNote(
           characterId!,

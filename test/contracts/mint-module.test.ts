@@ -1,5 +1,5 @@
-import { expect, describe, test } from 'vitest'
-import { encodeModuleInitData, decodeModuleInitData } from '../../src'
+import { describe, expect, test } from 'vitest'
+import { decodeModuleInitData, encodeModuleInitData } from '../../src'
 
 describe('mind-module', () => {
   const input = [

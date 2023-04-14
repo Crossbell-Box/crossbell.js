@@ -1,8 +1,8 @@
-import { CharacterEntity } from './character'
-import { LinklistEntity } from './linklist'
-import { MetadataEntity } from './metadata'
-import { LinkItemType } from './../contract'
-import { Address } from 'abitype'
+import { type Address } from 'viem'
+import { type CharacterEntity } from './character'
+import { type LinklistEntity } from './linklist'
+import { type MetadataEntity } from './metadata'
+import { type LinkItemType } from './../contract'
 
 export interface NoteEntity {
   characterId: number

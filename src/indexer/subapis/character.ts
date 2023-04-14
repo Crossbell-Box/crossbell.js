@@ -1,7 +1,7 @@
-import { BaseIndexer } from './base'
-import type { ListResponse, CharacterEntity } from '../../types/indexer'
+import { type Address } from 'viem'
 import { createSearchParamsString } from '../../utils'
-import { Address } from 'abitype'
+import { type CharacterEntity, type ListResponse } from '../../types/indexer'
+import { BaseIndexer } from './base'
 
 export class CharacterIndexer extends BaseIndexer {
   /**
@@ -41,7 +41,7 @@ export class CharacterIndexer extends BaseIndexer {
    * @param address - The address of the character owner.
    * @returns The primary character.
    */
-  async getPrimaryCharacter(address: Address): Promise<CharacterEntity | null> {
+  getPrimaryCharacter(address: Address): Promise<CharacterEntity | null> {
     return this.getCharacters(address, { limit: 1, primary: true }).then(
       (res) => res.list?.[0] ?? null,
     )
@@ -53,10 +53,8 @@ export class CharacterIndexer extends BaseIndexer {
    * @param characterId - The id of the character.
    * @returns The character.
    */
-  async getCharacter(
-    characterId: bigint,
-  ): Promise<CharacterEntity | null> {
-    let url = `${this.endpoint}/characters/${characterId}`
+  async getCharacter(characterId: bigint): Promise<CharacterEntity | null> {
+    const url = `${this.endpoint}/characters/${characterId}`
 
     const res = await this.fetch(url).then((res) => res.json())
 
@@ -70,7 +68,7 @@ export class CharacterIndexer extends BaseIndexer {
    * @returns The character.
    */
   async getCharacterByHandle(handle: string): Promise<CharacterEntity | null> {
-    let url = `${this.endpoint}/handles/${handle}/character`
+    const url = `${this.endpoint}/handles/${handle}/character`
 
     const res = await this.fetch(url).then((res) => res.json())
 

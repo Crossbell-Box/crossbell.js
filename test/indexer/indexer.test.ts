@@ -1,4 +1,4 @@
-import { expect, describe, test } from 'vitest'
+import { describe, expect, test } from 'vitest'
 import { Indexer } from '../../src'
 import { mockUser } from '../mock'
 

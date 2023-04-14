@@ -1,4 +1,4 @@
-import { NoteMetadata, CharacterMetadata } from './../metadata'
+import { type CharacterMetadata, type NoteMetadata } from './../metadata'
 
 export type MetadataType = 'CHARACTER' | 'NOTE' | 'LINKLIST'
 

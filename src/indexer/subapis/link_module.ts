@@ -1,11 +1,11 @@
-import { BaseIndexer } from './base'
-import type {
-  LinkModuleEntity,
-  LinkModuleTargetItemType,
-  ListResponse,
-} from '../../types/indexer'
+import { type Address } from 'viem'
 import { createSearchParamsString } from '../../utils'
-import { Address } from 'abitype'
+import {
+  type LinkModuleEntity,
+  type LinkModuleTargetItemType,
+  type ListResponse,
+} from '../../types/indexer'
+import { BaseIndexer } from './base'
 
 export class LinkModuleIndexer extends BaseIndexer {
   /**

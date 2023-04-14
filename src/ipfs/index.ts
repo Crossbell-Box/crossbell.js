@@ -1,17 +1,17 @@
 import retry from 'async-retry'
 import '../utils/fetch'
-import type {
-  BaseMetadata,
-  Metadata,
-  NoteMetadata,
-  CharacterMetadata,
-} from '../types/metadata'
-import { IpfsResponse } from '../types/ipfs'
 import { ipfsFetch, isIpfsUrl } from '@crossbell/ipfs-fetch'
+import { type IpfsResponse } from '../types/ipfs'
+import {
+  type BaseMetadata,
+  type CharacterMetadata,
+  type Metadata,
+  type NoteMetadata,
+} from '../types/metadata'
 
 export class Ipfs {
-  static async uploadJson(json: any) {
-    return await retry(
+  static uploadJson(json: any) {
+    return retry(
       async () => {
         const res = await fetch('https://ipfs-relay.crossbell.io/json', {
           method: 'POST',
@@ -36,7 +36,7 @@ export class Ipfs {
           body: formData,
         })
 
-        return await res.json()
+        return res.json()
       },
       { retries: 3 },
     )
@@ -52,7 +52,7 @@ export class Ipfs {
     return res.url
   }
 
-  static async uriToMetadata<T extends Metadata>(uri: string) {
+  static uriToMetadata<T extends Metadata>(uri: string) {
     return retry(
       async () => {
         if (isIpfsUrl(uri)) {
@@ -60,8 +60,8 @@ export class Ipfs {
           try {
             const json = JSON.parse(res)
             return json as T
-          } catch (e) {
-            throw new Error('Failed to parse metadata from uri: ' + uri)
+          } catch {
+            throw new Error(`Failed to parse metadata from uri: ${uri}`)
           }
         }
 
@@ -70,9 +70,9 @@ export class Ipfs {
           res = await fetch(uri).then((res) => res.text())
           res = JSON.parse(res)
           return res as T
-        } catch (e) {
+        } catch {
           throw new Error(
-            `Failed to fetch metadata from uri: ${uri} . Response: ` + res,
+            `Failed to fetch metadata from uri: ${uri} . Response: ${res}`,
           )
         }
       },
@@ -80,22 +80,22 @@ export class Ipfs {
     )
   }
 
-  static async parseMetadataOrUri<T = NoteMetadata>(
+  static async parseMetadataOrUri(
     type: 'note',
     metadataOrUri: NoteMetadata | string,
     retrieveMetadataIfNeeded?: false,
   ): Promise<{ uri: string }>
-  static async parseMetadataOrUri<T = NoteMetadata>(
+  static async parseMetadataOrUri(
     type: 'note',
     metadataOrUri: NoteMetadata | string,
     retrieveMetadataIfNeeded: true,
   ): Promise<{ metadata: NoteMetadata; uri: string }>
-  static async parseMetadataOrUri<T = CharacterMetadata>(
+  static async parseMetadataOrUri(
     type: 'character',
     metadataOrUri: CharacterMetadata | string,
     retrieveMetadataIfNeeded?: false,
   ): Promise<{ uri: string }>
-  static async parseMetadataOrUri<T = CharacterMetadata>(
+  static async parseMetadataOrUri(
     type: 'character',
     metadataOrUri: CharacterMetadata | string,
     retrieveMetadataIfNeeded: true,
@@ -103,7 +103,7 @@ export class Ipfs {
   static async parseMetadataOrUri<T extends Metadata>(
     type: BaseMetadata['type'],
     metadataOrUri: T | string,
-    retrieveMetadataIfNeeded: boolean = false,
+    retrieveMetadataIfNeeded = false,
   ): Promise<{ metadata?: T; uri: string }> {
     if (metadataOrUri === '') {
       return { uri: '', metadata: undefined }

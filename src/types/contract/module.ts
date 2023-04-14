@@ -1,4 +1,4 @@
-import { AbiType, Address } from 'abitype'
+import { type AbiType, type Address } from 'abitype'
 
 export interface MintOrLinkModule<T extends 'mint' | 'link' = 'mint' | 'link'> {
   /* Global unique id */

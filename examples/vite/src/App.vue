@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Contract } from 'crossbell.js'
-import { ref, onErrorCaptured } from 'vue'
-import { useLocalStorage, useEventListener, useDark } from '@vueuse/core'
+import { onErrorCaptured, ref } from 'vue'
+import { useDark, useEventListener, useLocalStorage } from '@vueuse/core'
 import { type Address } from 'abitype'
 
 useDark()
@@ -66,9 +66,9 @@ function setPrimaryCharacterId() {
   <h1 text="3xl" py4>Crossbell.js Demo</h1>
   <hr />
   <div flex="~ gap2 wrap" font-mono>
-    <input type="text" v-model="address" placeholder="address" />
-    <input type="text" v-model="characterId" placeholder="characterId" />
-    <input type="text" v-model="handle" placeholder="handle" />
+    <input v-model="address" type="text" placeholder="address" />
+    <input v-model="characterId" type="text" placeholder="characterId" />
+    <input v-model="handle" type="text" placeholder="handle" />
   </div>
   <hr />
   <div flex="~ gap2 wrap">

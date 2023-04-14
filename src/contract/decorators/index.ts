@@ -1,4 +1,4 @@
-import { BaseContract } from '../../contract/subcontracts/base'
+import { type BaseContract } from '../../contract/subcontracts/base'
 import { Network } from '../../network'
 import { Logger } from '../../utils'
 
@@ -22,13 +22,12 @@ export function autoSwitchMainnet() {
         if (!isMainnet) {
           Logger.warn("You're not on the mainnet. Switching to mainnet.")
           await walletClient.switchChain({ id: Network.getChain().id })
-          console.log(await walletClient.getChainId())
         }
       }
 
       try {
         await checkAndSwitch()
-      } catch (e) {
+      } catch {
         // we may need to connect again if the user switch network on the halfway
         await checkAndSwitch()
       }

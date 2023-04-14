@@ -12,7 +12,8 @@
     "noImplicitAny": true,
     "allowJs": true,
     "resolveJsonModule": true,
-    "types": ["node"]
+    "types": ["node"],
+    "outDir": "dist"
   },
   "include": ["scripts"]
 }

@@ -1,12 +1,18 @@
-import { CharacterEntity } from './character'
-import { LinkEntity } from './link'
-import { LinklistEntity } from './linklist'
-import { LinkModuleEntity, LinkModuleTargetItemType } from './link_module'
-import { MintedNoteEntity } from './minted_note'
-import { MintModuleEntity, MintModuleTargetItemType } from './mint_module'
-import { NoteEntity } from './note'
-import { TipEntity } from './tip'
-import { Address } from 'abitype'
+import { type Address } from 'viem'
+import { type CharacterEntity } from './character'
+import { type LinkEntity } from './link'
+import { type LinklistEntity } from './linklist'
+import {
+  type LinkModuleEntity,
+  type LinkModuleTargetItemType,
+} from './link_module'
+import { type MintedNoteEntity } from './minted_note'
+import {
+  type MintModuleEntity,
+  type MintModuleTargetItemType,
+} from './mint_module'
+import { type NoteEntity } from './note'
+import { type TipEntity } from './tip'
 
 export enum FeedType {
   CREATE_CHARACTER = 'CREATE_CHARACTER',

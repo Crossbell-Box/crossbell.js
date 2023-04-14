@@ -1,8 +1,8 @@
-import { Address } from 'abitype'
-import { LinkItemType } from '../contract'
-import { CharacterEntity } from './character'
-import { LinklistEntity } from './linklist'
-import { NoteEntity } from './note'
+import { type Address } from 'viem'
+import { type LinkItemType } from '../contract'
+import { type CharacterEntity } from './character'
+import { type LinklistEntity } from './linklist'
+import { type NoteEntity } from './note'
 
 export interface LinkEntity {
   linklistId: number

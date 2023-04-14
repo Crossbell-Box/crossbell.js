@@ -1,6 +1,6 @@
-import { BaseContract } from './base'
-import type { ReadOverrides, Result } from '../../types/contract'
-import { Entry } from '../abi'
+import { type Entry } from '../abi'
+import { type ReadOverrides, type Result } from '../../types/contract'
+import { type BaseContract } from './base'
 
 const CURRENT_SDK_REVISION = 4n
 export class RevisionContract {
@@ -13,7 +13,7 @@ export class RevisionContract {
    */
   async getLatest(
     overrides: ReadOverrides<Entry, 'getRevision'> = {},
-  ): Promise<Result<bigint, false>> | never {
+  ): Promise<Result<bigint, false>> {
     const revision = await this.base.contract.read.getRevision(overrides)
 
     return {
@@ -26,7 +26,7 @@ export class RevisionContract {
    * @category Revision
    * @returns The local SDK revision of the contract.
    */
-  async getCurrent(): Promise<Result<bigint, false>> | never {
+  getCurrent(): Result<bigint, false> {
     return {
       data: CURRENT_SDK_REVISION,
     }
@@ -42,18 +42,16 @@ export class RevisionContract {
    * @category Revision
    * @returns Whether the SDK is up-to-date with the contract and the local/remote revision.
    */
-  async check():
-    | Promise<
-        Result<
-          {
-            isUpToDate: boolean
-            currentRevision: bigint
-            latestRevision: bigint
-          },
-          false
-        >
-      >
-    | never {
+  async check(): Promise<
+    Result<
+      {
+        isUpToDate: boolean
+        currentRevision: bigint
+        latestRevision: bigint
+      },
+      false
+    >
+  > {
     const { data: latestRevision } = await this.getLatest()
     const currentRevision = CURRENT_SDK_REVISION
     const isUpToDate = latestRevision === currentRevision

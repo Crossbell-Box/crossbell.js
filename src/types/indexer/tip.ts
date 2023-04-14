@@ -1,6 +1,6 @@
-import { Address } from 'abitype'
-import { CharacterEntity } from './character'
-import { NoteEntity } from './note'
+import { type Address } from 'viem'
+import { type CharacterEntity } from './character'
+import { type NoteEntity } from './note'
 
 export interface TipEntity {
   characterId: number

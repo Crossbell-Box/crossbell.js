@@ -1,6 +1,6 @@
-import { expect, describe, test, beforeAll } from 'vitest'
+import { beforeAll, describe, expect, test } from 'vitest'
 import { Contract } from '../../src'
-import { mockUser, NIL_ADDRESS } from '../mock'
+import { NIL_ADDRESS, mockUser } from '../mock'
 
 const contract = new Contract(mockUser.privateKey)
 

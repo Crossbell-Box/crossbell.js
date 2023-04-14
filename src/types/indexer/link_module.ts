@@ -1,7 +1,7 @@
-import { Address } from 'abitype'
-import { CharacterEntity } from './character'
-import { LinklistEntity } from './linklist'
-import { NoteEntity } from './note'
+import { type Address } from 'viem'
+import { type CharacterEntity } from './character'
+import { type LinklistEntity } from './linklist'
+import { type NoteEntity } from './note'
 
 export type LinkModuleTargetItemType =
   | 'Address'

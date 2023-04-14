@@ -1,9 +1,10 @@
-import { Abi, Address, ExtractAbiFunctionNames } from 'abitype'
+import { type Abi, type ExtractAbiFunctionNames } from 'abitype'
 import {
-  Account,
-  Chain,
-  WriteContractParameters,
-  ReadContractParameters,
+  type Account,
+  type Address,
+  type Chain,
+  type ReadContractParameters,
+  type WriteContractParameters,
 } from 'viem'
 
 /**

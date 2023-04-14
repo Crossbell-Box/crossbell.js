@@ -5,16 +5,17 @@ import {
   keccak256,
   trim,
 } from 'viem'
-import { BaseContract } from './base'
+import pLimit from 'p-limit'
+import { type Address } from 'viem'
 import {
-  Result,
-  Note,
-  NoteMetadata,
-  PostNoteOptions,
-  ReadOverrides,
-  WriteOverrides,
-  LinkItemType,
-  LinkItemMap,
+  type LinkItemMap,
+  type LinkItemType,
+  type Note,
+  type NoteMetadata,
+  type PostNoteOptions,
+  type ReadOverrides,
+  type Result,
+  type WriteOverrides,
 } from '../../types'
 import { Ipfs } from '../../ipfs'
 import {
@@ -24,10 +25,9 @@ import {
   validateAddress,
 } from '../../utils'
 import { autoSwitchMainnet } from '../decorators'
-import pLimit from 'p-limit'
-import { Address } from 'abitype'
 import { Abi } from '../..'
-import { Entry } from '../abi'
+import { type Entry } from '../abi'
+import { type BaseContract } from './base'
 
 export class NoteContract {
   constructor(private base: BaseContract) {}
@@ -46,7 +46,7 @@ export class NoteContract {
     metadataOrUri: NoteMetadata | string,
     { locked = false, linkModule, mintModule }: PostNoteOptions = {},
     overrides: WriteOverrides<Entry, 'postNote'> = {},
-  ): Promise<Result<{ noteId: bigint }, true>> | never {
+  ): Promise<Result<{ noteId: bigint }, true>> {
     const { uri } = await Ipfs.parseMetadataOrUri('note', metadataOrUri)
 
     const linkModuleConfig = await getModuleConfig(linkModule)
@@ -55,13 +55,13 @@ export class NoteContract {
     const tx = await this.base.contract.write.postNote(
       [
         {
-          characterId: characterId,
+          characterId,
           contentUri: uri,
           linkModule: linkModuleConfig.address,
           linkModuleInitData: linkModuleConfig.initData,
           mintModule: mintModuleConfig.address,
           mintModuleInitData: mintModuleConfig.initData,
-          locked: locked,
+          locked,
         },
       ],
       overrides,
@@ -101,7 +101,7 @@ export class NoteContract {
       options?: PostNoteOptions
     }[],
     overrides: WriteOverrides<Entry, 'multicall'> = {},
-  ): Promise<Result<{ noteIds: bigint[] }, true>> | never {
+  ): Promise<Result<{ noteIds: bigint[] }, true>> {
     const limitedPromise = pLimit(10)
     const encodedDataArr = await Promise.all(
       notes.map((note) => {
@@ -154,7 +154,7 @@ export class NoteContract {
 
     return {
       data: {
-        noteIds: noteIds,
+        noteIds,
       },
       transactionHash: receipt.transactionHash,
     }
@@ -176,7 +176,7 @@ export class NoteContract {
     targetUri: string,
     { locked = false, linkModule, mintModule }: PostNoteOptions = {},
     overrides: WriteOverrides<Entry, 'postNote4AnyUri'> = {},
-  ): Promise<Result<{ noteId: bigint }, true>> | never {
+  ): Promise<Result<{ noteId: bigint }, true>> {
     const { uri } = await Ipfs.parseMetadataOrUri('note', metadataOrUri)
 
     const linkModuleConfig = await getModuleConfig(linkModule)
@@ -185,13 +185,13 @@ export class NoteContract {
     const tx = await this.base.contract.write.postNote4AnyUri(
       [
         {
-          characterId: characterId,
+          characterId,
           contentUri: uri,
           linkModule: linkModuleConfig.address,
           linkModuleInitData: linkModuleConfig.initData,
           mintModule: mintModuleConfig.address,
           mintModuleInitData: mintModuleConfig.initData,
-          locked: locked,
+          locked,
         },
         targetUri,
       ],
@@ -229,7 +229,7 @@ export class NoteContract {
     targetNoteId: bigint,
     { locked = false, linkModule, mintModule }: PostNoteOptions = {},
     overrides: WriteOverrides<Entry, 'postNote4Note'> = {},
-  ): Promise<Result<{ noteId: bigint }, true>> | never {
+  ): Promise<Result<{ noteId: bigint }, true>> {
     const { uri } = await Ipfs.parseMetadataOrUri('note', metadataOrUri)
 
     const linkModuleConfig = await getModuleConfig(linkModule)
@@ -238,13 +238,13 @@ export class NoteContract {
     const tx = await this.base.contract.write.postNote4Note(
       [
         {
-          characterId: characterId,
+          characterId,
           contentUri: uri,
           linkModule: linkModuleConfig.address,
           linkModuleInitData: linkModuleConfig.initData,
           mintModule: mintModuleConfig.address,
           mintModuleInitData: mintModuleConfig.initData,
-          locked: locked,
+          locked,
         },
         {
           characterId: targetCharacterId,
@@ -282,7 +282,7 @@ export class NoteContract {
     noteId: bigint,
     metadataOrUri: NoteMetadata | string,
     overrides: WriteOverrides<Entry, 'setNoteUri'> = {},
-  ): Promise<Result<{ uri: string; metadata: NoteMetadata }, true>> | never {
+  ): Promise<Result<{ uri: string; metadata: NoteMetadata }, true>> {
     const { uri, metadata } = await Ipfs.parseMetadataOrUri(
       'note',
       metadataOrUri,
@@ -355,7 +355,9 @@ export class NoteContract {
 
     const metadata = modifier(note.data.metadata)
     if (typeof metadata === 'undefined') {
-      throw new Error('The modified metadata is undefined. Did you return it?')
+      throw new TypeError(
+        'The modified metadata is undefined. Did you return it?',
+      )
     }
 
     if (!metadata.type) {
@@ -369,7 +371,7 @@ export class NoteContract {
    * This is the same as {@link setUri}
    * @category Note
    */
-  async setMetadata(
+  setMetadata(
     characterId: bigint,
     noteId: bigint,
     metadata: NoteMetadata,
@@ -390,7 +392,7 @@ export class NoteContract {
     noteId: bigint,
     linkItemType?: T,
     overrides: ReadOverrides<Entry, 'getNote'> = {},
-  ): Promise<Result<Note<LinkItemMap[T]>>> | never {
+  ): Promise<Result<Note<LinkItemMap[T]>>> {
     const data = await this.base.contract.read.getNote(
       [characterId, noteId],
       overrides,
@@ -409,7 +411,7 @@ export class NoteContract {
     const pc = this.base.peripheryContract.read
     if (linkItemType === 'AnyUri') {
       const uri = await pc.getLinkingAnyUri([data.linkKey])
-      linkItem = { uri: uri } satisfies LinkItemMap['AnyUri'] as LinkItemMap[T]
+      linkItem = { uri } satisfies LinkItemMap['AnyUri'] as LinkItemMap[T]
     } else if (linkItemType === 'ERC721') {
       const erc721 = await pc.getLinkingERC721([data.linkKey])
       linkItem = {
@@ -419,12 +421,12 @@ export class NoteContract {
     } else if (linkItemType === 'Address') {
       const address = await pc.getLinkingAddress([data.linkKey])
       linkItem = {
-        address: address,
+        address,
       } satisfies LinkItemMap['Address'] as LinkItemMap[T]
     } else if (linkItemType === 'Character') {
       const characterId = await pc.getLinkingCharacterId([data.linkKey])
       linkItem = {
-        characterId: characterId,
+        characterId,
       } satisfies LinkItemMap['Character'] as LinkItemMap[T]
     } else if (linkItemType === 'Note') {
       const ret = await pc.getLinkingNote([data.linkKey])
@@ -435,7 +437,7 @@ export class NoteContract {
     } else if (linkItemType === 'Linklist') {
       const linklistId = await pc.getLinkingLinklistId([data.linkKey])
       linkItem = {
-        linklistId: linklistId,
+        linklistId,
       } satisfies LinkItemMap['Linklist'] as LinkItemMap[T]
     } else {
       linkItem = undefined as unknown as LinkItemMap[T]
@@ -443,12 +445,12 @@ export class NoteContract {
 
     return {
       data: {
-        characterId: characterId,
-        noteId: noteId,
+        characterId,
+        noteId,
         contentUri: data.contentUri,
         metadata,
         linkItemType: data.linkItemType,
-        linkItemTypeString: linkItemTypeString,
+        linkItemTypeString,
         linkItem,
         linkKey: data.linkKey,
         linkModule: data.linkModule,
@@ -475,7 +477,7 @@ export class NoteContract {
     characterId: bigint,
     noteId: bigint,
     overrides: WriteOverrides<Entry, 'deleteNote'> = {},
-  ): Promise<Result<undefined, true>> | never {
+  ): Promise<Result<undefined, true>> {
     const tx = await this.base.contract.write.deleteNote(
       [characterId, noteId],
       overrides,
@@ -509,7 +511,7 @@ export class NoteContract {
     characterId: bigint,
     noteId: bigint,
     overrides: WriteOverrides<Entry, 'lockNote'> = {},
-  ): Promise<Result<undefined, true>> | never {
+  ): Promise<Result<undefined, true>> {
     const tx = await this.base.contract.write.lockNote(
       [characterId, noteId],
       overrides,
@@ -539,16 +541,14 @@ export class NoteContract {
     noteId: bigint,
     toAddress: Address,
     overrides: WriteOverrides<Entry, 'mintNote'> = {},
-  ):
-    | Promise<Result<{ contractAddress: Address; tokenId: bigint }, true>>
-    | never {
+  ): Promise<Result<{ contractAddress: Address; tokenId: bigint }, true>> {
     validateAddress(toAddress)
 
     const tx = await this.base.contract.write.mintNote(
       [
         {
-          characterId: characterId,
-          noteId: noteId,
+          characterId,
+          noteId,
           to: toAddress,
           mintModuleData: NIL_ADDRESS,
         },

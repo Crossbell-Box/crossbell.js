@@ -1,4 +1,4 @@
-import { defineConfig, Options } from 'tsup'
+import { type Options, defineConfig } from 'tsup'
 import { NodeModulesPolyfillPlugin } from '@esbuild-plugins/node-modules-polyfill'
 
 const commonConfig: Options = {

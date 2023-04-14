@@ -8,7 +8,7 @@ on:
 
 jobs:
   test:
-    concurrency: 'test'
+    concurrency: test
     strategy:
       matrix:
         os: [ubuntu-latest]

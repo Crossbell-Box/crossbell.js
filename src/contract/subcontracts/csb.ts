@@ -1,8 +1,8 @@
-import { Address, Hex } from 'viem'
-import { BaseContract } from './base'
+import { type Address, type Hex } from 'viem'
 import { autoSwitchMainnet } from '../decorators'
-import type { Result } from '../../types/contract'
+import { type Result } from '../../types/contract'
 import { validateAddress } from '../../utils'
+import { type BaseContract } from './base'
 
 export class CsbContract {
   constructor(private base: BaseContract) {}
@@ -13,7 +13,7 @@ export class CsbContract {
    * @param {string} owner - The address of the account to get the $CSB balance of.
    * @returns The $CSB balance of the owner.
    */
-  async getBalance(owner: Address): Promise<Result<bigint>> | never {
+  async getBalance(owner: Address): Promise<Result<bigint>> {
     validateAddress(owner)
     const balance = await this.base.publicClient.getBalance({ address: owner })
     return {

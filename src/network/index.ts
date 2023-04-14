@@ -1,4 +1,4 @@
-import { Address, Chain, WalletClient } from 'viem'
+import { type Address, type Chain, type WalletClient } from 'viem'
 
 export type AvailableNetwork = 'crossbell'
 

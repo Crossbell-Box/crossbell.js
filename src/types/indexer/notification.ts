@@ -1,5 +1,5 @@
-import { CharacterEntity } from './character'
-import { FeedEntity } from './feed'
+import { type CharacterEntity } from './character'
+import { type FeedEntity } from './feed'
 
 export enum NotificationType {
   OPERATOR_ADDED = 'OPERATOR_ADDED',

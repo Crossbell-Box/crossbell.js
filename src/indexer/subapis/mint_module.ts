@@ -1,10 +1,10 @@
-import { BaseIndexer } from './base'
-import type {
-  MintModuleEntity,
-  MintModuleTargetItemType,
-  ListResponse,
-} from '../../types/indexer'
 import { createSearchParamsString } from '../../utils'
+import {
+  type ListResponse,
+  type MintModuleEntity,
+  type MintModuleTargetItemType,
+} from '../../types/indexer'
+import { BaseIndexer } from './base'
 
 export class MintModuleIndexer extends BaseIndexer {
   /**
