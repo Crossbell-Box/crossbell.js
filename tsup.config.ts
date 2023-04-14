@@ -1,5 +1,4 @@
 import { type Options, defineConfig } from 'tsup'
-import { NodeModulesPolyfillPlugin } from '@esbuild-plugins/node-modules-polyfill'
 
 const commonConfig: Options = {
   entry: ['./src/index.ts'],
@@ -25,6 +24,6 @@ export default defineConfig((options) => [
     platform: 'browser',
     dts: false,
     target: 'es2020',
-    esbuildPlugins: [NodeModulesPolyfillPlugin()],
+    esbuildPlugins: [],
   },
 ])
