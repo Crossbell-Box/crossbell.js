@@ -1,15 +1,9 @@
-import { BigNumberish } from 'ethers'
+import { MaybeArray } from '../types/utils'
 
 export function createSearchParamsString(
   params: Record<
     string,
-    | string
-    | string[]
-    | BigNumberish
-    | BigNumberish[]
-    | boolean
-    | undefined
-    | null
+    MaybeArray<string | bigint | number> | boolean | undefined | null
   >,
 ) {
   return new URLSearchParams(

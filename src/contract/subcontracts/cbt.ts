@@ -1,9 +1,15 @@
 import { autoSwitchMainnet } from '../decorators'
-import type { Overrides, Result } from '../../types/contract'
+import type {
+  ReadOverrides,
+  WriteOverrides,
+  Result,
+} from '../../types/contract'
 import { BaseContract } from './base'
-import { CallOverrides, type BigNumberish } from 'ethers'
+import { Cbt } from '../abi'
 
-export class CbtContract extends BaseContract {
+export class CbtContract {
+  constructor(private base: BaseContract) {}
+
   /**
    * This mint a new CBT token to a character.
    *
@@ -13,14 +19,19 @@ export class CbtContract extends BaseContract {
    * @returns The transaction hash.
    */
   @autoSwitchMainnet()
-  async mintCbt(
-    characterId: BigNumberish,
-    tokenId: BigNumberish,
-    overrides: Overrides = {},
+  async mint(
+    characterId: bigint,
+    tokenId: bigint,
+    overrides: WriteOverrides<Cbt, 'mint'> = {},
   ): Promise<Result<undefined, true>> | never {
-    const tx = await this.cbtContract.mint(characterId, tokenId, overrides)
+    const tx = await this.base.cbtContract.write.mint(
+      [characterId, tokenId],
+      overrides,
+    )
 
-    const receipt = await tx.wait()
+    const receipt = await this.base.publicClient.waitForTransactionReceipt({
+      hash: tx,
+    })
 
     return {
       data: undefined,
@@ -37,14 +48,19 @@ export class CbtContract extends BaseContract {
    * @returns The transaction hash.
    */
   @autoSwitchMainnet()
-  async setCbtTokenUri(
-    tokenId: BigNumberish,
+  async setTokenUri(
+    tokenId: bigint,
     uri: string,
-    overrides: Overrides = {},
+    overrides: WriteOverrides<Cbt, 'setTokenURI'> = {},
   ): Promise<Result<undefined, true>> | never {
-    const tx = await this.cbtContract.setTokenURI(tokenId, uri, overrides)
+    const tx = await this.base.cbtContract.write.setTokenURI(
+      [tokenId, uri],
+      overrides,
+    )
 
-    const receipt = await tx.wait()
+    const receipt = await this.base.publicClient.waitForTransactionReceipt({
+      hash: tx,
+    })
 
     return {
       data: undefined,
@@ -58,11 +74,11 @@ export class CbtContract extends BaseContract {
    * @param tokenId - The id of the token.
    * @returns The URI of the token.
    */
-  async getCbtTokenUri(
-    tokenId: BigNumberish,
-    overrides: CallOverrides = {},
+  async getTokenUri(
+    tokenId: bigint,
+    overrides: ReadOverrides<Cbt, 'uri'> = {},
   ): Promise<Result<string>> | never {
-    const uri = await this.getCbtContract().uri(tokenId, overrides)
+    const uri = await this.base.cbtContract.read.uri([tokenId], overrides)
 
     return {
       data: uri,

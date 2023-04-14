@@ -5,7 +5,6 @@ import type {
   AchievementItem,
   AchievementStatusKey,
 } from '../../types/indexer'
-import { type BigNumberish } from 'ethers'
 import { createSearchParamsString } from '../../utils'
 
 export class AchievementIndexer extends BaseIndexer {
@@ -17,7 +16,7 @@ export class AchievementIndexer extends BaseIndexer {
    * @returns The list of achievements.
    */
   async getAchievements(
-    characterId: BigNumberish,
+    characterId: bigint,
     { status }: { status?: AchievementStatusKey[] } = {},
   ): Promise<ListResponse<AchievementSection> | null> {
     let url = `${this.endpoint}/characters/${characterId}/achievements?`
@@ -37,8 +36,8 @@ export class AchievementIndexer extends BaseIndexer {
    * @returns The achievement minted.
    */
   async mintAchievement(
-    characterId: BigNumberish,
-    achievementId: BigNumberish,
+    characterId: bigint,
+    achievementId: bigint,
   ): Promise<AchievementItem> | never {
     let url = `${this.endpoint}/characters/${characterId}/achievements/${achievementId}`
 

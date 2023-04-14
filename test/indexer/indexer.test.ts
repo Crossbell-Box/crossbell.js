@@ -18,12 +18,12 @@ describe.concurrent('characters', () => {
 
 describe.concurrent('links', () => {
   test.concurrent('getLinklists', async () => {
-    const res = await indexer.getLinklistsOfCharacter(10)
+    const res = await indexer.getLinklistsOfCharacter(10n)
     expect(res.list).toBeInstanceOf(Array)
   })
 
   test.concurrent('getLinkingItems', async () => {
-    const res = await indexer.getLinks('10', {
+    const res = await indexer.getLinks(10n, {
       linkType: 'follow',
       linkItemType: 'Character',
     })
@@ -31,7 +31,7 @@ describe.concurrent('links', () => {
   })
 
   test.concurrent('getBacklinkingItems', async () => {
-    const res = await indexer.getBacklinksOfCharacter('10', {
+    const res = await indexer.getBacklinksOfCharacter(10n, {
       linkType: 'follow',
     })
 

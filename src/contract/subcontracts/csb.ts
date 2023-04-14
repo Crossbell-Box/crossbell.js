@@ -1,20 +1,23 @@
+import { Address, Hex } from 'viem'
 import { BaseContract } from './base'
 import { autoSwitchMainnet } from '../decorators'
 import type { Result } from '../../types/contract'
-import type { BigNumberish, providers } from 'ethers'
+import { validateAddress } from '../../utils'
 
-export class CsbContract extends BaseContract {
+export class CsbContract {
+  constructor(private base: BaseContract) {}
+
   /**
    * It returns the $CSB balance of the owner.
    * @category CSB
    * @param {string} owner - The address of the account to get the $CSB balance of.
    * @returns The $CSB balance of the owner.
    */
-  async getBalance(owner: string): Promise<Result<string>> | never {
-    this.validateAddress(owner)
-    const balance = await this.getContract().provider.getBalance(owner)
+  async getBalance(owner: Address): Promise<Result<bigint>> | never {
+    validateAddress(owner)
+    const balance = await this.base.publicClient.getBalance({ address: owner })
     return {
-      data: balance.toString(),
+      data: balance,
     }
   }
 
@@ -26,20 +29,21 @@ export class CsbContract extends BaseContract {
    * @returns The $CSB balance of the owner.
    */
   @autoSwitchMainnet()
-  async transferCsb(
-    toAddress: string,
-    amount: BigNumberish,
-  ): Promise<Result<{}, true>> | never {
-    this.validateAddress(toAddress)
-    // https://github.com/wagmi-dev/wagmi/blob/3e9145bdfc311f6eaeffe0747d03455f548d918c/packages/core/src/actions/transactions/sendTransaction.ts#L82-L100
-    const signer = this.contract.signer
-    const uncheckedSigner =
-      (signer as providers.JsonRpcSigner).connectUnchecked?.() ?? signer
-    const tx = await uncheckedSigner.sendTransaction({
+  async transfer(
+    toAddress: Hex,
+    amount: bigint | number,
+  ): Promise<Result<{}, true>> {
+    validateAddress(toAddress)
+
+    const hash = await this.base.walletClient!.sendTransaction({
+      account: this.base.account!,
       to: toAddress,
-      value: amount,
+      value: BigInt(amount),
     })
-    const receipt = await tx.wait()
+    const receipt = await this.base.publicClient.waitForTransactionReceipt({
+      hash,
+    })
+
     return {
       data: {},
       transactionHash: receipt.transactionHash,

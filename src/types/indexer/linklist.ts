@@ -1,3 +1,4 @@
+import { Address } from 'abitype'
 import { MetadataEntity } from './metadata'
 
 export interface LinklistEntity {
@@ -9,7 +10,7 @@ export interface LinklistEntity {
   metadata?: MetadataEntity<'LINKLIST'> | null
   operator: string
   owner: string
-  fromAddress: string
+  fromAddress: Address
   createdAt: string
   updatedAt: string
   transactionHash: string

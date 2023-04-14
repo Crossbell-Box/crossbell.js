@@ -1,7 +1,7 @@
 import { BaseIndexer } from './base'
 import type { ListResponse, CharacterEntity } from '../../types/indexer'
-import { type BigNumberish } from 'ethers'
 import { createSearchParamsString } from '../../utils'
+import { Address } from 'abitype'
 
 export class CharacterIndexer extends BaseIndexer {
   /**
@@ -12,7 +12,7 @@ export class CharacterIndexer extends BaseIndexer {
    * @returns The list of characters.
    */
   async getCharacters(
-    address: string,
+    address: Address,
     {
       primary = undefined,
       limit = 20,
@@ -41,7 +41,7 @@ export class CharacterIndexer extends BaseIndexer {
    * @param address - The address of the character owner.
    * @returns The primary character.
    */
-  async getPrimaryCharacter(address: string): Promise<CharacterEntity | null> {
+  async getPrimaryCharacter(address: Address): Promise<CharacterEntity | null> {
     return this.getCharacters(address, { limit: 1, primary: true }).then(
       (res) => res.list?.[0] ?? null,
     )
@@ -54,7 +54,7 @@ export class CharacterIndexer extends BaseIndexer {
    * @returns The character.
    */
   async getCharacter(
-    characterId: BigNumberish,
+    characterId: bigint,
   ): Promise<CharacterEntity | null> {
     let url = `${this.endpoint}/characters/${characterId}`
 

@@ -1,21 +1,23 @@
 import { BaseContract } from './base'
-import { autoSwitchMainnet } from '../decorators'
-import type { Result } from '../../types/contract'
+import type { ReadOverrides, Result } from '../../types/contract'
+import { Entry } from '../abi'
 
-export class RevisionContract extends BaseContract {
-  private CURRENT_SDK_REVISION = 4
+const CURRENT_SDK_REVISION = 4n
+export class RevisionContract {
+  constructor(private base: BaseContract) {}
 
   /**
    * This returns the remote latest revision of the contract.
    * @category Revision
    * @returns The remote latest revision of the contract.
    */
-  @autoSwitchMainnet()
-  async getLatestRevision(): Promise<Result<number, false>> | never {
-    const revision = await this.getContract().getRevision()
+  async getLatest(
+    overrides: ReadOverrides<Entry, 'getRevision'> = {},
+  ): Promise<Result<bigint, false>> | never {
+    const revision = await this.base.contract.read.getRevision(overrides)
 
     return {
-      data: revision.toNumber(),
+      data: revision,
     }
   }
 
@@ -24,9 +26,9 @@ export class RevisionContract extends BaseContract {
    * @category Revision
    * @returns The local SDK revision of the contract.
    */
-  async getCurrentRevision(): Promise<Result<number, false>> | never {
+  async getCurrent(): Promise<Result<bigint, false>> | never {
     return {
-      data: this.CURRENT_SDK_REVISION,
+      data: CURRENT_SDK_REVISION,
     }
   }
 
@@ -40,20 +42,20 @@ export class RevisionContract extends BaseContract {
    * @category Revision
    * @returns Whether the SDK is up-to-date with the contract and the local/remote revision.
    */
-  async checkRevision():
+  async check():
     | Promise<
         Result<
           {
             isUpToDate: boolean
-            currentRevision: number
-            latestRevision: number
+            currentRevision: bigint
+            latestRevision: bigint
           },
           false
         >
       >
     | never {
-    const { data: latestRevision } = await this.getLatestRevision()
-    const currentRevision = this.CURRENT_SDK_REVISION
+    const { data: latestRevision } = await this.getLatest()
+    const currentRevision = CURRENT_SDK_REVISION
     const isUpToDate = latestRevision === currentRevision
 
     return {

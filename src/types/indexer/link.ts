@@ -1,3 +1,4 @@
+import { Address } from 'abitype'
 import { LinkItemType } from '../contract'
 import { CharacterEntity } from './character'
 import { LinklistEntity } from './linklist'
@@ -13,10 +14,10 @@ export interface LinkEntity {
   fromCharacter?: CharacterEntity | null
   toCharacterId: number | null
   toCharacter?: CharacterEntity | null
-  toAddress: string | null
+  toAddress: Address | null
   toNoteId: number | null
   toNote?: NoteEntity | null
-  toContractAddress: string | null
+  toContractAddress: Address | null
   toTokenId: number | null
   toLinklistId: number | null
   toLinklist?: LinklistEntity | null

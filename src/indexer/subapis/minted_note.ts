@@ -1,8 +1,8 @@
 import { BaseIndexer } from './base'
 import type { ListResponse, MintedNoteEntity } from '../../types/indexer'
-import { type BigNumberish } from 'ethers'
 import { createSearchParamsString } from '../../utils'
 import { NoteMetadata } from '../../types'
+import { Address } from 'abitype'
 
 export class MintedNoteIndexer extends BaseIndexer {
   /**
@@ -14,7 +14,7 @@ export class MintedNoteIndexer extends BaseIndexer {
    * @returns The list of minted notes.
    */
   async getMintedNotesOfAddress(
-    address: string,
+    address: Address,
     {
       noteCharacterId,
       noteId,
@@ -24,9 +24,9 @@ export class MintedNoteIndexer extends BaseIndexer {
       order,
     }: {
       /** The character ID of the note */
-      noteCharacterId?: BigNumberish
+      noteCharacterId?: bigint
       /** THe note id */
-      noteId?: BigNumberish
+      noteId?: bigint
       /** The `metadata.content.variant` to filter by. */
       variant?: NoteMetadata['variant']
       /** Limit the count of items returned. */
@@ -62,8 +62,8 @@ export class MintedNoteIndexer extends BaseIndexer {
    * @returns The list of minted notes.
    */
   async getMintedNotesOfNote(
-    characterId: BigNumberish,
-    noteId: BigNumberish,
+    characterId: bigint,
+    noteId: bigint,
     {
       owner,
       limit,
@@ -102,8 +102,8 @@ export class MintedNoteIndexer extends BaseIndexer {
    * @returns The minted note.
    */
   async getMintedNote(
-    contractAddress: string,
-    tokenId: BigNumberish,
+    contractAddress: Address,
+    tokenId: bigint,
   ): Promise<MintedNoteEntity | null> {
     const url = `${this.endpoint}/minted/notes/${contractAddress}/${tokenId}`
     const res = await this.fetch(url).then((res) => res.json())

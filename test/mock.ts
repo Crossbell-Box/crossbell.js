@@ -1,6 +1,8 @@
+import { Address, Hex } from 'viem'
+
 export const mockUser = {
-  address: process.env.VITE_MOCK_USER_ADDRESS!,
-  privateKey: process.env.VITE_MOCK_USER_PRIVATE_KEY!,
+  address: process.env.VITE_MOCK_USER_ADDRESS as Address,
+  privateKey: process.env.VITE_MOCK_USER_PRIVATE_KEY as Hex,
 }
 
 export const randomHandle = genRandomHandle()

@@ -1,42 +1,31 @@
-import { Mixin } from 'ts-mixer'
-import { CsbContract } from './subcontracts/csb'
-import { LinkContract } from './subcontracts/link'
-import { NoteContract } from './subcontracts/note'
-import { CharacterContract } from './subcontracts/character'
-import { RevisionContract } from './subcontracts/revision'
-import { OperatorContract } from './subcontracts/operator'
-import { CbtContract } from './subcontracts/cbt'
-import { TipsContract } from './subcontracts/tips'
-import { LinkModuleContract } from './subcontracts/link_module'
-import { MintModuleContract } from './subcontracts/mint_module'
-
-const Contracts = Mixin(
-  CharacterContract,
+import {
+  BaseContract,
+  CsbContract,
   LinkContract,
   NoteContract,
+  CharacterContract,
   OperatorContract,
-  CsbContract,
-  RevisionContract,
   CbtContract,
   TipsContract,
+  RevisionContract,
   LinkModuleContract,
   MintModuleContract,
-)
+} from './subcontracts'
 
 /**
  * This class is used to interact with the contract.
  *
- * @example Connect with Metamask
- * ```
+ * @example
+ * ```ts
  * import { Contract } from 'crossbell.js'
  *
  * // Create a new contract instance with metamask provider
  * const provider = window.ethereum
  * const contract = new Contract(provider)
- *
+ * await contract.walletClient!.requestAddresses()
  * // Example API: Create a new character for an address
  * try {
- *   const result = await contract.createCharacter(
+ *   const result = await contract.character.create(
  *     '0x1234567890123456789012345678901234567890',
  *     'Jason',
  *     'ipfs://xxxx/metadata.json',
@@ -48,4 +37,15 @@ const Contracts = Mixin(
  * }
  * ```
  */
-export class Contract extends Contracts {}
+export class Contract extends BaseContract {
+  csb = new CsbContract(this)
+  character = new CharacterContract(this)
+  link = new LinkContract(this)
+  cbt = new CbtContract(this)
+  note = new NoteContract(this)
+  operator = new OperatorContract(this)
+  tips = new TipsContract(this)
+  revision = new RevisionContract(this)
+  linkModule = new LinkModuleContract(this)
+  mintModule = new MintModuleContract(this)
+}

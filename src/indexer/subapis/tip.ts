@@ -1,7 +1,7 @@
 import { BaseIndexer } from './base'
 import type { ListResponse, TipEntity } from '../../types/indexer'
-import { type BigNumberish } from 'ethers'
 import { createSearchParamsString } from '../../utils'
+import { Address } from 'abitype'
 
 export class TipIndexer extends BaseIndexer {
   /**
@@ -23,13 +23,13 @@ export class TipIndexer extends BaseIndexer {
     cursor,
   }: {
     /** The characterId of the tip sender. */
-    characterId?: BigNumberish
+    characterId?: bigint
     /** The characterId of the tip receiver. */
-    toCharacterId?: BigNumberish
+    toCharacterId?: bigint
     /** The noteId of the tip receiver. */
-    toNoteId?: BigNumberish
+    toNoteId?: bigint
     /** The token address of the token sent in tip. */
-    tokenAddress?: string
+    tokenAddress?: Address
     /** Whether to include tips with zero amount. */
     includeZeroAmount?: boolean
     /** Whether to include character and note metadata */
@@ -66,7 +66,7 @@ export class TipIndexer extends BaseIndexer {
    */
   async getTip(
     transactionHash: string,
-    logIndex: BigNumberish,
+    logIndex: bigint,
   ): Promise<TipEntity | null> {
     const url = `${this.endpoint}/tips/${transactionHash}/${logIndex}`
     const res = await this.fetch(url).then((res) => res.json())

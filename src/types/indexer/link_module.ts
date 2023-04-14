@@ -1,3 +1,4 @@
+import { Address } from 'abitype'
 import { CharacterEntity } from './character'
 import { LinklistEntity } from './linklist'
 import { NoteEntity } from './note'
@@ -12,15 +13,15 @@ export type LinkModuleTargetItemType =
 export interface LinkModuleEntity {
   targetItemType: LinkModuleTargetItemType
   linkValue: string
-  contractAddress: string
+  contractAddress: Address
   initData: string
   returnData: string
   toCharacterId: number | null
   toCharacter?: CharacterEntity | null
-  toAddress: string | null
+  toAddress: Address
   toNoteId: number | null
   toNote?: NoteEntity | null
-  toContractAddress: string | null
+  toContractAddress: Address | null
   toTokenId: number | null
   toLinklistId: number | null
   toLinklist?: LinklistEntity | null

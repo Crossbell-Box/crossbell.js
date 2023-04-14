@@ -4,8 +4,8 @@ import type {
   CharacterOperatorEntity,
   NoteOperatorEntity,
 } from '../../types/indexer'
-import { type BigNumberish } from 'ethers'
 import { createSearchParamsString } from '../../utils'
+import { Address } from 'abitype'
 
 export class OperatorIndexer extends BaseIndexer {
   /**
@@ -16,7 +16,7 @@ export class OperatorIndexer extends BaseIndexer {
    * @returns The list of operators.
    */
   async getCharacterOperators(
-    characterId: BigNumberish,
+    characterId: bigint,
     {
       limit = 20,
       cursor,
@@ -43,8 +43,8 @@ export class OperatorIndexer extends BaseIndexer {
    * @returns The list of operators.
    */
   async getNoteOperators(
-    characterId: BigNumberish,
-    noteId: BigNumberish,
+    characterId: bigint,
+    noteId: bigint,
   ): Promise<NoteOperatorEntity> {
     let url = `${this.endpoint}/characters/${characterId}/notes/${noteId}/operators?`
     // url += createSearchParamsString()
@@ -62,8 +62,8 @@ export class OperatorIndexer extends BaseIndexer {
    * @returns The primary character.
    */
   async getCharacterOperator(
-    characterId: BigNumberish,
-    address: string,
+    characterId: bigint,
+    address: Address,
   ): Promise<CharacterOperatorEntity | null> {
     let url = `${this.endpoint}/characters/${characterId}/operators/${address}`
 
@@ -81,9 +81,9 @@ export class OperatorIndexer extends BaseIndexer {
    * @returns The primary character.
    */
   async getNoteOperator(
-    characterId: BigNumberish,
-    noteId: BigNumberish,
-    address: string,
+    characterId: bigint,
+    noteId: bigint,
+    address: Address,
   ): Promise<NoteOperatorEntity | null> {
     let url = `${this.endpoint}/characters/${characterId}/notes/${noteId}/operators/${address}`
 

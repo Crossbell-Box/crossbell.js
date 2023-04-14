@@ -1,5 +1,4 @@
 import { BaseIndexer } from './base'
-import type { BigNumberish } from 'ethers'
 import type { CharacterMetadata, NoteMetadata } from '../../types'
 
 export class MetadataIndexer extends BaseIndexer {
@@ -9,7 +8,7 @@ export class MetadataIndexer extends BaseIndexer {
    * @param characterId - the character id
    */
   async syncMetadataOfCharacter(
-    characterId: BigNumberish,
+    characterId: bigint,
   ): Promise<CharacterMetadata | never> {
     let url = `${this.endpoint}/characters/${characterId}/metadata/sync`
 
@@ -25,8 +24,8 @@ export class MetadataIndexer extends BaseIndexer {
    * @param noteId - the note id
    */
   async syncMetadataOfNote(
-    characterId: BigNumberish,
-    noteId: BigNumberish,
+    characterId: bigint,
+    noteId: bigint,
   ): Promise<NoteMetadata | never> {
     let url = `${this.endpoint}/notes/${characterId}/${noteId}/metadata/sync`
 

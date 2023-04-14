@@ -1,12 +1,13 @@
+import { Address } from 'abitype'
 import { NoteMetadata } from '../metadata'
 import { LinkItem, LinkItemType } from './link'
 import { MintOrLinkModuleConfig } from './module'
 
 export interface Note<T extends LinkItem | undefined = undefined> {
   /** The character id of the address who owns the note.  */
-  characterId: number
+  characterId: bigint
   /** The id of this note. Each id is unique under one character. */
-  noteId: number
+  noteId: bigint
 
   /** The content URI of this note. */
   contentUri: string
@@ -29,7 +30,7 @@ export interface Note<T extends LinkItem | undefined = undefined> {
   linkModule: string
 
   /** NFT contract address if this is a minted NFT note. */
-  contractAddress: string
+  contractAddress: Address
   /** The mint module address of the note */
   mintModule: string
 

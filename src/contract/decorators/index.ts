@@ -1,29 +1,34 @@
+import { BaseContract } from '../../contract/subcontracts/base'
 import { Network } from '../../network'
 import { Logger } from '../../utils'
-// import { BaseContract } from '../subcontracts/base'
 
+// TODO: refactor this to ES standard decorator
+// Wait for esbuild
 export function autoSwitchMainnet() {
   return (
     target: Object,
     propertyKey: string,
-    descriptor: TypedPropertyDescriptor<any>,
+    descriptor: TypedPropertyDescriptor<
+      (this: { base: BaseContract }, ...args: any[]) => Promise<any>
+    >,
   ) => {
-    const originalMethod = descriptor.value
+    const originalMethod = descriptor.value!
 
     descriptor.value = async function (...args: any[]) {
       const checkAndSwitch = async () => {
-        // @ts-ignore
-        const provider = this.contract.provider
-        const isMainnet = await Network.isCrossbellMainnet(provider)
+        const { walletClient } = this.base
+        if (!walletClient) return
+        const isMainnet = await Network.isCrossbellMainnet(walletClient)
         if (!isMainnet) {
           Logger.warn("You're not on the mainnet. Switching to mainnet.")
-          await Network.switchToCrossbellMainnet(provider)
+          await walletClient.switchChain({ id: Network.getChain().id })
+          console.log(await walletClient.getChainId())
         }
       }
 
       try {
         await checkAndSwitch()
-      } catch {
+      } catch (e) {
         // we may need to connect again if the user switch network on the halfway
         await checkAndSwitch()
       }

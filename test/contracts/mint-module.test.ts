@@ -1,8 +1,5 @@
-import { BigNumber } from 'ethers'
 import { expect, describe, test } from 'vitest'
-import { Contract } from '../../src'
-
-const contract = new Contract()
+import { encodeModuleInitData, decodeModuleInitData } from '../../src'
 
 describe('mind-module', () => {
   const input = [
@@ -10,12 +7,12 @@ describe('mind-module', () => {
       '0x1234567890123456789012345678901234567890',
       '0xAbc123def456aBc123def456aBc123DEf456ABc1',
     ],
-    BigNumber.from(1),
+    1n,
   ]
   const output =
     '0x0000000000000000000000000000000000000000000000000000000000000040000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000020000000000000000000000001234567890123456789012345678901234567890000000000000000000000000abc123def456abc123def456abc123def456abc1'
   test('encodeModuleInitData', async () => {
-    const result = await contract.encodeModuleInitData(
+    const result = await encodeModuleInitData(
       '0x328610484ba1faae0fcdee44990d199cd84c8608',
       input,
     )
@@ -23,7 +20,7 @@ describe('mind-module', () => {
   })
 
   test('decodeModuleInitData', async () => {
-    const result = await contract.decodeModuleInitData(
+    const result = await decodeModuleInitData(
       '0x328610484ba1faae0fcdee44990d199cd84c8608',
       output,
     )

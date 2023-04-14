@@ -1,47 +1,45 @@
-export type LinkItemType =
-  | 'Character'
-  | 'Address'
-  | 'Note'
-  | 'ERC721'
-  | 'Linklist'
-  | 'AnyUri'
-// | 'CharacterLink'
-// | 'AddressLink'
-// | 'NoteLink'
-// | 'ERC721Link'
-// | 'ListLink'
-// | 'AnyLink'
+import { Address } from "abitype"
+
+export interface LinkItemMap {
+  Character: LinkItemCharacter
+  Address: LinkItemAddress
+  Note: LinkItemNote
+  ERC721: LinkItemERC721
+  Linklist: LinkItemLinklist
+  AnyUri: LinkItemAnyUri
+  // | 'CharacterLink'
+  // | 'AddressLink'
+  // | 'NoteLink'
+  // | 'ERC721Link'
+  // | 'ListLink'
+  // | 'AnyLink'
+}
+
+export type LinkItemType = keyof LinkItemMap
+export type LinkItem = LinkItemMap[LinkItemType]
 
 export interface LinkItemCharacter {
-  characterId: number
+  characterId: bigint
 }
 
 export interface LinkItemAddress {
-  address: string
+  address: Address
 }
 
 export interface LinkItemNote {
-  characterId: number
-  noteId: number
+  characterId: bigint
+  noteId: bigint
 }
 
 export interface LinkItemERC721 {
-  contractAddress: string
+  contractAddress: Address
   tokenId: string
 }
 
 export interface LinkItemLinklist {
-  linklistId: number
+  linklistId: bigint
 }
 
 export interface LinkItemAnyUri {
   uri: string
 }
-
-export type LinkItem =
-  | LinkItemCharacter
-  | LinkItemAddress
-  | LinkItemNote
-  | LinkItemERC721
-  | LinkItemLinklist
-  | LinkItemAnyUri

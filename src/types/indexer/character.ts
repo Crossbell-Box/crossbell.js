@@ -1,3 +1,4 @@
+import { Address } from 'abitype'
 import { MetadataEntity } from './metadata'
 
 export interface CharacterEntity {
@@ -9,7 +10,7 @@ export interface CharacterEntity {
   socialToken: string | null
   operator: string
   owner: string
-  fromAddress: string
+  fromAddress: Address
   createdAt: string
   updatedAt: string
   deletedAt: string | null

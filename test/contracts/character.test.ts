@@ -1,4 +1,4 @@
-import { type BigNumberish, Wallet } from 'ethers'
+import { generatePrivateKey, privateKeyToAccount } from 'viem/accounts'
 import { expect, describe, test } from 'vitest'
 import { Contract } from '../../src'
 import {
@@ -12,13 +12,13 @@ import {
 
 const contract = new Contract(mockUser.privateKey)
 
-let characterId: BigNumberish | null = null
+let characterId: bigint | null = null
 
 describe('character', () => {
   describe('create a character and check', () => {
     test('should fail to createCharacter if the handle is not in correct format', () => {
       expect(
-        contract.createCharacter(
+        contract.character.create(
           mockUser.address,
           'cannot contain whitespace',
           metadataUri,
@@ -26,7 +26,7 @@ describe('character', () => {
       ).rejects.toThrow(/Invalid handle/)
 
       expect(
-        contract.createCharacter(
+        contract.character.create(
           mockUser.address,
           'cannot-contain-be-more-than-32-characters-longlonglonglonglonglonglonglonglong',
           metadataUri,
@@ -35,40 +35,36 @@ describe('character', () => {
     })
 
     test('check if a character exists', async () => {
-      const wallet = Wallet.createRandom()
-      const randomAddress = wallet.address
-      const randomHandle = genRandomHandle()
+      const randAccount = privateKeyToAccount(generatePrivateKey())
+      const randAddr = randAccount.address
+      const randHandle = genRandomHandle()
 
       // not exists if not created
-      const { data: exists } = await contract.existsCharacterForAddress(
-        randomAddress,
-      )
+      const { data: exists } =
+        await contract.character.existsForAddress(randAddr)
       expect(exists).toBe(false)
-      const { data: exists2 } = await contract.existsCharacterForHandle(
-        randomHandle,
-      )
+      const { data: exists2 } =
+        await contract.character.existsForHandle(randHandle)
       expect(exists2).toBe(false)
 
       // create one
-      const characterId = await contract
-        .createCharacter(randomAddress, randomHandle, metadataUri)
+      const characterId = await contract.character
+        .create(randAddr, randHandle, metadataUri)
         .then(({ data }) => data)
 
       expect(characterId).not.toBeNull()
 
       // should exist now
-      const { data: exists3 } = await contract.existsCharacterForAddress(
-        randomAddress,
-      )
+      const { data: exists3 } =
+        await contract.character.existsForAddress(randAddr)
       expect(exists3).toBe(true)
-      const { data: exists4 } = await contract.existsCharacterForHandle(
-        randomHandle,
-      )
+      const { data: exists4 } =
+        await contract.character.existsForHandle(randHandle)
       expect(exists4).toBe(true)
     })
 
     test('createCharacter and getCharacterByTransaction', async () => {
-      const result = await contract.createCharacter(
+      const result = await contract.character.create(
         mockUser.address,
         randomHandle,
         metadataUri,
@@ -76,92 +72,101 @@ describe('character', () => {
       characterId = result.data
       expect(result.data).not.toBeNull()
 
-      const character = await contract.getCharacterByTransaction(
+      const character = await contract.character.getByTransaction(
         result.transactionHash,
       )
       expect(character.data.characterId).toBe(characterId)
     })
 
     test.concurrent('getCharacter', async () => {
-      const { data } = await contract.getCharacter(characterId!)
+      const { data } = await contract.character.get(characterId!)
       expect(data.handle).toBe(randomHandle)
       expect(data.uri).toBe(metadataUri)
     })
 
     test.concurrent('getCharacterByHandle', async () => {
-      const { data } = await contract.getCharacterByHandle(randomHandle)
+      const { data } = await contract.character.getByHandle(
+        randomHandle,
+      )
       // expect(data.characterId).toBe(characterId)
       expect(data.handle).toBe(randomHandle)
       expect(data.uri).toBe(metadataUri)
     })
 
     test.concurrent('getHandle', async () => {
-      const { data } = await contract.getHandle(characterId!)
+      const { data } = await contract.character.getHandle(characterId!)
       expect(data).toBe(randomHandle)
     })
 
     test.concurrent('getCharacterMetadataUri', async () => {
-      const { data } = await contract.getCharacterUri(characterId!)
+      const { data } = await contract.character.getUri(characterId!)
       expect(data).toBe(metadataUri)
     })
   })
 
   describe('change a character and check', () => {
     test('setPrimaryCharacter', async () => {
-      await contract.setPrimaryCharacterId(characterId!)
+      await contract.character.setPrimaryId(characterId!)
     })
 
     test('getPrimaryCharacter', async () => {
-      const { data } = await contract.getPrimaryCharacterId(mockUser.address)
+      const { data } = await contract.character.getPrimaryId(
+        mockUser.address,
+      )
       expect(data).toBe(characterId)
     })
 
     test('isPrimaryCharacterId', async () => {
-      const { data } = await contract.isPrimaryCharacterId(characterId!)
+      const { data } = await contract.character.isPrimaryId(
+        characterId!,
+      )
       expect(data).toBe(true)
     })
 
     test('setHandle', async () => {
-      await contract.setHandle(characterId!, randomHandle2)
+      await contract.character.setHandle(characterId!, randomHandle2)
     })
 
     test('getHandle - after changed', async () => {
-      const { data } = await contract.getHandle(characterId!)
+      const { data } = await contract.character.getHandle(characterId!)
       expect(data).toBe(randomHandle2)
     })
 
     test('setMetadataUri', async () => {
-      await contract.setCharacterUri(characterId!, metadataUri2)
+      await contract.character.setUri(characterId!, metadataUri2)
     })
 
     test('getMetadataUri', async () => {
-      const { data } = await contract.getCharacterUri(characterId!)
+      const { data } = await contract.character.getUri(characterId!)
       expect(data).toBe(metadataUri2)
     })
   })
 
   describe('change character metadata and check', () => {
     test('setCharacterMetadata', async () => {
-      await contract.setCharacterMetadata(characterId!, {
+      await contract.character.setMetadata(characterId!, {
         name: 'test-name',
         bio: 'test-bio',
       })
 
-      const { data } = await contract.getCharacter(characterId!)
+      const { data } = await contract.character.get(characterId!)
 
       expect(data.metadata?.name).toBe('test-name')
       expect(data.metadata?.bio).toBe('test-bio')
     })
 
     test('changeCharacterMetadata', async () => {
-      await contract.changeCharacterMetadata(characterId!, (metadata) => {
-        metadata = {
-          ...metadata,
-          name: 'test-name-2',
-        }
-        return metadata
-      })
-      const { data } = await contract.getCharacter(characterId!)
+      await contract.character.changeMetadata(
+        characterId!,
+        (metadata) => {
+          metadata = {
+            ...metadata,
+            name: 'test-name-2',
+          }
+          return metadata
+        },
+      )
+      const { data } = await contract.character.get(characterId!)
 
       expect(data.metadata?.name).toBe('test-name-2')
       expect(data.metadata?.bio).toBe('test-bio')

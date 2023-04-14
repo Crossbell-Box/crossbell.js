@@ -1,16 +1,15 @@
-import { type BigNumberish } from 'ethers'
 import { expect, describe, test, beforeAll } from 'vitest'
 import { Contract } from '../../src'
 import { mockUser } from '../mock'
 
 const contract = new Contract(mockUser.privateKey)
 
-let characterId: BigNumberish | null = null
+let characterId: bigint | null = null
 
 describe('tips', () => {
   beforeAll(async () => {
-    characterId = await contract
-      .getPrimaryCharacterId(mockUser.address)
+    characterId = await contract.character
+      .getPrimaryId(mockUser.address)
       .then((res) => res.data)
 
     expect(characterId).not.toBe(null)
@@ -18,16 +17,20 @@ describe('tips', () => {
 
   describe('tip', () => {
     test('tip character', async () => {
-      const res = await contract.tipCharacter(characterId!, characterId!, 0)
+      const res = await contract.tips.tipCharacter(
+        characterId!,
+        characterId!,
+        0,
+      )
 
       expect(res.transactionHash).toBeDefined()
     })
 
     test('tip character for a note', async () => {
-      const res = await contract.tipCharacterForNote(
+      const res = await contract.tips.tipCharacterForNote(
         characterId!,
         characterId!,
-        1,
+        1n,
         0,
       )
 
@@ -36,11 +39,11 @@ describe('tips', () => {
 
     test('tip failed when amount not enough', async () => {
       expect(
-        contract.tipCharacterForNote(
+        contract.tips.tipCharacterForNote(
           characterId!,
           characterId!,
-          1,
-          1000000000000,
+          1n,
+          1000000000000n,
         ),
       ).rejects.toThrow()
     })

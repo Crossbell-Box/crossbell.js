@@ -1,3 +1,4 @@
+import { Address } from 'abitype'
 import { CharacterEntity } from './character'
 import { NoteEntity } from './note'
 
@@ -6,11 +7,11 @@ export interface MintedNoteEntity {
   noteCharacter?: CharacterEntity
   noteId: number
   note?: NoteEntity | null
-  contractAddress: string
+  contractAddress: Address
   tokenId: number
   operator: string
   owner: string
-  fromAddress: string
+  fromAddress: Address
   createdAt: string
   updatedAt: string
   transactionHash: string

@@ -1,17 +1,29 @@
-import type {
-  Overrides as Overrides_,
-  CallOverrides as CallOverrides_,
-} from 'ethers'
+import { Abi, Address, ExtractAbiFunctionNames } from 'abitype'
+import {
+  Account,
+  Chain,
+  WriteContractParameters,
+  ReadContractParameters,
+} from 'viem'
 
 /**
  * The result of a call to a transaction / get function.
  */
 export type Result<T, HasTxHash extends boolean = false> = {
   data: T
-} & (HasTxHash extends true ? { transactionHash: string } : {})
+} & (HasTxHash extends true ? { transactionHash: Address } : {})
 
-export interface Overrides extends Overrides_ {
-  from?: string
-}
-
-export interface CallOverrides extends CallOverrides_ {}
+export type ReadOverrides<
+  TAbi extends Abi,
+  TFunctionName extends ExtractAbiFunctionNames<TAbi, 'pure' | 'view'>,
+> = Omit<
+  ReadContractParameters<TAbi, TFunctionName>,
+  'abi' | 'address' | 'args' | 'functionName'
+>
+export type WriteOverrides<
+  TAbi extends Abi,
+  TFunctionName extends ExtractAbiFunctionNames<TAbi, 'nonpayable' | 'payable'>,
+> = Omit<
+  WriteContractParameters<TAbi, TFunctionName, Chain, Account>,
+  'abi' | 'address' | 'args' | 'functionName'
+>
