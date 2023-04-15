@@ -17,9 +17,9 @@ import {
   createWalletClientFromPrivateKeyAccount,
   createWalletClientFromProvider,
   getProviderAddress,
-} from '../../utils/viem'
+} from '../../utils'
+import { type Overwrite } from '../../types'
 import * as Abi from '../abi'
-import { type Overwrite } from '../../types/utils'
 
 export interface AccountOptions {
   account: Account | Address

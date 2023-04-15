@@ -1,16 +1,17 @@
 import { type Address } from 'viem'
-import { type CharacterMetadata } from '../../types/metadata'
+import {
+  type Character,
+  type CharacterMetadata,
+  type MintOrLinkModuleConfig,
+  type Numberish,
+  type ReadOverrides,
+  type Result,
+  type WriteOverrides,
+} from '../../types'
 import { Ipfs } from '../../ipfs'
 import { autoSwitchMainnet } from '../decorators'
 import { getModuleConfig, parseLog, validateAddress } from '../../utils'
 import { type Entry, type NewbieVilla } from '../abi'
-import {
-  type Character,
-  type MintOrLinkModuleConfig,
-  type ReadOverrides,
-  type Result,
-  type WriteOverrides,
-} from '../../types/contract'
 import { type BaseContract } from './base'
 
 export class CharacterContract {
@@ -78,14 +79,14 @@ export class CharacterContract {
    */
   @autoSwitchMainnet()
   async setHandle(
-    characterId: bigint,
+    characterId: Numberish,
     handle: string,
     overrides: WriteOverrides<Entry, 'setHandle'> = {},
   ): Promise<Result<undefined, true>> {
     this.#validateHandleFormat(handle)
 
     const tx = await this.base.contract.write.setHandle(
-      [characterId, handle],
+      [BigInt(characterId), handle],
       overrides,
     )
     const receipt = await this.base.publicClient.waitForTransactionReceipt({
@@ -106,7 +107,7 @@ export class CharacterContract {
    */
   @autoSwitchMainnet()
   async setUri(
-    characterId: bigint,
+    characterId: Numberish,
     metadataOrUri: CharacterMetadata | string,
     overrides: WriteOverrides<Entry, 'setCharacterUri'> = {},
   ): Promise<Result<{ uri: string; metadata: CharacterMetadata }, true>> {
@@ -117,7 +118,7 @@ export class CharacterContract {
     )
 
     const tx = await this.base.contract.write.setCharacterUri(
-      [characterId, uri],
+      [BigInt(characterId), uri],
       overrides,
     )
     const receipt = await this.base.publicClient.waitForTransactionReceipt({
@@ -138,7 +139,7 @@ export class CharacterContract {
    * @category Character
    */
   setMetadata(
-    characterId: bigint,
+    characterId: Numberish,
     metadata: CharacterMetadata,
     overrides: WriteOverrides<Entry, 'setCharacterUri'> = {},
   ) {
@@ -183,7 +184,7 @@ export class CharacterContract {
    */
   @autoSwitchMainnet()
   async changeMetadata(
-    characterId: bigint,
+    characterId: Numberish,
     modifier: (metadata?: CharacterMetadata) => CharacterMetadata,
     overrides: WriteOverrides<Entry, 'setCharacterUri'> = {},
   ) {
@@ -212,12 +213,12 @@ export class CharacterContract {
    */
   @autoSwitchMainnet()
   async setSocialToken(
-    characterId: bigint,
+    characterId: Numberish,
     socialToken: Address,
     overrides: WriteOverrides<Entry, 'setSocialToken'> = {},
   ): Promise<Result<undefined, true>> {
     const tx = await this.base.contract.write.setSocialToken(
-      [characterId, socialToken],
+      [BigInt(characterId), socialToken],
       overrides,
     )
     const receipt = await this.base.publicClient.waitForTransactionReceipt({
@@ -237,7 +238,7 @@ export class CharacterContract {
    */
   @autoSwitchMainnet()
   async setPrimaryId(
-    characterId: bigint | number,
+    characterId: Numberish,
     overrides: WriteOverrides<Entry, 'setPrimaryCharacterId'> = {},
   ): Promise<Result<undefined, true>> {
     const hash = await this.base.contract.write.setPrimaryCharacterId(
@@ -261,10 +262,13 @@ export class CharacterContract {
    */
   @autoSwitchMainnet()
   async burn(
-    characterId: bigint,
+    characterId: Numberish,
     overrides: WriteOverrides<Entry, 'burn'> = {},
   ): Promise<Result<undefined, true>> {
-    const tx = await this.base.contract.write.burn([characterId], overrides)
+    const tx = await this.base.contract.write.burn(
+      [BigInt(characterId)],
+      overrides,
+    )
 
     const receipt = await this.base.publicClient.waitForTransactionReceipt({
       hash: tx,
@@ -305,11 +309,11 @@ export class CharacterContract {
    * @returns A boolean value.
    */
   async isPrimaryId(
-    characterId: bigint,
+    characterId: Numberish,
     overrides: ReadOverrides<Entry, 'isPrimaryCharacter'> = {},
   ): Promise<Result<boolean>> {
     const isPrimary = await this.base.contract.read.isPrimaryCharacter(
-      [characterId],
+      [BigInt(characterId)],
       overrides,
     )
     return {
@@ -357,7 +361,7 @@ export class CharacterContract {
    * @returns The character with the given characterId.
    */
   async get(
-    characterId: bigint | number,
+    characterId: Numberish,
     overrides: ReadOverrides<Entry, 'getCharacter'> = {},
   ): Promise<Result<Character>> {
     const character = await this.base.contract.read.getCharacter(
@@ -390,7 +394,7 @@ export class CharacterContract {
    * @returns The handle of the character.
    */
   async getHandle(
-    characterId: bigint | number,
+    characterId: Numberish,
     overrides: ReadOverrides<Entry, 'getHandle'> = {},
   ): Promise<Result<string>> {
     const handle = await this.base.contract.read.getHandle(
@@ -409,11 +413,11 @@ export class CharacterContract {
    * @returns The URI of the character.
    */
   async getUri(
-    characterId: bigint,
+    characterId: Numberish,
     overrides: ReadOverrides<Entry, 'getCharacterUri'> = {},
   ): Promise<Result<string>> {
     const uri = await this.base.contract.read.getCharacterUri(
-      [characterId],
+      [BigInt(characterId)],
       overrides,
     )
     return {
@@ -496,16 +500,16 @@ export class CharacterContract {
   @autoSwitchMainnet()
   async withdrawFromNewbieVilla(
     toAddress: Address,
-    characterId: bigint,
-    nonce: bigint,
-    expires: bigint,
+    characterId: Numberish,
+    nonce: Numberish,
+    expires: Numberish,
     proof: Address,
     overrides: WriteOverrides<NewbieVilla, 'withdraw'> = {},
   ): Promise<Result<undefined, true>> {
     validateAddress(toAddress)
 
     const tx = await this.base.newbieVillaContract.write.withdraw(
-      [toAddress, characterId, nonce, expires, proof],
+      [toAddress, BigInt(characterId), BigInt(nonce), BigInt(expires), proof],
       overrides,
     )
 

@@ -4,10 +4,11 @@ import { autoSwitchMainnet } from '../decorators'
 import { type Entry, type Periphery } from '../abi'
 import {
   type Character,
+  type Numberish,
   type ReadOverrides,
   type Result,
   type WriteOverrides,
-} from '../../types/contract'
+} from '../../types'
 import { type BaseContract } from './base'
 import { type CharacterContract } from './character'
 
@@ -25,8 +26,8 @@ export class LinkContract {
    */
   @autoSwitchMainnet()
   async linkCharacter(
-    fromCharacterId: bigint,
-    toCharacterId: bigint,
+    fromCharacterId: Numberish,
+    toCharacterId: Numberish,
     linkType: string,
     data?: Hex,
     overrides: WriteOverrides<Entry, 'linkCharacter'> = {},
@@ -34,8 +35,8 @@ export class LinkContract {
     const hash = await this.base.contract.write.linkCharacter(
       [
         {
-          fromCharacterId,
-          toCharacterId,
+          fromCharacterId: BigInt(fromCharacterId),
+          toCharacterId: BigInt(toCharacterId),
           linkType: pad(toHex(linkType), { dir: 'right' }),
           data: data ?? NIL_ADDRESS,
         },
@@ -70,8 +71,8 @@ export class LinkContract {
    */
   @autoSwitchMainnet()
   async linkCharactersInBatch(
-    fromCharacterId: bigint,
-    toCharacterIds: bigint[],
+    fromCharacterId: Numberish,
+    toCharacterIds: Numberish[],
     toAddresses: Address[],
     linkType: string,
     data?: Address[],
@@ -84,8 +85,8 @@ export class LinkContract {
     const tx = await this.base.peripheryContract.write.linkCharactersInBatch(
       [
         {
-          fromCharacterId,
-          toCharacterIds,
+          fromCharacterId: BigInt(fromCharacterId),
+          toCharacterIds: toCharacterIds.map((id) => BigInt(id)),
           toAddresses,
           linkType: pad(toHex(linkType), { dir: 'right' }),
           data: data ?? toCharacterIds.map(() => NIL_ADDRESS),
@@ -140,7 +141,7 @@ export class LinkContract {
    */
   @autoSwitchMainnet()
   async createThenLinkCharacter(
-    fromCharacterId: bigint,
+    fromCharacterId: Numberish,
     toAddress: Address,
     linkType: string,
     overrides: WriteOverrides<Entry, 'createThenLinkCharacter'> = {},
@@ -150,7 +151,7 @@ export class LinkContract {
     const tx = await this.base.contract.write.createThenLinkCharacter(
       [
         {
-          fromCharacterId,
+          fromCharacterId: BigInt(fromCharacterId),
           to: toAddress,
           linkType: pad(toHex(linkType), { dir: 'right' }),
         },
@@ -184,16 +185,16 @@ export class LinkContract {
    */
   @autoSwitchMainnet()
   async unlinkCharacter(
-    fromCharacterId: bigint,
-    toCharacterId: bigint,
+    fromCharacterId: Numberish,
+    toCharacterId: Numberish,
     linkType: string,
     overrides: WriteOverrides<Entry, 'unlinkCharacter'> = {},
   ): Promise<Result<undefined, true>> {
     const tx = await this.base.contract.write.unlinkCharacter(
       [
         {
-          fromCharacterId,
-          toCharacterId,
+          fromCharacterId: BigInt(fromCharacterId),
+          toCharacterId: BigInt(toCharacterId),
           linkType: pad(toHex(linkType), { dir: 'right' }),
         },
       ],
@@ -216,13 +217,13 @@ export class LinkContract {
    * @returns An array of character ids that are linked to the character id passed in.
    */
   async getLinkingCharacterIds(
-    fromCharacterId: bigint,
+    fromCharacterId: Numberish,
     linkType: string,
     overrides: ReadOverrides<Periphery, 'getLinkingCharacterIds'> = {},
   ): Promise<Result<bigint[]>> {
     const linkList =
       await this.base.peripheryContract.read.getLinkingCharacterIds(
-        [fromCharacterId, pad(toHex(linkType), { dir: 'right' })],
+        [BigInt(fromCharacterId), pad(toHex(linkType), { dir: 'right' })],
         overrides,
       )
     return {
@@ -238,12 +239,12 @@ export class LinkContract {
    * @returns An array of character that are linked to the character id passed in.
    */
   async getLinkingCharacters(
-    fromCharacterId: bigint,
+    fromCharacterId: Numberish,
     linkType: string,
     overrides: ReadOverrides<Periphery, 'getLinkingCharacterIds'> = {},
   ): Promise<Result<Character[]>> {
     const ids = await this.base.peripheryContract.read.getLinkingCharacterIds(
-      [fromCharacterId, pad(toHex(linkType), { dir: 'right' })],
+      [BigInt(fromCharacterId), pad(toHex(linkType), { dir: 'right' })],
       overrides,
     )
     const characters = await Promise.all(
@@ -267,7 +268,7 @@ export class LinkContract {
    */
   @autoSwitchMainnet()
   async linkAddress(
-    fromCharacterId: bigint,
+    fromCharacterId: Numberish,
     toAddress: Address,
     linkType: string,
     data: Address = NIL_ADDRESS,
@@ -276,7 +277,7 @@ export class LinkContract {
     const tx = await this.base.contract.write.linkAddress(
       [
         {
-          fromCharacterId,
+          fromCharacterId: BigInt(fromCharacterId),
           ethAddress: toAddress,
           linkType: pad(toHex(linkType), { dir: 'right' }),
           data,
@@ -307,7 +308,7 @@ export class LinkContract {
    */
   @autoSwitchMainnet()
   async unlinkAddress(
-    fromCharacterId: bigint,
+    fromCharacterId: Numberish,
     toAddress: Address,
     linkType: string,
     overrides: WriteOverrides<Entry, 'unlinkAddress'> = {},
@@ -315,7 +316,7 @@ export class LinkContract {
     const tx = await this.base.contract.write.unlinkAddress(
       [
         {
-          fromCharacterId,
+          fromCharacterId: BigInt(fromCharacterId),
           ethAddress: toAddress,
           linkType: pad(toHex(linkType), { dir: 'right' }),
         },
@@ -344,7 +345,7 @@ export class LinkContract {
    */
   @autoSwitchMainnet()
   async linkAnyUri(
-    fromCharacterId: bigint,
+    fromCharacterId: Numberish,
     toUri: string,
     linkType: string,
     data: Address = NIL_ADDRESS,
@@ -353,7 +354,7 @@ export class LinkContract {
     const tx = await this.base.contract.write.linkAnyUri(
       [
         {
-          fromCharacterId,
+          fromCharacterId: BigInt(fromCharacterId),
           toUri,
           linkType: pad(toHex(linkType), { dir: 'right' }),
           data,
@@ -384,7 +385,7 @@ export class LinkContract {
    */
   @autoSwitchMainnet()
   async unlinkAnyUri(
-    fromCharacterId: bigint,
+    fromCharacterId: Numberish,
     toUri: string,
     linkType: string,
     overrides: WriteOverrides<Entry, 'unlinkAnyUri'> = {},
@@ -392,7 +393,7 @@ export class LinkContract {
     const tx = await this.base.contract.write.unlinkAnyUri(
       [
         {
-          fromCharacterId,
+          fromCharacterId: BigInt(fromCharacterId),
           toUri,
           linkType: pad(toHex(linkType), { dir: 'right' }),
         },
@@ -422,9 +423,9 @@ export class LinkContract {
    */
   @autoSwitchMainnet()
   async linkErc721(
-    fromCharacterId: bigint,
+    fromCharacterId: Numberish,
     toContractAddress: Address,
-    toTokenId: bigint,
+    toTokenId: Numberish,
     linkType: string,
     data: Address = NIL_ADDRESS,
     overrides: WriteOverrides<Entry, 'linkERC721'> = {},
@@ -432,9 +433,9 @@ export class LinkContract {
     const tx = await this.base.contract.write.linkERC721(
       [
         {
-          fromCharacterId,
+          fromCharacterId: BigInt(fromCharacterId),
           tokenAddress: toContractAddress,
-          tokenId: toTokenId,
+          tokenId: BigInt(toTokenId),
           linkType: pad(toHex(linkType), { dir: 'right' }),
           data,
         },
@@ -465,18 +466,18 @@ export class LinkContract {
    */
   @autoSwitchMainnet()
   async unlinkErc721(
-    fromCharacterId: bigint,
+    fromCharacterId: Numberish,
     toContractAddress: Address,
-    toTokenId: bigint,
+    toTokenId: Numberish,
     linkType: string,
     overrides: WriteOverrides<Entry, 'unlinkERC721'> = {},
   ): Promise<Result<undefined, true>> {
     const tx = await this.base.contract.write.unlinkERC721(
       [
         {
-          fromCharacterId,
+          fromCharacterId: BigInt(fromCharacterId),
           tokenAddress: toContractAddress,
-          tokenId: toTokenId,
+          tokenId: BigInt(toTokenId),
           linkType: pad(toHex(linkType), { dir: 'right' }),
         },
       ],
@@ -505,9 +506,9 @@ export class LinkContract {
    */
   @autoSwitchMainnet()
   async linkNote(
-    fromCharacterId: bigint,
-    toCharacterId: bigint,
-    toNoteId: bigint,
+    fromCharacterId: Numberish,
+    toCharacterId: Numberish,
+    toNoteId: Numberish,
     linkType: string,
     data?: Address,
     overrides: WriteOverrides<Entry, 'linkNote'> = {},
@@ -515,9 +516,9 @@ export class LinkContract {
     const tx = await this.base.contract.write.linkNote(
       [
         {
-          fromCharacterId,
-          toCharacterId,
-          toNoteId,
+          fromCharacterId: BigInt(fromCharacterId),
+          toCharacterId: BigInt(toCharacterId),
+          toNoteId: BigInt(toNoteId),
           linkType: pad(toHex(linkType), { dir: 'right' }),
           data: data ?? NIL_ADDRESS,
         },
@@ -548,18 +549,18 @@ export class LinkContract {
    */
   @autoSwitchMainnet()
   async unlinkNote(
-    fromCharacterId: bigint,
-    toCharacterId: bigint,
-    toNoteId: bigint,
+    fromCharacterId: Numberish,
+    toCharacterId: Numberish,
+    toNoteId: Numberish,
     linkType: string,
     overrides: WriteOverrides<Entry, 'unlinkNote'> = {},
   ): Promise<Result<undefined, true>> {
     const tx = await this.base.contract.write.unlinkNote(
       [
         {
-          fromCharacterId,
-          toCharacterId,
-          toNoteId,
+          fromCharacterId: BigInt(fromCharacterId),
+          toCharacterId: BigInt(toCharacterId),
+          toNoteId: BigInt(toNoteId),
           linkType: pad(toHex(linkType), { dir: 'right' }),
         },
       ],
@@ -589,8 +590,8 @@ export class LinkContract {
    */
   @autoSwitchMainnet()
   async linkLinklist(
-    fromCharacterId: bigint,
-    toLinkListId: bigint,
+    fromCharacterId: Numberish,
+    toLinkListId: Numberish,
     linkType: string,
     data: Address = NIL_ADDRESS,
     overrides: WriteOverrides<Entry, 'linkLinklist'> = {},
@@ -598,8 +599,8 @@ export class LinkContract {
     const tx = await this.base.contract.write.linkLinklist(
       [
         {
-          fromCharacterId,
-          toLinkListId,
+          fromCharacterId: BigInt(fromCharacterId),
+          toLinkListId: BigInt(toLinkListId),
           linkType: pad(toHex(linkType), { dir: 'right' }),
           data,
         },
@@ -629,16 +630,16 @@ export class LinkContract {
    */
   @autoSwitchMainnet()
   async unlinkLinklist(
-    fromCharacterId: bigint,
-    toLinklistId: bigint,
+    fromCharacterId: Numberish,
+    toLinklistId: Numberish,
     linkType: string,
     overrides: WriteOverrides<Entry, 'unlinkLinklist'> = {},
   ): Promise<Result<undefined, true>> {
     const tx = await this.base.contract.write.unlinkLinklist(
       [
         {
-          fromCharacterId,
-          toLinkListId: toLinklistId,
+          fromCharacterId: BigInt(fromCharacterId),
+          toLinkListId: BigInt(toLinklistId),
           linkType: pad(toHex(linkType), { dir: 'right' }),
         },
       ],

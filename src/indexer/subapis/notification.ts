@@ -3,7 +3,8 @@ import {
   type ListResponse,
   type NotificationEntity,
   type NotificationTypeKey,
-} from '../../types/indexer'
+  type Numberish,
+} from '../../types'
 import { BaseIndexer } from './base'
 
 export class NotificationIndexer extends BaseIndexer {
@@ -16,7 +17,7 @@ export class NotificationIndexer extends BaseIndexer {
    * @returns The list of notifications.
    */
   async getNotificationsOfCharacter(
-    characterId: bigint,
+    characterId: Numberish,
     {
       type,
       includeCharacterMetadata,
@@ -66,7 +67,7 @@ export class NotificationIndexer extends BaseIndexer {
    * @returns The latest notification date string.
    */
   async markNotificationsAsRead(
-    characterId: bigint,
+    characterId: Numberish,
   ): Promise<{ data: string }> {
     const url = `${this.endpoint}/characters/${characterId}/notifications/read`
     const res = await this.fetch(url, {
@@ -86,9 +87,9 @@ export class NotificationIndexer extends BaseIndexer {
    * @returns The feed.
    */
   async getNotification(
-    characterId: bigint,
+    characterId: Numberish,
     transactionHash: string,
-    logIndex: bigint,
+    logIndex: Numberish,
     {
       includeCharacterMetadata,
     }: {

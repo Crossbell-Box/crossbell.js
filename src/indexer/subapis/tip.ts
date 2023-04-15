@@ -1,6 +1,6 @@
 import { type Address } from 'viem'
 import { createSearchParamsString } from '../../utils'
-import { type ListResponse, type TipEntity } from '../../types/indexer'
+import { type ListResponse, type Numberish, type TipEntity } from '../../types'
 import { BaseIndexer } from './base'
 
 export class TipIndexer extends BaseIndexer {
@@ -23,11 +23,11 @@ export class TipIndexer extends BaseIndexer {
     cursor,
   }: {
     /** The characterId of the tip sender. */
-    characterId?: bigint
+    characterId?: Numberish
     /** The characterId of the tip receiver. */
-    toCharacterId?: bigint
+    toCharacterId?: Numberish
     /** The noteId of the tip receiver. */
-    toNoteId?: bigint
+    toNoteId?: Numberish
     /** The token address of the token sent in tip. */
     tokenAddress?: Address
     /** Whether to include tips with zero amount. */
@@ -66,7 +66,7 @@ export class TipIndexer extends BaseIndexer {
    */
   async getTip(
     transactionHash: string,
-    logIndex: bigint,
+    logIndex: Numberish,
   ): Promise<TipEntity | null> {
     const url = `${this.endpoint}/tips/${transactionHash}/${logIndex}`
     const res = await this.fetch(url).then((res) => res.json())

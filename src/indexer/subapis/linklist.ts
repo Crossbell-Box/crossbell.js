@@ -1,5 +1,9 @@
 import { createSearchParamsString } from '../../utils'
-import { type LinklistEntity, type ListResponse } from '../../types/indexer'
+import {
+  type LinklistEntity,
+  type ListResponse,
+  type Numberish,
+} from '../../types'
 import { BaseIndexer } from './base'
 
 export class LinklistIndexer extends BaseIndexer {
@@ -11,7 +15,7 @@ export class LinklistIndexer extends BaseIndexer {
    * @returns The list of linklist.
    */
   async getLinklistsOfCharacter(
-    characterId: bigint,
+    characterId: Numberish,
     {
       linkType,
       limit = 20,
@@ -39,7 +43,7 @@ export class LinklistIndexer extends BaseIndexer {
    * @param linklistId - The id of the linklist.
    * @returns The character.
    */
-  async getLinklist(linklistId: bigint): Promise<LinklistEntity | null> {
+  async getLinklist(linklistId: Numberish): Promise<LinklistEntity | null> {
     const url = `${this.endpoint}/linklists/${linklistId}`
 
     const res = await this.fetch(url).then((res) => res.json())

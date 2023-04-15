@@ -1,4 +1,8 @@
-import { type CharacterStatEntity, type NoteStatEntity } from '../../types'
+import {
+  type CharacterStatEntity,
+  type NoteStatEntity,
+  type Numberish,
+} from '../../types'
 import { BaseIndexer } from './base'
 
 export class StatIndexer extends BaseIndexer {
@@ -8,7 +12,9 @@ export class StatIndexer extends BaseIndexer {
    * @param characterId - The id of the character.
    * @returns The stat of the character.
    */
-  async getStatOfCharacter(characterId: bigint): Promise<CharacterStatEntity> {
+  async getStatOfCharacter(
+    characterId: Numberish,
+  ): Promise<CharacterStatEntity> {
     const url = `${this.endpoint}/stat/characters/${characterId}?`
 
     const res = await this.fetch(url).then((res) => res.json())
@@ -24,8 +30,8 @@ export class StatIndexer extends BaseIndexer {
    * @returns The stat of the note.
    */
   async getStatOfNote(
-    characterId: bigint,
-    noteId: bigint,
+    characterId: Numberish,
+    noteId: Numberish,
   ): Promise<NoteStatEntity> {
     const url = `${this.endpoint}/stat/notes/${characterId}/${noteId}?`
 

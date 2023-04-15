@@ -1,7 +1,11 @@
 import { type Address } from 'viem'
 import { createSearchParamsString } from '../../utils'
-import { type NoteMetadata } from '../../types'
-import { type ListResponse, type MintedNoteEntity } from '../../types/indexer'
+import {
+  type ListResponse,
+  type MintedNoteEntity,
+  type NoteMetadata,
+  type Numberish,
+} from '../../types'
 import { BaseIndexer } from './base'
 
 export class MintedNoteIndexer extends BaseIndexer {
@@ -24,9 +28,9 @@ export class MintedNoteIndexer extends BaseIndexer {
       order,
     }: {
       /** The character ID of the note */
-      noteCharacterId?: bigint
+      noteCharacterId?: Numberish
       /** THe note id */
-      noteId?: bigint
+      noteId?: Numberish
       /** The `metadata.content.variant` to filter by. */
       variant?: NoteMetadata['variant']
       /** Limit the count of items returned. */
@@ -62,8 +66,8 @@ export class MintedNoteIndexer extends BaseIndexer {
    * @returns The list of minted notes.
    */
   async getMintedNotesOfNote(
-    characterId: bigint,
-    noteId: bigint,
+    characterId: Numberish,
+    noteId: Numberish,
     {
       owner,
       limit,
@@ -103,7 +107,7 @@ export class MintedNoteIndexer extends BaseIndexer {
    */
   async getMintedNote(
     contractAddress: Address,
-    tokenId: bigint,
+    tokenId: Numberish,
   ): Promise<MintedNoteEntity | null> {
     const url = `${this.endpoint}/minted/notes/${contractAddress}/${tokenId}`
     const res = await this.fetch(url).then((res) => res.json())
