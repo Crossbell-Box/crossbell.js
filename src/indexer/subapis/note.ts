@@ -4,26 +4,27 @@ import {
   type ListResponse,
   type NoteEntity,
   type NoteMetadata,
+  type Numberish,
 } from '../../types'
 import { type BaseIndexer } from './base'
 
 export type NoteQueryOptions = {
   /** The owner of this note */
-  characterId?: bigint
+  characterId?: Numberish
   /** The link item type to filter by. e.g. 'Character' */
   linkItemType?: LinkItemType
   /** The toCharacterId to filter by. */
-  toCharacterId?: bigint
+  toCharacterId?: Numberish
   /** The toAddress to filter by. */
   toAddress?: Address
   /** The toNoteId to filter by. */
-  toNoteId?: bigint
+  toNoteId?: Numberish
   /** The toContractAddress to filter by. */
   toContractAddress?: Address
   /** The toTokenId to filter by. */
-  toTokenId?: bigint
+  toTokenId?: Numberish
   /** The toLinklistId to filter by. */
-  toLinklistId?: bigint
+  toLinklistId?: Numberish
   /** The toUri to filter by. */
   toUri?: string
   /** Only returns locked notes or not */
@@ -86,7 +87,7 @@ export class NoteIndexer {
    * @returns
    */
   getManyForCharacterFollowing(
-    characterId: bigint,
+    characterId: Numberish,
     params: Omit<NoteQueryOptions, 'characterId'> = {},
   ) {
     const url = `/characters/${characterId}/notes/following`
@@ -103,7 +104,7 @@ export class NoteIndexer {
    * @param noteId - The noteId of the note to get.
    * @returns The note.
    */
-  get(characterId: bigint, noteId: bigint) {
+  get(characterId: Numberish, noteId: Numberish) {
     const url = `/characters/${characterId}/notes/${noteId}`
     return this.base.fetch<NoteEntity | null>(url)
   }
@@ -117,7 +118,7 @@ export class NoteIndexer {
    * @returns The list of tags.
    */
   getDistinctTagsByCharacter(
-    characterId: bigint,
+    characterId: Numberish,
     {
       sources,
     }: {
@@ -142,7 +143,7 @@ export class NoteIndexer {
    * @returns The list of tags.
    */
   getDistinctSourcesByCharacter(
-    characterId: bigint,
+    characterId: Numberish,
     {
       tags,
     }: {

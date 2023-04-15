@@ -1,6 +1,10 @@
 import { type Address } from 'viem'
-import { type NoteMetadata } from '../../types'
-import { type ListResponse, type MintedNoteEntity } from '../../types/indexer'
+import {
+  type ListResponse,
+  type MintedNoteEntity,
+  type NoteMetadata,
+  type Numberish,
+} from '../../types'
 import { type BaseIndexer } from './base'
 
 export class MintedNoteIndexer {
@@ -25,9 +29,9 @@ export class MintedNoteIndexer {
       order,
     }: {
       /** The character ID of the note */
-      noteCharacterId?: bigint
+      noteCharacterId?: Numberish
       /** THe note id */
-      noteId?: bigint
+      noteId?: Numberish
       /** The `metadata.content.variant` to filter by. */
       variant?: NoteMetadata['variant']
       /** Limit the count of items returned. */
@@ -61,8 +65,8 @@ export class MintedNoteIndexer {
    * @returns The list of minted notes.
    */
   getManyByNote(
-    characterId: bigint,
-    noteId: bigint,
+    characterId: Numberish,
+    noteId: Numberish,
     {
       owner,
       limit,
@@ -98,7 +102,7 @@ export class MintedNoteIndexer {
    * @param tokenId - The tokenId of the minted note.
    * @returns The minted note.
    */
-  get(contractAddress: Address, tokenId: bigint) {
+  get(contractAddress: Address, tokenId: Numberish) {
     const url = `/minted/notes/${contractAddress}/${tokenId}`
     return this.base.fetch<MintedNoteEntity | null>(url)
   }

@@ -1,4 +1,8 @@
-import { type CharacterStatEntity, type NoteStatEntity } from '../../types'
+import {
+  type CharacterStatEntity,
+  type NoteStatEntity,
+  type Numberish,
+} from '../../types'
 import { type BaseIndexer } from './base'
 
 export class StatIndexer {
@@ -10,7 +14,7 @@ export class StatIndexer {
    * @param characterId - The id of the character.
    * @returns The stat of the character.
    */
-  getByCharacter(characterId: bigint) {
+  getByCharacter(characterId: Numberish) {
     const url = `/stat/characters/${characterId}`
     return this.base.fetch<CharacterStatEntity>(url)
   }
@@ -22,7 +26,7 @@ export class StatIndexer {
    * @param noteId - The id of the note.
    * @returns The stat of the note.
    */
-  getByNote(characterId: bigint, noteId: bigint) {
+  getByNote(characterId: Numberish, noteId: Numberish) {
     const url = `/stat/notes/${characterId}/${noteId}`
     return this.base.fetch<NoteStatEntity>(url)
   }

@@ -1,5 +1,9 @@
 import { type Address } from 'viem'
-import { type CharacterEntity, type ListResponse } from '../../types'
+import {
+  type CharacterEntity,
+  type ListResponse,
+  type Numberish,
+} from '../../types'
 import { type BaseIndexer } from './base'
 
 export class CharacterIndexer {
@@ -51,7 +55,7 @@ export class CharacterIndexer {
    * @param characterId - The id of the character.
    * @returns The character.
    */
-  get(characterId: bigint) {
+  get(characterId: Numberish) {
     const url = `/characters/${characterId}`
     return this.base.fetch<CharacterEntity | null>(url)
   }

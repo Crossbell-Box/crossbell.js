@@ -3,6 +3,7 @@ import {
   type LinkEntity,
   type LinkItemType,
   type ListResponse,
+  type Numberish,
 } from '../../types'
 import { type BaseIndexer } from './base'
 
@@ -20,7 +21,7 @@ export class LinkIndexer {
    * @returns The list of links.
    */
   getMany(
-    characterId: bigint,
+    characterId: Numberish,
     {
       limit = 20,
       cursor,
@@ -47,17 +48,17 @@ export class LinkIndexer {
       /** The fromCharacterId to filter by. */
       fromCharacterId?: string
       /** The toCharacterId to filter by. */
-      toCharacterId?: bigint
+      toCharacterId?: Numberish
       /** The toAddress to filter by. */
       toAddress?: Address
       /** The toNoteId to filter by. */
-      toNoteId?: bigint
+      toNoteId?: Numberish
       /** The toContractAddress to filter by. */
       toContractAddress?: Address
       /** The toTokenId to filter by. */
-      toTokenId?: bigint
+      toTokenId?: Numberish
       /** The toLinklistId to filter by. */
-      toLinklistId?: bigint
+      toLinklistId?: Numberish
       /** The toUri to filter by. */
       toUri?: string
       /** The order to sort by. */
@@ -93,7 +94,7 @@ export class LinkIndexer {
    * @return The list of links.
    */
   getBacklinksByCharacter(
-    characterId: bigint,
+    characterId: Numberish,
     {
       limit = 20,
       cursor,
@@ -163,8 +164,8 @@ export class LinkIndexer {
    * @return The list of links.
    */
   getBacklinksByNote(
-    characterId: bigint,
-    noteId: bigint,
+    characterId: Numberish,
+    noteId: Numberish,
     {
       limit = 20,
       cursor,
@@ -197,8 +198,8 @@ export class LinkIndexer {
    * @return The list of links.
    */
   getBacklinksByErc721(
-    contractAddress: bigint,
-    tokenId: bigint,
+    contractAddress: Numberish,
+    tokenId: Numberish,
     {
       limit = 20,
       cursor,
@@ -230,7 +231,7 @@ export class LinkIndexer {
    * @return The list of links.
    */
   getBacklinksByLinklist(
-    linklistId: bigint,
+    linklistId: Numberish,
     {
       limit = 20,
       cursor,

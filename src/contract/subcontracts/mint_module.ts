@@ -1,5 +1,6 @@
 import {
   type MintOrLinkModuleConfig,
+  type Numberish,
   type Result,
   type WriteOverrides,
 } from '../../types'
@@ -21,8 +22,8 @@ export class MintModuleContract {
    */
   @autoSwitchMainnet()
   async setForNote(
-    characterId: bigint,
-    noteId: bigint,
+    characterId: Numberish,
+    noteId: Numberish,
     mintModule: MintOrLinkModuleConfig,
     overrides: WriteOverrides<Entry, 'setMintModule4Note'> = {},
   ): Promise<Result<undefined, true>> {
@@ -31,8 +32,8 @@ export class MintModuleContract {
     const tx = await this.base.contract.write.setMintModule4Note(
       [
         {
-          characterId,
-          noteId,
+          characterId: BigInt(characterId),
+          noteId: BigInt(noteId),
           mintModule: moduleConfig.address,
           mintModuleInitData: moduleConfig.initData,
         },

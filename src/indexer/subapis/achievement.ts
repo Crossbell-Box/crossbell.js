@@ -3,6 +3,7 @@ import {
   type AchievementSection,
   type AchievementStatusKey,
   type ListResponse,
+  type Numberish,
 } from '../../types'
 import { type BaseIndexer } from './base'
 
@@ -17,7 +18,7 @@ export class AchievementIndexer {
    * @returns The list of achievements.
    */
   getMany(
-    characterId: bigint,
+    characterId: Numberish,
     { status }: { status?: AchievementStatusKey[] } = {},
   ) {
     const url = `/characters/${characterId}/achievements`
@@ -33,7 +34,7 @@ export class AchievementIndexer {
    * @param achievementId - The token id of the achievement.
    * @returns The achievement minted.
    */
-  mint(characterId: bigint, achievementId: bigint) {
+  mint(characterId: Numberish, achievementId: Numberish) {
     const url = `/characters/${characterId}/achievements/${achievementId}`
     return this.base.fetch<AchievementItem>(url, { method: 'POST' })
   }

@@ -2,6 +2,7 @@ import {
   type FeedEntity,
   type FeedTypeKey,
   type ListResponse,
+  type Numberish,
 } from '../../types'
 import { type BaseIndexer } from './base'
 
@@ -17,7 +18,7 @@ export class FeedIndexer {
    * @returns The list of feeds.
    */
   getManyByCharacter(
-    characterId: bigint,
+    characterId: Numberish,
     {
       type,
       limit,
@@ -50,7 +51,7 @@ export class FeedIndexer {
    * @returns The list of feeds.
    */
   getManyByCharacterFollowing(
-    characterId: bigint,
+    characterId: Numberish,
     {
       type,
       limit,
@@ -82,7 +83,7 @@ export class FeedIndexer {
    * @param logIndex - The logIndex of the feed.
    * @returns The feed.
    */
-  get(transactionHash: string, logIndex: bigint) {
+  get(transactionHash: string, logIndex: Numberish) {
     const url = `/feed/${transactionHash}/${logIndex}`
     return this.base.fetch<FeedEntity | null>(url)
   }

@@ -3,6 +3,7 @@ import {
   type LinkModuleEntity,
   type LinkModuleTargetItemType,
   type ListResponse,
+  type Numberish,
 } from '../../types'
 import { type BaseIndexer } from './base'
 
@@ -32,15 +33,15 @@ export class LinkModuleIndexer {
     /** The address of the target item. */
     toAddress?: Address
     /** The character ID of the target item. */
-    toCharacterId?: bigint
+    toCharacterId?: Numberish
     /** The note ID of the target item. */
-    toNoteId?: bigint
+    toNoteId?: Numberish
     /** The contract address of the target item. */
     toContractAddress?: Address
     /** The token ID of the target item. */
-    toTokenId?: bigint
+    toTokenId?: Numberish
     /** The linklist ID of the target item. */
-    toLinklistId?: bigint
+    toLinklistId?: Numberish
     /** The limit of the number of items to return. */
     limit?: number
     /** Used for pagination. */
@@ -70,7 +71,7 @@ export class LinkModuleIndexer {
    * @param linkValue - The linkValue of the link module.
    * @returns The link module.
    */
-  get(targetItemType: LinkModuleTargetItemType, linkValue: bigint) {
+  get(targetItemType: LinkModuleTargetItemType, linkValue: Numberish) {
     const url = `/link-modules/${targetItemType}/${linkValue}`
     return this.base.fetch<LinkModuleEntity | null>(url)
   }

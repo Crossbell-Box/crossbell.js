@@ -3,6 +3,7 @@ import {
   type CharacterOperatorEntity,
   type ListResponse,
   type NoteOperatorEntity,
+  type Numberish,
 } from '../../types'
 import { type BaseIndexer } from './base'
 
@@ -17,7 +18,7 @@ export class OperatorIndexer {
    * @returns The list of operators.
    */
   getManyByCharacter(
-    characterId: bigint,
+    characterId: Numberish,
     {
       limit = 20,
       cursor,
@@ -41,7 +42,7 @@ export class OperatorIndexer {
    * @param noteId - The id of the note.
    * @returns The list of operators.
    */
-  getManyByNote(characterId: bigint, noteId: bigint) {
+  getManyByNote(characterId: Numberish, noteId: Numberish) {
     const url = `/characters/${characterId}/notes/${noteId}/operators`
     return this.base.fetch<NoteOperatorEntity>(url)
   }
@@ -53,7 +54,7 @@ export class OperatorIndexer {
    * @param address - The address of the operator.
    * @returns The primary character.
    */
-  getByCharacter(characterId: bigint, address: Address) {
+  getByCharacter(characterId: Numberish, address: Address) {
     const url = `/characters/${characterId}/operators/${address}`
     return this.base.fetch<CharacterOperatorEntity | null>(url)
   }
@@ -66,7 +67,7 @@ export class OperatorIndexer {
    * @param address - The address of the operator.
    * @returns The primary character.
    */
-  getByNote(characterId: bigint, noteId: bigint, address: Address) {
+  getByNote(characterId: Numberish, noteId: Numberish, address: Address) {
     const url = `/characters/${characterId}/notes/${noteId}/operators/${address}`
     return this.base.fetch<NoteOperatorEntity | null>(url)
   }

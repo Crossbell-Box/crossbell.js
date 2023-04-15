@@ -1,5 +1,5 @@
 import { type Address } from 'viem'
-import { type ListResponse, type TipEntity } from '../../types/indexer'
+import { type ListResponse, type Numberish, type TipEntity } from '../../types'
 import { type BaseIndexer } from './base'
 
 export class TipIndexer {
@@ -24,11 +24,11 @@ export class TipIndexer {
     cursor,
   }: {
     /** The characterId of the tip sender. */
-    characterId?: bigint
+    characterId?: Numberish
     /** The characterId of the tip receiver. */
-    toCharacterId?: bigint
+    toCharacterId?: Numberish
     /** The noteId of the tip receiver. */
-    toNoteId?: bigint
+    toNoteId?: Numberish
     /** The token address of the token sent in tip. */
     tokenAddress?: Address
     /** Whether to include tips with zero amount. */
@@ -64,7 +64,7 @@ export class TipIndexer {
    * @param logIndex - The logIndex of the tip.
    * @returns The tip.
    */
-  get(transactionHash: string, logIndex: bigint) {
+  get(transactionHash: string, logIndex: Numberish) {
     const url = `/tips/${transactionHash}/${logIndex}`
     return this.base.fetch<TipEntity | null>(url)
   }

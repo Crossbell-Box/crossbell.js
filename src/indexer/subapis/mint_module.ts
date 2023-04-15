@@ -2,6 +2,7 @@ import {
   type ListResponse,
   type MintModuleEntity,
   type MintModuleTargetItemType,
+  type Numberish,
 } from '../../types'
 import { type BaseIndexer } from './base'
 
@@ -25,9 +26,9 @@ export class MintModuleIndexer {
     /** The target item type of the mint module. */
     targetItemType?: MintModuleTargetItemType
     /** The character ID of the target item. */
-    toCharacterId?: bigint
+    toCharacterId?: Numberish
     /** The note ID of the target item. */
-    toNoteId?: bigint
+    toNoteId?: Numberish
     /** The limit of the number of items to return. */
     limit?: number
     /** Used for pagination. */
@@ -53,7 +54,7 @@ export class MintModuleIndexer {
    * @param linkValue - The linkValue of the mint module.
    * @returns The mint module.
    */
-  get(targetItemType: MintModuleTargetItemType, linkValue: bigint) {
+  get(targetItemType: MintModuleTargetItemType, linkValue: Numberish) {
     const url = `/mint-modules/${targetItemType}/${linkValue}`
     return this.base.fetch<MintModuleEntity>(url)
   }

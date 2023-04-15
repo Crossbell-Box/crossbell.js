@@ -1,4 +1,8 @@
-import { type LinklistEntity, type ListResponse } from '../../types/indexer'
+import {
+  type LinklistEntity,
+  type ListResponse,
+  type Numberish,
+} from '../../types'
 import { type BaseIndexer } from './base'
 
 export class LinklistIndexer {
@@ -12,7 +16,7 @@ export class LinklistIndexer {
    * @returns The list of linklist.
    */
   getManyByCharacter(
-    characterId: bigint,
+    characterId: Numberish,
     {
       linkType,
       limit = 20,
@@ -42,7 +46,7 @@ export class LinklistIndexer {
    * @param linklistId - The id of the linklist.
    * @returns The character.
    */
-  get(linklistId: bigint) {
+  get(linklistId: Numberish) {
     const url = `/linklists/${linklistId}`
     return this.base.fetch<LinklistEntity | null>(url)
   }

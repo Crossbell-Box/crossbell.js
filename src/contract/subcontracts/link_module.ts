@@ -1,6 +1,7 @@
 import { type Address } from 'viem'
 import {
   type MintOrLinkModuleConfig,
+  type Numberish,
   type Result,
   type WriteOverrides,
 } from '../../types'
@@ -57,7 +58,7 @@ export class LinkModuleContract {
    */
   @autoSwitchMainnet()
   async setForLinklist(
-    linklistId: bigint,
+    linklistId: Numberish,
     linkModule: MintOrLinkModuleConfig,
     overrides: WriteOverrides<Entry, 'setLinkModule4Linklist'> = {},
   ): Promise<Result<undefined, true>> {
@@ -66,7 +67,7 @@ export class LinkModuleContract {
     const tx = await this.base.contract.write.setLinkModule4Linklist(
       [
         {
-          linklistId,
+          linklistId: BigInt(linklistId),
           linkModule: moduleConfig.address,
           linkModuleInitData: moduleConfig.initData,
         },

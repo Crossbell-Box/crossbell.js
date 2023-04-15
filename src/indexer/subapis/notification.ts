@@ -2,7 +2,8 @@ import {
   type ListResponse,
   type NotificationEntity,
   type NotificationTypeKey,
-} from '../../types/indexer'
+  type Numberish,
+} from '../../types'
 import { type BaseIndexer } from './base'
 
 export class NotificationIndexer {
@@ -17,7 +18,7 @@ export class NotificationIndexer {
    * @returns The list of notifications.
    */
   getManyByCharacter(
-    characterId: bigint,
+    characterId: Numberish,
     {
       type,
       includeCharacterMetadata,
@@ -64,7 +65,7 @@ export class NotificationIndexer {
    * @param characterId - The characterId of the notification owner.
    * @returns The latest notification date string.
    */
-  markManyAsRead(characterId: bigint) {
+  markManyAsRead(characterId: Numberish) {
     const url = `/characters/${characterId}/notifications/read`
     return this.base.fetch<{ data: string }>(url, {
       method: 'POST',
@@ -81,9 +82,9 @@ export class NotificationIndexer {
    * @returns The feed.
    */
   get(
-    characterId: bigint,
+    characterId: Numberish,
     transactionHash: string,
-    logIndex: bigint,
+    logIndex: Numberish,
     {
       includeCharacterMetadata,
     }: {

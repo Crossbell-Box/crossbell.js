@@ -1,9 +1,10 @@
 import {
   type CharacterEntity,
+  type LinkItemType,
   type ListResponse,
   type NoteEntity,
-} from '../../types/indexer'
-import { type LinkItemType } from '../../types/contract'
+  type Numberish,
+} from '../../types'
 import { type BaseIndexer } from './base'
 
 export class SearchIndexer {
@@ -50,7 +51,7 @@ export class SearchIndexer {
       /** The link item type to filter by. e.g. 'Character' */
       linkItemType?: LinkItemType
       /** Note with the given characterId owner */
-      characterId?: bigint
+      characterId?: Numberish
       /** Limit the count of items returned. */
       limit?: number
       /** Used for pagination. */
