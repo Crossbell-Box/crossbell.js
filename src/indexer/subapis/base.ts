@@ -43,6 +43,17 @@ export class BaseIndexer {
     return fetch(this.endpoint + url, {
       ...this.fetchOptions,
       ...options,
-    }).then((r) => r.json())
+    }).then(async (r) => {
+      if (r.status !== 200) {
+        return Promise.reject(
+          new Error(
+            `Request failed, status code: ${
+              r.status
+            }\nResponse:\n${await r.text()}`,
+          ),
+        )
+      }
+      return r.json()
+    })
   }
 }

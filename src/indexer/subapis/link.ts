@@ -93,7 +93,7 @@ export class LinkIndexer {
    * @param options - The options to send to the indexer.
    * @return The list of links.
    */
-  getBacklinksByCharacter(
+  getBacklinksOfCharacter(
     characterId: Numberish,
     {
       limit = 20,
@@ -125,7 +125,7 @@ export class LinkIndexer {
    * @param options - The options to send to the indexer.
    * @return The list of links.
    */
-  getBacklinkByAddress(
+  getBacklinksByAddress(
     address: Address,
     {
       limit = 20,

@@ -17,7 +17,7 @@ export class NotificationIndexer {
    * @param options - The options to send to the indexer.
    * @returns The list of notifications.
    */
-  getManyByCharacter(
+  getMany(
     characterId: Numberish,
     {
       type,
@@ -65,7 +65,7 @@ export class NotificationIndexer {
    * @param characterId - The characterId of the notification owner.
    * @returns The latest notification date string.
    */
-  markManyAsRead(characterId: Numberish) {
+  markAllAsRead(characterId: Numberish) {
     const url = `/characters/${characterId}/notifications/read`
     return this.base.fetch<{ data: string }>(url, {
       method: 'POST',

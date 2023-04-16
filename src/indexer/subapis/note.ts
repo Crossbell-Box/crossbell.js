@@ -86,7 +86,7 @@ export class NoteIndexer {
    * @param params - The options of note query.
    * @returns
    */
-  getManyForCharacterFollowing(
+  getManyOfCharacterFollowing(
     characterId: Numberish,
     params: Omit<NoteQueryOptions, 'characterId'> = {},
   ) {
@@ -117,7 +117,7 @@ export class NoteIndexer {
    * @param options - The options of note query.
    * @returns The list of tags.
    */
-  getDistinctTagsByCharacter(
+  getDistinctTagsOfCharacter(
     characterId: Numberish,
     {
       sources,
@@ -142,7 +142,7 @@ export class NoteIndexer {
    * @param options - The options of note query.
    * @returns The list of tags.
    */
-  getDistinctSourcesByCharacter(
+  getDistinctSourcesOfCharacter(
     characterId: Numberish,
     {
       tags,

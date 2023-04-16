@@ -18,7 +18,7 @@ export class MintedNoteIndexer {
    * @param options - The options to send to the indexer.
    * @returns The list of minted notes.
    */
-  getManyByAddress(
+  getManyOfAddress(
     address: Address,
     {
       noteCharacterId,
@@ -64,7 +64,7 @@ export class MintedNoteIndexer {
    * @param options - The options to send to the indexer.
    * @returns The list of minted notes.
    */
-  getManyByNote(
+  getManyOfNote(
     characterId: Numberish,
     noteId: Numberish,
     {

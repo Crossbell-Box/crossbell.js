@@ -15,7 +15,7 @@ export class LinklistIndexer {
    * @param options - The options to send to the indexer.
    * @returns The list of linklist.
    */
-  getManyByCharacter(
+  getMany(
     characterId: Numberish,
     {
       linkType,

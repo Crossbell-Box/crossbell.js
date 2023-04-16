@@ -17,7 +17,7 @@ export class OperatorIndexer {
    * @param options - The options to send to the indexer.
    * @returns The list of operators.
    */
-  getManyByCharacter(
+  getManyForCharacter(
     characterId: Numberish,
     {
       limit = 20,
@@ -42,7 +42,7 @@ export class OperatorIndexer {
    * @param noteId - The id of the note.
    * @returns The list of operators.
    */
-  getManyByNote(characterId: Numberish, noteId: Numberish) {
+  getManyForNote(characterId: Numberish, noteId: Numberish) {
     const url = `/characters/${characterId}/notes/${noteId}/operators`
     return this.base.fetch<NoteOperatorEntity>(url)
   }
@@ -54,7 +54,7 @@ export class OperatorIndexer {
    * @param address - The address of the operator.
    * @returns The primary character.
    */
-  getByCharacter(characterId: Numberish, address: Address) {
+  getForCharacter(characterId: Numberish, address: Address) {
     const url = `/characters/${characterId}/operators/${address}`
     return this.base.fetch<CharacterOperatorEntity | null>(url)
   }
@@ -67,7 +67,7 @@ export class OperatorIndexer {
    * @param address - The address of the operator.
    * @returns The primary character.
    */
-  getByNote(characterId: Numberish, noteId: Numberish, address: Address) {
+  getForNote(characterId: Numberish, noteId: Numberish, address: Address) {
     const url = `/characters/${characterId}/notes/${noteId}/operators/${address}`
     return this.base.fetch<NoteOperatorEntity | null>(url)
   }

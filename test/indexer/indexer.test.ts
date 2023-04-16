@@ -18,7 +18,7 @@ describe.concurrent('characters', () => {
 
 describe.concurrent('links', () => {
   test.concurrent('getLinklists', async () => {
-    const res = await indexer.linklist.getManyByCharacter(10n)
+    const res = await indexer.linklist.getMany(10n)
     expect(res.list).toBeInstanceOf(Array)
   })
 
@@ -31,7 +31,7 @@ describe.concurrent('links', () => {
   })
 
   test.concurrent('getBacklinkingItems', async () => {
-    const res = await indexer.linklist.getManyByCharacter(10n, {
+    const res = await indexer.linklist.getMany(10n, {
       linkType: 'follow',
     })
 

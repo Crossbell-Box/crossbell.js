@@ -14,7 +14,7 @@ export class StatIndexer {
    * @param characterId - The id of the character.
    * @returns The stat of the character.
    */
-  getByCharacter(characterId: Numberish) {
+  getForCharacter(characterId: Numberish) {
     const url = `/stat/characters/${characterId}`
     return this.base.fetch<CharacterStatEntity>(url)
   }
@@ -26,7 +26,7 @@ export class StatIndexer {
    * @param noteId - The id of the note.
    * @returns The stat of the note.
    */
-  getByNote(characterId: Numberish, noteId: Numberish) {
+  getForNote(characterId: Numberish, noteId: Numberish) {
     const url = `/stat/notes/${characterId}/${noteId}`
     return this.base.fetch<NoteStatEntity>(url)
   }

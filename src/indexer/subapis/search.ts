@@ -18,7 +18,7 @@ export class SearchIndexer {
    * @param options - The options to send to the indexer.
    * @returns
    */
-  byCharacters(
+  characters(
     query: string,
     options: {
       /** Limit the count of items returned. */
@@ -41,7 +41,7 @@ export class SearchIndexer {
    * @param options - The options to send to the indexer.
    * @returns
    */
-  byNotes(
+  notes(
     query: string,
     options: {
       /** Notes with the given tags. */
