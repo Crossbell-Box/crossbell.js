@@ -1,69 +1,64 @@
 export const periphery = [
   {
-    inputs: [{ internalType: 'bytes32', name: 'linkKey', type: 'bytes32' }],
+    inputs: [{ name: 'linkKey', type: 'bytes32' }],
     name: 'getLinkingAddress',
-    outputs: [{ internalType: 'address', name: '', type: 'address' }],
+    outputs: [{ name: '', type: 'address' }],
     stateMutability: 'view',
     type: 'function',
   },
   {
     inputs: [
-      { internalType: 'uint256', name: 'fromCharacterId', type: 'uint256' },
-      { internalType: 'bytes32', name: 'linkType', type: 'bytes32' },
+      { name: 'fromCharacterId', type: 'uint256' },
+      { name: 'linkType', type: 'bytes32' },
     ],
     name: 'getLinkingAddresses',
-    outputs: [{ internalType: 'address[]', name: '', type: 'address[]' }],
+    outputs: [{ name: '', type: 'address[]' }],
     stateMutability: 'view',
     type: 'function',
   },
   {
-    inputs: [{ internalType: 'bytes32', name: 'linkKey', type: 'bytes32' }],
+    inputs: [{ name: 'linkKey', type: 'bytes32' }],
     name: 'getLinkingAnyUri',
-    outputs: [{ internalType: 'string', name: '', type: 'string' }],
+    outputs: [{ name: '', type: 'string' }],
     stateMutability: 'view',
     type: 'function',
   },
   {
     inputs: [
-      { internalType: 'uint256', name: 'fromCharacterId', type: 'uint256' },
-      { internalType: 'bytes32', name: 'linkType', type: 'bytes32' },
+      { name: 'fromCharacterId', type: 'uint256' },
+      { name: 'linkType', type: 'bytes32' },
     ],
     name: 'getLinkingAnyUris',
-    outputs: [{ internalType: 'string[]', name: 'results', type: 'string[]' }],
+    outputs: [{ name: 'results', type: 'string[]' }],
     stateMutability: 'view',
     type: 'function',
   },
   {
-    inputs: [{ internalType: 'bytes32', name: 'linkKey', type: 'bytes32' }],
+    inputs: [{ name: 'linkKey', type: 'bytes32' }],
     name: 'getLinkingCharacterId',
-    outputs: [
-      { internalType: 'uint256', name: 'characterId', type: 'uint256' },
-    ],
+    outputs: [{ name: 'characterId', type: 'uint256' }],
     stateMutability: 'view',
     type: 'function',
   },
   {
     inputs: [
-      { internalType: 'uint256', name: 'fromCharacterId', type: 'uint256' },
-      { internalType: 'bytes32', name: 'linkType', type: 'bytes32' },
+      { name: 'fromCharacterId', type: 'uint256' },
+      { name: 'linkType', type: 'bytes32' },
     ],
     name: 'getLinkingCharacterIds',
-    outputs: [
-      { internalType: 'uint256[]', name: 'results', type: 'uint256[]' },
-    ],
+    outputs: [{ name: 'results', type: 'uint256[]' }],
     stateMutability: 'view',
     type: 'function',
   },
   {
-    inputs: [{ internalType: 'bytes32', name: 'linkKey', type: 'bytes32' }],
+    inputs: [{ name: 'linkKey', type: 'bytes32' }],
     name: 'getLinkingERC721',
     outputs: [
       {
         components: [
-          { internalType: 'address', name: 'tokenAddress', type: 'address' },
-          { internalType: 'uint256', name: 'erc721TokenId', type: 'uint256' },
+          { name: 'tokenAddress', type: 'address' },
+          { name: 'erc721TokenId', type: 'uint256' },
         ],
-        internalType: 'struct DataTypes.ERC721Struct',
         name: '',
         type: 'tuple',
       },
@@ -73,17 +68,16 @@ export const periphery = [
   },
   {
     inputs: [
-      { internalType: 'uint256', name: 'fromCharacterId', type: 'uint256' },
-      { internalType: 'bytes32', name: 'linkType', type: 'bytes32' },
+      { name: 'fromCharacterId', type: 'uint256' },
+      { name: 'linkType', type: 'bytes32' },
     ],
     name: 'getLinkingERC721s',
     outputs: [
       {
         components: [
-          { internalType: 'address', name: 'tokenAddress', type: 'address' },
-          { internalType: 'uint256', name: 'erc721TokenId', type: 'uint256' },
+          { name: 'tokenAddress', type: 'address' },
+          { name: 'erc721TokenId', type: 'uint256' },
         ],
-        internalType: 'struct DataTypes.ERC721Struct[]',
         name: 'results',
         type: 'tuple[]',
       },
@@ -92,34 +86,31 @@ export const periphery = [
     type: 'function',
   },
   {
-    inputs: [{ internalType: 'bytes32', name: 'linkKey', type: 'bytes32' }],
+    inputs: [{ name: 'linkKey', type: 'bytes32' }],
     name: 'getLinkingLinklistId',
-    outputs: [{ internalType: 'uint256', name: 'linklistId', type: 'uint256' }],
+    outputs: [{ name: 'linklistId', type: 'uint256' }],
     stateMutability: 'view',
     type: 'function',
   },
   {
     inputs: [
-      { internalType: 'uint256', name: 'fromCharacterId', type: 'uint256' },
-      { internalType: 'bytes32', name: 'linkType', type: 'bytes32' },
+      { name: 'fromCharacterId', type: 'uint256' },
+      { name: 'linkType', type: 'bytes32' },
     ],
     name: 'getLinkingLinklistIds',
-    outputs: [
-      { internalType: 'uint256[]', name: 'linklistIds', type: 'uint256[]' },
-    ],
+    outputs: [{ name: 'linklistIds', type: 'uint256[]' }],
     stateMutability: 'view',
     type: 'function',
   },
   {
-    inputs: [{ internalType: 'bytes32', name: 'linkKey', type: 'bytes32' }],
+    inputs: [{ name: 'linkKey', type: 'bytes32' }],
     name: 'getLinkingNote',
     outputs: [
       {
         components: [
-          { internalType: 'uint256', name: 'characterId', type: 'uint256' },
-          { internalType: 'uint256', name: 'noteId', type: 'uint256' },
+          { name: 'characterId', type: 'uint256' },
+          { name: 'noteId', type: 'uint256' },
         ],
-        internalType: 'struct DataTypes.NoteStruct',
         name: '',
         type: 'tuple',
       },
@@ -129,23 +120,22 @@ export const periphery = [
   },
   {
     inputs: [
-      { internalType: 'uint256', name: 'fromCharacterId', type: 'uint256' },
-      { internalType: 'bytes32', name: 'linkType', type: 'bytes32' },
+      { name: 'fromCharacterId', type: 'uint256' },
+      { name: 'linkType', type: 'bytes32' },
     ],
     name: 'getLinkingNotes',
     outputs: [
       {
         components: [
-          { internalType: 'bytes32', name: 'linkItemType', type: 'bytes32' },
-          { internalType: 'bytes32', name: 'linkKey', type: 'bytes32' },
-          { internalType: 'string', name: 'contentUri', type: 'string' },
-          { internalType: 'address', name: 'linkModule', type: 'address' },
-          { internalType: 'address', name: 'mintModule', type: 'address' },
-          { internalType: 'address', name: 'mintNFT', type: 'address' },
-          { internalType: 'bool', name: 'deleted', type: 'bool' },
-          { internalType: 'bool', name: 'locked', type: 'bool' },
+          { name: 'linkItemType', type: 'bytes32' },
+          { name: 'linkKey', type: 'bytes32' },
+          { name: 'contentUri', type: 'string' },
+          { name: 'linkModule', type: 'address' },
+          { name: 'mintModule', type: 'address' },
+          { name: 'mintNFT', type: 'address' },
+          { name: 'deleted', type: 'bool' },
+          { name: 'locked', type: 'bool' },
         ],
-        internalType: 'struct DataTypes.Note[]',
         name: 'results',
         type: 'tuple[]',
       },
@@ -155,24 +145,23 @@ export const periphery = [
   },
   {
     inputs: [
-      { internalType: 'uint256', name: 'characterId', type: 'uint256' },
-      { internalType: 'uint256', name: 'offset', type: 'uint256' },
-      { internalType: 'uint256', name: 'limit', type: 'uint256' },
+      { name: 'characterId', type: 'uint256' },
+      { name: 'offset', type: 'uint256' },
+      { name: 'limit', type: 'uint256' },
     ],
     name: 'getNotesByCharacterId',
     outputs: [
       {
         components: [
-          { internalType: 'bytes32', name: 'linkItemType', type: 'bytes32' },
-          { internalType: 'bytes32', name: 'linkKey', type: 'bytes32' },
-          { internalType: 'string', name: 'contentUri', type: 'string' },
-          { internalType: 'address', name: 'linkModule', type: 'address' },
-          { internalType: 'address', name: 'mintModule', type: 'address' },
-          { internalType: 'address', name: 'mintNFT', type: 'address' },
-          { internalType: 'bool', name: 'deleted', type: 'bool' },
-          { internalType: 'bool', name: 'locked', type: 'bool' },
+          { name: 'linkItemType', type: 'bytes32' },
+          { name: 'linkKey', type: 'bytes32' },
+          { name: 'contentUri', type: 'string' },
+          { name: 'linkModule', type: 'address' },
+          { name: 'mintModule', type: 'address' },
+          { name: 'mintNFT', type: 'address' },
+          { name: 'deleted', type: 'bool' },
+          { name: 'locked', type: 'bool' },
         ],
-        internalType: 'struct DataTypes.Note[]',
         name: 'results',
         type: 'tuple[]',
       },
@@ -182,8 +171,8 @@ export const periphery = [
   },
   {
     inputs: [
-      { internalType: 'address', name: '_web3Entry', type: 'address' },
-      { internalType: 'address', name: '_linklist', type: 'address' },
+      { name: '_web3Entry', type: 'address' },
+      { name: '_linklist', type: 'address' },
     ],
     name: 'initialize',
     outputs: [],
@@ -194,17 +183,12 @@ export const periphery = [
     inputs: [
       {
         components: [
-          { internalType: 'uint256', name: 'fromCharacterId', type: 'uint256' },
-          {
-            internalType: 'uint256[]',
-            name: 'toCharacterIds',
-            type: 'uint256[]',
-          },
-          { internalType: 'bytes[]', name: 'data', type: 'bytes[]' },
-          { internalType: 'address[]', name: 'toAddresses', type: 'address[]' },
-          { internalType: 'bytes32', name: 'linkType', type: 'bytes32' },
+          { name: 'fromCharacterId', type: 'uint256' },
+          { name: 'toCharacterIds', type: 'uint256[]' },
+          { name: 'data', type: 'bytes[]' },
+          { name: 'toAddresses', type: 'address[]' },
+          { name: 'linkType', type: 'bytes32' },
         ],
-        internalType: 'struct DataTypes.linkCharactersInBatchData',
         name: 'vars',
         type: 'tuple',
       },
@@ -217,7 +201,7 @@ export const periphery = [
   {
     inputs: [],
     name: 'linklist',
-    outputs: [{ internalType: 'address', name: '', type: 'address' }],
+    outputs: [{ name: '', type: 'address' }],
     stateMutability: 'view',
     type: 'function',
   },
@@ -225,13 +209,12 @@ export const periphery = [
     inputs: [
       {
         components: [
-          { internalType: 'address', name: 'account', type: 'address' },
-          { internalType: 'string', name: 'handle', type: 'string' },
-          { internalType: 'string', name: 'uri', type: 'string' },
-          { internalType: 'address[]', name: 'toAddresses', type: 'address[]' },
-          { internalType: 'bytes32', name: 'linkType', type: 'bytes32' },
+          { name: 'account', type: 'address' },
+          { name: 'handle', type: 'string' },
+          { name: 'uri', type: 'string' },
+          { name: 'toAddresses', type: 'address[]' },
+          { name: 'linkType', type: 'bytes32' },
         ],
-        internalType: 'struct DataTypes.MigrateData',
         name: 'vars',
         type: 'tuple',
       },
@@ -244,7 +227,7 @@ export const periphery = [
   {
     inputs: [],
     name: 'web3Entry',
-    outputs: [{ internalType: 'address', name: '', type: 'address' }],
+    outputs: [{ name: '', type: 'address' }],
     stateMutability: 'view',
     type: 'function',
   },
