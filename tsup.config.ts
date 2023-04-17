@@ -5,13 +5,13 @@ const commonConfig: Options = {
   outDir: 'dist',
   clean: true,
   sourcemap: true,
+  treeshake: true,
 }
 
 export default defineConfig((options) => [
   {
     ...commonConfig,
     format: ['cjs', 'esm'],
-    minify: !options.watch,
     platform: 'node',
     dts: options.dts,
     target: 'node16',
@@ -24,6 +24,5 @@ export default defineConfig((options) => [
     platform: 'browser',
     dts: false,
     target: 'es2020',
-    esbuildPlugins: [],
   },
 ])
