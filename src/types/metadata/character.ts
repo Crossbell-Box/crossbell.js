@@ -1,7 +1,6 @@
-import { Mixin } from 'ts-mixer'
-import { AttributesMetadata, BaseMetadata } from './base'
+import { type AttributesMetadata, type BaseMetadata } from './base'
 
-export class CharacterMetadata extends Mixin(BaseMetadata, AttributesMetadata) {
+export interface CharacterMetadata extends BaseMetadata, AttributesMetadata {
   /** The name of this character. */
   name?: string
 

@@ -1,7 +1,6 @@
-import { Mixin } from 'ts-mixer'
-import { AttributesMetadata, BaseMetadata } from './base'
+import { type AttributesMetadata, type BaseMetadata } from './base'
 
-export class NoteMetadataAttachmentBase<
+export interface NoteMetadataAttachmentBase<
   ContentType extends 'address' | 'content',
 > {
   /**
@@ -46,7 +45,7 @@ export class NoteMetadataAttachmentBase<
   height?: number
 }
 
-export class NoteMetadata extends Mixin(BaseMetadata, AttributesMetadata) {
+export interface NoteMetadata extends BaseMetadata, AttributesMetadata {
   /**
    * The tags of this note.
    *

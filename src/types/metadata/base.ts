@@ -1,10 +1,10 @@
-export class BaseMetadata {
+export interface BaseMetadata {
   // version: '1' // TODO: do we need this?
 
   type?: 'character' | 'note' | 'linklist'
 }
 
-export class AttributesMetadata {
+export interface AttributesMetadata {
   /**
    * Custom attributes.
    *
