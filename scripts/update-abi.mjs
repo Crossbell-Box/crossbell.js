@@ -32,18 +32,18 @@ async function main() {
 }
 
 /**
- * @returns {Promise<[name: string, abi: any][]>}
+ * @returns {Promise<[name: string, abi: import('abitype').Abi][]>}
  */
 async function getAllAbis() {
   const [
     { abi: abi1 },
     { abi: abi2 },
-    { abi: periphery_abi },
-    { abi: cbt_abi },
-    { abi: newbie_villa_abi },
-    { abi: tips_abi },
-    mira_abi,
-    { abi: linklist_abi },
+    { abi: periphery },
+    { abi: cbt },
+    { abi: newbieVilla },
+    { abi: tips },
+    mira,
+    { abi: linklist },
   ] = await Promise.all([
     getAbi('Web3Entry'),
     getAbi('Events'),
@@ -60,13 +60,13 @@ async function getAllAbis() {
   const abi = [...abi1, ...abi2]
 
   return [
-    ['entry', abi],
-    ['periphery', periphery_abi],
-    ['cbt', cbt_abi],
-    ['newbie-villa', newbie_villa_abi],
-    ['tips', tips_abi],
-    ['mira', mira_abi],
-    ['linklist', linklist_abi],
+    ['entry', simplifyAbi(abi)],
+    ['periphery', simplifyAbi(periphery)],
+    ['cbt', simplifyAbi(cbt)],
+    ['newbie-villa', simplifyAbi(newbieVilla)],
+    ['tips', simplifyAbi(tips)],
+    ['mira', simplifyAbi(mira)],
+    ['linklist', simplifyAbi(linklist)],
   ]
 }
 
@@ -85,7 +85,7 @@ function getAbi(name) {
 
 /**
  * @param {string} name kebab-case
- * @param {*} abi
+ * @param {import('abitype').Abi} abi
  */
 async function writeAbi(name, abi) {
   const camelName = camelCase(name)
@@ -96,4 +96,27 @@ async function writeAbi(name, abi) {
     { ...prettierConfig, parser: 'babel-ts' },
   )
   await writeFile(path.resolve(abiDir, `${name}.ts`), contents)
+}
+
+/** @param {import('abitype').Abi} abi */
+function simplifyAbi(abi) {
+  /** @param {import('abitype').AbiParameter} param */
+  function removeField(param) {
+    if ('internalType' in param) delete param.internalType
+    if ('components' in param) {
+      param.components = param.components.map((c) => removeField(c))
+    }
+    return param
+  }
+
+  return abi.map((abi) => {
+    if ('anonymous' in abi) delete abi.anonymous
+    if ('inputs' in abi && abi.inputs) {
+      abi.inputs = abi.inputs.map((i) => removeField(i))
+    }
+    if ('outputs' in abi && abi.outputs) {
+      abi.outputs = abi.outputs.map((i) => removeField(i))
+    }
+    return abi
+  })
 }
