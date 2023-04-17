@@ -71,7 +71,7 @@ import { Indexer } from 'crossbell.js'
 const indexer = new Indexer()
 
 // get a list of characters owned by a specific address
-const res = await indexer.getCharacters(
+const res = await indexer.character.getMany(
   '0x1234567890123456789012345678901234567890',
 )
 console.log(res.list)
