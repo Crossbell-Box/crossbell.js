@@ -44,7 +44,7 @@ export class BaseIndexer {
       ...this.fetchOptions,
       ...options,
     }).then(async (r) => {
-      if (r.status !== 200) {
+      if (!r.ok) {
         return Promise.reject(
           new Error(
             `Request failed, status code: ${
