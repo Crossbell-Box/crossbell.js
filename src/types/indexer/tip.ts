@@ -1,4 +1,4 @@
-import { type Address } from 'viem'
+import { type Address, type Hash } from 'viem'
 import { type CharacterEntity } from './character'
 import { type NoteEntity } from './note'
 
@@ -12,7 +12,7 @@ export interface TipEntity {
   amount: string
   tokenAddress: Address
   createdAt: Date
-  transactionHash: string
+  transactionHash: Hash
   blockNumber: number
   logIndex: number
 }

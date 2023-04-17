@@ -1,4 +1,4 @@
-import { type Address } from 'viem'
+import { type Address, type Hash } from 'viem'
 import { type CharacterEntity } from './character'
 import { type LinkEntity } from './link'
 import { type LinklistEntity } from './linklist'
@@ -64,11 +64,11 @@ export interface FeedEntity {
   mintModuleTargetItemType?: MintModuleTargetItemType
   mintModule?: MintModuleEntity
   tip?: TipEntity
-  owner: string
+  owner: Address
   createdAt: Date
   updatedAt: Date
   deletedAt: Date | null
-  transactionHash: string
+  transactionHash: Hash
   blockNumber: number
   logIndex: number
 }

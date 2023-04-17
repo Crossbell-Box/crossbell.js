@@ -1,4 +1,4 @@
-import { type Address } from 'viem'
+import { type Address, type Hash } from 'viem'
 import { type MetadataEntity } from './metadata'
 
 export interface LinklistEntity {
@@ -8,15 +8,15 @@ export interface LinklistEntity {
   linkType: string
   uri: string | null
   metadata?: MetadataEntity<'LINKLIST'> | null
-  operator: string
-  owner: string
+  operator: Address
+  owner: Address
   fromAddress: Address
   createdAt: string
   updatedAt: string
-  transactionHash: string
+  transactionHash: Hash
   blockNumber: number
   logIndex: number
-  updatedTransactionHash: string
+  updatedTransactionHash: Hash
   updatedBlockNumber: number
   updatedLogIndex: number
 }

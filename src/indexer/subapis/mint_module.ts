@@ -30,7 +30,7 @@ export class MintModuleIndexer {
     /** The note ID of the target item. */
     toNoteId?: Numberish
     /** The limit of the number of items to return. */
-    limit?: number
+    limit?: Numberish
     /** Used for pagination. */
     cursor?: string
   } = {}) {

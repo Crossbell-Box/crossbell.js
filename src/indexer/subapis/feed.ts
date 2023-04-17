@@ -1,3 +1,4 @@
+import { type Hash } from 'viem'
 import {
   type FeedEntity,
   type FeedTypeKey,
@@ -27,7 +28,7 @@ export class FeedIndexer {
       /** The type of feed */
       type?: FeedTypeKey | FeedTypeKey[]
       /** Limit the count of items returned. */
-      limit?: number
+      limit?: Numberish
       /** Used for pagination. */
       cursor?: string
     } = {},
@@ -60,7 +61,7 @@ export class FeedIndexer {
       /** The type of feed */
       type?: FeedTypeKey | FeedTypeKey[]
       /** Limit the count of items returned. */
-      limit?: number
+      limit?: Numberish
       /** Used for pagination. */
       cursor?: string
     } = {},
@@ -83,7 +84,7 @@ export class FeedIndexer {
    * @param logIndex - The logIndex of the feed.
    * @returns The feed.
    */
-  get(transactionHash: string, logIndex: Numberish) {
+  get(transactionHash: Hash, logIndex: Numberish) {
     const url = `/feed/${transactionHash}/${logIndex}`
     return this.base.fetch<FeedEntity | null>(url)
   }

@@ -1,3 +1,5 @@
+import { type Address, type Hash } from 'viem'
+
 export enum CharacterOperatorPermission {
   SET_HANDLE = 'SET_HANDLE',
   SET_SOCIAL_TOKEN = 'SET_SOCIAL_TOKEN',
@@ -38,14 +40,14 @@ export type CharacterPermissionKey = keyof typeof CharacterOperatorPermission
 
 export interface CharacterOperatorEntity {
   characterId: number
-  operator: string
+  operator: Address
   permissions: CharacterPermissionKey[]
   createdAt: Date
   updatedAt: Date
-  transactionHash: string
+  transactionHash: Hash
   blockNumber: number
   logIndex: number
-  updatedTransactionHash: string
+  updatedTransactionHash: Hash
   updatedBlockNumber: number
   updatedLogIndex: number
 }
@@ -53,14 +55,14 @@ export interface CharacterOperatorEntity {
 export interface NoteOperatorEntity {
   characterId: number
   noteId: number
-  allowlist: string[]
-  blocklist: string[]
+  allowlist: Address[]
+  blocklist: Address[]
   createdAt: Date
   updatedAt: Date
-  transactionHash: string
+  transactionHash: Hash
   blockNumber: number
   logIndex: number
-  updatedTransactionHash: string
+  updatedTransactionHash: Hash
   updatedBlockNumber: number
   updatedLogIndex: number
 }

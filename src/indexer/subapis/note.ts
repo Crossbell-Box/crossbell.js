@@ -40,7 +40,7 @@ export type NoteQueryOptions = {
   /** The `metadata.content.variant` to filter by. */
   variant?: NoteMetadata['variant']
   /** Limit the count of items returned. */
-  limit?: number
+  limit?: Numberish
   /** Used for pagination. */
   cursor?: string
   /** Whether to include notes whose metadata content are empty even though the `tags`, `sources` or `external_urls` fields are specified. */
@@ -56,7 +56,7 @@ export type NoteQueryOptions = {
   /** How many levels of nested notes to include */
   nestedNotesDepth?: 1 | 2 | 3
   /** How many nested notes to include per note */
-  nestedNotesLimit?: number
+  nestedNotesLimit?: Numberish
   /** The order of the returned list. */
   orderBy?: 'createdAt' | 'updatedAt' | 'publishedAt' | 'viewCount'
 }

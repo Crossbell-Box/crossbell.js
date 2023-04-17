@@ -1,4 +1,4 @@
-import { type Address } from 'viem'
+import { type Address, type Hash } from 'viem'
 import { type CharacterEntity } from './character'
 import { type NoteEntity } from './note'
 
@@ -14,14 +14,14 @@ export interface MintModuleEntity {
   toCharacter?: CharacterEntity | null
   toNoteId: number | null
   toNote?: NoteEntity | null
-  operator: string
+  operator: Address
   createdAt: Date
   updatedAt: Date
   deletedAt: Date | null
-  transactionHash: string
+  transactionHash: Hash
   blockNumber: number
   logIndex: number
-  updatedTransactionHash: string
+  updatedTransactionHash: Hash
   updatedBlockNumber: number
   updatedLogIndex: number
 }

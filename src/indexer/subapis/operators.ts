@@ -24,7 +24,7 @@ export class OperatorIndexer {
       cursor,
     }: {
       /** Limit the count of items returned. */
-      limit?: number
+      limit?: Numberish
       /** Used for pagination. */
       cursor?: string
     } = {},

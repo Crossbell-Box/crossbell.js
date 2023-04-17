@@ -22,7 +22,7 @@ export class SearchIndexer {
     query: string,
     options: {
       /** Limit the count of items returned. */
-      limit?: number
+      limit?: Numberish
       /** Used for pagination. */
       cursor?: string
     },
@@ -53,7 +53,7 @@ export class SearchIndexer {
       /** Note with the given characterId owner */
       characterId?: Numberish
       /** Limit the count of items returned. */
-      limit?: number
+      limit?: Numberish
       /** Used for pagination. */
       cursor?: string
       /** Whether to include character metadata */

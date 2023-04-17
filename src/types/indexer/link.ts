@@ -1,4 +1,4 @@
-import { type Address } from 'viem'
+import { type Address, type Hash } from 'viem'
 import { type LinkItemType } from '../contract'
 import { type CharacterEntity } from './character'
 import { type LinklistEntity } from './linklist'
@@ -22,15 +22,15 @@ export interface LinkEntity {
   toLinklistId: number | null
   toLinklist?: LinklistEntity | null
   toUri: string | null
-  operator: string
-  owner: string
+  operator: Address
+  owner: Address
   createdAt: string
   updatedAt: string
   deletedAt: string | null
-  transactionHash: string
+  transactionHash: Hash
   blockNumber: number
   logIndex: number
-  updatedTransactionHash: string
+  updatedTransactionHash: Hash
   updatedBlockNumber: number
   updatedLogIndex: number
 }

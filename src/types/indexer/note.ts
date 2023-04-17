@@ -1,4 +1,4 @@
-import { type Address } from 'viem'
+import { type Address, type Hash } from 'viem'
 import { type CharacterEntity } from './character'
 import { type LinklistEntity } from './linklist'
 import { type MetadataEntity } from './metadata'
@@ -29,15 +29,15 @@ export interface NoteEntity {
   contractAddress: Address | null
   uri: string | null
   metadata?: MetadataEntity<'NOTE'> | null
-  operator: string
-  owner: string
+  operator: Address
+  owner: Address
   createdAt: string
   updatedAt: string
   deletedAt: string | null
-  transactionHash: string
+  transactionHash: Hash
   blockNumber: number
   logIndex: number
-  updatedTransactionHash: string
+  updatedTransactionHash: Hash
   updatedBlockNumber: number
   updatedLogIndex: number
 }

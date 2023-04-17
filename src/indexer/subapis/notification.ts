@@ -1,3 +1,4 @@
+import { type Hash } from 'viem'
 import {
   type ListResponse,
   type NotificationEntity,
@@ -39,7 +40,7 @@ export class NotificationIndexer {
       /** @deprecated Whether to read notifications. Please use */
       read?: boolean
       /** Limit the count of items returned. */
-      limit?: number
+      limit?: Numberish
       /** Used for pagination. */
       cursor?: string
     } = {},
@@ -83,7 +84,7 @@ export class NotificationIndexer {
    */
   get(
     characterId: Numberish,
-    transactionHash: string,
+    transactionHash: Hash,
     logIndex: Numberish,
     {
       includeCharacterMetadata,

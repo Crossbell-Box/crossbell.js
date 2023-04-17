@@ -1,3 +1,5 @@
+import { type Hash } from 'viem'
+
 export interface AchievementInfo {
   tokenId: number
   name: FunctionStringCallback
@@ -29,7 +31,7 @@ export interface AchievementItem {
   createdAt: string
   updatedAt: string
   mintedAt: string | null
-  transactionHash: string | null
+  transactionHash: Hash | null
   info: AchievementInfo
   stat: {
     mintedCount: number

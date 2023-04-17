@@ -1,3 +1,4 @@
+import { type Hash } from 'viem'
 import { type CharacterEntity } from './character'
 import { type FeedEntity } from './feed'
 
@@ -18,7 +19,7 @@ export interface NotificationEntity {
   characterId: number
   character?: CharacterEntity
   type: NotificationTypeKey
-  transactionHash: string
+  transactionHash: Hash
   blockNumber: number
   logIndex: number
   feed?: FeedEntity

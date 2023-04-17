@@ -1,4 +1,4 @@
-import { type Address } from 'viem'
+import { type Address, type Hash } from 'viem'
 import { type CharacterEntity } from './character'
 import { type NoteEntity } from './note'
 
@@ -9,15 +9,15 @@ export interface MintedNoteEntity {
   note?: NoteEntity | null
   contractAddress: Address
   tokenId: number
-  operator: string
-  owner: string
+  operator: Address
+  owner: Address
   fromAddress: Address
   createdAt: string
   updatedAt: string
-  transactionHash: string
+  transactionHash: Hash
   blockNumber: number
   logIndex: number
-  updatedTransactionHash: string
+  updatedTransactionHash: Hash
   updatedBlockNumber: number
   updatedLogIndex: number
 }

@@ -38,7 +38,7 @@ export class LinkIndexer {
       order,
     }: {
       /** Limit the count of items returned. */
-      limit?: number
+      limit?: Numberish
       /** Used for pagination. */
       cursor?: string
       /** The link type to filter by. e.g. 'follow' */
@@ -46,7 +46,7 @@ export class LinkIndexer {
       /** The link item type to filter by. e.g. 'Character' */
       linkItemType?: LinkItemType
       /** The fromCharacterId to filter by. */
-      fromCharacterId?: string
+      fromCharacterId?: Numberish
       /** The toCharacterId to filter by. */
       toCharacterId?: Numberish
       /** The toAddress to filter by. */
@@ -102,7 +102,7 @@ export class LinkIndexer {
       order,
     }: {
       /** Limit the count of items returned. */
-      limit?: number
+      limit?: Numberish
       /** Used for pagination. */
       cursor?: string
       /** The link type to filter by. e.g. 'follow' */
@@ -134,7 +134,7 @@ export class LinkIndexer {
       order,
     }: {
       /** Limit the count of items returned. */
-      limit?: number
+      limit?: Numberish
       /** Used for pagination. */
       cursor?: string
       /** The link type to filter by. e.g. 'follow' */
@@ -173,7 +173,7 @@ export class LinkIndexer {
       order,
     }: {
       /** Limit the count of items returned. */
-      limit?: number
+      limit?: Numberish
       /** Used for pagination. */
       cursor?: string
       /** The link type to filter by. e.g. 'follow' */
@@ -207,7 +207,7 @@ export class LinkIndexer {
       order,
     }: {
       /** Limit the count of items returned. */
-      limit?: number
+      limit?: Numberish
       /** Used for pagination. */
       cursor?: string
       /** The link type to filter by. e.g. 'follow' */
@@ -239,7 +239,7 @@ export class LinkIndexer {
       order,
     }: {
       /** Limit the count of items returned. */
-      limit?: number
+      limit?: Numberish
       /** Used for pagination. */
       cursor?: string
       /** The link type to filter by. e.g. 'follow' */
@@ -276,7 +276,7 @@ export class LinkIndexer {
       order,
     }: {
       /** Limit the count of items returned. */
-      limit?: number
+      limit?: Numberish
       /** Used for pagination. */
       cursor?: string
       /** The link type to filter by. e.g. 'follow' */

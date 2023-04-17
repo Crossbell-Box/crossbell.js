@@ -35,7 +35,7 @@ export class MintedNoteIndexer {
       /** The `metadata.content.variant` to filter by. */
       variant?: NoteMetadata['variant']
       /** Limit the count of items returned. */
-      limit?: number
+      limit?: Numberish
       /** Used for pagination. */
       cursor?: string
       /** The order to sort by. */
@@ -74,9 +74,9 @@ export class MintedNoteIndexer {
       order,
     }: {
       /** The address of the owner */
-      owner?: string
+      owner?: Address
       /** Limit the count of items returned. */
-      limit?: number
+      limit?: Numberish
       /** Used for pagination. */
       cursor?: string
       /** The order to sort by. */

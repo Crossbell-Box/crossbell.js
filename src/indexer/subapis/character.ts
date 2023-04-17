@@ -26,7 +26,7 @@ export class CharacterIndexer {
       /** If true, return only the primary character. */
       primary?: boolean
       /** Limit the count of items returned. */
-      limit?: number
+      limit?: Numberish
       /** Used for pagination. */
       cursor?: string
     } = {},

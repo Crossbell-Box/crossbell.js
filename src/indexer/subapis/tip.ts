@@ -1,4 +1,4 @@
-import { type Address } from 'viem'
+import { type Address, type Hash } from 'viem'
 import { type ListResponse, type Numberish, type TipEntity } from '../../types'
 import { type BaseIndexer } from './base'
 
@@ -36,7 +36,7 @@ export class TipIndexer {
     /** Whether to include character and note metadata */
     includeMetadata?: boolean
     /** Limit the count of items returned. */
-    limit?: number
+    limit?: Numberish
     /** Used for pagination. */
     cursor?: string
   } = {}) {
@@ -64,7 +64,7 @@ export class TipIndexer {
    * @param logIndex - The logIndex of the tip.
    * @returns The tip.
    */
-  get(transactionHash: string, logIndex: Numberish) {
+  get(transactionHash: Hash, logIndex: Numberish) {
     const url = `/tips/${transactionHash}/${logIndex}`
     return this.base.fetch<TipEntity | null>(url)
   }

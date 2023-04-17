@@ -25,7 +25,7 @@ export class LinklistIndexer {
       /** The link type to filter by. */
       linkType?: string
       /** Limit the count of items returned. */
-      limit?: number
+      limit?: Numberish
       /** Used for pagination. */
       cursor?: string
     } = {},

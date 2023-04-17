@@ -43,7 +43,7 @@ export class LinkModuleIndexer {
     /** The linklist ID of the target item. */
     toLinklistId?: Numberish
     /** The limit of the number of items to return. */
-    limit?: number
+    limit?: Numberish
     /** Used for pagination. */
     cursor?: string
   } = {}) {
