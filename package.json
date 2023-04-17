@@ -76,5 +76,8 @@
     "typedoc": "^0.24.4",
     "typescript": "^5.0.4",
     "vitest": "^0.30.1"
+  },
+  "engines": {
+    "node": ">=16.14.0"
   }
 }

@@ -12,6 +12,10 @@ npm install crossbell.js
 
 ## Usage
 
+### Requirements
+
+Node.js >= 18.0.0 or Node.js >= 16.14.0 with [fetch polyfill](https://github.com/nodejs/undici)
+
 ### Contract
 
 #### Connect with Metamask
