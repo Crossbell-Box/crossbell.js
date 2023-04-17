@@ -1,9 +1,10 @@
 import { type Address } from 'viem'
-import { createSearchParamsString } from '../../utils'
 import { type ListResponse, type Numberish, type TipEntity } from '../../types'
-import { BaseIndexer } from './base'
+import { type BaseIndexer } from './base'
 
-export class TipIndexer extends BaseIndexer {
+export class TipIndexer {
+  constructor(private base: BaseIndexer) {}
+
   /**
    * This returns a list of tips.
    *
@@ -12,7 +13,7 @@ export class TipIndexer extends BaseIndexer {
    * @param options - The options to send to the indexer.
    * @returns The list of tips.
    */
-  async getTips({
+  getMany({
     characterId,
     toCharacterId,
     toNoteId,
@@ -38,22 +39,21 @@ export class TipIndexer extends BaseIndexer {
     limit?: number
     /** Used for pagination. */
     cursor?: string
-  } = {}): Promise<ListResponse<TipEntity>> {
-    let url = `${this.endpoint}/tips?`
-    url += createSearchParamsString({
-      characterId,
-      toCharacterId,
-      toNoteId,
-      tokenAddress,
-      includeZeroAmount,
-      includeMetadata,
-      limit,
-      cursor,
+  } = {}) {
+    const url = `/tips`
+
+    return this.base.fetch<ListResponse<TipEntity>>(url, {
+      params: {
+        characterId,
+        toCharacterId,
+        toNoteId,
+        tokenAddress,
+        includeZeroAmount,
+        includeMetadata,
+        limit,
+        cursor,
+      },
     })
-
-    const res = await this.fetch(url).then((res) => res.json())
-
-    return res as ListResponse<TipEntity>
   }
 
   /**
@@ -64,13 +64,8 @@ export class TipIndexer extends BaseIndexer {
    * @param logIndex - The logIndex of the tip.
    * @returns The tip.
    */
-  async getTip(
-    transactionHash: string,
-    logIndex: Numberish,
-  ): Promise<TipEntity | null> {
-    const url = `${this.endpoint}/tips/${transactionHash}/${logIndex}`
-    const res = await this.fetch(url).then((res) => res.json())
-
-    return res as TipEntity
+  get(transactionHash: string, logIndex: Numberish) {
+    const url = `/tips/${transactionHash}/${logIndex}`
+    return this.base.fetch<TipEntity | null>(url)
   }
 }

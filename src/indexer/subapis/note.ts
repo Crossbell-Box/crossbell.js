@@ -1,5 +1,4 @@
 import { type Address } from 'viem'
-import { createSearchParamsString } from '../../utils'
 import {
   type LinkItemType,
   type ListResponse,
@@ -7,7 +6,7 @@ import {
   type NoteMetadata,
   type Numberish,
 } from '../../types'
-import { BaseIndexer } from './base'
+import { type BaseIndexer } from './base'
 
 export type NoteQueryOptions = {
   /** The owner of this note */
@@ -62,27 +61,21 @@ export type NoteQueryOptions = {
   orderBy?: 'createdAt' | 'updatedAt' | 'publishedAt' | 'viewCount'
 }
 
-export class NoteIndexer extends BaseIndexer {
+export class NoteIndexer {
+  constructor(private base: BaseIndexer) {}
+
   /**
    * This returns a list of notes.
    *
    * @category Note
-   * @param options - The options of note query.
+   * @param params - The options of note query.
    * @returns The list of notes.
    */
-  async getNotes(
-    options: NoteQueryOptions = {},
-  ): Promise<
-    ListResponse<NoteEntity & { fromNotes: ListResponse<NoteEntity> }>
-  > {
-    let url = `${this.endpoint}/notes?`
-    url += createSearchParamsString(options)
-
-    const res = await this.fetch(url).then((res) => res.json())
-
-    return res as ListResponse<
-      NoteEntity & { fromNotes: ListResponse<NoteEntity> }
-    >
+  getMany(params: NoteQueryOptions = {}) {
+    const url = `/notes`
+    return this.base.fetch<
+      ListResponse<NoteEntity & { fromNotes: ListResponse<NoteEntity> }>
+    >(url, { params })
   }
 
   /**
@@ -90,23 +83,17 @@ export class NoteIndexer extends BaseIndexer {
    *
    * @category Note
    * @param characterId - The characterId.
-   * @param options - The options of note query.
+   * @param params - The options of note query.
    * @returns
    */
-  async getNotesOfCharacterFollowing(
+  getManyOfCharacterFollowing(
     characterId: Numberish,
-    options: Omit<NoteQueryOptions, 'characterId'> = {},
-  ): Promise<
-    ListResponse<NoteEntity & { fromNotes: ListResponse<NoteEntity> }>
-  > {
-    let url = `${this.endpoint}/characters/${characterId}/notes/following?`
-    url += createSearchParamsString(options)
-
-    const res = await this.fetch(url).then((res) => res.json())
-
-    return res as ListResponse<
-      NoteEntity & { fromNotes: ListResponse<NoteEntity> }
-    >
+    params: Omit<NoteQueryOptions, 'characterId'> = {},
+  ) {
+    const url = `/characters/${characterId}/notes/following`
+    return this.base.fetch<
+      ListResponse<NoteEntity & { fromNotes: ListResponse<NoteEntity> }>
+    >(url, { params })
   }
 
   /**
@@ -117,14 +104,9 @@ export class NoteIndexer extends BaseIndexer {
    * @param noteId - The noteId of the note to get.
    * @returns The note.
    */
-  async getNote(
-    characterId: Numberish,
-    noteId: Numberish,
-  ): Promise<NoteEntity | null> {
-    const url = `${this.endpoint}/characters/${characterId}/notes/${noteId}`
-    const res = await this.fetch(url).then((res) => res.json())
-
-    return res as NoteEntity
+  get(characterId: Numberish, noteId: Numberish) {
+    const url = `/characters/${characterId}/notes/${noteId}`
+    return this.base.fetch<NoteEntity | null>(url)
   }
 
   /**
@@ -135,7 +117,7 @@ export class NoteIndexer extends BaseIndexer {
    * @param options - The options of note query.
    * @returns The list of tags.
    */
-  async getDistinctNoteTagsOfCharacter(
+  getDistinctTagsOfCharacter(
     characterId: Numberish,
     {
       sources,
@@ -143,15 +125,13 @@ export class NoteIndexer extends BaseIndexer {
       /** The `metadata.content.sources` to filter by. */
       sources?: string | string[]
     } = {},
-  ): Promise<ListResponse<string>> {
-    let url = `${this.endpoint}/characters/${characterId}/notes/tags?`
-    url += createSearchParamsString({
-      sources,
+  ) {
+    const url = `/characters/${characterId}/notes/tags`
+    return this.base.fetch<ListResponse<string>>(url, {
+      params: {
+        sources,
+      },
     })
-
-    const res = await this.fetch(url).then((res) => res.json())
-
-    return res as ListResponse<string>
   }
 
   /**
@@ -162,7 +142,7 @@ export class NoteIndexer extends BaseIndexer {
    * @param options - The options of note query.
    * @returns The list of tags.
    */
-  async getDistinctNoteSourcesOfCharacter(
+  getDistinctSourcesOfCharacter(
     characterId: Numberish,
     {
       tags,
@@ -170,14 +150,12 @@ export class NoteIndexer extends BaseIndexer {
       /** The `metadata.content.tags` to filter by. */
       tags?: string | string[]
     } = {},
-  ): Promise<ListResponse<string>> {
-    let url = `${this.endpoint}/characters/${characterId}/notes/sources?`
-    url += createSearchParamsString({
-      tags,
+  ) {
+    const url = `/characters/${characterId}/notes/sources`
+    return this.base.fetch<ListResponse<string>>(url, {
+      params: {
+        tags,
+      },
     })
-
-    const res = await this.fetch(url).then((res) => res.json())
-
-    return res as ListResponse<string>
   }
 }

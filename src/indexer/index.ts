@@ -1,1 +1,1 @@
-export { Indexer } from './indexer'
+export * from './indexer'

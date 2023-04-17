@@ -3,22 +3,19 @@ import {
   type NoteMetadata,
   type Numberish,
 } from '../../types'
-import { BaseIndexer } from './base'
+import { type BaseIndexer } from './base'
 
-export class MetadataIndexer extends BaseIndexer {
+export class MetadataIndexer {
+  constructor(private base: BaseIndexer) {}
+
   /**
    * (Re)sync a character's metadata.
    *
    * @param characterId - the character id
    */
-  async syncMetadataOfCharacter(
-    characterId: Numberish,
-  ): Promise<CharacterMetadata | never> {
-    const url = `${this.endpoint}/characters/${characterId}/metadata/sync`
-
-    const res = await this.fetch(url).then((res) => res.json())
-
-    return res as CharacterMetadata
+  syncForCharacter(characterId: Numberish) {
+    const url = `/characters/${characterId}/metadata/sync`
+    return this.base.fetch<CharacterMetadata>(url)
   }
 
   /**
@@ -27,14 +24,8 @@ export class MetadataIndexer extends BaseIndexer {
    * @param characterId - the character id of the note's owner
    * @param noteId - the note id
    */
-  async syncMetadataOfNote(
-    characterId: Numberish,
-    noteId: Numberish,
-  ): Promise<NoteMetadata | never> {
-    const url = `${this.endpoint}/notes/${characterId}/${noteId}/metadata/sync`
-
-    const res = await this.fetch(url).then((res) => res.json())
-
-    return res as NoteMetadata
+  syncForNote(characterId: Numberish, noteId: Numberish) {
+    const url = `/notes/${characterId}/${noteId}/metadata/sync`
+    return this.base.fetch<NoteMetadata>(url)
   }
 }

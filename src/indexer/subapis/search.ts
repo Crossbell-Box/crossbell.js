@@ -1,4 +1,3 @@
-import { createSearchParamsString } from '../../utils'
 import {
   type CharacterEntity,
   type LinkItemType,
@@ -6,9 +5,11 @@ import {
   type NoteEntity,
   type Numberish,
 } from '../../types'
-import { BaseIndexer } from './base'
+import { type BaseIndexer } from './base'
 
-export class SearchIndexer extends BaseIndexer {
+export class SearchIndexer {
+  constructor(private base: BaseIndexer) {}
+
   /**
    * This searches for characters on the crossbell contract.
    *
@@ -17,7 +18,7 @@ export class SearchIndexer extends BaseIndexer {
    * @param options - The options to send to the indexer.
    * @returns
    */
-  async searchCharacters(
+  characters(
     query: string,
     options: {
       /** Limit the count of items returned. */
@@ -25,13 +26,11 @@ export class SearchIndexer extends BaseIndexer {
       /** Used for pagination. */
       cursor?: string
     },
-  ): Promise<ListResponse<CharacterEntity>> {
-    let url = `${this.endpoint}/characters/search?`
-    url += createSearchParamsString({ q: query, ...options })
-
-    const res = await this.fetch(url).then((res) => res.json())
-
-    return res as ListResponse<CharacterEntity>
+  ) {
+    const url = `/characters/search`
+    return this.base.fetch<ListResponse<CharacterEntity>>(url, {
+      params: { q: query, ...options },
+    })
   }
 
   /**
@@ -42,7 +41,7 @@ export class SearchIndexer extends BaseIndexer {
    * @param options - The options to send to the indexer.
    * @returns
    */
-  async searchNotes(
+  notes(
     query: string,
     options: {
       /** Notes with the given tags. */
@@ -62,15 +61,13 @@ export class SearchIndexer extends BaseIndexer {
       /** The order of the returned list. */
       orderBy?: 'createdAt' | 'updatedAt' | 'publishedAt' | 'viewCount'
     },
-  ): Promise<ListResponse<NoteEntity>> {
-    let url = `${this.endpoint}/notes/search?`
-    url += createSearchParamsString({
-      q: query,
-      ...options,
+  ) {
+    const url = `/notes/search`
+    return this.base.fetch<ListResponse<NoteEntity>>(url, {
+      params: {
+        q: query,
+        ...options,
+      },
     })
-
-    const res = await this.fetch(url).then((res) => res.json())
-
-    return res as ListResponse<NoteEntity>
   }
 }

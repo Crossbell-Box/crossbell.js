@@ -1,13 +1,14 @@
-import { createSearchParamsString } from '../../utils'
 import {
   type ListResponse,
   type NotificationEntity,
   type NotificationTypeKey,
   type Numberish,
 } from '../../types'
-import { BaseIndexer } from './base'
+import { type BaseIndexer } from './base'
 
-export class NotificationIndexer extends BaseIndexer {
+export class NotificationIndexer {
+  constructor(private base: BaseIndexer) {}
+
   /**
    * This returns a list of notifications.
    *
@@ -16,7 +17,7 @@ export class NotificationIndexer extends BaseIndexer {
    * @param options - The options to send to the indexer.
    * @returns The list of notifications.
    */
-  async getNotificationsOfCharacter(
+  getMany(
     characterId: Numberish,
     {
       type,
@@ -42,21 +43,19 @@ export class NotificationIndexer extends BaseIndexer {
       /** Used for pagination. */
       cursor?: string
     } = {},
-  ): Promise<ListResponse<NotificationEntity>> {
-    let url = `${this.endpoint}/characters/${characterId}/notifications?`
-    url += createSearchParamsString({
-      type,
-      includeCharacterMetadata,
-      includeSelfInvoked,
-      includeIsRead,
-      read,
-      limit,
-      cursor,
+  ) {
+    const url = `/characters/${characterId}/notifications`
+    return this.base.fetch<ListResponse<NotificationEntity>>(url, {
+      params: {
+        type,
+        includeCharacterMetadata,
+        includeSelfInvoked,
+        includeIsRead,
+        read,
+        limit,
+        cursor,
+      },
     })
-
-    const res = await this.fetch(url).then((res) => res.json())
-
-    return res as ListResponse<NotificationEntity>
   }
 
   /**
@@ -66,15 +65,11 @@ export class NotificationIndexer extends BaseIndexer {
    * @param characterId - The characterId of the notification owner.
    * @returns The latest notification date string.
    */
-  async markNotificationsAsRead(
-    characterId: Numberish,
-  ): Promise<{ data: string }> {
-    const url = `${this.endpoint}/characters/${characterId}/notifications/read`
-    const res = await this.fetch(url, {
+  markAllAsRead(characterId: Numberish) {
+    const url = `/characters/${characterId}/notifications/read`
+    return this.base.fetch<{ data: string }>(url, {
       method: 'POST',
-    }).then((res) => res.json())
-
-    return res as { data: string }
+    })
   }
 
   /**
@@ -86,7 +81,7 @@ export class NotificationIndexer extends BaseIndexer {
    * @param logIndex - The logIndex of the notification.
    * @returns The feed.
    */
-  async getNotification(
+  get(
     characterId: Numberish,
     transactionHash: string,
     logIndex: Numberish,
@@ -96,14 +91,12 @@ export class NotificationIndexer extends BaseIndexer {
       /** Whether to include metadata of the character */
       includeCharacterMetadata?: boolean
     } = {},
-  ): Promise<NotificationEntity | null> {
-    let url = `${this.endpoint}/characters/${characterId}/notifications/${transactionHash}/${logIndex}?`
-    url += createSearchParamsString({
-      includeCharacterMetadata,
+  ) {
+    const url = `/characters/${characterId}/notifications/${transactionHash}/${logIndex}`
+    return this.base.fetch<NotificationEntity | null>(url, {
+      params: {
+        includeCharacterMetadata,
+      },
     })
-
-    const res = await this.fetch(url).then((res) => res.json())
-
-    return res as NotificationEntity
   }
 }

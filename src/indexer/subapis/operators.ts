@@ -1,14 +1,15 @@
 import { type Address } from 'viem'
-import { createSearchParamsString } from '../../utils'
 import {
   type CharacterOperatorEntity,
   type ListResponse,
   type NoteOperatorEntity,
   type Numberish,
 } from '../../types'
-import { BaseIndexer } from './base'
+import { type BaseIndexer } from './base'
 
-export class OperatorIndexer extends BaseIndexer {
+export class OperatorIndexer {
+  constructor(private base: BaseIndexer) {}
+
   /**
    * This returns a list of operators for a specific character.
    * @category Operator
@@ -16,7 +17,7 @@ export class OperatorIndexer extends BaseIndexer {
    * @param options - The options to send to the indexer.
    * @returns The list of operators.
    */
-  async getCharacterOperators(
+  getManyForCharacter(
     characterId: Numberish,
     {
       limit = 20,
@@ -27,13 +28,11 @@ export class OperatorIndexer extends BaseIndexer {
       /** Used for pagination. */
       cursor?: string
     } = {},
-  ): Promise<ListResponse<CharacterOperatorEntity>> {
-    let url = `${this.endpoint}/characters/${characterId}/operators?`
-    url += createSearchParamsString({ limit, cursor })
-
-    const res = await this.fetch(url).then((res) => res.json())
-
-    return res as ListResponse<CharacterOperatorEntity>
+  ) {
+    const url = `/characters/${characterId}/operators`
+    return this.base.fetch<ListResponse<CharacterOperatorEntity>>(url, {
+      params: { limit, cursor },
+    })
   }
 
   /**
@@ -43,16 +42,9 @@ export class OperatorIndexer extends BaseIndexer {
    * @param noteId - The id of the note.
    * @returns The list of operators.
    */
-  async getNoteOperators(
-    characterId: Numberish,
-    noteId: Numberish,
-  ): Promise<NoteOperatorEntity> {
-    const url = `${this.endpoint}/characters/${characterId}/notes/${noteId}/operators?`
-    // url += createSearchParamsString()
-
-    const res = await this.fetch(url).then((res) => res.json())
-
-    return res as NoteOperatorEntity
+  getManyForNote(characterId: Numberish, noteId: Numberish) {
+    const url = `/characters/${characterId}/notes/${noteId}/operators`
+    return this.base.fetch<NoteOperatorEntity>(url)
   }
 
   /**
@@ -62,15 +54,9 @@ export class OperatorIndexer extends BaseIndexer {
    * @param address - The address of the operator.
    * @returns The primary character.
    */
-  async getCharacterOperator(
-    characterId: Numberish,
-    address: Address,
-  ): Promise<CharacterOperatorEntity | null> {
-    const url = `${this.endpoint}/characters/${characterId}/operators/${address}`
-
-    const res = await this.fetch(url).then((res) => res.json())
-
-    return res as CharacterOperatorEntity
+  getForCharacter(characterId: Numberish, address: Address) {
+    const url = `/characters/${characterId}/operators/${address}`
+    return this.base.fetch<CharacterOperatorEntity | null>(url)
   }
 
   /**
@@ -81,15 +67,8 @@ export class OperatorIndexer extends BaseIndexer {
    * @param address - The address of the operator.
    * @returns The primary character.
    */
-  async getNoteOperator(
-    characterId: Numberish,
-    noteId: Numberish,
-    address: Address,
-  ): Promise<NoteOperatorEntity | null> {
-    const url = `${this.endpoint}/characters/${characterId}/notes/${noteId}/operators/${address}`
-
-    const res = await this.fetch(url).then((res) => res.json())
-
-    return res as NoteOperatorEntity
+  getForNote(characterId: Numberish, noteId: Numberish, address: Address) {
+    const url = `/characters/${characterId}/notes/${noteId}/operators/${address}`
+    return this.base.fetch<NoteOperatorEntity | null>(url)
   }
 }

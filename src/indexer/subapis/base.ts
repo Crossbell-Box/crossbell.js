@@ -1,17 +1,25 @@
+import { type MaybeArray } from '../../types/utils'
+import { createSearchParamsString } from '../../utils'
+
+export type FetchOptions = Omit<RequestInit, 'method'>
+type InternalFetchOptions = RequestInit & {
+  params?: Record<
+    string,
+    boolean | MaybeArray<string | number | bigint> | null | undefined
+  >
+}
+
 export class BaseIndexer {
   /** The indexer endpoint */
   endpoint = 'https://indexer.crossbell.io/v1'
 
   /** The options to send to the fetch function. */
-  fetchOptions: Omit<RequestInit, 'method'> = {}
+  fetchOptions: FetchOptions = {}
 
   constructor(
     endpointOrOptions?:
       | string
-      | {
-          endpoint?: string
-          fetchOptions?: (typeof BaseIndexer)['prototype']['fetchOptions']
-        },
+      | { endpoint?: string; fetchOptions?: FetchOptions },
   ) {
     if (typeof endpointOrOptions === 'string') {
       this.endpoint = endpointOrOptions
@@ -27,10 +35,25 @@ export class BaseIndexer {
     }
   }
 
-  fetch(url: string, options: RequestInit = {}) {
-    return fetch(url, {
+  fetch<T>(
+    url: string,
+    { params, ...options }: InternalFetchOptions = {},
+  ): Promise<T> {
+    if (params) url += `?${createSearchParamsString(params)}`
+    return fetch(this.endpoint + url, {
       ...this.fetchOptions,
       ...options,
+    }).then(async (r) => {
+      if (!r.ok) {
+        return Promise.reject(
+          new Error(
+            `Request failed, status code: ${
+              r.status
+            }\nResponse:\n${await r.text()}`,
+          ),
+        )
+      }
+      return r.json()
     })
   }
 }

@@ -1,14 +1,15 @@
 import { type Address } from 'viem'
-import { createSearchParamsString } from '../../utils'
 import {
   type LinkModuleEntity,
   type LinkModuleTargetItemType,
   type ListResponse,
   type Numberish,
 } from '../../types'
-import { BaseIndexer } from './base'
+import { type BaseIndexer } from './base'
 
-export class LinkModuleIndexer extends BaseIndexer {
+export class LinkModuleIndexer {
+  constructor(private base: BaseIndexer) {}
+
   /**
    * This returns a list of link modules.
    *
@@ -16,7 +17,7 @@ export class LinkModuleIndexer extends BaseIndexer {
    * @param options - The options to send to the indexer.
    * @returns The list of link modules.
    */
-  async getLinkModules({
+  getMany({
     targetItemType,
     toAddress,
     toCharacterId,
@@ -45,23 +46,21 @@ export class LinkModuleIndexer extends BaseIndexer {
     limit?: number
     /** Used for pagination. */
     cursor?: string
-  } = {}): Promise<ListResponse<LinkModuleEntity>> {
-    let url = `${this.endpoint}/link-modules?`
-    url += createSearchParamsString({
-      targetItemType,
-      toAddress,
-      toCharacterId,
-      toNoteId,
-      toContractAddress,
-      toTokenId,
-      toLinklistId,
-      limit,
-      cursor,
+  } = {}) {
+    const url = `/link-modules`
+    return this.base.fetch<ListResponse<LinkModuleEntity>>(url, {
+      params: {
+        targetItemType,
+        toAddress,
+        toCharacterId,
+        toNoteId,
+        toContractAddress,
+        toTokenId,
+        toLinklistId,
+        limit,
+        cursor,
+      },
     })
-
-    const res = await this.fetch(url).then((res) => res.json())
-
-    return res as ListResponse<LinkModuleEntity>
   }
 
   /**
@@ -72,13 +71,8 @@ export class LinkModuleIndexer extends BaseIndexer {
    * @param linkValue - The linkValue of the link module.
    * @returns The link module.
    */
-  async getLinkModule(
-    targetItemType: LinkModuleTargetItemType,
-    linkValue: Numberish,
-  ): Promise<LinkModuleEntity | null> {
-    const url = `${this.endpoint}/link-modules/${targetItemType}/${linkValue}`
-    const res = await this.fetch(url).then((res) => res.json())
-
-    return res as LinkModuleEntity
+  get(targetItemType: LinkModuleTargetItemType, linkValue: Numberish) {
+    const url = `/link-modules/${targetItemType}/${linkValue}`
+    return this.base.fetch<LinkModuleEntity | null>(url)
   }
 }
