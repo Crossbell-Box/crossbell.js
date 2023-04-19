@@ -13,9 +13,6 @@ export const CONTRACT_ADDRESS = {
   LINKLIST: '0xFc8C75bD5c26F50798758f387B698f207a016b6A',
 } as const satisfies Record<string, Address>
 
-export const AVAILABLE_NETWORKS = ['crossbell'] as const
-export type AvailableNetwork = (typeof AVAILABLE_NETWORKS)[number]
-
 let JSON_RPC_ADDRESS =
   // @ts-ignore
   globalThis.process?.env.CROSSBELL_RPC_ADDRESS ?? 'https://rpc.crossbell.io'
