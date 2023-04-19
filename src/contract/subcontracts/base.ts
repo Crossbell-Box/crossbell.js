@@ -11,7 +11,7 @@ import {
 } from 'viem'
 import { privateKeyToAccount } from 'viem/accounts'
 import { type EIP1193Provider } from 'eip1193-types'
-import { Network } from '../../network'
+import { CONTRACT_ADDRESS } from '../../network'
 import {
   createDefaultPublicClient,
   createWalletClientFromPrivateKeyAccount,
@@ -150,13 +150,13 @@ export class BaseContract {
       account: this.account,
       gasPrice: options?.gasPrice ?? 10n ** 9n,
       address: {
-        entryContract: Network.getContractAddress(),
-        peripheryContract: Network.getPeripheryContractAddress(),
-        cbtContract: Network.getCbtContractAddress(),
-        tipsContract: Network.getTipsContractAddress(),
-        miraContract: Network.getMiraContractAddress(),
-        newbieVillaContract: Network.getNewbieVillaContractAddress(),
-        linklistContract: Network.getLinklistContractAddress(),
+        entryContract: CONTRACT_ADDRESS.ENTRY,
+        peripheryContract: CONTRACT_ADDRESS.PERIPHERY,
+        cbtContract: CONTRACT_ADDRESS.CBT,
+        tipsContract: CONTRACT_ADDRESS.TIPS,
+        miraContract: CONTRACT_ADDRESS.MIRA,
+        newbieVillaContract: CONTRACT_ADDRESS.NEWBIE_VILLA,
+        linklistContract: CONTRACT_ADDRESS.LINKLIST,
         ...options?.address,
       },
     }

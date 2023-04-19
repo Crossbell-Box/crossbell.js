@@ -1,6 +1,6 @@
-export { Network } from './network'
 export { Indexer } from './indexer'
 export { Ipfs } from './ipfs'
+export * from './network'
 export * from './contract'
 
 export * from './utils'

@@ -23,16 +23,15 @@ import {
   type Abi as _Abi,
 } from 'abitype'
 import { type EIP1193Provider } from 'eip1193-types'
-import { Network } from '../network'
+import { CROSSBELL_CHAIN, JSON_RPC_ADDRESS } from '../network'
 import * as Abi from '../contract/abi'
 
-export function createDefaultTransport(): Transport {
-  const addr = Network.getJsonRpcAddress()
+export function createDefaultTransport(addr = JSON_RPC_ADDRESS): Transport {
   if (addr.startsWith('ws://') || addr.startsWith('wss://')) {
     return webSocket(addr, {
       timeout: 30_000,
-      key: Network.getNetwork(),
-      name: Network.getNetwork(),
+      key: CROSSBELL_CHAIN.network,
+      name: CROSSBELL_CHAIN.network,
       retryCount: 5,
       retryDelay: 5000,
     })
@@ -45,7 +44,7 @@ export function createDefaultPublicClient(): PublicClient {
   const transport = createDefaultTransport()
   return createPublicClient({
     transport,
-    chain: Network.getChain(),
+    chain: CROSSBELL_CHAIN,
     pollingInterval: 100,
   })
 }
@@ -56,7 +55,7 @@ export function createWalletClientFromPrivateKeyAccount(
   const transport = createDefaultTransport()
   return createWalletClient({
     transport,
-    chain: Network.getChain(),
+    chain: CROSSBELL_CHAIN,
     account,
     pollingInterval: 100,
   })
@@ -80,7 +79,7 @@ export function createWalletClientFromProvider(
 ): WalletClient<Transport, Chain, Account> {
   return createWalletClient({
     transport: custom(provider),
-    chain: Network.getChain(),
+    chain: CROSSBELL_CHAIN,
     account,
     pollingInterval: 100,
   })

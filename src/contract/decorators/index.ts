@@ -1,5 +1,5 @@
 import { type BaseContract } from '../../contract/subcontracts/base'
-import { Network } from '../../network'
+import { CROSSBELL_CHAIN, isCrossbellMainnet } from '../../network'
 import { Logger } from '../../utils'
 
 // TODO: refactor this to ES standard decorator
@@ -18,10 +18,10 @@ export function autoSwitchMainnet() {
       const checkAndSwitch = async () => {
         const { walletClient } = this.base
         if (!walletClient) return
-        const isMainnet = await Network.isCrossbellMainnet(walletClient)
+        const isMainnet = await isCrossbellMainnet(walletClient)
         if (!isMainnet) {
           Logger.warn("You're not on the mainnet. Switching to mainnet.")
-          await walletClient.switchChain({ id: Network.getChain().id })
+          await walletClient.switchChain({ id: CROSSBELL_CHAIN.id })
         }
       }
 
