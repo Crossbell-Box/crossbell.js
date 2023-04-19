@@ -4,6 +4,9 @@ A JavaScript SDK to interact with the Crossbell. It works for both browser and N
 
 [![npm version](https://badgen.net/npm/v/crossbell.js)](https://npm.im/crossbell.js) [![npm downloads](https://badgen.net/npm/dm/crossbell.js)](https://npm.im/crossbell.js)
 
+- [API Reference](https://crossbell-box.github.io/crossbell.js/)
+- [Vite Example](https://crossbell-js.netlify.app/)
+
 ## Installation
 
 ```bash
