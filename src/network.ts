@@ -1,4 +1,7 @@
 import { type Address, type WalletClient } from 'viem'
+import { crossbell } from 'viem/chains'
+
+export { crossbell }
 
 export const CONTRACT_ADDRESS = {
   ENTRY: '0xa6f969045641Cf486a747A2688F3a5A6d43cd0D8',
@@ -18,36 +21,11 @@ export const JSON_RPC_ADDRESS =
   // @ts-ignore
   globalThis.process?.env.CROSSBELL_RPC_ADDRESS ?? 'https://rpc.crossbell.io'
 
-export const CROSSBELL_CHAIN = {
-  name: 'Crossbell',
-  network: 'crossbell',
-  id: 3737,
-  nativeCurrency: {
-    name: 'CSB',
-    symbol: 'CSB',
-    decimals: 18,
-  },
-  rpcUrls: {
-    public: { http: ['https://rpc.crossbell.io'] },
-    default: { http: ['https://rpc.crossbell.io'] },
-  },
-  blockExplorers: {
-    etherscan: { name: 'Crossbell', url: 'https://scan.crossbell.io' },
-    default: { name: 'Crossbell', url: 'https://scan.crossbell.io' },
-  },
-  contracts: {
-    multicall3: {
-      address: CONTRACT_ADDRESS.ENTRY,
-      blockCreated: 30548014,
-    },
-  },
-} as const
-
 /**
  * This checks if the current network is the Crossbell mainnet.
  * @param client - The wallet client to check if it's the Crossbell mainnet.
  * @returns A boolean value indicating if the current network is the Crossbell mainnet.
  */
 export async function isCrossbellMainnet(client: WalletClient) {
-  return (await client.getChainId()) === CROSSBELL_CHAIN.id
+  return (await client.getChainId()) === crossbell.id
 }
