@@ -35,10 +35,19 @@ export interface AddressOptions {
 }
 export interface ContractOptions extends Partial<AccountOptions> {
   address?: Partial<AddressOptions>
+  /**
+   * Gas price for transaction costs.
+   *
+   * `estimate`: Estimate the gas price from the network.
+   *
+   * @default 10n ** 9n
+   *
+   */
+  gasPrice?: 'estimate' | bigint
 }
 
 export type ResolvedContractOptions = Overwrite<
-  ContractOptions,
+  Required<ContractOptions>,
   { address: AddressOptions }
 >
 
@@ -139,6 +148,7 @@ export class BaseContract {
   #resolveOptions(options?: ContractOptions): ResolvedContractOptions {
     return {
       account: this.account,
+      gasPrice: options?.gasPrice ?? 10n ** 9n,
       address: {
         entryContract: Network.getContractAddress(),
         peripheryContract: Network.getPeripheryContractAddress(),
@@ -153,41 +163,80 @@ export class BaseContract {
   }
 
   #initContract() {
-    this.contract = getContract({
-      address: this.options.address.entryContract,
-      abi: Abi.entry,
-      publicClient: this.publicClient,
-      walletClient: this.walletClient,
-    })
-    this.newbieVillaContract = getContract({
-      address: this.options.address.newbieVillaContract,
-      abi: Abi.newbieVilla,
-      publicClient: this.publicClient,
-      walletClient: this.walletClient,
-    })
-    this.peripheryContract = getContract({
-      address: this.options.address.peripheryContract,
-      abi: Abi.periphery,
-      publicClient: this.publicClient,
-      walletClient: this.walletClient,
-    })
-    this.cbtContract = getContract({
-      address: this.options.address.cbtContract,
-      abi: Abi.cbt,
-      publicClient: this.publicClient,
-      walletClient: this.walletClient,
-    })
-    this.miraContract = getContract({
-      address: this.options.address.miraContract,
-      abi: Abi.mira,
-      publicClient: this.publicClient,
-      walletClient: this.walletClient,
-    })
-    this.tipsContract = getContract({
-      address: this.options.address.tipsContract,
-      abi: Abi.tips,
-      publicClient: this.publicClient,
-      walletClient: this.walletClient,
-    })
+    this.contract = this.proxyContract(
+      getContract({
+        address: this.options.address.entryContract,
+        abi: Abi.entry,
+        publicClient: this.publicClient,
+        walletClient: this.walletClient,
+      }),
+    )
+    this.newbieVillaContract = this.proxyContract(
+      getContract({
+        address: this.options.address.newbieVillaContract,
+        abi: Abi.newbieVilla,
+        publicClient: this.publicClient,
+        walletClient: this.walletClient,
+      }),
+    )
+    this.peripheryContract = this.proxyContract(
+      getContract({
+        address: this.options.address.peripheryContract,
+        abi: Abi.periphery,
+        publicClient: this.publicClient,
+        walletClient: this.walletClient,
+      }),
+    )
+    this.cbtContract = this.proxyContract(
+      getContract({
+        address: this.options.address.cbtContract,
+        abi: Abi.cbt,
+        publicClient: this.publicClient,
+        walletClient: this.walletClient,
+      }),
+    )
+    this.miraContract = this.proxyContract(
+      getContract({
+        address: this.options.address.miraContract,
+        abi: Abi.mira,
+        publicClient: this.publicClient,
+        walletClient: this.walletClient,
+      }),
+    )
+    this.tipsContract = this.proxyContract(
+      getContract({
+        address: this.options.address.tipsContract,
+        abi: Abi.tips,
+        publicClient: this.publicClient,
+        walletClient: this.walletClient,
+      }),
+    )
+  }
+
+  proxyContract<T extends GetContractReturnType>(contract: T): T {
+    if ((contract as any).write)
+      (contract as any).write = new Proxy((contract as any).write, {
+        get: (...args) => {
+          return new Proxy(Reflect.get(...args), {
+            apply: (target, thisArg, argArray) => {
+              const hasArgs = argArray.length > 0 && Array.isArray(argArray[0])
+              const options = {
+                ...((hasArgs ? argArray[1] : argArray[0]) ?? {}),
+              }
+
+              if (typeof this.options.gasPrice === 'bigint')
+                options.gasPrice = this.options.gasPrice
+
+              if (argArray.length > 0) {
+                if (hasArgs) argArray[1] = options
+                else argArray[0] = options
+              } else argArray.push(options)
+
+              return Reflect.apply(target, thisArg, argArray)
+            },
+          })
+        },
+      })
+    return contract
   }
 }
