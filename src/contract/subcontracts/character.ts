@@ -8,7 +8,7 @@ import {
   type Result,
   type WriteOverrides,
 } from '../../types'
-import { Ipfs } from '../../ipfs'
+import { ipfsParseMetadataOrUri, ipfsUriToMetadata } from '../../ipfs'
 import { autoSwitchMainnet } from '../decorators'
 import { getModuleConfig, parseLog, validateAddress } from '../../utils'
 import { type Entry, type NewbieVilla } from '../abi'
@@ -41,7 +41,7 @@ export class CharacterContract {
     validateAddress(owner)
     this.#validateHandleFormat(handle)
 
-    const { uri } = await Ipfs.parseMetadataOrUri('character', metadataOrUri)
+    const { uri } = await ipfsParseMetadataOrUri('character', metadataOrUri)
 
     const moduleConfig = await getModuleConfig(linkModule)
 
@@ -111,7 +111,7 @@ export class CharacterContract {
     metadataOrUri: CharacterMetadata | string,
     overrides: WriteOverrides<Entry, 'setCharacterUri'> = {},
   ): Promise<Result<{ uri: string; metadata: CharacterMetadata }, true>> {
-    const { uri, metadata } = await Ipfs.parseMetadataOrUri(
+    const { uri, metadata } = await ipfsParseMetadataOrUri(
       'character',
       metadataOrUri,
       true,
@@ -339,7 +339,7 @@ export class CharacterContract {
     )
 
     const metadata = character.uri
-      ? await Ipfs.uriToMetadata<CharacterMetadata>(character.uri)
+      ? await ipfsUriToMetadata<CharacterMetadata>(character.uri)
       : undefined
 
     return {
@@ -369,7 +369,7 @@ export class CharacterContract {
       overrides,
     )
 
-    const { metadata } = await Ipfs.parseMetadataOrUri(
+    const { metadata } = await ipfsParseMetadataOrUri(
       'character',
       character.uri,
       true,

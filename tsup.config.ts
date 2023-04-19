@@ -1,7 +1,7 @@
 import { type Options, defineConfig } from 'tsup'
 
 const commonConfig: Options = {
-  entry: ['./src/index.ts'],
+  entry: ['./src/*.ts'],
   outDir: 'dist',
   clean: true,
   sourcemap: true,

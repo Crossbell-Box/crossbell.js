@@ -7,7 +7,8 @@ import {
   type Result,
   type WriteOverrides,
 } from '../../types'
-import { Logger, parseLog, validateAddress } from '../../utils'
+import { parseLog, validateAddress } from '../../utils'
+import { warn } from '../../utils/logger'
 import { type Entry } from '../abi'
 import { type BaseContract } from './base'
 
@@ -261,7 +262,7 @@ export class OperatorContract {
           if (this.#isPermissionBitForCharacter(index)) {
             return CHARACTER_PERMISSION_BITMAP[index]
           } else {
-            Logger.warn('Found invalid permission bit.', index)
+            warn('Found invalid permission bit.', index)
           }
         }
         return undefined

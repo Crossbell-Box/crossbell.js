@@ -1,21 +1,20 @@
 /* eslint-disable no-console */
 
-export class Logger {
-  static prefix = '[crossbell.js]'
+const PREFIX = '[crossbell.js]'
+const isProduction = globalThis?.process?.env?.NODE_ENV === 'production'
 
-  static log(...message: any[]) {
-    console.log(this.prefix, ...message)
-  }
+export function log(...message: any[]) {
+  if (!isProduction) console.log(PREFIX, ...message)
+}
 
-  static warn(...message: any[]) {
-    console.warn(this.prefix, ...message)
-  }
+export function warn(...message: any[]) {
+  console.warn(PREFIX, ...message)
+}
 
-  static error(...message: any[]) {
-    console.error(this.prefix, ...message)
-  }
+export function error(...message: any[]) {
+  console.error(PREFIX, ...message)
+}
 
-  static info(...message: any[]) {
-    console.info(this.prefix, ...message)
-  }
+export function info(...message: any[]) {
+  console.info(PREFIX, ...message)
 }
