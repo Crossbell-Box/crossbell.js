@@ -23,10 +23,10 @@ import {
   type Abi as _Abi,
 } from 'abitype'
 import { type EIP1193Provider } from 'eip1193-types'
-import { JSON_RPC_ADDRESS, crossbell } from '../network'
+import { crossbell, getJsonRpcAddress } from '../network'
 import * as Abi from '../contract/abi'
 
-export function createDefaultTransport(addr = JSON_RPC_ADDRESS): Transport {
+export function createDefaultTransport(addr = getJsonRpcAddress()): Transport {
   if (addr.startsWith('ws://') || addr.startsWith('wss://')) {
     return webSocket(addr, {
       timeout: 30_000,

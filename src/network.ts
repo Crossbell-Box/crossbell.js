@@ -16,10 +16,16 @@ export const CONTRACT_ADDRESS = {
 export const AVAILABLE_NETWORKS = ['crossbell'] as const
 export type AvailableNetwork = (typeof AVAILABLE_NETWORKS)[number]
 
-export const IPFS_GATEWAY = 'https://w3s.link/ipfs/'
-export const JSON_RPC_ADDRESS =
+let JSON_RPC_ADDRESS =
   // @ts-ignore
   globalThis.process?.env.CROSSBELL_RPC_ADDRESS ?? 'https://rpc.crossbell.io'
+
+export function getJsonRpcAddress() {
+  return JSON_RPC_ADDRESS
+}
+export function setJsonRpcAddress(address: string) {
+  JSON_RPC_ADDRESS = address
+}
 
 /**
  * This checks if the current network is the Crossbell mainnet.

@@ -7,6 +7,14 @@ import {
   type NoteMetadata,
 } from './types/metadata'
 
+let IPFS_GATEWAY = 'https://w3s.link/ipfs/'
+export function getIpfsGateway() {
+  return IPFS_GATEWAY
+}
+export function setIpfsGateway(gateway: string) {
+  IPFS_GATEWAY = gateway
+}
+
 export interface IpfsResponse {
   status: 'ok' | 'error'
   cid: string
