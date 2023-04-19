@@ -3,7 +3,7 @@
     "composite": true,
     "target": "esnext",
     "module": "esnext",
-    "lib": ["es2020", "DOM"],
+    "lib": ["es2022", "DOM"],
     "strict": true,
     "esModuleInterop": true,
     "moduleResolution": "node",
