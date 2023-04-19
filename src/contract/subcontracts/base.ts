@@ -35,6 +35,14 @@ export interface AddressOptions {
 }
 export interface ContractOptions extends Partial<AccountOptions> {
   address?: Partial<AddressOptions>
+  /**
+   * Gas price for transaction costs.
+   *
+   * `estimate`: Estimate the gas price from the network.
+   *
+   * @default 10n ** 9n
+   *
+   */
   gasPrice?: 'estimate' | bigint
 }
 
