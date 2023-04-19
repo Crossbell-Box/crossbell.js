@@ -24,17 +24,22 @@
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
   "exports": {
-    "./package.json": "./package.json",
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.mjs",
       "require": "./dist/index.js"
     },
-    "./dist": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.js"
-    }
+    "./network": {
+      "types": "./dist/network.d.ts",
+      "import": "./dist/network.mjs",
+      "require": "./dist/network.js"
+    },
+    "./ipfs": {
+      "types": "./dist/ipfs.d.ts",
+      "import": "./dist/ipfs.mjs",
+      "require": "./dist/ipfs.js"
+    },
+    "./*": "./*"
   },
   "publishConfig": {
     "access": "public"

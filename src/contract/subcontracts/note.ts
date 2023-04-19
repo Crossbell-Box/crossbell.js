@@ -18,7 +18,7 @@ import {
   type Result,
   type WriteOverrides,
 } from '../../types'
-import { Ipfs } from '../../ipfs'
+import { ipfsParseMetadataOrUri, ipfsUriToMetadata } from '../../ipfs'
 import {
   NIL_ADDRESS,
   getModuleConfig,
@@ -47,7 +47,7 @@ export class NoteContract {
     { locked = false, linkModule, mintModule }: PostNoteOptions = {},
     overrides: WriteOverrides<Entry, 'postNote'> = {},
   ): Promise<Result<{ noteId: bigint }, true>> {
-    const { uri } = await Ipfs.parseMetadataOrUri('note', metadataOrUri)
+    const { uri } = await ipfsParseMetadataOrUri('note', metadataOrUri)
 
     const linkModuleConfig = await getModuleConfig(linkModule)
     const mintModuleConfig = await getModuleConfig(mintModule)
@@ -106,7 +106,7 @@ export class NoteContract {
     const encodedDataArr = await Promise.all(
       notes.map((note) => {
         return limitedPromise(async () => {
-          const { uri } = await Ipfs.parseMetadataOrUri(
+          const { uri } = await ipfsParseMetadataOrUri(
             'note',
             note.metadataOrUri,
           )
@@ -177,7 +177,7 @@ export class NoteContract {
     { locked = false, linkModule, mintModule }: PostNoteOptions = {},
     overrides: WriteOverrides<Entry, 'postNote4AnyUri'> = {},
   ): Promise<Result<{ noteId: bigint }, true>> {
-    const { uri } = await Ipfs.parseMetadataOrUri('note', metadataOrUri)
+    const { uri } = await ipfsParseMetadataOrUri('note', metadataOrUri)
 
     const linkModuleConfig = await getModuleConfig(linkModule)
     const mintModuleConfig = await getModuleConfig(mintModule)
@@ -230,7 +230,7 @@ export class NoteContract {
     { locked = false, linkModule, mintModule }: PostNoteOptions = {},
     overrides: WriteOverrides<Entry, 'postNote4Note'> = {},
   ): Promise<Result<{ noteId: bigint }, true>> {
-    const { uri } = await Ipfs.parseMetadataOrUri('note', metadataOrUri)
+    const { uri } = await ipfsParseMetadataOrUri('note', metadataOrUri)
 
     const linkModuleConfig = await getModuleConfig(linkModule)
     const mintModuleConfig = await getModuleConfig(mintModule)
@@ -283,7 +283,7 @@ export class NoteContract {
     metadataOrUri: NoteMetadata | string,
     overrides: WriteOverrides<Entry, 'setNoteUri'> = {},
   ): Promise<Result<{ uri: string; metadata: NoteMetadata }, true>> {
-    const { uri, metadata } = await Ipfs.parseMetadataOrUri(
+    const { uri, metadata } = await ipfsParseMetadataOrUri(
       'note',
       metadataOrUri,
       true,
@@ -404,7 +404,7 @@ export class NoteContract {
         'string',
       ) as LinkItemType) || undefined
     const metadata = data.contentUri
-      ? await Ipfs.uriToMetadata<NoteMetadata>(data.contentUri)
+      ? await ipfsUriToMetadata<NoteMetadata>(data.contentUri)
       : undefined
 
     let linkItem: LinkItemMap[T]
