@@ -61,15 +61,17 @@ export function createWalletClientFromPrivateKeyAccount(
   })
 }
 
-export function getProviderAddress(
+export function getProviderAccount(
   provider: EIP1193Provider,
-): Address | undefined {
+): Account | undefined {
   if ('selectedAddress' in provider && provider.selectedAddress) {
-    return provider.selectedAddress as Address
+    return addressToAccount(provider.selectedAddress as Address)
   }
   if ('send' in provider && typeof provider.send === 'function') {
     const result: any = provider.send({ method: 'eth_accounts' })
-    if (result?.result?.[0]) return result.result[0]
+    if (result?.result?.[0]) {
+      return addressToAccount(result.result[0])
+    }
   }
 }
 
@@ -168,4 +170,13 @@ export function parseLog<TName extends ExtractAbiEventNames<Abi.Entry>>(
   if (returnMultipleLogs) return parsedLogs
 
   return parsedLogs[0]
+}
+
+export function addressToAccount(address: Address | Account): Account {
+  if (typeof address === 'string')
+    return {
+      type: 'json-rpc',
+      address,
+    }
+  return address
 }

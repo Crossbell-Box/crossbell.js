@@ -1,4 +1,4 @@
-export { Contract } from './contract'
+export * from './contract'
 export type {
   ContractOptions,
   ResolvedContractOptions,

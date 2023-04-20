@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Contract, Indexer } from 'crossbell.js'
+import { Indexer, createContract } from 'crossbell.js'
 import { onErrorCaptured, ref } from 'vue'
 import { useDark, useEventListener, useLocalStorage } from '@vueuse/core'
 import { type Address } from 'abitype'
@@ -14,7 +14,7 @@ onErrorCaptured((err) => {
 })
 
 const metamask = window.ethereum
-const contract = new Contract(metamask)
+const contract = createContract(metamask)
 
 const indexer = new Indexer()
 
@@ -25,7 +25,7 @@ const result = ref('')
 const loading = ref(false)
 
 async function connect() {
-  await showResult(contract.walletClient!.requestAddresses())
+  await showResult(contract.walletClient.requestAddresses())
 }
 
 async function showResult(p: any) {
