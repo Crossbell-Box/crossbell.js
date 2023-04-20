@@ -1,8 +1,8 @@
 import { describe, expect, test } from 'vitest'
-import { Indexer } from '../../src'
+import { createIndexer } from '../../src'
 import { mockUser } from '../mock'
 
-const indexer = new Indexer()
+const indexer = createIndexer()
 
 describe.concurrent('characters', () => {
   test.concurrent('getCharacters', async () => {

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Indexer, createContract } from 'crossbell.js'
+import { createContract, createIndexer } from 'crossbell.js'
 import { onErrorCaptured, ref } from 'vue'
 import { useDark, useEventListener, useLocalStorage } from '@vueuse/core'
 import { type Address } from 'abitype'
@@ -16,7 +16,7 @@ onErrorCaptured((err) => {
 const metamask = window.ethereum
 const contract = createContract(metamask)
 
-const indexer = new Indexer()
+const indexer = createIndexer()
 
 const address = useLocalStorage<Address>('address', '0x')
 const characterId = useLocalStorage('characterId', '')

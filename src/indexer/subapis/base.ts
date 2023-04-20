@@ -2,6 +2,10 @@ import { type MaybeArray } from '../../types/utils'
 import { createSearchParamsString } from '../../utils'
 
 export type FetchOptions = Omit<RequestInit, 'method'>
+export type IndexerOptions =
+  | string
+  | { endpoint?: string; fetchOptions?: FetchOptions }
+
 type InternalFetchOptions = RequestInit & {
   params?: Record<
     string,
@@ -16,11 +20,7 @@ export class BaseIndexer {
   /** The options to send to the fetch function. */
   fetchOptions: FetchOptions = {}
 
-  constructor(
-    endpointOrOptions?:
-      | string
-      | { endpoint?: string; fetchOptions?: FetchOptions },
-  ) {
+  constructor(endpointOrOptions?: IndexerOptions) {
     if (typeof endpointOrOptions === 'string') {
       this.endpoint = endpointOrOptions
     } else if (typeof endpointOrOptions === 'object') {

@@ -12,16 +12,16 @@ import { OperatorIndexer } from './subapis/operators'
 import { TipIndexer } from './subapis/tip'
 import { LinkModuleIndexer } from './subapis/link_module'
 import { MintModuleIndexer } from './subapis/mint_module'
-import { BaseIndexer } from './subapis/base'
+import { BaseIndexer, type IndexerOptions } from './subapis/base'
 
 /**
  * This class is used to fetch data like characters, links from the indexer.
  *
  * @example
  * ```js
- * import { Indexer } from 'crossbell.js'
+ * import { createIndexer } from 'crossbell.js'
  *
- * const indexer = new Indexer()
+ * const indexer = createIndexer()
  * const res = await indexer.character.getMany('0x...')
  * console.log(res.list)
  * ```
@@ -43,4 +43,22 @@ export class Indexer extends BaseIndexer {
   tip = new TipIndexer(this)
   linkModule = new LinkModuleIndexer(this)
   mintModule = new MintModuleIndexer(this)
+}
+
+/**
+ * This function is used to create an indexer, and fetch data like characters, links from the indexer.
+ *
+ * @example
+ * ```js
+ * import { createIndexer } from 'crossbell.js'
+ *
+ * const indexer = createIndexer()
+ * const res = await indexer.character.getMany('0x...')
+ * console.log(res.list)
+ * ```
+ *
+ * @see https://indexer.crossbell.io/docs The underlying APIs.
+ */
+export function createIndexer(endpointOrOptions?: IndexerOptions) {
+  return new Indexer(endpointOrOptions)
 }

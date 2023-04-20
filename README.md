@@ -73,9 +73,9 @@ For more contract api, see [docs](https://crossbell-box.github.io/crossbell.js/c
 You can fetch data from the crossbell indexer.
 
 ```typescript
-import { Indexer } from 'crossbell.js'
+import { createIndexer } from 'crossbell.js'
 
-const indexer = new Indexer()
+const indexer = createIndexer()
 
 // get a list of characters owned by a specific address
 const res = await indexer.character.getMany(
