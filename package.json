@@ -66,7 +66,7 @@
   "devDependencies": {
     "@sxzz/eslint-config": "3.0.0-beta.8",
     "@types/async-retry": "^1.4.5",
-    "@types/node": "^18.15.13",
+    "@types/node": "^18.16.0",
     "abitype": "^0.8.0",
     "bumpp": "^9.1.0",
     "change-case": "^4.1.2",
