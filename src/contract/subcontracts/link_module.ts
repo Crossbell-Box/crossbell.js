@@ -28,7 +28,7 @@ export class LinkModuleContract {
   ): Promise<Result<undefined, true>> {
     const moduleConfig = await getModuleConfig(linkModule)
 
-    const tx = await this.base.contract.write.setLinkModule4Address(
+    const hash = await this.base.contract.write.setLinkModule4Address(
       [
         {
           account: address,
@@ -40,7 +40,7 @@ export class LinkModuleContract {
     )
 
     const receipt = await this.base.publicClient.waitForTransactionReceipt({
-      hash: tx,
+      hash,
     })
 
     return {
@@ -64,7 +64,7 @@ export class LinkModuleContract {
   ): Promise<Result<undefined, true>> {
     const moduleConfig = await getModuleConfig(linkModule)
 
-    const tx = await this.base.contract.write.setLinkModule4Linklist(
+    const hash = await this.base.contract.write.setLinkModule4Linklist(
       [
         {
           linklistId: BigInt(linklistId),
@@ -76,7 +76,7 @@ export class LinkModuleContract {
     )
 
     const receipt = await this.base.publicClient.waitForTransactionReceipt({
-      hash: tx,
+      hash,
     })
 
     return {

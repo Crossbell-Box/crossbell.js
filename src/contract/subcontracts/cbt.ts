@@ -25,13 +25,13 @@ export class CbtContract {
     tokenId: Numberish,
     overrides: WriteOverrides<Cbt, 'mint'> = {},
   ): Promise<Result<undefined, true>> {
-    const tx = await this.base.cbtContract.write.mint(
+    const hash = await this.base.cbtContract.write.mint(
       [BigInt(characterId), BigInt(tokenId)],
       overrides,
     )
 
     const receipt = await this.base.publicClient.waitForTransactionReceipt({
-      hash: tx,
+      hash,
     })
 
     return {
@@ -54,13 +54,13 @@ export class CbtContract {
     uri: string,
     overrides: WriteOverrides<Cbt, 'setTokenURI'> = {},
   ): Promise<Result<undefined, true>> {
-    const tx = await this.base.cbtContract.write.setTokenURI(
+    const hash = await this.base.cbtContract.write.setTokenURI(
       [BigInt(tokenId), uri],
       overrides,
     )
 
     const receipt = await this.base.publicClient.waitForTransactionReceipt({
-      hash: tx,
+      hash,
     })
 
     return {

@@ -46,13 +46,13 @@ export class OperatorContract {
     const permissionUint256 =
       this.convertPermissionsToUint256ForCharacter(permissions)
 
-    const tx = await this.base.contract.write.grantOperatorPermissions(
+    const hash = await this.base.contract.write.grantOperatorPermissions(
       [BigInt(characterId), operator, permissionUint256],
       overrides,
     )
 
     const receipt = await this.base.publicClient.waitForTransactionReceipt({
-      hash: tx,
+      hash,
     })
 
     const log = parseLog(receipt.logs, 'GrantOperatorPermissions')
@@ -95,13 +95,13 @@ export class OperatorContract {
     validateAddress(allowlist)
     validateAddress(blocklist)
 
-    const tx = await this.base.contract.write.grantOperators4Note(
+    const hash = await this.base.contract.write.grantOperators4Note(
       [BigInt(characterId), BigInt(noteId), blocklist, allowlist],
       overrides,
     )
 
     const receipt = await this.base.publicClient.waitForTransactionReceipt({
-      hash: tx,
+      hash,
     })
 
     // const log = parseLog(receipt.logs, 'grantOperators4Note')

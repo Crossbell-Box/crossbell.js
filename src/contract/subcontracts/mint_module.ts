@@ -29,7 +29,7 @@ export class MintModuleContract {
   ): Promise<Result<undefined, true>> {
     const moduleConfig = await getModuleConfig(mintModule)
 
-    const tx = await this.base.contract.write.setMintModule4Note(
+    const hash = await this.base.contract.write.setMintModule4Note(
       [
         {
           characterId: BigInt(characterId),
@@ -42,7 +42,7 @@ export class MintModuleContract {
     )
 
     const receipt = await this.base.publicClient.waitForTransactionReceipt({
-      hash: tx,
+      hash,
     })
 
     return {

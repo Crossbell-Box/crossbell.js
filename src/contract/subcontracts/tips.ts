@@ -33,13 +33,13 @@ export class TipsContract {
       [BigInt(fromCharacterId), BigInt(toCharacterId)],
     )
 
-    const tx = await this.base.miraContract.write.send(
+    const hash = await this.base.miraContract.write.send(
       [this.base.options.address.tipsContract, BigInt(amount), data],
       overrides,
     )
 
     const receipt = await this.base.publicClient.waitForTransactionReceipt({
-      hash: tx,
+      hash,
     })
 
     return {
@@ -71,13 +71,13 @@ export class TipsContract {
       [BigInt(fromCharacterId), BigInt(toCharacterId), BigInt(toNoteId)],
     )
 
-    const tx = await this.base.miraContract.write.send(
+    const hash = await this.base.miraContract.write.send(
       [this.base.options.address.tipsContract, BigInt(amount), data],
       overrides,
     )
 
     const receipt = await this.base.publicClient.waitForTransactionReceipt({
-      hash: tx,
+      hash,
     })
 
     return {

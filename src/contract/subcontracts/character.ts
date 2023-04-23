@@ -85,12 +85,12 @@ export class CharacterContract {
   ): Promise<Result<undefined, true>> {
     this.#validateHandleFormat(handle)
 
-    const tx = await this.base.contract.write.setHandle(
+    const hash = await this.base.contract.write.setHandle(
       [BigInt(characterId), handle],
       overrides,
     )
     const receipt = await this.base.publicClient.waitForTransactionReceipt({
-      hash: tx,
+      hash,
     })
     return {
       data: undefined,
@@ -117,12 +117,12 @@ export class CharacterContract {
       true,
     )
 
-    const tx = await this.base.contract.write.setCharacterUri(
+    const hash = await this.base.contract.write.setCharacterUri(
       [BigInt(characterId), uri],
       overrides,
     )
     const receipt = await this.base.publicClient.waitForTransactionReceipt({
-      hash: tx,
+      hash,
     })
 
     return {
@@ -217,12 +217,12 @@ export class CharacterContract {
     socialToken: Address,
     overrides: WriteOverrides<Entry, 'setSocialToken'> = {},
   ): Promise<Result<undefined, true>> {
-    const tx = await this.base.contract.write.setSocialToken(
+    const hash = await this.base.contract.write.setSocialToken(
       [BigInt(characterId), socialToken],
       overrides,
     )
     const receipt = await this.base.publicClient.waitForTransactionReceipt({
-      hash: tx,
+      hash,
     })
     return {
       data: undefined,
@@ -265,13 +265,13 @@ export class CharacterContract {
     characterId: Numberish,
     overrides: WriteOverrides<Entry, 'burn'> = {},
   ): Promise<Result<undefined, true>> {
-    const tx = await this.base.contract.write.burn(
+    const hash = await this.base.contract.write.burn(
       [BigInt(characterId)],
       overrides,
     )
 
     const receipt = await this.base.publicClient.waitForTransactionReceipt({
-      hash: tx,
+      hash,
     })
 
     return {
@@ -508,13 +508,13 @@ export class CharacterContract {
   ): Promise<Result<undefined, true>> {
     validateAddress(toAddress)
 
-    const tx = await this.base.newbieVillaContract.write.withdraw(
+    const hash = await this.base.newbieVillaContract.write.withdraw(
       [toAddress, BigInt(characterId), BigInt(nonce), BigInt(expires), proof],
       overrides,
     )
 
     const receipt = await this.base.publicClient.waitForTransactionReceipt({
-      hash: tx,
+      hash,
     })
 
     return {

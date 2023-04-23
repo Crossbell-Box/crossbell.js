@@ -52,7 +52,7 @@ export class NoteContract {
     const linkModuleConfig = await getModuleConfig(linkModule)
     const mintModuleConfig = await getModuleConfig(mintModule)
 
-    const tx = await this.base.contract.write.postNote(
+    const hash = await this.base.contract.write.postNote(
       [
         {
           characterId: BigInt(characterId),
@@ -68,7 +68,7 @@ export class NoteContract {
     )
 
     const receipt = await this.base.publicClient.waitForTransactionReceipt({
-      hash: tx,
+      hash,
     })
 
     const log = parseLog(receipt.logs, 'PostNote')
@@ -136,13 +136,13 @@ export class NoteContract {
       }),
     )
 
-    const tx = await this.base.contract.write.multicall(
+    const hash = await this.base.contract.write.multicall(
       [encodedDataArr],
       overrides,
     )
 
     const receipt = await this.base.publicClient.waitForTransactionReceipt({
-      hash: tx,
+      hash,
     })
 
     const logs = parseLog(receipt.logs, 'PostNote', {
@@ -182,7 +182,7 @@ export class NoteContract {
     const linkModuleConfig = await getModuleConfig(linkModule)
     const mintModuleConfig = await getModuleConfig(mintModule)
 
-    const tx = await this.base.contract.write.postNote4AnyUri(
+    const hash = await this.base.contract.write.postNote4AnyUri(
       [
         {
           characterId: BigInt(characterId),
@@ -199,7 +199,7 @@ export class NoteContract {
     )
 
     const receipt = await this.base.publicClient.waitForTransactionReceipt({
-      hash: tx,
+      hash,
     })
 
     const log = parseLog(receipt.logs, 'PostNote')
@@ -235,7 +235,7 @@ export class NoteContract {
     const linkModuleConfig = await getModuleConfig(linkModule)
     const mintModuleConfig = await getModuleConfig(mintModule)
 
-    const tx = await this.base.contract.write.postNote4Note(
+    const hash = await this.base.contract.write.postNote4Note(
       [
         {
           characterId: BigInt(characterId),
@@ -255,7 +255,7 @@ export class NoteContract {
     )
 
     const receipt = await this.base.publicClient.waitForTransactionReceipt({
-      hash: tx,
+      hash,
     })
 
     const log = parseLog(receipt.logs, 'PostNote')
@@ -289,13 +289,13 @@ export class NoteContract {
       true,
     )
 
-    const tx = await this.base.contract.write.setNoteUri(
+    const hash = await this.base.contract.write.setNoteUri(
       [BigInt(characterId), BigInt(noteId), uri],
       overrides,
     )
 
     const receipt = await this.base.publicClient.waitForTransactionReceipt({
-      hash: tx,
+      hash,
     })
 
     return {
@@ -478,13 +478,13 @@ export class NoteContract {
     noteId: Numberish,
     overrides: WriteOverrides<Entry, 'deleteNote'> = {},
   ): Promise<Result<undefined, true>> {
-    const tx = await this.base.contract.write.deleteNote(
+    const hash = await this.base.contract.write.deleteNote(
       [BigInt(characterId), BigInt(noteId)],
       overrides,
     )
 
     const receipt = await this.base.publicClient.waitForTransactionReceipt({
-      hash: tx,
+      hash,
     })
 
     return {
@@ -512,13 +512,13 @@ export class NoteContract {
     noteId: Numberish,
     overrides: WriteOverrides<Entry, 'lockNote'> = {},
   ): Promise<Result<undefined, true>> {
-    const tx = await this.base.contract.write.lockNote(
+    const hash = await this.base.contract.write.lockNote(
       [BigInt(characterId), BigInt(noteId)],
       overrides,
     )
 
     const receipt = await this.base.publicClient.waitForTransactionReceipt({
-      hash: tx,
+      hash,
     })
 
     return {
@@ -544,7 +544,7 @@ export class NoteContract {
   ): Promise<Result<{ contractAddress: Address; tokenId: bigint }, true>> {
     validateAddress(toAddress)
 
-    const tx = await this.base.contract.write.mintNote(
+    const hash = await this.base.contract.write.mintNote(
       [
         {
           characterId: BigInt(characterId),
@@ -557,7 +557,7 @@ export class NoteContract {
     )
 
     const receipt = await this.base.publicClient.waitForTransactionReceipt({
-      hash: tx,
+      hash,
     })
 
     const log = parseLog(receipt.logs, 'MintNote')
