@@ -64,10 +64,8 @@
     "viem": "^0.3.7"
   },
   "devDependencies": {
-    "@esbuild-plugins/node-modules-polyfill": "^0.2.2",
     "@sxzz/eslint-config": "3.0.0-beta.8",
     "@types/async-retry": "^1.4.5",
-    "@types/bn.js": "^5.1.1",
     "@types/node": "^18.15.13",
     "abitype": "^0.8.0",
     "bumpp": "^9.1.0",
