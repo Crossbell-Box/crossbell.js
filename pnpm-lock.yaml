@@ -2,8 +2,8 @@ lockfileVersion: '6.0'
 
 dependencies:
   '@crossbell/ipfs-fetch':
-    specifier: ^0.0.15
-    version: 0.0.15
+    specifier: ^0.0.19
+    version: 0.0.19
   '@ethersproject/abi':
     specifier: ^5.7.0
     version: 5.7.0
@@ -72,8 +72,8 @@ devDependencies:
 
 packages:
 
-  /@crossbell/ipfs-fetch@0.0.15:
-    resolution: {integrity: sha512-AYGDrwiSKqCGNDi0mEPP1k+96loWik+Pd40xH0MzRNM4RtCutPbwm4o+Sj5iWu0tlHoQC2bTs1XcufsLiv+WYw==}
+  /@crossbell/ipfs-fetch@0.0.19:
+    resolution: {integrity: sha512-0Yf9+MMTSD+JJkFbNaK/s+kl3CXhr4oq2yj3K0dvheB+e8uykcpM7yomxHie/sr0ushw3G7Ppf5NXYkfH0eiSw==}
     dev: false
 
   /@esbuild-plugins/node-modules-polyfill@0.2.2(esbuild@0.17.7):
