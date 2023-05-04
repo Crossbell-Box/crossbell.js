@@ -41,7 +41,7 @@ import {
  * ```
  */
 export class Contract<
-  THasWallet extends boolean,
+  THasWallet extends boolean = boolean,
 > extends BaseContract<THasWallet> {
   csb = new CsbContract(this)
   character = new CharacterContract(this)
