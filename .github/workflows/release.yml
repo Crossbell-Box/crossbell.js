@@ -19,14 +19,15 @@ jobs:
         with:
           node-version: lts/*
           cache: pnpm
+          registry-url: https://registry.npmjs.org/
 
       - name: Install deps
         run: pnpm i --frozen-lockfile
 
-      - id: publish
-        uses: JS-DevTools/npm-publish@v2
-        with:
-          token: ${{ secrets.NPM_TOKEN }}
+      - name: Build & Publish
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
 
       - run: npx changelogithub
         env:
