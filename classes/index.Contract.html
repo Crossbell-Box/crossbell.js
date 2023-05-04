@@ -1,4 +1,4 @@
-<!DOCTYPE html><html class="default" lang="en"><head><meta charSet="utf-8"/><meta http-equiv="x-ua-compatible" content="IE=edge"/><title>Contract | crossbell.js - v1.0.0-alpha.2</title><meta name="description" content="Documentation for crossbell.js"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="../assets/style.css"/><link rel="stylesheet" href="../assets/highlight.css"/><script defer src="../assets/main.js"></script><script async src="../assets/search.js" id="tsd-search-script"></script></head><body><script>document.documentElement.dataset.theme = localStorage.getItem("tsd-theme") || "os"</script><header class="tsd-page-toolbar">
+<!DOCTYPE html><html class="default" lang="en"><head><meta charSet="utf-8"/><meta http-equiv="x-ua-compatible" content="IE=edge"/><title>Contract | crossbell.js - v1.0.0-alpha.3</title><meta name="description" content="Documentation for crossbell.js"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="../assets/style.css"/><link rel="stylesheet" href="../assets/highlight.css"/><script defer src="../assets/main.js"></script><script async src="../assets/search.js" id="tsd-search-script"></script></head><body><script>document.documentElement.dataset.theme = localStorage.getItem("tsd-theme") || "os"</script><header class="tsd-page-toolbar">
 <div class="tsd-toolbar-contents container">
 <div class="table-cell" id="tsd-search" data-base="..">
 <div class="field"><label for="tsd-search-field" class="tsd-widget tsd-toolbar-icon search no-caption"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M15.7824 13.833L12.6666 10.7177C12.5259 10.5771 12.3353 10.499 12.1353 10.499H11.6259C12.4884 9.39596 13.001 8.00859 13.001 6.49937C13.001 2.90909 10.0914 0 6.50048 0C2.90959 0 0 2.90909 0 6.49937C0 10.0896 2.90959 12.9987 6.50048 12.9987C8.00996 12.9987 9.39756 12.4863 10.5008 11.6239V12.1332C10.5008 12.3332 10.5789 12.5238 10.7195 12.6644L13.8354 15.7797C14.1292 16.0734 14.6042 16.0734 14.8948 15.7797L15.7793 14.8954C16.0731 14.6017 16.0731 14.1267 15.7824 13.833ZM6.50048 10.499C4.29094 10.499 2.50018 8.71165 2.50018 6.49937C2.50018 4.29021 4.28781 2.49976 6.50048 2.49976C8.71001 2.49976 10.5008 4.28708 10.5008 6.49937C10.5008 8.70852 8.71314 10.499 6.50048 10.499Z" fill="var(--color-text)"></path></svg></label><input type="text" id="tsd-search-field" aria-label="Search"/></div>
@@ -6,7 +6,7 @@
 <div id="tsd-toolbar-links"></div></div>
 <ul class="results">
 <li class="state loading">Preparing search index...</li>
-<li class="state failure">The search index is not available</li></ul><a href="../index.html" class="title">crossbell.js - v1.0.0-alpha.2</a></div>
+<li class="state failure">The search index is not available</li></ul><a href="../index.html" class="title">crossbell.js - v1.0.0-alpha.3</a></div>
 <div class="table-cell" id="tsd-widgets"><a href="#" class="tsd-widget tsd-toolbar-icon menu no-caption" data-toggle="menu" aria-label="Menu"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="1" y="3" width="14" height="2" fill="var(--color-text)"></rect><rect x="1" y="7" width="14" height="2" fill="var(--color-text)"></rect><rect x="1" y="11" width="14" height="2" fill="var(--color-text)"></rect></svg></a></div></div></header>
 <div class="container container-main">
 <div class="col-content">
@@ -20,13 +20,13 @@
 <div class="tsd-comment tsd-typography"><p>This class is used to interact with the contract.</p>
 
 <h3>Example</h3><pre><code class="language-ts"><span class="hl-2">import</span><span class="hl-0"> { </span><span class="hl-3">createContract</span><span class="hl-0"> } </span><span class="hl-2">from</span><span class="hl-0"> </span><span class="hl-1">&#39;crossbell.js&#39;</span><br/><br/><span class="hl-4">// Create a new contract instance with metamask provider</span><br/><span class="hl-5">const</span><span class="hl-0"> </span><span class="hl-6">provider</span><span class="hl-0"> = </span><span class="hl-3">window</span><span class="hl-0">.</span><span class="hl-3">ethereum</span><br/><span class="hl-5">const</span><span class="hl-0"> </span><span class="hl-6">contract</span><span class="hl-0"> = </span><span class="hl-7">createContract</span><span class="hl-0">(</span><span class="hl-3">provider</span><span class="hl-0">)</span><br/><span class="hl-2">await</span><span class="hl-0"> </span><span class="hl-3">contract</span><span class="hl-0">.</span><span class="hl-3">walletClient</span><span class="hl-0">.</span><span class="hl-7">requestAddresses</span><span class="hl-0">()</span><br/><span class="hl-4">// Example API: Create a new character for an address</span><br/><span class="hl-2">try</span><span class="hl-0"> {</span><br/><span class="hl-0">  </span><span class="hl-5">const</span><span class="hl-0"> </span><span class="hl-6">result</span><span class="hl-0"> = </span><span class="hl-2">await</span><span class="hl-0"> </span><span class="hl-3">contract</span><span class="hl-0">.</span><span class="hl-3">character</span><span class="hl-0">.</span><span class="hl-7">create</span><span class="hl-0">(</span><br/><span class="hl-0">    </span><span class="hl-1">&#39;0x1234567890123456789012345678901234567890&#39;</span><span class="hl-0">,</span><br/><span class="hl-0">    </span><span class="hl-1">&#39;Jason&#39;</span><span class="hl-0">,</span><br/><span class="hl-0">    </span><span class="hl-1">&#39;ipfs://xxxx/metadata.json&#39;</span><span class="hl-0">,</span><br/><span class="hl-0">  )</span><br/><span class="hl-0">  </span><span class="hl-3">console</span><span class="hl-0">.</span><span class="hl-7">log</span><span class="hl-0">(</span><span class="hl-3">result</span><span class="hl-0">.</span><span class="hl-3">data</span><span class="hl-0">) </span><span class="hl-4">// &#39;42&#39; (characterId)</span><br/><span class="hl-0">  </span><span class="hl-3">console</span><span class="hl-0">.</span><span class="hl-7">log</span><span class="hl-0">(</span><span class="hl-3">result</span><span class="hl-0">.</span><span class="hl-3">transactionHash</span><span class="hl-0">) </span><span class="hl-4">// &#39;0xabcdef...&#39;</span><br/><span class="hl-0">} </span><span class="hl-2">catch</span><span class="hl-0"> (</span><span class="hl-3">e</span><span class="hl-0">) {</span><br/><span class="hl-0">  </span><span class="hl-3">console</span><span class="hl-0">.</span><span class="hl-7">error</span><span class="hl-0">(</span><span class="hl-3">e</span><span class="hl-0">.</span><span class="hl-3">message</span><span class="hl-0">) </span><span class="hl-4">// e.g. &quot;execution reverted: Web3Entry: HandleExists&quot;</span><br/><span class="hl-0">}</span>
-</code></pre>
+</code><button>Copy</button></pre>
 </div></section> 
-<section class="tsd-panel tsd-type-parameters">
+<section class="tsd-panel">
 <h4>Type Parameters</h4>
-<ul class="tsd-type-parameters">
+<ul class="tsd-type-parameter-list">
 <li>
-<h4><span class="tsd-kind-type-parameter">THasWallet</span><span class="tsd-signature-symbol"> extends </span><span class="tsd-signature-type">boolean</span></h4></li></ul></section> 
+<h4><span class="tsd-kind-type-parameter">THasWallet</span><span class="tsd-signature-symbol"> extends </span><span class="tsd-signature-type">boolean</span> = <span class="tsd-signature-type">boolean</span></h4></li></ul></section> 
 <section class="tsd-panel tsd-hierarchy">
 <h4>Hierarchy</h4>
 <ul class="tsd-hierarchy">
@@ -34,7 +34,7 @@
 <ul class="tsd-hierarchy">
 <li><span class="target">Contract</span></li></ul></li></ul></section><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/Crossbell-Box/crossbell.js/blob/605d32d/src/contract/contract.ts#L43">src/contract/contract.ts:43</a></li></ul></aside>
+<li>Defined in <a href="https://github.com/Crossbell-Box/crossbell.js/blob/cc97663/src/contract/contract.ts#L43">src/contract/contract.ts:43</a></li></ul></aside>
 <section class="tsd-panel-group tsd-index-group">
 <section class="tsd-panel tsd-index-panel">
 <details class="tsd-index-content tsd-index-accordion" open><summary class="tsd-accordion-summary tsd-index-summary">
@@ -83,25 +83,23 @@
 <li class="tsd-description">
 <div class="tsd-comment tsd-typography"><p>This creates a new Contract instance to interact with.</p>
 
-<h3>Returns</h3><p>The Contract instance.</p>
-
 <h3>Example</h3><p>Connect with Metamask</p>
 <pre><code class="language-js"><span class="hl-2">import</span><span class="hl-0"> { </span><span class="hl-3">Contract</span><span class="hl-0"> } </span><span class="hl-2">from</span><span class="hl-0"> </span><span class="hl-1">&#39;crossbell.js&#39;</span><br/><span class="hl-5">const</span><span class="hl-0"> </span><span class="hl-6">provider</span><span class="hl-0"> = </span><span class="hl-3">window</span><span class="hl-0">.</span><span class="hl-3">ethereum</span><span class="hl-0"> </span><span class="hl-4">// the metamask provider</span><br/><span class="hl-5">const</span><span class="hl-0"> </span><span class="hl-6">contract</span><span class="hl-0"> = </span><span class="hl-5">new</span><span class="hl-0"> </span><span class="hl-7">Contract</span><span class="hl-0">(</span><span class="hl-3">provider</span><span class="hl-0">)</span>
-</code></pre>
+</code><button>Copy</button></pre>
 
 <h3>Example</h3><p>Connect with Private Key</p>
 <pre><code class="language-js"><span class="hl-2">import</span><span class="hl-0"> { </span><span class="hl-3">Contract</span><span class="hl-0"> } </span><span class="hl-2">from</span><span class="hl-0"> </span><span class="hl-1">&#39;crossbell.js&#39;</span><br/><span class="hl-5">const</span><span class="hl-0"> </span><span class="hl-6">privateKey</span><span class="hl-0"> = </span><span class="hl-1">&#39;0xabcdef0123456789012345678901234567890123456789012345678901234&#39;</span><br/><span class="hl-5">const</span><span class="hl-0"> </span><span class="hl-6">contract</span><span class="hl-0"> = </span><span class="hl-5">new</span><span class="hl-0"> </span><span class="hl-7">Contract</span><span class="hl-0">(</span><span class="hl-3">privateKey</span><span class="hl-0">)</span>
-</code></pre>
+</code><button>Copy</button></pre>
 
 <h3>Example</h3><p>Connect with a Readonly Contract</p>
 <pre><code class="language-js"><span class="hl-2">import</span><span class="hl-0"> { </span><span class="hl-3">Contract</span><span class="hl-0"> } </span><span class="hl-2">from</span><span class="hl-0"> </span><span class="hl-1">&#39;crossbell.js&#39;</span><br/><span class="hl-5">const</span><span class="hl-0"> </span><span class="hl-6">contract</span><span class="hl-0"> = </span><span class="hl-5">new</span><span class="hl-0"> </span><span class="hl-7">Contract</span><span class="hl-0">() </span><span class="hl-4">// readonly contract</span>
-</code></pre>
+</code><button>Copy</button></pre>
 </div>
-<section class="tsd-panel tsd-type-parameters">
+<section class="tsd-panel">
 <h4>Type Parameters</h4>
-<ul class="tsd-type-parameters">
+<ul class="tsd-type-parameter-list">
 <li>
-<h4><span class="tsd-kind-type-parameter">THasWallet</span><span class="tsd-signature-symbol"> extends </span><span class="tsd-signature-type">boolean</span></h4></li></ul></section>
+<h4><span class="tsd-kind-type-parameter">THasWallet</span><span class="tsd-signature-symbol"> extends </span><span class="tsd-signature-type">boolean</span> = <span class="tsd-signature-type">boolean</span></h4></li></ul></section>
 <div class="tsd-parameters">
 <h4 class="tsd-parameters-title">Parameters</h4>
 <ul class="tsd-parameter-list">
@@ -111,17 +109,18 @@
 </div></li>
 <li>
 <h5><code class="tsd-tag ts-flagOptional">Optional</code> <span class="tsd-kind-parameter">options</span>: <span class="tsd-signature-type ">Partial</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/index.contracts.ContractOptions.html" class="tsd-signature-type tsd-kind-interface">ContractOptions</a><span class="tsd-signature-symbol">&gt;</span></h5></li></ul></div>
-<h4 class="tsd-returns-title">Returns <a href="index.Contract.html" class="tsd-signature-type tsd-kind-class">Contract</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type tsd-kind-type-parameter">THasWallet</span><span class="tsd-signature-symbol">&gt;</span></h4><aside class="tsd-sources">
+<h4 class="tsd-returns-title">Returns <a href="index.Contract.html" class="tsd-signature-type tsd-kind-class">Contract</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type tsd-kind-type-parameter">THasWallet</span><span class="tsd-signature-symbol">&gt;</span></h4><p>The Contract instance.</p>
+<aside class="tsd-sources">
 <p>Inherited from <a href="index.contracts.BaseContract.html">BaseContract</a>.<a href="index.contracts.BaseContract.html#constructor">constructor</a></p>
 <ul>
-<li>Defined in <a href="https://github.com/Crossbell-Box/crossbell.js/blob/605d32d/src/contract/subcontracts/base.ts#L131">src/contract/subcontracts/base.ts:131</a></li></ul></aside></li></ul></section></section>
+<li>Defined in <a href="https://github.com/Crossbell-Box/crossbell.js/blob/cc97663/src/contract/subcontracts/base.ts#L131">src/contract/subcontracts/base.ts:131</a></li></ul></aside></li></ul></section></section>
 <section class="tsd-panel-group tsd-member-group">
 <h2>Properties</h2>
 <section class="tsd-panel tsd-member"><a id="cbt" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>cbt</span><a href="#cbt" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">cbt</span><span class="tsd-signature-symbol">:</span> <a href="index.contracts.CbtContract.html" class="tsd-signature-type tsd-kind-class">CbtContract</a><span class="tsd-signature-symbol"> = ...</span></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/Crossbell-Box/crossbell.js/blob/605d32d/src/contract/contract.ts#L49">src/contract/contract.ts:49</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/Crossbell-Box/crossbell.js/blob/cc97663/src/contract/contract.ts#L49">src/contract/contract.ts:49</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-is-inherited"><a id="cbtContract" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>cbt<wbr/>Contract</span><a href="#cbtContract" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">cbt<wbr/>Contract</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{}</span></div>
@@ -130,12 +129,12 @@
 <ul class="tsd-parameters"></ul></div><aside class="tsd-sources">
 <p>Inherited from <a href="index.contracts.BaseContract.html">BaseContract</a>.<a href="index.contracts.BaseContract.html#cbtContract">cbtContract</a></p>
 <ul>
-<li>Defined in <a href="https://github.com/Crossbell-Box/crossbell.js/blob/605d32d/src/contract/subcontracts/base.ts#L90">src/contract/subcontracts/base.ts:90</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/Crossbell-Box/crossbell.js/blob/cc97663/src/contract/subcontracts/base.ts#L90">src/contract/subcontracts/base.ts:90</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member"><a id="character" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>character</span><a href="#character" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">character</span><span class="tsd-signature-symbol">:</span> <a href="index.contracts.CharacterContract.html" class="tsd-signature-type tsd-kind-class">CharacterContract</a><span class="tsd-signature-symbol"> = ...</span></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/Crossbell-Box/crossbell.js/blob/605d32d/src/contract/contract.ts#L47">src/contract/contract.ts:47</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/Crossbell-Box/crossbell.js/blob/cc97663/src/contract/contract.ts#L47">src/contract/contract.ts:47</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-is-inherited"><a id="contract" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>contract</span><a href="#contract" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">contract</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{}</span></div>
@@ -144,27 +143,27 @@
 <ul class="tsd-parameters"></ul></div><aside class="tsd-sources">
 <p>Inherited from <a href="index.contracts.BaseContract.html">BaseContract</a>.<a href="index.contracts.BaseContract.html#contract">contract</a></p>
 <ul>
-<li>Defined in <a href="https://github.com/Crossbell-Box/crossbell.js/blob/605d32d/src/contract/subcontracts/base.ts#L75">src/contract/subcontracts/base.ts:75</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/Crossbell-Box/crossbell.js/blob/cc97663/src/contract/subcontracts/base.ts#L75">src/contract/subcontracts/base.ts:75</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member"><a id="csb" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>csb</span><a href="#csb" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">csb</span><span class="tsd-signature-symbol">:</span> <a href="index.contracts.CsbContract.html" class="tsd-signature-type tsd-kind-class">CsbContract</a><span class="tsd-signature-symbol"> = ...</span></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/Crossbell-Box/crossbell.js/blob/605d32d/src/contract/contract.ts#L46">src/contract/contract.ts:46</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/Crossbell-Box/crossbell.js/blob/cc97663/src/contract/contract.ts#L46">src/contract/contract.ts:46</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member"><a id="link" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>link</span><a href="#link" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">link</span><span class="tsd-signature-symbol">:</span> <a href="index.contracts.LinkContract.html" class="tsd-signature-type tsd-kind-class">LinkContract</a><span class="tsd-signature-symbol"> = ...</span></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/Crossbell-Box/crossbell.js/blob/605d32d/src/contract/contract.ts#L48">src/contract/contract.ts:48</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/Crossbell-Box/crossbell.js/blob/cc97663/src/contract/contract.ts#L48">src/contract/contract.ts:48</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member"><a id="linkModule" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>link<wbr/>Module</span><a href="#linkModule" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">link<wbr/>Module</span><span class="tsd-signature-symbol">:</span> <a href="index.contracts.LinkModuleContract.html" class="tsd-signature-type tsd-kind-class">LinkModuleContract</a><span class="tsd-signature-symbol"> = ...</span></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/Crossbell-Box/crossbell.js/blob/605d32d/src/contract/contract.ts#L54">src/contract/contract.ts:54</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/Crossbell-Box/crossbell.js/blob/cc97663/src/contract/contract.ts#L54">src/contract/contract.ts:54</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member"><a id="mintModule" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>mint<wbr/>Module</span><a href="#mintModule" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">mint<wbr/>Module</span><span class="tsd-signature-symbol">:</span> <a href="index.contracts.MintModuleContract.html" class="tsd-signature-type tsd-kind-class">MintModuleContract</a><span class="tsd-signature-symbol"> = ...</span></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/Crossbell-Box/crossbell.js/blob/605d32d/src/contract/contract.ts#L55">src/contract/contract.ts:55</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/Crossbell-Box/crossbell.js/blob/cc97663/src/contract/contract.ts#L55">src/contract/contract.ts:55</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-is-inherited"><a id="miraContract" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>mira<wbr/>Contract</span><a href="#miraContract" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">mira<wbr/>Contract</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{}</span></div>
@@ -173,7 +172,7 @@
 <ul class="tsd-parameters"></ul></div><aside class="tsd-sources">
 <p>Inherited from <a href="index.contracts.BaseContract.html">BaseContract</a>.<a href="index.contracts.BaseContract.html#miraContract">miraContract</a></p>
 <ul>
-<li>Defined in <a href="https://github.com/Crossbell-Box/crossbell.js/blob/605d32d/src/contract/subcontracts/base.ts#L95">src/contract/subcontracts/base.ts:95</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/Crossbell-Box/crossbell.js/blob/cc97663/src/contract/subcontracts/base.ts#L95">src/contract/subcontracts/base.ts:95</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-is-inherited"><a id="newbieVillaContract" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>newbie<wbr/>Villa<wbr/>Contract</span><a href="#newbieVillaContract" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">newbie<wbr/>Villa<wbr/>Contract</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{}</span></div>
@@ -182,23 +181,23 @@
 <ul class="tsd-parameters"></ul></div><aside class="tsd-sources">
 <p>Inherited from <a href="index.contracts.BaseContract.html">BaseContract</a>.<a href="index.contracts.BaseContract.html#newbieVillaContract">newbieVillaContract</a></p>
 <ul>
-<li>Defined in <a href="https://github.com/Crossbell-Box/crossbell.js/blob/605d32d/src/contract/subcontracts/base.ts#L80">src/contract/subcontracts/base.ts:80</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/Crossbell-Box/crossbell.js/blob/cc97663/src/contract/subcontracts/base.ts#L80">src/contract/subcontracts/base.ts:80</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member"><a id="note" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>note</span><a href="#note" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">note</span><span class="tsd-signature-symbol">:</span> <a href="index.contracts.NoteContract.html" class="tsd-signature-type tsd-kind-class">NoteContract</a><span class="tsd-signature-symbol"> = ...</span></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/Crossbell-Box/crossbell.js/blob/605d32d/src/contract/contract.ts#L50">src/contract/contract.ts:50</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/Crossbell-Box/crossbell.js/blob/cc97663/src/contract/contract.ts#L50">src/contract/contract.ts:50</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member"><a id="operator" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>operator</span><a href="#operator" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">operator</span><span class="tsd-signature-symbol">:</span> <a href="index.contracts.OperatorContract.html" class="tsd-signature-type tsd-kind-class">OperatorContract</a><span class="tsd-signature-symbol"> = ...</span></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/Crossbell-Box/crossbell.js/blob/605d32d/src/contract/contract.ts#L51">src/contract/contract.ts:51</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/Crossbell-Box/crossbell.js/blob/cc97663/src/contract/contract.ts#L51">src/contract/contract.ts:51</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-is-inherited"><a id="options" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>options</span><a href="#options" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">options</span><span class="tsd-signature-symbol">:</span> <a href="../types/index.contracts.ResolvedContractOptions.html" class="tsd-signature-type tsd-kind-type-alias">ResolvedContractOptions</a></div><aside class="tsd-sources">
 <p>Inherited from <a href="index.contracts.BaseContract.html">BaseContract</a>.<a href="index.contracts.BaseContract.html#options">options</a></p>
 <ul>
-<li>Defined in <a href="https://github.com/Crossbell-Box/crossbell.js/blob/605d32d/src/contract/subcontracts/base.ts#L73">src/contract/subcontracts/base.ts:73</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/Crossbell-Box/crossbell.js/blob/cc97663/src/contract/subcontracts/base.ts#L73">src/contract/subcontracts/base.ts:73</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-is-inherited"><a id="peripheryContract" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>periphery<wbr/>Contract</span><a href="#peripheryContract" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">periphery<wbr/>Contract</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{}</span></div>
@@ -207,7 +206,7 @@
 <ul class="tsd-parameters"></ul></div><aside class="tsd-sources">
 <p>Inherited from <a href="index.contracts.BaseContract.html">BaseContract</a>.<a href="index.contracts.BaseContract.html#peripheryContract">peripheryContract</a></p>
 <ul>
-<li>Defined in <a href="https://github.com/Crossbell-Box/crossbell.js/blob/605d32d/src/contract/subcontracts/base.ts#L85">src/contract/subcontracts/base.ts:85</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/Crossbell-Box/crossbell.js/blob/cc97663/src/contract/subcontracts/base.ts#L85">src/contract/subcontracts/base.ts:85</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-is-inherited"><a id="publicClient" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>public<wbr/>Client</span><a href="#publicClient" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">public<wbr/>Client</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{}</span><span class="tsd-signature-symbol"> = ...</span></div>
@@ -216,17 +215,17 @@
 <ul class="tsd-parameters"></ul></div><aside class="tsd-sources">
 <p>Inherited from <a href="index.contracts.BaseContract.html">BaseContract</a>.<a href="index.contracts.BaseContract.html#publicClient">publicClient</a></p>
 <ul>
-<li>Defined in <a href="https://github.com/Crossbell-Box/crossbell.js/blob/605d32d/src/contract/subcontracts/base.ts#L56">src/contract/subcontracts/base.ts:56</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/Crossbell-Box/crossbell.js/blob/cc97663/src/contract/subcontracts/base.ts#L56">src/contract/subcontracts/base.ts:56</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member"><a id="revision" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>revision</span><a href="#revision" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">revision</span><span class="tsd-signature-symbol">:</span> <a href="index.contracts.RevisionContract.html" class="tsd-signature-type tsd-kind-class">RevisionContract</a><span class="tsd-signature-symbol"> = ...</span></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/Crossbell-Box/crossbell.js/blob/605d32d/src/contract/contract.ts#L53">src/contract/contract.ts:53</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/Crossbell-Box/crossbell.js/blob/cc97663/src/contract/contract.ts#L53">src/contract/contract.ts:53</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member"><a id="tips" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>tips</span><a href="#tips" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">tips</span><span class="tsd-signature-symbol">:</span> <a href="index.contracts.TipsContract.html" class="tsd-signature-type tsd-kind-class">TipsContract</a><span class="tsd-signature-symbol"> = ...</span></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/Crossbell-Box/crossbell.js/blob/605d32d/src/contract/contract.ts#L52">src/contract/contract.ts:52</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/Crossbell-Box/crossbell.js/blob/cc97663/src/contract/contract.ts#L52">src/contract/contract.ts:52</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-is-inherited"><a id="tipsContract" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>tips<wbr/>Contract</span><a href="#tipsContract" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">tips<wbr/>Contract</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{}</span></div>
@@ -235,7 +234,7 @@
 <ul class="tsd-parameters"></ul></div><aside class="tsd-sources">
 <p>Inherited from <a href="index.contracts.BaseContract.html">BaseContract</a>.<a href="index.contracts.BaseContract.html#tipsContract">tipsContract</a></p>
 <ul>
-<li>Defined in <a href="https://github.com/Crossbell-Box/crossbell.js/blob/605d32d/src/contract/subcontracts/base.ts#L100">src/contract/subcontracts/base.ts:100</a></li></ul></aside></section></section>
+<li>Defined in <a href="https://github.com/Crossbell-Box/crossbell.js/blob/cc97663/src/contract/subcontracts/base.ts#L100">src/contract/subcontracts/base.ts:100</a></li></ul></aside></section></section>
 <section class="tsd-panel-group tsd-member-group">
 <h2>Accessors</h2>
 <section class="tsd-panel tsd-member tsd-is-inherited"><a id="account" class="tsd-anchor"></a>
@@ -246,7 +245,7 @@
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Account</span></h4><aside class="tsd-sources">
 <p>Inherited from BaseContract.account</p>
 <ul>
-<li>Defined in <a href="https://github.com/Crossbell-Box/crossbell.js/blob/605d32d/src/contract/subcontracts/base.ts#L60">src/contract/subcontracts/base.ts:60</a></li></ul></aside></li>
+<li>Defined in <a href="https://github.com/Crossbell-Box/crossbell.js/blob/cc97663/src/contract/subcontracts/base.ts#L60">src/contract/subcontracts/base.ts:60</a></li></ul></aside></li>
 <li class="tsd-signature" id="account.account-2"><span class="tsd-signature-symbol">set</span> account<span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">value</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 <li class="tsd-description">
 <div class="tsd-parameters">
@@ -257,7 +256,7 @@
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4><aside class="tsd-sources">
 <p>Inherited from BaseContract.account</p>
 <ul>
-<li>Defined in <a href="https://github.com/Crossbell-Box/crossbell.js/blob/605d32d/src/contract/subcontracts/base.ts#L63">src/contract/subcontracts/base.ts:63</a></li></ul></aside></li></ul></section>
+<li>Defined in <a href="https://github.com/Crossbell-Box/crossbell.js/blob/cc97663/src/contract/subcontracts/base.ts#L63">src/contract/subcontracts/base.ts:63</a></li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member tsd-is-inherited"><a id="walletClient" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>wallet<wbr/>Client</span><a href="#walletClient" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-is-inherited">
@@ -266,7 +265,7 @@
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-symbol">{}</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-type tsd-kind-type-parameter">THasWallet</span><span class="tsd-signature-symbol"> extends </span><span class="tsd-signature-type">true</span><br/><span>    </span><span class="tsd-signature-symbol">? </span><span class="tsd-signature-type">never</span><br/><span>    </span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol">)</span></h4><aside class="tsd-sources">
 <p>Inherited from BaseContract.walletClient</p>
 <ul>
-<li>Defined in <a href="https://github.com/Crossbell-Box/crossbell.js/blob/605d32d/src/contract/subcontracts/base.ts#L67">src/contract/subcontracts/base.ts:67</a></li></ul></aside></li></ul></section></section>
+<li>Defined in <a href="https://github.com/Crossbell-Box/crossbell.js/blob/cc97663/src/contract/subcontracts/base.ts#L67">src/contract/subcontracts/base.ts:67</a></li></ul></aside></li></ul></section></section>
 <section class="tsd-panel-group tsd-member-group">
 <h2>Methods</h2>
 <section class="tsd-panel tsd-member tsd-is-inherited"><a id="proxyContract" class="tsd-anchor"></a>
@@ -274,9 +273,9 @@
 <ul class="tsd-signatures tsd-is-inherited">
 <li class="tsd-signature tsd-anchor-link" id="proxyContract.proxyContract-1"><span class="tsd-kind-call-signature">proxy<wbr/>Contract</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type tsd-kind-type-parameter">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">contract</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type tsd-kind-type-parameter">T</span><a href="#proxyContract.proxyContract-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
 <li class="tsd-description">
-<section class="tsd-panel tsd-type-parameters">
+<section class="tsd-panel">
 <h4>Type Parameters</h4>
-<ul class="tsd-type-parameters">
+<ul class="tsd-type-parameter-list">
 <li>
 <h4><span class="tsd-kind-type-parameter">T</span><span class="tsd-signature-symbol"> extends </span><span class="tsd-signature-symbol">{}</span></h4></li></ul></section>
 <div class="tsd-parameters">
@@ -287,7 +286,7 @@
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type tsd-kind-type-parameter">T</span></h4><aside class="tsd-sources">
 <p>Inherited from <a href="index.contracts.BaseContract.html">BaseContract</a>.<a href="index.contracts.BaseContract.html#proxyContract">proxyContract</a></p>
 <ul>
-<li>Defined in <a href="https://github.com/Crossbell-Box/crossbell.js/blob/605d32d/src/contract/subcontracts/base.ts#L229">src/contract/subcontracts/base.ts:229</a></li></ul></aside></li></ul></section></section></div>
+<li>Defined in <a href="https://github.com/Crossbell-Box/crossbell.js/blob/cc97663/src/contract/subcontracts/base.ts#L229">src/contract/subcontracts/base.ts:229</a></li></ul></aside></li></ul></section></section></div>
 <div class="col-sidebar">
 <div class="page-menu">
 <div class="tsd-navigation settings">
@@ -327,7 +326,7 @@
 <li><a href="#walletClient" class="tsd-is-inherited"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-262144-path"></use><use href="#icon-262144-text"></use></svg><span>wallet<wbr/>Client</span></a></li>
 <li><a href="#proxyContract" class="tsd-is-inherited"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-2048-path"></use><use href="#icon-2048-text"></use></svg><span>proxy<wbr/>Contract</span></a></li></ul></div></details></div>
 <div class="site-menu">
-<nav class="tsd-navigation"><a href="../index.html"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><rect fill="var(--color-icon-background)" stroke="var(--color-ts-namespace)" stroke-width="1.5" x="1" y="1" width="22" height="22" rx="6" id="icon-4-path"></rect><path d="M9.33 16V7.24H10.77L13.446 14.74C13.43 14.54 13.41 14.296 13.386 14.008C13.37 13.712 13.354 13.404 13.338 13.084C13.33 12.756 13.326 12.448 13.326 12.16V7.24H14.37V16H12.93L10.266 8.5C10.282 8.692 10.298 8.936 10.314 9.232C10.33 9.52 10.342 9.828 10.35 10.156C10.366 10.476 10.374 10.784 10.374 11.08V16H9.33Z" fill="var(--color-text)" id="icon-4-text"></path></svg><span>crossbell.js -<wbr/> v1.0.0-<wbr/>alpha.2</span></a>
+<nav class="tsd-navigation"><a href="../index.html"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><rect fill="var(--color-icon-background)" stroke="var(--color-ts-namespace)" stroke-width="1.5" x="1" y="1" width="22" height="22" rx="6" id="icon-4-path"></rect><path d="M9.33 16V7.24H10.77L13.446 14.74C13.43 14.54 13.41 14.296 13.386 14.008C13.37 13.712 13.354 13.404 13.338 13.084C13.33 12.756 13.326 12.448 13.326 12.16V7.24H14.37V16H12.93L10.266 8.5C10.282 8.692 10.298 8.936 10.314 9.232C10.33 9.52 10.342 9.828 10.35 10.156C10.366 10.476 10.374 10.784 10.374 11.08V16H9.33Z" fill="var(--color-text)" id="icon-4-text"></path></svg><span>crossbell.js -<wbr/> v1.0.0-<wbr/>alpha.3</span></a>
 <ul class="tsd-small-nested-navigation">
 <li>
 <details class="tsd-index-accordion" open data-key="index"><summary class="tsd-accordion-summary"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M4.93896 8.531L12 15.591L19.061 8.531L16.939 6.409L12 11.349L7.06098 6.409L4.93896 8.531Z" fill="var(--color-text)"></path></svg><a href="../modules/index.html"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-4-path"></use><use href="#icon-4-text"></use></svg><span>index</span></a></summary>
