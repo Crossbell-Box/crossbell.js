@@ -133,6 +133,7 @@ export const newbieVilla = [
       { name: 'xsyncOperator_', type: 'address' },
       { name: 'token_', type: 'address' },
       { name: 'admin_', type: 'address' },
+      { name: 'tips_', type: 'address' },
     ],
     name: 'initialize',
     outputs: [],
@@ -176,6 +177,29 @@ export const newbieVilla = [
     name: 'supportsInterface',
     outputs: [{ name: '', type: 'bool' }],
     stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      { name: 'fromCharacterId', type: 'uint256' },
+      { name: 'toCharacterId', type: 'uint256' },
+      { name: 'amount', type: 'uint256' },
+    ],
+    name: 'tipCharacter',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      { name: 'fromCharacterId', type: 'uint256' },
+      { name: 'toCharacterId', type: 'uint256' },
+      { name: 'toNoteId', type: 'uint256' },
+      { name: 'amount', type: 'uint256' },
+    ],
+    name: 'tipCharacterForNote',
+    outputs: [],
+    stateMutability: 'nonpayable',
     type: 'function',
   },
   {

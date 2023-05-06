@@ -1,6 +1,6 @@
 import { type Address, encodeAbiParameters, isAddressEqual } from 'viem'
 import { autoSwitchMainnet } from '../decorators'
-import { type Entry, type Mira, type Tips } from '../abi'
+import { type Entry, type Mira, type NewbieVilla, type Tips } from '../abi'
 import {
   type Numberish,
   type ReadOverrides,
@@ -35,6 +35,56 @@ export class TipsContract {
 
     const hash = await this.base.miraContract.write.send(
       [this.base.options.address.tipsContract, BigInt(amount), data],
+      overrides,
+    )
+
+    const receipt = await this.base.publicClient.waitForTransactionReceipt({
+      hash,
+    })
+
+    return {
+      data: undefined,
+      transactionHash: receipt.transactionHash,
+    }
+  }
+
+  @autoSwitchMainnet()
+  async tipCharacterFromNewbieVilla(
+    fromCharacterId: Numberish,
+    toCharacterId: Numberish,
+    amount: Numberish,
+    overrides: WriteOverrides<NewbieVilla, 'tipCharacter'> = {},
+  ) {
+    const hash = await this.base.newbieVillaContract.write.tipCharacter(
+      [BigInt(fromCharacterId), BigInt(toCharacterId), BigInt(amount)],
+      overrides,
+    )
+
+    const receipt = await this.base.publicClient.waitForTransactionReceipt({
+      hash,
+    })
+
+    return {
+      data: undefined,
+      transactionHash: receipt.transactionHash,
+    }
+  }
+
+  @autoSwitchMainnet()
+  async tipCharacterForNoteFromNewbieVilla(
+    fromCharacterId: Numberish,
+    toCharacterId: Numberish,
+    toNoteId: Numberish,
+    amount: Numberish,
+    overrides: WriteOverrides<NewbieVilla, 'tipCharacterForNote'> = {},
+  ) {
+    const hash = await this.base.newbieVillaContract.write.tipCharacterForNote(
+      [
+        BigInt(fromCharacterId),
+        BigInt(toCharacterId),
+        BigInt(toNoteId),
+        BigInt(amount),
+      ],
       overrides,
     )
 
