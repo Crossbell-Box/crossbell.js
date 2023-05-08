@@ -40,3 +40,5 @@ jobs:
         env:
           VITE_MOCK_USER_ADDRESS: ${{ secrets.VITE_MOCK_USER_ADDRESS }}
           VITE_MOCK_USER_PRIVATE_KEY: ${{ secrets.VITE_MOCK_USER_PRIVATE_KEY }}
+          VITE_MOCK_USER_EMAIL: ${{ secrets.VITE_MOCK_USER_EMAIL }}
+          VITE_MOCK_USER_PASSWORD: ${{ secrets.VITE_MOCK_USER_PASSWORD }}
