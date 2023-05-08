@@ -3,6 +3,8 @@ import { type Address, type Hex } from 'viem'
 export const mockUser = {
   address: process.env.VITE_MOCK_USER_ADDRESS as Address,
   privateKey: process.env.VITE_MOCK_USER_PRIVATE_KEY as Hex,
+  email: process.env.VITE_MOCK_USER_EMAIL!,
+  password: process.env.VITE_MOCK_USER_PASSWORD!,
 }
 
 export const randomHandle = genRandomHandle()

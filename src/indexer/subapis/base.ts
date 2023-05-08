@@ -11,6 +11,7 @@ type InternalFetchOptions = RequestInit & {
     string,
     boolean | MaybeArray<string | number | bigint> | null | undefined
   >
+  data?: any
 }
 
 export class BaseIndexer {
@@ -19,6 +20,8 @@ export class BaseIndexer {
 
   /** The options to send to the fetch function. */
   fetchOptions: FetchOptions = {}
+
+  token: string | undefined
 
   constructor(endpointOrOptions?: IndexerOptions) {
     if (typeof endpointOrOptions === 'string') {
@@ -37,12 +40,30 @@ export class BaseIndexer {
 
   fetch<T>(
     url: string,
-    { params, ...options }: InternalFetchOptions = {},
+    { params, data, ...options }: InternalFetchOptions = {},
   ): Promise<T> {
     if (params) url += `?${createSearchParamsString(params)}`
+
+    const headers = new Headers({
+      ...this.fetchOptions.headers,
+      ...options.headers,
+    })
+    let body: string | undefined
+
+    if (data) {
+      body = JSON.stringify(data)
+      headers.set('Content-Type', 'application/json')
+    }
+
+    if (this.token) {
+      headers.set('Authorization', `Bearer ${this.token}`)
+    }
+
     return fetch(this.endpoint + url, {
       ...this.fetchOptions,
+      body,
       ...options,
+      headers,
     }).then(async (r) => {
       if (!r.ok) {
         return Promise.reject(
