@@ -8,7 +8,7 @@ describe('newbie', () => {
   test('sign in', async () => {
     const token = await indexer.newbie.signIn(mockUser.email, mockUser.password)
     expect(token).toBeTruthy()
-    expect(token).toEqual(indexer.token)
+    expect(token).toEqual(indexer.newbie.token)
   })
 
   test('current user', async () => {

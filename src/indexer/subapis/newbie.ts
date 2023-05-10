@@ -10,7 +10,9 @@ import {
 import { type BaseIndexer } from './base'
 
 export class NewbieIndexer {
-  constructor(private base: BaseIndexer & { token: string | undefined }) {}
+  constructor(private base: BaseIndexer) {}
+
+  token: string | undefined
 
   /**
    * Ask for a verify-code to be sent to an email box for registration
@@ -53,7 +55,7 @@ export class NewbieIndexer {
       method: 'PUT',
       data: options,
     })
-    this.base.token = token
+    this.token = token
     return token
   }
 
@@ -68,7 +70,7 @@ export class NewbieIndexer {
       method: 'POST',
       data: { email, password },
     })
-    this.base.token = token
+    this.token = token
     return token
   }
 
@@ -117,15 +119,15 @@ export class NewbieIndexer {
    */
   getAccount() {
     const url = `/newbie/account`
-    return this.base.fetch<EmailUserEntity>(url)
+    return this.base.fetch<EmailUserEntity>(url, { token: this.token })
   }
 
   /**
    * Delete current user information
    */
-  deleteAccount() {
+  async deleteAccount() {
     const url = `/newbie/account`
-    return this.base.fetch<''>(url, { method: 'DELETE' })
+    await this.base.fetch(url, { method: 'DELETE', token: this.token })
   }
 
   linkNote({
@@ -141,7 +143,7 @@ export class NewbieIndexer {
   }) {
     return this.base.fetch<{ transactionHash: string; data: string }>(
       `/newbie/contract/links/notes/${characterId}/${noteId}/${linkType}`,
-      { method: 'PUT', data: { data } },
+      { method: 'PUT', data: { data }, token: this.token },
     )
   }
 
@@ -156,7 +158,7 @@ export class NewbieIndexer {
   }) {
     return this.base.fetch<{ transactionHash: string; data: string }>(
       `/newbie/contract/links/notes/${characterId}/${noteId}/${linkType}`,
-      { method: 'DELETE' },
+      { method: 'DELETE', token: this.token },
     )
   }
 
@@ -171,7 +173,7 @@ export class NewbieIndexer {
   }) {
     return this.base.fetch<{ transactionHash: string; data: string }>(
       `/newbie/contract/links/characters/${toCharacterId}/${linkType}`,
-      { method: 'PUT', data: { data } },
+      { method: 'PUT', data: { data }, token: this.token },
     )
   }
 
@@ -191,6 +193,7 @@ export class NewbieIndexer {
       {
         method: 'PUT',
         data: { data, linkType, toCharacterIds, toAddresses },
+        token: this.token,
       },
     )
   }
@@ -204,7 +207,7 @@ export class NewbieIndexer {
   }) {
     return this.base.fetch<{ transactionHash: string; data: string }>(
       `/newbie/contract/links/characters/${toCharacterId}/${linkType}`,
-      { method: 'DELETE' },
+      { method: 'DELETE', token: this.token },
     )
   }
 
@@ -216,10 +219,7 @@ export class NewbieIndexer {
   }) {
     return this.base.fetch<{ transactionHash: string; data: string }>(
       `/newbie/contract/notes`,
-      {
-        method: 'PUT',
-        data,
-      },
+      { method: 'PUT', token: this.token, data },
     )
   }
 
@@ -232,17 +232,14 @@ export class NewbieIndexer {
   }) {
     return this.base.fetch<{ transactionHash: string; data: string }>(
       `/newbie/contract/notes/${noteId}/metadata`,
-      {
-        method: 'POST',
-        data: { metadata },
-      },
+      { method: 'POST', token: this.token, data: { metadata } },
     )
   }
 
   deleteNote({ noteId }: { noteId: NoteEntity['noteId'] }) {
     return this.base.fetch<{ transactionHash: string; data: string }>(
       `/newbie/contract/notes/${noteId}`,
-      { method: 'DELETE' },
+      { method: 'DELETE', token: this.token },
     )
   }
 
@@ -252,8 +249,14 @@ export class NewbieIndexer {
   refillBalance() {
     return this.base.fetch<
       { balance: string } | { ok: boolean; message: string }
-    >(`/newbie/account/balance/refill`, {
+    >(`/newbie/account/balance/refill`, { method: 'POST', token: this.token })
+  }
+
+  updateHandle(handle: string): Promise<{ ok: boolean; msg: string }> {
+    return this.base.fetch('/newbie/contract/characters/me/handle', {
       method: 'POST',
+      token: this.token,
+      data: { handle },
     })
   }
 
@@ -269,6 +272,7 @@ export class NewbieIndexer {
       {
         method: 'POST',
         data: { metadata, mode },
+        token: this.token,
       },
     )
   }
@@ -279,7 +283,7 @@ export class NewbieIndexer {
   getWithdrawProof() {
     return this.base.fetch<{ proof: Address; nonce: number; expires: number }>(
       `/newbie/account/withdraw/proof`,
-      { method: 'GET' },
+      { method: 'GET', token: this.token },
     )
   }
 }
