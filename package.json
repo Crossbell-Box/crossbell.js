@@ -43,9 +43,11 @@
   },
   "typesVersions": {
     "*": {
-      "*": [
-        "./dist/*",
-        "./*"
+      "network": [
+        "./dist/network.d.ts"
+      ],
+      "ipfs": [
+        "./dist/ipfs.d.ts"
       ]
     }
   },
