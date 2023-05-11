@@ -22,8 +22,10 @@ export class LinkModuleContract {
    */
   @autoSwitchMainnet()
   async setForAddress(
-    address: Address,
-    linkModule: MintOrLinkModuleConfig,
+    {
+      address,
+      linkModule,
+    }: { address: Address; linkModule: MintOrLinkModuleConfig },
     overrides: WriteOverrides<Entry, 'setLinkModule4Address'> = {},
   ): Promise<Result<undefined, true>> {
     const moduleConfig = await getModuleConfig(linkModule)
@@ -58,8 +60,10 @@ export class LinkModuleContract {
    */
   @autoSwitchMainnet()
   async setForLinklist(
-    linklistId: Numberish,
-    linkModule: MintOrLinkModuleConfig,
+    {
+      linklistId,
+      linkModule,
+    }: { linklistId: Numberish; linkModule: MintOrLinkModuleConfig },
     overrides: WriteOverrides<Entry, 'setLinkModule4Linklist'> = {},
   ): Promise<Result<undefined, true>> {
     const moduleConfig = await getModuleConfig(linkModule)

@@ -29,16 +29,22 @@ export class OperatorContract {
    * To completely remove an operator, pass an empty array (`[]`) to the `permissions` parameter.
    *
    * @category Operator
-   * @param characterId - The id of the character.
-   * @param operator - The address of the operator.
-   * @param permissions - The permissions of the operator.
    * @returns The transaction hash.
    */
   @autoSwitchMainnet()
   async grantForCharacter(
-    characterId: Numberish,
-    operator: Address,
-    permissions: CharacterPermissionKey[],
+    {
+      characterId,
+      operator,
+      permissions,
+    }: {
+      /** The id of the character. */
+      characterId: Numberish
+      /** The address of the operator. */
+      operator: Address
+      /** The permissions of the operator. */
+      permissions: CharacterPermissionKey[]
+    },
     overrides: WriteOverrides<Entry, 'grantOperatorPermissions'> = {},
   ): Promise<Result<{ bitmapUint256: bigint }, true>> {
     validateAddress(operator)
@@ -77,22 +83,26 @@ export class OperatorContract {
    * To completely remove an operator, pass an empty array (`[]`) to the `permissions` parameter.
    *
    * @category Operator
-   * @param characterId - The id of the character.
-   * @param noteId - The id of the note.
-   * @param allowlist - Operators that are allowed to operate the note.
-   * @param blocklist - Operators that are not allowed to operate the note.
-   *                    (Used to override the character permission and allowlist.)
    * @returns The transaction hash.
    */
   @autoSwitchMainnet()
   async grantForNote(
-    characterId: Numberish,
-    noteId: Numberish,
     {
+      characterId,
+      noteId,
       allowlist,
       blocklist = [],
     }: {
+      /** The id of the character. */
+      characterId: Numberish
+      /** The id of the note. */
+      noteId: Numberish
+      /** Operators that are allowed to operate the note. */
       allowlist: Address[]
+      /**
+       * Operators that are not allowed to operate the note.
+       * (Used to override the character permission and allowlist.)
+       */
       blocklist: Address[]
     },
     overrides: WriteOverrides<Entry, 'grantOperators4Note'> = {},
@@ -121,11 +131,15 @@ export class OperatorContract {
    * This returns operators of the character.
    *
    * @category Operator
-   * @param characterId - The id of the character.
    * @returns The operators of the character.
    */
   async getForCharacter(
-    characterId: Numberish,
+    {
+      characterId,
+    }: {
+      /** The id of the character. */
+      characterId: Numberish
+    },
     overrides: ReadOverrides<Entry, 'getOperators'> = {},
   ): Promise<Result<readonly Address[], false>> {
     const operators = await this.base.contract.read.getOperators(
@@ -141,12 +155,17 @@ export class OperatorContract {
    * This returns operators of the note.
    *
    * @category Operator
-   * @param characterId - The id of the character.
-   * @param noteId - The id of the note.
    */
   async getForNote(
-    characterId: Numberish,
-    noteId: Numberish,
+    {
+      characterId,
+      noteId,
+    }: {
+      /** The id of the character. */
+      characterId: Numberish
+      /** The id of the note. */
+      noteId: Numberish
+    },
     overrides: ReadOverrides<Entry, 'getOperators4Note'> = {},
   ): Promise<
     Result<
@@ -171,15 +190,21 @@ export class OperatorContract {
    * This checks if an operator is allowed to operate a note.
    *
    * @category Operator
-   * @param characterId - The id of the character.
-   * @param noteId - The id of the note.
-   * @param operator - The address of the operator.
    * @returns Whether the operator is allowed to operate the note.
    */
   async isAllowedForNote(
-    characterId: Numberish,
-    noteId: Numberish,
-    operator: Address,
+    {
+      characterId,
+      noteId,
+      operator,
+    }: {
+      /** The id of the character. */
+      characterId: Numberish
+      /** The id of the note. */
+      noteId: Numberish
+      /** The address of the operator. */
+      operator: Address
+    },
     overrides: ReadOverrides<Entry, 'isOperatorAllowedForNote'> = {},
   ): Promise<Result<boolean, false>> {
     const isAllowed = await this.base.contract.read.isOperatorAllowedForNote(
@@ -195,13 +220,18 @@ export class OperatorContract {
    * This returns the permissions of an operator for a character.
    *
    * @category Operator
-   * @param characterId - The id of the character.
-   * @param operator - The address of the operator.
    * @returns The permissions of the operator.
    */
   async getPermissionsForCharacter(
-    characterId: Numberish,
-    operator: Address,
+    {
+      characterId,
+      operator,
+    }: {
+      /** The id of the character. */
+      characterId: Numberish
+      /** The address of the operator. */
+      operator: Address
+    },
     overrides: ReadOverrides<Entry, 'getOperatorPermissions'> = {},
   ): Promise<Result<CharacterPermissionKey[], false>> {
     const permissionUint256 =
@@ -222,7 +252,6 @@ export class OperatorContract {
    * This converts the character operator permission constants array to a uint256.
    *
    * @category Operator
-   * @param permissions - The permission constants array.
    * @returns The uint256.
    */
   convertPermissionsToUint256ForCharacter(
@@ -243,7 +272,7 @@ export class OperatorContract {
 
     uint256Array.reverse()
 
-    const uint256Decimal = this.convertBinaryBitsToUint256(uint256Array)
+    const uint256Decimal = this.#convertBinaryBitsToUint256(uint256Array)
 
     return uint256Decimal
   }
@@ -284,7 +313,7 @@ export class OperatorContract {
    * @param bits - The binary bits array.
    * @returns The uint256 in decimal.
    */
-  private convertBinaryBitsToUint256(bits: number[]): bigint {
+  #convertBinaryBitsToUint256(bits: number[]): bigint {
     const n = bits
       .join('')
       .replace(/^0+/, '')

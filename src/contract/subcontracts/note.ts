@@ -35,16 +35,22 @@ export class NoteContract {
   /**
    * This creates a new note.
    * @category Note
-   * @param characterId - The character ID of the owner who post this note. Must be your own character, otherwise it will be rejected.
-   * @param metadataOrUri - The metadata or URI of the content you want to post.
-   * @param options - The options for this post.
    * @returns The id of the new note.
    */
   @autoSwitchMainnet()
   async post(
-    characterId: Numberish,
-    metadataOrUri: NoteMetadata | string,
-    { locked = false, linkModule, mintModule }: PostNoteOptions = {},
+    {
+      characterId,
+      metadataOrUri,
+      locked = false,
+      linkModule,
+      mintModule,
+    }: PostNoteOptions & {
+      /** The character ID of the owner who post this note. Must be your own character, otherwise it will be rejected. */
+      characterId: Numberish
+      /** The metadata or URI of the content you want to post. */
+      metadataOrUri: NoteMetadata | string
+    },
     overrides: WriteOverrides<Entry, 'postNote'> = {},
   ): Promise<Result<{ noteId: bigint }, true>> {
     const { uri } = await ipfsParseMetadataOrUri('note', metadataOrUri)
@@ -84,22 +90,21 @@ export class NoteContract {
   /**
    * This creates multiple new notes.
    * @category Note
-   * @param notes - The notes you want to post.
-   * @param notes[].characterId - The character ID of the owner who post this note. Must be your own character, otherwise it will be rejected.
-   * @param notes[].metadataOrUri - The metadata or URI of the content you want to post.
-   * @param notes[].options - The options of the note.
-   * @param notes[].options.locked - Whether the note is locked.
-   * @param notes[].options.linkModule - The link module of the note.
-   * @param notes[].options.mintModule - The mint module of the note.
    * @returns The id of the new note.
    */
   @autoSwitchMainnet()
   async postMany(
-    notes: {
-      characterId: Numberish
-      metadataOrUri: NoteMetadata | string
-      options?: PostNoteOptions
-    }[],
+    {
+      notes,
+    }: {
+      notes: {
+        /** The character ID of the owner who post this note. Must be your own character, otherwise it will be rejected. */
+        characterId: Numberish
+        /** The metadata or URI of the content you want to post. */
+        metadataOrUri: NoteMetadata | string
+        options?: PostNoteOptions
+      }[]
+    },
     overrides: WriteOverrides<Entry, 'multicall'> = {},
   ): Promise<Result<{ noteIds: bigint[] }, true>> {
     const limitedPromise = pLimit(10)
@@ -163,18 +168,25 @@ export class NoteContract {
   /**
    * This creates a new note for any target uri.
    * @category Note
-   * @param characterId - The character ID of the owner who post this note. Must be your own character, otherwise it will be rejected.
-   * @param metadataOrUri - The metadata or URI of the content you want to post.
-   * @param targetUri - The target uri of the note.
-   * @param options - Options for the note.
    * @returns The id of the new note.
    */
   @autoSwitchMainnet()
   async postForAnyUri(
-    characterId: Numberish,
-    metadataOrUri: NoteMetadata | string,
-    targetUri: string,
-    { locked = false, linkModule, mintModule }: PostNoteOptions = {},
+    {
+      characterId,
+      metadataOrUri,
+      targetUri,
+      locked = false,
+      linkModule,
+      mintModule,
+    }: PostNoteOptions & {
+      /** The character ID of the owner who post this note. Must be your own character, otherwise it will be rejected. */
+      characterId: Numberish
+      /** The metadata or URI of the content you want to post. */
+      metadataOrUri: NoteMetadata | string
+      /** The target uri of the note. */
+      targetUri: string
+    },
     overrides: WriteOverrides<Entry, 'postNote4AnyUri'> = {},
   ): Promise<Result<{ noteId: bigint }, true>> {
     const { uri } = await ipfsParseMetadataOrUri('note', metadataOrUri)
@@ -215,19 +227,27 @@ export class NoteContract {
   /**
    * This creates a new note for a note.
    * @category Note
-   * @param characterId - The character ID of the owner who post this note. Must be your own character, otherwise it will be rejected.
-   * @param metadataOrUri - The metadata or URI of the content you want to post.
-   * @param targetUri - The target uri of the note.
-   * @param options - Options for the note.
    * @returns The id of the new note.
    */
   @autoSwitchMainnet()
   async postForNote(
-    characterId: Numberish,
-    metadataOrUri: NoteMetadata | string,
-    targetCharacterId: Numberish,
-    targetNoteId: Numberish,
-    { locked = false, linkModule, mintModule }: PostNoteOptions = {},
+    {
+      characterId,
+      metadataOrUri,
+      targetCharacterId,
+      targetNoteId,
+      locked = false,
+      linkModule,
+      mintModule,
+    }: PostNoteOptions & {
+      /** The character ID of the owner who post this note. Must be your own character, otherwise it will be rejected. */
+      characterId: Numberish
+      /** The metadata or URI of the content you want to post. */
+      metadataOrUri: NoteMetadata | string
+      /** The target uri of the note. */
+      targetCharacterId: Numberish
+      targetNoteId: Numberish
+    },
     overrides: WriteOverrides<Entry, 'postNote4Note'> = {},
   ): Promise<Result<{ noteId: bigint }, true>> {
     const { uri } = await ipfsParseMetadataOrUri('note', metadataOrUri)
@@ -271,16 +291,22 @@ export class NoteContract {
   /**
    * This sets a note's metadata (URI).
    * @category Note
-   * @param characterId - The character ID of the owner who post this note. Must be your own character, otherwise it will be rejected.
-   * @param noteId - The id of the note you want to set the metadata.
-   * @param metadataOrUri - The metadata or URI of the content you want to post.
    * @returns The transaction hash of the transaction.
    */
   @autoSwitchMainnet()
   async setUri(
-    characterId: Numberish,
-    noteId: Numberish,
-    metadataOrUri: NoteMetadata | string,
+    {
+      characterId,
+      noteId,
+      metadataOrUri,
+    }: {
+      /** The character ID of the owner who post this note. Must be your own character, otherwise it will be rejected. */
+      characterId: Numberish
+      /** The id of the note you want to set the metadata. */
+      noteId: Numberish
+      /** The metadata or URI of the content you want to post. */
+      metadataOrUri: NoteMetadata | string
+    },
     overrides: WriteOverrides<Entry, 'setNoteUri'> = {},
   ): Promise<Result<{ uri: string; metadata: NoteMetadata }, true>> {
     const { uri, metadata } = await ipfsParseMetadataOrUri(
@@ -310,9 +336,6 @@ export class NoteContract {
   /**
    * This changes a note's metadata (URI).
    * @category Note
-   * @param characterId - The character ID of the user you want to set the URI for.
-   * @param noteId - The id of the note you want to set the URI for.
-   * @param modifier - The callback function that modifies the metadata.
    * @returns The transaction hash of the transaction that was sent to the blockchain.
    * @example change a note's metadata name and content
    *
@@ -346,12 +369,21 @@ export class NoteContract {
    */
   @autoSwitchMainnet()
   async changeMetadata(
-    characterId: Numberish,
-    noteId: Numberish,
-    modifier: (metadata?: NoteMetadata) => NoteMetadata,
+    {
+      characterId,
+      noteId,
+      modifier,
+    }: {
+      /** The character ID of the user you want to set the URI for. */
+      characterId: Numberish
+      /** The id of the note you want to set the URI for. */
+      noteId: Numberish
+      /** The callback function that modifies the metadata. */
+      modifier: (metadata?: NoteMetadata) => NoteMetadata
+    },
     overrides: WriteOverrides<Entry, 'setNoteUri'> = {},
   ) {
-    const note = await this.get(characterId, noteId)
+    const note = await this.get({ characterId, noteId })
 
     const metadata = modifier(note.data.metadata)
     if (typeof metadata === 'undefined') {
@@ -364,7 +396,7 @@ export class NoteContract {
       metadata.type = 'note'
     }
 
-    return this.setMetadata(characterId, noteId, metadata, overrides)
+    return this.setMetadata({ characterId, noteId, metadata }, overrides)
   }
 
   /**
@@ -372,25 +404,40 @@ export class NoteContract {
    * @category Note
    */
   setMetadata(
-    characterId: Numberish,
-    noteId: Numberish,
-    metadata: NoteMetadata,
+    {
+      characterId,
+      noteId,
+      metadata,
+    }: {
+      characterId: Numberish
+      noteId: Numberish
+      metadata: NoteMetadata
+    },
     overrides: WriteOverrides<Entry, 'setNoteUri'> = {},
   ) {
-    return this.setUri(characterId, noteId, metadata, overrides)
+    return this.setUri(
+      { characterId, noteId, metadataOrUri: metadata },
+      overrides,
+    )
   }
 
   /**
    * This returns the info of a note.
    * @category Note
-   * @param characterId - The character ID of the address who owns the note.
-   * @param noteId - The id of the note you want to get the info for.
    * @returns The info of the note.
    */
   async get<T extends LinkItemType>(
-    characterId: Numberish,
-    noteId: Numberish,
-    linkItemType?: T,
+    {
+      characterId,
+      noteId,
+      linkItemType,
+    }: {
+      /** The character ID of the address who owns the note. */
+      characterId: Numberish
+      /** The id of the note you want to get the info for. */
+      noteId: Numberish
+      linkItemType?: T
+    },
     overrides: ReadOverrides<Entry, 'getNote'> = {},
   ): Promise<Result<Note<LinkItemMap[T]>>> {
     const data = await this.base.contract.read.getNote(
@@ -468,14 +515,19 @@ export class NoteContract {
    * Note: This only changes the note's `deleted` property to `true`. It can't really be deleted from the blockchain.
    *
    * @category Note
-   * @param characterId - The character ID of the owner who post this note. Must be your own character, otherwise it will be rejected.
-   * @param noteId - The id of the note you want to delete.
    * @returns The transaction hash of the transaction.
    */
   @autoSwitchMainnet()
   async delete(
-    characterId: Numberish,
-    noteId: Numberish,
+    {
+      characterId,
+      noteId,
+    }: {
+      /** The character ID of the owner who post this note. Must be your own character, otherwise it will be rejected. */
+      characterId: Numberish
+      /** The id of the note you want to delete. */
+      noteId: Numberish
+    },
     overrides: WriteOverrides<Entry, 'deleteNote'> = {},
   ): Promise<Result<undefined, true>> {
     const hash = await this.base.contract.write.deleteNote(
@@ -502,14 +554,19 @@ export class NoteContract {
    * You can still delete the note using {@link delete}.
    *
    * @category Note
-   * @param characterId  - The character ID of the owner who post this note. Must be your own character, otherwise it will be rejected.
-   * @param noteId - The id of the note you want to lock.
    * @returns The transaction hash of the transaction.
    */
   @autoSwitchMainnet()
   async lock(
-    characterId: Numberish,
-    noteId: Numberish,
+    {
+      characterId,
+      noteId,
+    }: {
+      /** The character ID of the owner who post this note. Must be your own character, otherwise it will be rejected. */
+      characterId: Numberish
+      /** The id of the note you want to lock. */
+      noteId: Numberish
+    },
     overrides: WriteOverrides<Entry, 'lockNote'> = {},
   ): Promise<Result<undefined, true>> {
     const hash = await this.base.contract.write.lockNote(
@@ -530,16 +587,22 @@ export class NoteContract {
   /**
    * This mints a note as an NFT.
    * @category Note
-   * @param characterId - The character ID of the address who owns the note.
-   * @param noteId - The id of the note you want to get the info for.
-   * @param toAddress - The address you want to mint the note to.
    * @returns The transaction hash of the transaction.
    */
   @autoSwitchMainnet()
   async mint(
-    characterId: Numberish,
-    noteId: Numberish,
-    toAddress: Address,
+    {
+      characterId,
+      noteId,
+      toAddress,
+    }: {
+      /** The character ID of the address who owns the note. */
+      characterId: Numberish
+      /** The id of the note you want to get the info for. */
+      noteId: Numberish
+      /** The address you want to mint the note to. */
+      toAddress: Address
+    },
     overrides: WriteOverrides<Entry, 'mintNote'> = {},
   ): Promise<Result<{ contractAddress: Address; tokenId: bigint }, true>> {
     validateAddress(toAddress)
@@ -574,10 +637,14 @@ export class NoteContract {
   /**
    * This returns the linkKey of a note linked to a character.
    * @category Note
-   * @param toCharacterId - The character ID of the character you want to get the linkKey of.
    * @returns The linkKey of the note.
    */
-  getLinkKeyForCharacter(toCharacterId: Numberish): string {
+  getLinkKeyForCharacter({
+    toCharacterId,
+  }: {
+    /** The character ID of the character you want to get the linkKey of. */
+    toCharacterId: Numberish
+  }): string {
     return keccak256(
       encodePacked(['string', 'uint'], ['Character', BigInt(toCharacterId)]),
     )
@@ -586,10 +653,14 @@ export class NoteContract {
   /**
    * This returns the linkKey of a note linked to a note.
    * @category Note
-   * @param toAddress - The address you want to get the linkKey of.
    * @returns The linkKey of the note.
    */
-  getLinkKeyForAddress(toAddress: Address): string {
+  getLinkKeyForAddress({
+    toAddress,
+  }: {
+    /** The address you want to get the linkKey of. */
+    toAddress: Address
+  }): string {
     validateAddress(toAddress)
 
     return keccak256(
@@ -600,11 +671,17 @@ export class NoteContract {
   /**
    * This returns the linkKey of a note linked to a note.
    * @category Note
-   * @param toCharacterId - The character ID of the character you want to get the linkKey of.
-   * @param toNoteId - The id of the note you want to get the linkKey of.
    * @returns The linkKey of the note.
    */
-  getLinkKeyForNote(toCharacterId: Numberish, toNoteId: Numberish): string {
+  getLinkKeyForNote({
+    toCharacterId,
+    toNoteId,
+  }: {
+    /** The character ID of the character you want to get the linkKey of. */
+    toCharacterId: Numberish
+    /** The id of the note you want to get the linkKey of. */
+    toNoteId: Numberish
+  }): string {
     return keccak256(
       encodePacked(
         ['string', 'uint', 'uint'],
@@ -616,14 +693,17 @@ export class NoteContract {
   /**
    * This returns the linkKey of a note linked to an ERC721 token.
    * @category Note
-   * @param toContractAddress - The address of the ERC721 token you want to get the linkKey of.
-   * @param toTokenId - The id of the ERC721 token you want to get the linkKey of.
    * @returns The linkKey of the note.
    */
-  getLinkKeyForERC721(
-    toContractAddress: Address,
-    toTokenId: Numberish,
-  ): string {
+  getLinkKeyForERC721({
+    toContractAddress,
+    toTokenId,
+  }: {
+    /** The address of the ERC721 token you want to get the linkKey of. */
+    toContractAddress: Address
+    /** The id of the ERC721 token you want to get the linkKey of. */
+    toTokenId: Numberish
+  }): string {
     return keccak256(
       encodePacked(
         ['string', 'address', 'uint'],
@@ -635,10 +715,14 @@ export class NoteContract {
   /**
    * This returns the linkKey of a note linked to a linklist.
    * @category Note
-   * @param toLinkListId - The id of the linklist you want to get the linkKey of.
    * @returns The linkKey of the note.
    */
-  getLinkKeyForLinklist(toLinkListId: Numberish): string {
+  getLinkKeyForLinklist({
+    toLinkListId,
+  }: {
+    /** The id of the linklist you want to get the linkKey of. */
+    toLinkListId: Numberish
+  }): string {
     return keccak256(
       encodePacked(['string', 'uint'], ['Linklist', BigInt(toLinkListId)]),
     )
@@ -647,10 +731,14 @@ export class NoteContract {
   /**
    * This returns the linkKey of a note linked to an any uri.
    * @category Note
-   * @param toUri - The uri you want to get the linkKey of.
    * @returns The linkKey of the note.
    */
-  getLinkKeyForAnyUri(toUri: string): string {
+  getLinkKeyForAnyUri({
+    toUri,
+  }: {
+    /** The uri you want to get the linkKey of. */
+    toUri: string
+  }): string {
     return keccak256(encodePacked(['string', 'string'], ['AnyUri', toUri]))
   }
 }

@@ -11,13 +11,15 @@ describe('link and check', () => {
   let characterId2: bigint | null = null
   test('create two characters to link with', async () => {
     characterId1 = await contract.character
-      .create(mockUser.address, {
+      .create({
+        owner: mockUser.address,
         handle: genRandomHandle(),
         metadataOrUri: metadataUri,
       })
       .then(({ data }) => data)
     characterId2 = await contract.character
-      .create(mockUser.address, {
+      .create({
+        owner: mockUser.address,
         handle: genRandomHandle(),
         metadataOrUri: metadataUri,
       })
@@ -38,9 +40,9 @@ describe('link and check', () => {
     linklistId = result.data
     expect(linklistId).not.toBeNull()
 
-    const linklist = await contract.link.getLinklistIdByTransaction(
-      result.transactionHash,
-    )
+    const linklist = await contract.link.getLinklistIdByTransaction({
+      hash: result.transactionHash,
+    })
     expect(linklist.data).toBe(linklistId)
   })
 
@@ -56,10 +58,10 @@ describe('link and check', () => {
   })
 
   test('getLinkingCharacterIds', async () => {
-    const { data } = await contract.link.getLinkingCharacterIds(
-      characterId1!,
+    const { data } = await contract.link.getLinkingCharacterIds({
+      fromCharacterId: characterId1!,
       linkType,
-    )
+    })
     expect(data).toContain(characterId2!)
   })
 
@@ -72,10 +74,10 @@ describe('link and check', () => {
       })
       .then(({ data }) => data)
 
-    const { data } = await contract.link.getLinkingCharacterIds(
-      characterId1!,
+    const { data } = await contract.link.getLinkingCharacterIds({
+      fromCharacterId: characterId1!,
       linkType,
-    )
+    })
     expect(data).not.toContain(characterId2!)
   })
 
@@ -91,28 +93,31 @@ describe('link and check', () => {
     expect(result.data.toCharacterId).not.toBeNull()
     expect(linklistId).not.toBeNull()
 
-    const { data } = await contract.link.getLinkingCharacterIds(
-      characterId1!,
+    const { data } = await contract.link.getLinkingCharacterIds({
+      fromCharacterId: characterId1!,
       linkType,
-    )
+    })
     expect(data).toContain(result.data.toCharacterId!)
 
     const {
       data: { handle },
-    } = await contract.character.getByHandle(randomAddress)
+    } = await contract.character.getByHandle({ handle: randomAddress })
     expect(handle).toBe(randomAddress.toLowerCase())
 
     // should also able to get character by transaction
-    const { data: character } = await contract.character.getByTransaction(
-      result.transactionHash,
-    )
+    const { data: character } = await contract.character.getByTransaction({
+      txHash: result.transactionHash,
+    })
     expect(character.characterId).toBe(result.data.toCharacterId)
   })
 
   // link note
   test('create a note and link it', async () => {
-    const note = await contract.note.post(characterId1!, {
-      content: 'test',
+    const note = await contract.note.post({
+      characterId: characterId1!,
+      metadataOrUri: {
+        content: 'test',
+      },
     })
 
     // like this note

@@ -21,20 +21,21 @@ export class CharacterContract {
    * This creates a new character for an address, and returns the ID of the newly created character.
    * When the character is the first character created for an address, the address will be set as the primary character.
    * @category Character
-   * @param owner - The Ethereum address of the character owner.
-   * @param handle - The handle of the character you want to create.
-   * @param metadataOrUri - The metadata or URI of the character.
    * @returns The transaction hash and the character ID.
    */
   @autoSwitchMainnet()
   async create(
-    owner: Address,
     {
+      owner,
       handle,
       metadataOrUri,
       linkModule,
     }: {
+      /** The Ethereum address of the character owner. */
+      owner: Address
+      /** The handle of the character you want to create. */
       handle: string
+      /** The metadata or URI of the character. */
       metadataOrUri: CharacterMetadata | string
       linkModule?: MintOrLinkModuleConfig
     },
@@ -75,14 +76,19 @@ export class CharacterContract {
   /**
    * This changes a character's handle.
    * @category Character
-   * @param characterId - The character ID of the user you want to set the handle for.
-   * @param handle - The handle you want to set.
    * @returns The transaction hash of the transaction that was sent to the blockchain.
    */
   @autoSwitchMainnet()
   async setHandle(
-    characterId: Numberish,
-    handle: string,
+    {
+      characterId,
+      handle,
+    }: {
+      /** The character ID of the user you want to set the handle for. */
+      characterId: Numberish
+      /** The handle you want to set. */
+      handle: string
+    },
     overrides: WriteOverrides<Entry, 'setHandle'> = {},
   ): Promise<Result<undefined, true>> {
     this.#validateHandleFormat(handle)
@@ -103,14 +109,19 @@ export class CharacterContract {
   /**
    * This sets a character's metadata (URI).
    * @category Character
-   * @param characterId - The character ID of the user you want to set the URI for.
-   * @param metadataOrUri - The metadata or URI you want to set.
    * @returns The transaction hash of the transaction that was sent to the blockchain.
    */
   @autoSwitchMainnet()
   async setUri(
-    characterId: Numberish,
-    metadataOrUri: CharacterMetadata | string,
+    {
+      characterId,
+      metadataOrUri,
+    }: {
+      /** The character ID of the user you want to set the URI for. */
+      characterId: Numberish
+      /** The metadata or URI you want to set. */
+      metadataOrUri: CharacterMetadata | string
+    },
     overrides: WriteOverrides<Entry, 'setCharacterUri'> = {},
   ): Promise<Result<{ uri: string; metadata: CharacterMetadata }, true>> {
     const { uri, metadata } = await ipfsParseMetadataOrUri(
@@ -141,11 +152,16 @@ export class CharacterContract {
    * @category Character
    */
   setMetadata(
-    characterId: Numberish,
-    metadata: CharacterMetadata,
+    {
+      characterId,
+      metadata,
+    }: {
+      characterId: Numberish
+      metadata: CharacterMetadata
+    },
     overrides: WriteOverrides<Entry, 'setCharacterUri'> = {},
   ) {
-    return this.setUri(characterId, metadata, overrides)
+    return this.setUri({ characterId, metadataOrUri: metadata }, overrides)
   }
 
   /**
@@ -186,11 +202,16 @@ export class CharacterContract {
    */
   @autoSwitchMainnet()
   async changeMetadata(
-    characterId: Numberish,
-    modifier: (metadata?: CharacterMetadata) => CharacterMetadata,
+    {
+      characterId,
+      modifier,
+    }: {
+      characterId: Numberish
+      modifier: (metadata?: CharacterMetadata) => CharacterMetadata
+    },
     overrides: WriteOverrides<Entry, 'setCharacterUri'> = {},
   ) {
-    const character = await this.get(characterId)
+    const character = await this.get({ characterId })
 
     const metadata = modifier(character.data.metadata)
     if (typeof metadata === 'undefined') {
@@ -203,20 +224,25 @@ export class CharacterContract {
       metadata.type = 'character'
     }
 
-    return this.setMetadata(characterId, metadata, overrides)
+    return this.setMetadata({ characterId, metadata }, overrides)
   }
 
   /**
    * This sets the social token for a character
    * @category Character
-   * @param characterId - The character ID of the user you want to set the social token for.
-   * @param socialToken - The token address you want to set for the character.
    * @returns The transaction hash of the transaction that was sent to the blockchain.
    */
   @autoSwitchMainnet()
   async setSocialToken(
-    characterId: Numberish,
-    socialToken: Address,
+    {
+      characterId,
+      socialToken,
+    }: {
+      /** The character ID of the user you want to set the social token for. */
+      characterId: Numberish
+      /** The token address you want to set for the character. */
+      socialToken: Address
+    },
     overrides: WriteOverrides<Entry, 'setSocialToken'> = {},
   ): Promise<Result<undefined, true>> {
     const hash = await this.base.contract.write.setSocialToken(
@@ -235,12 +261,16 @@ export class CharacterContract {
   /**
    * This sets the primary character ID for the user.
    * @category Character
-   * @param characterId - The character ID of the character you want to set as primary.
    * @returns The transaction hash of the transaction that was sent to the blockchain.
    */
   @autoSwitchMainnet()
   async setPrimaryId(
-    characterId: Numberish,
+    {
+      characterId,
+    }: {
+      /** The character ID of the character you want to set as primary. */
+      characterId: Numberish
+    },
     overrides: WriteOverrides<Entry, 'setPrimaryCharacterId'> = {},
   ): Promise<Result<undefined, true>> {
     const hash = await this.base.contract.write.setPrimaryCharacterId(
@@ -259,12 +289,16 @@ export class CharacterContract {
   /**
    * This burns a character.
    * @category Character
-   * @param characterId - The character ID of the character you want to burn.
    * @returns The transaction hash.
    */
   @autoSwitchMainnet()
   async burn(
-    characterId: Numberish,
+    {
+      characterId,
+    }: {
+      /** The character ID of the character you want to burn. */
+      characterId: Numberish
+    },
     overrides: WriteOverrides<Entry, 'burn'> = {},
   ): Promise<Result<undefined, true>> {
     const hash = await this.base.contract.write.burn(
@@ -285,11 +319,15 @@ export class CharacterContract {
   /**
    * This returns the primary character ID of the given address.
    * @category Character
-   * @param address - The address of the user you want to get the primary character ID for.
    * @returns The characterId of the primary character of the address.
    */
   async getPrimaryId(
-    address: Address,
+    {
+      address,
+    }: {
+      /** The address of the user you want to get the primary character ID for. */
+      address: Address
+    },
     overrides: ReadOverrides<Entry, 'getPrimaryCharacterId'> = {},
   ): Promise<Result<bigint>> {
     validateAddress(address)
@@ -307,11 +345,15 @@ export class CharacterContract {
   /**
    * This returns a boolean indicating whether the characterId is a primary characterId of an address.
    * @category Character
-   * @param characterId - The character ID of the character you want to check.
    * @returns A boolean value.
    */
   async isPrimaryId(
-    characterId: Numberish,
+    {
+      /** The character ID of the character you want to check. */
+      characterId,
+    }: {
+      characterId: Numberish
+    },
     overrides: ReadOverrides<Entry, 'isPrimaryCharacter'> = {},
   ): Promise<Result<boolean>> {
     const isPrimary = await this.base.contract.read.isPrimaryCharacter(
@@ -326,11 +368,15 @@ export class CharacterContract {
   /**
    * This returns a character given its handle.
    * @category Character
-   * @param handle - The handle of the character you want to get the content of.
    * @returns The character with the given handle.
    */
   async getByHandle(
-    handle: string,
+    {
+      handle,
+    }: {
+      /** The handle of the character you want to get the content of. */
+      handle: string
+    },
     overrides: ReadOverrides<Entry, 'getCharacterByHandle'> = {},
   ): Promise<Result<Character>> {
     handle = handle.toLowerCase()
@@ -359,11 +405,15 @@ export class CharacterContract {
   /**
    * This returns a character given its characterId.
    * @category Character
-   * @param characterId - The character ID of the character you want to get.
    * @returns The character with the given characterId.
    */
   async get(
-    characterId: Numberish,
+    {
+      characterId,
+    }: {
+      /** The character ID of the character you want to get. */
+      characterId: Numberish
+    },
     overrides: ReadOverrides<Entry, 'getCharacter'> = {},
   ): Promise<Result<Character>> {
     const character = await this.base.contract.read.getCharacter(
@@ -392,11 +442,15 @@ export class CharacterContract {
   /**
    * This returns the handle of a character.
    * @category Character
-   * @param characterId - The characterId of the character you want to get the handle for.
    * @returns The handle of the character.
    */
   async getHandle(
-    characterId: Numberish,
+    {
+      characterId,
+    }: {
+      /** The characterId of the character you want to get the handle for. */
+      characterId: Numberish
+    },
     overrides: ReadOverrides<Entry, 'getHandle'> = {},
   ): Promise<Result<string>> {
     const handle = await this.base.contract.read.getHandle(
@@ -411,11 +465,15 @@ export class CharacterContract {
   /**
    * This returns the URI of a character.
    * @category Character
-   * @param characterId - The character ID of the character you want to get the URI for.
    * @returns The URI of the character.
    */
   async getUri(
-    characterId: Numberish,
+    {
+      characterId,
+    }: {
+      /** The character ID of the character you want to get the URI for. */
+      characterId: Numberish
+    },
     overrides: ReadOverrides<Entry, 'getCharacterUri'> = {},
   ): Promise<Result<string>> {
     const uri = await this.base.contract.read.getCharacterUri(
@@ -430,11 +488,15 @@ export class CharacterContract {
   /**
    * This returns the character given a {@link create} transaction hash.
    * @category Character
-   * @param txHash - The transaction hash of the {@link create} transaction.
    * @returns The characterId of the character that was created.
    */
   async getByTransaction(
-    txHash: Address,
+    {
+      txHash,
+    }: {
+      /** The transaction hash of the {@link create} transaction. */
+      txHash: Address
+    },
     overrides: ReadOverrides<Entry, 'getCharacter'> = {},
   ): Promise<Result<Character>> {
     const receipt = await this.base.publicClient.waitForTransactionReceipt({
@@ -442,7 +504,10 @@ export class CharacterContract {
     })
 
     const parser = parseLog(receipt.logs, 'CharacterCreated')
-    const result = await this.get(parser.args.characterId, overrides)
+    const result = await this.get(
+      { characterId: parser.args.characterId },
+      overrides,
+    )
 
     return result
   }
@@ -450,11 +515,15 @@ export class CharacterContract {
   /**
    * This checks if a character exists.
    * @category Character
-   * @param address - The address of a user.
    * @returns A boolean indicating whether the character exists.
    */
   async existsForAddress(
-    address: Address,
+    {
+      address,
+    }: {
+      /** The address of a user. */
+      address: Address
+    },
     overrides: ReadOverrides<Entry, 'getPrimaryCharacterId'> = {},
   ): Promise<Result<boolean>> {
     validateAddress(address)
@@ -472,11 +541,15 @@ export class CharacterContract {
   /**
    * This checks if a character exists.
    * @category Character
-   * @param handle - The handle of a character.
    * @returns A boolean indicating whether the character exists.
    */
   async existsForHandle(
-    handle: string,
+    {
+      handle,
+    }: {
+      /** The handle of a character. */
+      handle: string
+    },
     overrides: ReadOverrides<Entry, 'getCharacterByHandle'> = {},
   ): Promise<Result<boolean>> {
     const data = await this.base.contract.read.getCharacterByHandle(
@@ -492,11 +565,6 @@ export class CharacterContract {
   /**
    * This withdraws a character from the Newbie Villa contract.
    * @category Character
-   * @param toAddress - The address of the user that will receive the character.
-   * @param characterId - The character ID of the character you want to withdraw.
-   * @param nonce - The nonce given from the server
-   * @param expires - The expiration time given from the server
-   * @param proof - The proof given from the server
    * @returns The transaction hash.
    */
   @autoSwitchMainnet()
@@ -508,10 +576,15 @@ export class CharacterContract {
       expires,
       proof,
     }: {
+      /** The address of the user that will receive the character. */
       toAddress: Address
+      /** The character ID of the character you want to withdraw. */
       characterId: Numberish
+      /** The nonce given from the server. */
       nonce: Numberish
+      /** The expiration time given from the server. */
       expires: Numberish
+      /** The proof given from the server. */
       proof: Address
     },
     overrides: WriteOverrides<NewbieVilla, 'withdraw'> = {},

@@ -16,16 +16,22 @@ export class TipsContract {
    * This tips a character with $MIRA token.
    *
    * @category TipsContract
-   * @param fromCharacterId - The character ID of the character that is tipping.
-   * @param toCharacterId - The character ID of the character that is being tipped.
-   * @param amount - The amount of $MIRA token to tip. Unit: wei.
    * @returns The transaction hash.
    */
   @autoSwitchMainnet()
   async tipCharacter(
-    fromCharacterId: Numberish,
-    toCharacterId: Numberish,
-    amount: Numberish,
+    {
+      fromCharacterId,
+      toCharacterId,
+      amount,
+    }: {
+      /** The character ID of the character that is tipping. */
+      fromCharacterId: Numberish
+      /** The character ID of the character that is being tipped. */
+      toCharacterId: Numberish
+      /** The amount of $MIRA token to tip. Unit: wei. */
+      amount: Numberish
+    },
     overrides: WriteOverrides<Mira, 'send'> = {},
   ): Promise<Result<undefined, true>> {
     const data = encodeAbiParameters(
@@ -50,9 +56,15 @@ export class TipsContract {
 
   @autoSwitchMainnet()
   async tipCharacterFromNewbieVilla(
-    fromCharacterId: Numberish,
-    toCharacterId: Numberish,
-    amount: Numberish,
+    {
+      fromCharacterId,
+      toCharacterId,
+      amount,
+    }: {
+      fromCharacterId: Numberish
+      toCharacterId: Numberish
+      amount: Numberish
+    },
     overrides: WriteOverrides<NewbieVilla, 'tipCharacter'> = {},
   ) {
     const hash = await this.base.newbieVillaContract.write.tipCharacter(
@@ -102,18 +114,25 @@ export class TipsContract {
    * This tips a character for a note with $MIRA token.
    *
    * @category TipsContract
-   * @param fromCharacterId - The character ID of the character that is tipping.
-   * @param toCharacterId - The character ID of the character that is being tipped.
-   * @param toNoteId - The note ID of the note that is being tipped.
-   * @param amount - The amount of $MIRA token to tip. Unit: wei.
    * @returns The transaction hash.
    */
   @autoSwitchMainnet()
   async tipCharacterForNote(
-    fromCharacterId: Numberish,
-    toCharacterId: Numberish,
-    toNoteId: Numberish,
-    amount: Numberish,
+    {
+      fromCharacterId,
+      toCharacterId,
+      toNoteId,
+      amount,
+    }: {
+      /** The character ID of the character that is tipping. */
+      fromCharacterId: Numberish
+      /** The character ID of the character that is being tipped. */
+      toCharacterId: Numberish
+      /** The note ID of the note that is being tipped. */
+      toNoteId: Numberish
+      /** The amount of $MIRA token to tip. Unit: wei. */
+      amount: Numberish
+    },
     overrides: WriteOverrides<Mira, 'send'> = {},
   ): Promise<Result<undefined, true>> {
     const data = encodeAbiParameters(
@@ -144,11 +163,15 @@ export class TipsContract {
    * This throws if the character is not found.
    *
    * @category TipsContract
-   * @param characterId - The character ID to get the balance of.
    * @returns The balance of $MIRA token of the address. Unit: wei.
    */
   async getBalanceOfCharacter(
-    characterId: Numberish,
+    {
+      characterId,
+    }: {
+      /** The character ID to get the balance of. */
+      characterId: Numberish
+    },
     overrides: ReadOverrides<Entry, 'ownerOf' | 'balanceOf'> = {},
   ): Promise<Result<bigint>> {
     const address = await this.base.contract.read.ownerOf(
@@ -173,11 +196,15 @@ export class TipsContract {
    * This gets the balance of $MIRA token of an address.
    *
    * @category TipsContract
-   * @param address - The address to get the balance of.
    * @returns The balance of $MIRA token of the address. Unit: wei.
    */
   async getBalance(
-    address: Address,
+    {
+      address,
+    }: {
+      /** The address to get the balance of. */
+      address: Address
+    },
     overrides: ReadOverrides<Entry, 'balanceOf'> = {},
   ): Promise<Result<bigint>> {
     const balance = await this.base.miraContract.read.balanceOf(

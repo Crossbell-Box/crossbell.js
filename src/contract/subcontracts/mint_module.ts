@@ -22,9 +22,15 @@ export class MintModuleContract {
    */
   @autoSwitchMainnet()
   async setForNote(
-    characterId: Numberish,
-    noteId: Numberish,
-    mintModule: MintOrLinkModuleConfig,
+    {
+      characterId,
+      noteId,
+      mintModule,
+    }: {
+      characterId: Numberish
+      noteId: Numberish
+      mintModule: MintOrLinkModuleConfig
+    },
     overrides: WriteOverrides<Entry, 'setMintModule4Note'> = {},
   ): Promise<Result<undefined, true>> {
     const moduleConfig = await getModuleConfig(mintModule)

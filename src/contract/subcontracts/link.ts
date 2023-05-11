@@ -18,10 +18,6 @@ export class LinkContract {
   /**
    * This links a character to another character with a given link type.
    * @category Link
-   * @param fromCharacterId - The character ID of the character that is linking to another character. Must be your own character, otherwise it will be rejected.
-   * @param toCharacterId - The character ID of the character you want to link to.
-   * @param linkType - The type of link.
-   * @param data - The data to be passed to the link module if the character has one.
    * @returns The linklist id and the transaction hash of the transaction that was sent to the blockchain.
    */
   @autoSwitchMainnet()
@@ -32,9 +28,13 @@ export class LinkContract {
       linkType,
       data,
     }: {
+      /** The character ID of the character that is linking to another character. Must be your own character, otherwise it will be rejected. */
       fromCharacterId: Numberish
+      /** The character ID of the character you want to link to. */
       toCharacterId: Numberish
+      /** The type of link. */
       linkType: string
+      /** The data to be passed to the link module if the character has one. */
       data?: Hex
     },
     overrides: WriteOverrides<Entry, 'linkCharacter'> = {},
@@ -69,11 +69,6 @@ export class LinkContract {
    * This could be considered a bulk version of {@link linkCharacter} & {@link createThenLinkCharacter}
    *
    * @category Link
-   * @param fromCharacterId - The character ID of the character that is linking to another character. Must be your own character, otherwise it will be rejected.
-   * @param toCharacterIds - The character IDs of the character you want to link to.
-   * @param toAddresses - The addresses of the characters you want to link to (who don't have a character). See more on {@link createThenLinkCharacter}
-   * @param linkType - The type of link.
-   * @param data - The data to be passed to the link module if the character has one. It should has the same length as `toCharacterIds`.
    * @returns The linklist id and the transaction hash of the transaction that was sent to the blockchain.
    */
   @autoSwitchMainnet()
@@ -85,10 +80,15 @@ export class LinkContract {
       linkType,
       data,
     }: {
+      /** The character ID of the character that is linking to another character. Must be your own character, otherwise it will be rejected. */
       fromCharacterId: Numberish
+      /** The character IDs of the character you want to link to. */
       toCharacterIds: Numberish[]
+      /** The addresses of the characters you want to link to (who don't have a character). See more on {@link createThenLinkCharacter} */
       toAddresses: Address[]
+      /** The type of link. */
       linkType: string
+      /** The data to be passed to the link module if the character has one. It should has the same length as `toCharacterIds`. */
       data?: Address[]
     },
     overrides: WriteOverrides<Periphery, 'linkCharactersInBatch'> = {},
@@ -127,10 +127,14 @@ export class LinkContract {
   /**
    * This gets the linklist id of a {@link linkCharacter} transaction.
    * @category Link
-   * @param hash - The transaction hash of the transaction you want to get the linklist id of.
    * @returns The linklist id of the transaction.
    */
-  async getLinklistIdByTransaction(hash: Address): Promise<Result<bigint>> {
+  async getLinklistIdByTransaction({
+    hash,
+  }: {
+    /** The transaction hash of the transaction you want to get the linklist id of. */
+    hash: Address
+  }): Promise<Result<bigint>> {
     const receipt = await this.base.publicClient.getTransactionReceipt({ hash })
     const parser = parseLog(receipt.logs, 'LinkCharacter')
 
@@ -149,9 +153,6 @@ export class LinkContract {
    * The new character's handle will be set to the address of the target address.
    *
    * @category Link
-   * @param fromCharacterId - The character ID of the character that is creating the new character. Must be your own character, otherwise it will be rejected.
-   * @param toAddress - The address of the character you want to link to.
-   * @param linkType - The type of link you want to create. This is a string.
    * @returns The transaction hash of the transaction that was sent to the blockchain, the toCharacterId and linklistId.
    */
   @autoSwitchMainnet()
@@ -161,8 +162,11 @@ export class LinkContract {
       toAddress,
       linkType,
     }: {
+      /** The character ID of the character that is creating the new character. Must be your own character, otherwise it will be rejected. */
       fromCharacterId: Numberish
+      /** The address of the character you want to link to. */
       toAddress: Address
+      /** The type of link you want to create. This is a string. */
       linkType: string
     },
     overrides: WriteOverrides<Entry, 'createThenLinkCharacter'> = {},
@@ -199,9 +203,6 @@ export class LinkContract {
   /**
    * This removes a link from a character to another character.
    * @category Link
-   * @param fromCharacterId - The character ID of the character that is linking to another character.
-   * @param toCharacterId - The character you want to link to.
-   * @param linkType - The type of link.
    * @returns The transaction hash of the transaction that was sent to the blockchain.
    */
   @autoSwitchMainnet()
@@ -211,8 +212,11 @@ export class LinkContract {
       toCharacterId,
       linkType,
     }: {
+      /** The character ID of the character that is linking to another character. */
       fromCharacterId: Numberish
+      /** The character you want to link to. */
       toCharacterId: Numberish
+      /** The type of link. */
       linkType: string
     },
     overrides: WriteOverrides<Entry, 'unlinkCharacter'> = {},
@@ -239,13 +243,18 @@ export class LinkContract {
   /**
    * This returns the *attached* linked character ID of a character with a given link type.
    * @category Link
-   * @param fromCharacterId - The character ID of the character you want to get the linked characters from.
-   * @param linkType - The type of link you want to get.
    * @returns An array of character ids that are linked to the character id passed in.
    */
   async getLinkingCharacterIds(
-    fromCharacterId: Numberish,
-    linkType: string,
+    {
+      fromCharacterId,
+      linkType,
+    }: {
+      /** The character ID of the character you want to get the linked characters from. */
+      fromCharacterId: Numberish
+      /** The type of link you want to get. */
+      linkType: string
+    },
     overrides: ReadOverrides<Periphery, 'getLinkingCharacterIds'> = {},
   ): Promise<Result<bigint[]>> {
     const linkList =
@@ -261,13 +270,18 @@ export class LinkContract {
   /**
    * This returns the *attached* linked character of a character with a given link type.
    * @category Link
-   * @param fromCharacterId - The character ID of the character you want to get the linked characters from.
-   * @param linkType - The type of link you want to get.
    * @returns An array of character that are linked to the character id passed in.
    */
   async getLinkingCharacters(
-    fromCharacterId: Numberish,
-    linkType: string,
+    {
+      fromCharacterId,
+      linkType,
+    }: {
+      /** The character ID of the character you want to get the linked characters from. */
+      fromCharacterId: Numberish
+      /** The type of link you want to get. */
+      linkType: string
+    },
     overrides: ReadOverrides<Periphery, 'getLinkingCharacterIds'> = {},
   ): Promise<Result<Character[]>> {
     const ids = await this.base.peripheryContract.read.getLinkingCharacterIds(
@@ -275,7 +289,7 @@ export class LinkContract {
       overrides,
     )
     const characters = await Promise.all(
-      ids.map((ids) => this.base.character.get(ids)),
+      ids.map((ids) => this.base.character.get({ characterId: ids })),
     )
     return {
       data: characters.map((character) => character.data),
@@ -287,10 +301,6 @@ export class LinkContract {
   /**
    * This links a character to an address with a given link type.
    * @category Link
-   * @param fromCharacterId - The character ID of the character that is linking to the address.
-   * @param toAddress - The address of the character you want to link to.
-   * @param linkType - The type of link.
-   * @param data - The data to be passed to the link module if the address has one.
    * @returns The transaction hash of the transaction that was sent to the blockchain, and the linklistId.
    */
   @autoSwitchMainnet()
@@ -301,9 +311,13 @@ export class LinkContract {
       linkType,
       data = NIL_ADDRESS,
     }: {
+      /** The character ID of the character that is linking to the address. */
       fromCharacterId: Numberish
+      /** The address of the character you want to link to. */
       toAddress: Address
+      /** The type of link. */
       linkType: string
+      /** The data to be passed to the link module if the address has one. */
       data: Address
     },
     overrides: WriteOverrides<Entry, 'linkAddress'> = {},
@@ -335,9 +349,6 @@ export class LinkContract {
   /**
    * This removes a link from a character to an address.
    * @category Link
-   * @param fromCharacterId - The character ID of the character that is linking to another character.
-   * @param toAddress - The address you want to unlink from.
-   * @param linkType - The type of link.
    * @returns The transaction hash of the transaction that was sent to the blockchain.
    */
   @autoSwitchMainnet()
@@ -347,8 +358,11 @@ export class LinkContract {
       toAddress,
       linkType,
     }: {
+      /** The character ID of the character that is linking to another character. */
       fromCharacterId: Numberish
+      /** The address you want to unlink from. */
       toAddress: Address
+      /** The type of link. */
       linkType: string
     },
     overrides: WriteOverrides<Entry, 'unlinkAddress'> = {},
@@ -377,10 +391,6 @@ export class LinkContract {
   /**
    * This links a character to any uri with a given link type.
    * @category Link
-   * @param fromCharacterId - The character ID of the character that is linking to the address.
-   * @param toUri - The uri of the character you want to link to.
-   * @param linkType - The type of link.
-   * @param data - The data to be passed to the link module if the address has one.
    * @returns The transaction hash of the transaction that was sent to the blockchain, and the linklistId.
    */
   @autoSwitchMainnet()
@@ -391,9 +401,13 @@ export class LinkContract {
       linkType,
       data = NIL_ADDRESS,
     }: {
+      /** The character ID of the character that is linking to the address. */
       fromCharacterId: Numberish
+      /** The uri of the character you want to link to. */
       toUri: string
+      /** The type of link. */
       linkType: string
+      /** The data to be passed to the link module if the address has one. */
       data: Address
     },
     overrides: WriteOverrides<Entry, 'linkAnyUri'> = {},
@@ -425,9 +439,6 @@ export class LinkContract {
   /**
    * This removes a link from a character to an uri.
    * @category Link
-   * @param fromCharacterId - The character ID of the character that is linking to another character.
-   * @param toUri - The uri you want to unlink from.
-   * @param linkType - The type of link.
    * @returns The transaction hash of the transaction that was sent to the blockchain.
    */
   @autoSwitchMainnet()
@@ -437,8 +448,11 @@ export class LinkContract {
       toUri,
       linkType,
     }: {
+      /** The character ID of the character that is linking to another character. */
       fromCharacterId: Numberish
+      /** The uri you want to unlink from. */
       toUri: string
+      /** The type of link. */
       linkType: string
     },
     overrides: WriteOverrides<Entry, 'unlinkAnyUri'> = {},
@@ -467,11 +481,6 @@ export class LinkContract {
   /**
    * This links a character to any uri with a given link type.
    * @category Link
-   * @param fromCharacterId - The character ID of the character that is linking to the address.
-   * @param toContractAddress - The address of the ERC721 contract.
-   * @param toTokenId - The token id of the ERC721 token.
-   * @param linkType - The type of link.
-   * @param data - The data to be passed to the link module if the address has one.
    * @returns The transaction hash of the transaction that was sent to the blockchain, and the linklistId.
    */
   @autoSwitchMainnet()
@@ -483,10 +492,15 @@ export class LinkContract {
       linkType,
       data = NIL_ADDRESS,
     }: {
+      /** The character ID of the character that is linking to the address. */
       fromCharacterId: Numberish
+      /** The address of the ERC721 contract. */
       toContractAddress: Address
+      /** The token id of the ERC721 token. */
       toTokenId: Numberish
+      /** The type of link. */
       linkType: string
+      /** The data to be passed to the link module if the address has one. */
       data: Address
     },
     overrides: WriteOverrides<Entry, 'linkERC721'> = {},
@@ -519,10 +533,6 @@ export class LinkContract {
   /**
    * This removes a link from a character to an Erc721 token.
    * @category Link
-   * @param fromCharacterId - The character ID of the character that is linking to another character.
-   * @param toContractAddress - The address of the ERC721 contract.
-   * @param toTokenId - The token id of the ERC721 token.
-   * @param linkType - The type of link.
    * @returns The transaction hash of the transaction that was sent to the blockchain.
    */
   @autoSwitchMainnet()
@@ -533,9 +543,13 @@ export class LinkContract {
       toTokenId,
       linkType,
     }: {
+      /** The character ID of the character that is linking to another character. */
       fromCharacterId: Numberish
+      /** The address of the ERC721 contract. */
       toContractAddress: Address
+      /** The token id of the ERC721 token. */
       toTokenId: Numberish
+      /** The type of link. */
       linkType: string
     },
     overrides: WriteOverrides<Entry, 'unlinkERC721'> = {},
@@ -565,11 +579,6 @@ export class LinkContract {
   /**
    * This links a character to another note with a given link type.
    * @category Link
-   * @param fromCharacterId - The character ID of the character that is linking to another note. Must be your own character, otherwise it will be rejected.
-   * @param toCharacterId - The character ID of the character you want to link to.
-   * @param toNoteId - The note ID of the note you want to link to.
-   * @param linkType - The type of link.
-   * @param data - The data to be passed to the link module if the character has one.
    * @returns The linklist id and the transaction hash of the transaction that was sent to the blockchain.
    */
   @autoSwitchMainnet()
@@ -581,10 +590,15 @@ export class LinkContract {
       linkType,
       data,
     }: {
+      /** The character ID of the character that is linking to another note. Must be your own character, otherwise it will be rejected. */
       fromCharacterId: Numberish
+      /** The character ID of the character you want to link to. */
       toCharacterId: Numberish
+      /** The note ID of the note you want to link to. */
       toNoteId: Numberish
+      /** The type of link. */
       linkType: string
+      /** The data to be passed to the link module if the character has one. */
       data?: Address
     },
     overrides: WriteOverrides<Entry, 'linkNote'> = {},
@@ -617,10 +631,6 @@ export class LinkContract {
   /**
    * This removes a link from a character to another note.
    * @category Link
-   * @param fromCharacterId - The character ID of the character that is linking to another note.
-   * @param toCharacterId - The character you want to unlink to.
-   * @param toNoteId - The note ID of the note you want to unlink to.
-   * @param linkType - The type of link.
    * @returns The transaction hash of the transaction that was sent to the blockchain.
    */
   @autoSwitchMainnet()
@@ -631,9 +641,13 @@ export class LinkContract {
       toNoteId,
       linkType,
     }: {
+      /** The character ID of the character that is linking to another note. */
       fromCharacterId: Numberish
+      /** The character you want to unlink to. */
       toCharacterId: Numberish
+      /** The note ID of the note you want to unlink to. */
       toNoteId: Numberish
+      /** The type of link. */
       linkType: string
     },
     overrides: WriteOverrides<Entry, 'unlinkNote'> = {},
@@ -665,10 +679,6 @@ export class LinkContract {
   /**
    * This links a character to a linklist with a given link type.
    * @category Link
-   * @param fromCharacterId - The character ID of the character that is linking to another note. Must be your own character, otherwise it will be rejected.
-   * @param toLinklistId - The linklist ID of the linklist you want to link to.
-   * @param linkType - The type of link.
-   * @param data - The data to be passed to the link module if the character has one.
    * @returns The linklist id and the transaction hash of the transaction that was sent to the blockchain.
    */
   @autoSwitchMainnet()
@@ -679,9 +689,13 @@ export class LinkContract {
       linkType,
       data = NIL_ADDRESS,
     }: {
+      /** The character ID of the character that is linking to another note. Must be your own character, otherwise it will be rejected. */
       fromCharacterId: Numberish
+      /** The linklist ID of the linklist you want to link to. */
       toLinkListId: Numberish
+      /** The type of link. */
       linkType: string
+      /** The data to be passed to the link module if the character has one. */
       data: Address
     },
     overrides: WriteOverrides<Entry, 'linkLinklist'> = {},
@@ -713,9 +727,6 @@ export class LinkContract {
   /**
    * This removes a link from a character to a linklist.
    * @category Link
-   * @param fromCharacterId - The character ID of the character that is linking to another note.
-   * @param toLinklistId - The linklist ID of the linklist you want to unlink to.
-   * @param linkType - The type of link.
    * @returns The transaction hash of the transaction that was sent to the blockchain.
    */
   @autoSwitchMainnet()
@@ -725,8 +736,11 @@ export class LinkContract {
       toLinklistId,
       linkType,
     }: {
+      /** The character ID of the character that is linking to another note. */
       fromCharacterId: Numberish
+      /** The linklist ID of the linklist you want to unlink to. */
       toLinklistId: Numberish
+      /** The type of link. */
       linkType: string
     },
     overrides: WriteOverrides<Entry, 'unlinkLinklist'> = {},
@@ -752,16 +766,14 @@ export class LinkContract {
     }
   }
 
-  /** linklist uri */
-
   async setLinklistUri(
-    fromCharacterId: Numberish,
-    uri: string,
+    { fromCharacterId, uri }: { fromCharacterId: Numberish; uri: string },
+    overrides: WriteOverrides<Entry, 'setLinklistUri'> = {},
   ): Promise<Result<undefined, true>> {
-    const tx = await this.base.contract.write.setLinklistUri([
-      BigInt(fromCharacterId),
-      uri,
-    ])
+    const tx = await this.base.contract.write.setLinklistUri(
+      [BigInt(fromCharacterId), uri],
+      overrides,
+    )
     const receipt = await this.base.publicClient.waitForTransactionReceipt({
       hash: tx,
     })
@@ -771,10 +783,14 @@ export class LinkContract {
     }
   }
 
-  async getLinklistUri(fromCharacterId: string): Promise<Result<string>> {
-    const uri = await this.base.contract.read.getLinklistUri([
-      BigInt(fromCharacterId),
-    ])
+  async getLinklistUri(
+    { fromCharacterId }: { fromCharacterId: string },
+    overrides: ReadOverrides<Entry, 'getLinklistUri'> = {},
+  ): Promise<Result<string>> {
+    const uri = await this.base.contract.read.getLinklistUri(
+      [BigInt(fromCharacterId)],
+      overrides,
+    )
     return {
       data: uri,
     }

@@ -15,14 +15,19 @@ export class CbtContract {
    * This mint a new CBT token to a character.
    *
    * @category CharacterBoundToken
-   * @param characterId - The id of the character.
-   * @param tokenId - The id of the token.
    * @returns The transaction hash.
    */
   @autoSwitchMainnet()
   async mint(
-    characterId: Numberish,
-    tokenId: Numberish,
+    {
+      characterId,
+      tokenId,
+    }: {
+      /** The id of the character. */
+      characterId: Numberish
+      /**  The id of the token. */
+      tokenId: Numberish
+    },
     overrides: WriteOverrides<Cbt, 'mint'> = {},
   ): Promise<Result<undefined, true>> {
     const hash = await this.base.cbtContract.write.mint(
@@ -44,14 +49,19 @@ export class CbtContract {
    * This sets the URI of the token.
    *
    * @category CharacterBoundToken
-   * @param tokenId - The id of the token.
-   * @param uri - The URI of the token.
    * @returns The transaction hash.
    */
   @autoSwitchMainnet()
   async setTokenUri(
-    tokenId: Numberish,
-    uri: string,
+    {
+      tokenId,
+      uri,
+    }: {
+      /** The id of the token.*/
+      tokenId: Numberish
+      /** The URI of the token. */
+      uri: string
+    },
     overrides: WriteOverrides<Cbt, 'setTokenURI'> = {},
   ): Promise<Result<undefined, true>> {
     const hash = await this.base.cbtContract.write.setTokenURI(
@@ -72,11 +82,15 @@ export class CbtContract {
   /**
    * This returns the URI of the token.
    * @category CharacterBoundToken
-   * @param tokenId - The id of the token.
    * @returns The URI of the token.
    */
   async getTokenUri(
-    tokenId: Numberish,
+    {
+      tokenId,
+    }: {
+      /** The id of the token. */
+      tokenId: Numberish
+    },
     overrides: ReadOverrides<Cbt, 'uri'> = {},
   ): Promise<Result<string>> {
     const uri = await this.base.cbtContract.read.uri(

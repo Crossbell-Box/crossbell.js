@@ -7,70 +7,81 @@ const contract = new Contract(mockUser.privateKey)
 describe('should post note', () => {
   let characterId: bigint
   beforeAll(async () => {
-    const { data: pid } = await contract.character.getPrimaryId(
-      mockUser.address,
-    )
+    const { data: pid } = await contract.character.getPrimaryId({
+      address: mockUser.address,
+    })
     characterId = pid
   })
 
   test('postNote and check', async () => {
-    const { data } = await contract.note.post(characterId, {
-      title: 'test',
-      content: 'test',
+    const { data } = await contract.note.post({
+      characterId,
+      metadataOrUri: {
+        title: 'test',
+        content: 'test',
+      },
     })
 
     expect(data.noteId).toBeDefined()
 
-    const { data: note } = await contract.note.get(characterId, data.noteId)
+    const { data: note } = await contract.note.get({
+      characterId,
+      noteId: data.noteId,
+    })
     expect(note.metadata?.title).toBe('test')
   })
 
   test('postNotes and check', async () => {
-    const { data } = await contract.note.postMany([
-      {
-        characterId,
-        metadataOrUri: {
-          title: 'test1',
-          content: 'test1',
+    const { data } = await contract.note.postMany({
+      notes: [
+        {
+          characterId,
+          metadataOrUri: {
+            title: 'test1',
+            content: 'test1',
+          },
         },
-      },
-      {
-        characterId,
-        metadataOrUri: {
-          title: 'test2',
-          content: 'test2',
+        {
+          characterId,
+          metadataOrUri: {
+            title: 'test2',
+            content: 'test2',
+          },
         },
-      },
-    ])
+      ],
+    })
 
     expect(data.noteIds).toHaveLength(2)
 
-    const { data: note1 } = await contract.note.get(
+    const { data: note1 } = await contract.note.get({
       characterId,
-      data.noteIds[0],
-    )
+      noteId: data.noteIds[0],
+    })
     expect(note1.metadata?.title).toBe('test1')
 
-    const { data: note2 } = await contract.note.get(
+    const { data: note2 } = await contract.note.get({
       characterId,
-      data.noteIds[1],
-    )
+      noteId: data.noteIds[1],
+    })
     expect(note2.metadata?.title).toBe('test2')
   })
 
   test('mintNote', async () => {
-    const { data } = await contract.note.post(characterId, {
-      title: 'test',
-      content: 'test',
+    const { data } = await contract.note.post({
+      characterId,
+      metadataOrUri: {
+        title: 'test',
+        content: 'test',
+      },
     })
 
     expect(data.noteId).toBeDefined()
 
-    const { transactionHash: mintHash } = await contract.note.mint(
+    const { transactionHash: mintHash } = await contract.note.mint({
       characterId,
-      data.noteId,
-      mockUser.address,
-    )
+      noteId: data.noteId,
+      toAddress: mockUser.address,
+    })
 
     expect(mintHash).toBeDefined()
 
@@ -78,36 +89,45 @@ describe('should post note', () => {
   })
 
   test('deleteNote', async () => {
-    const { data } = await contract.note.post(characterId, {
-      title: 'test',
-      content: 'test',
+    const { data } = await contract.note.post({
+      characterId,
+      metadataOrUri: {
+        title: 'test',
+        content: 'test',
+      },
     })
 
     expect(data.noteId).toBeDefined()
 
-    const { transactionHash: deleteHash } = await contract.note.delete(
+    const { transactionHash: deleteHash } = await contract.note.delete({
       characterId,
-      data.noteId,
-    )
+      noteId: data.noteId,
+    })
 
     expect(deleteHash).toBeDefined()
 
-    const { data: note } = await contract.note.get(characterId, data.noteId)
+    const { data: note } = await contract.note.get({
+      characterId,
+      noteId: data.noteId,
+    })
     expect(note.deleted).toBeTruthy()
   })
 
   test('postNoteForAnyUri', async () => {
-    const { data } = await contract.note.postForAnyUri(
+    const { data } = await contract.note.postForAnyUri({
       characterId,
-      { title: 'test', content: 'test' },
-      'https://example.com',
-    )
+      metadataOrUri: { title: 'test', content: 'test' },
+      targetUri: 'https://example.com',
+    })
 
     expect(data.noteId).toBeDefined()
 
-    const { data: note } = await contract.note.get(characterId, data.noteId)
+    const { data: note } = await contract.note.get({
+      characterId,
+      noteId: data.noteId,
+    })
     expect(note.linkKey).toBe(
-      contract.note.getLinkKeyForAnyUri('https://example.com'),
+      contract.note.getLinkKeyForAnyUri({ toUri: 'https://example.com' }),
     )
   })
 })
