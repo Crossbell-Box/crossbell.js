@@ -45,27 +45,52 @@ async function showResult(p: any) {
 }
 
 function balance() {
-  showResult(contract.csb.getBalance(address.value))
+  showResult(
+    contract.csb.getBalance({
+      owner: address.value,
+    }),
+  )
 }
 
 function transfer() {
-  showResult(contract.csb.transfer(address.value, 0))
+  showResult(
+    contract.csb.transfer({
+      toAddress: address.value,
+      amount: 0,
+    }),
+  )
 }
 
 function getPrimaryHandle() {
-  showResult(contract.character.getPrimaryId(address.value))
+  showResult(
+    contract.character.getPrimaryId({
+      address: address.value,
+    }),
+  )
 }
 
 function getCharacterByHandle() {
-  showResult(contract.character.getByHandle(handle.value))
+  showResult(
+    contract.character.getByHandle({
+      handle: handle.value,
+    }),
+  )
 }
 
 function getCharacter() {
-  showResult(contract.character.get(BigInt(characterId.value)))
+  showResult(
+    contract.character.get({
+      characterId: characterId.value,
+    }),
+  )
 }
 
 function setPrimaryCharacterId() {
-  showResult(contract.character.setPrimaryId(+characterId.value))
+  showResult(
+    contract.character.setPrimaryId({
+      characterId: +characterId.value,
+    }),
+  )
 }
 
 function getCharacters() {
