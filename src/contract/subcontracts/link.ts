@@ -754,28 +754,29 @@ export class LinkContract {
 
   /** linklist uri */
 
-  // TODO: next version
-  // async setLinklistUri(
-  //   fromCharacterId: string,
-  //   uri: string, // Name: Atlas's follow links
-  // ): Promise<Result<undefined>>  {
-  //   const tx = await this.base.contract.setLinklistUri(fromCharacterId, uri)
-  //   const receipt = await this.base.publicClient.waitForTransactionReceipt({hash:tx})
-  //   return {
-  //     data: undefined,
-  //     transactionHash: receipt.transactionHash,
-  //   }
-  // }
+  async setLinklistUri(
+    fromCharacterId: Numberish,
+    uri: string,
+  ): Promise<Result<undefined, true>> {
+    const tx = await this.base.contract.write.setLinklistUri([
+      BigInt(fromCharacterId),
+      uri,
+    ])
+    const receipt = await this.base.publicClient.waitForTransactionReceipt({
+      hash: tx,
+    })
+    return {
+      data: undefined,
+      transactionHash: receipt.transactionHash,
+    }
+  }
 
-  // TODO: next version
-  // async getLinklistUri(
-  //   fromCharacterId: string,
-  //   linkType: string,
-  // ): Promise<Result<string>>  {
-  //   const uri = await this.base.contract.getLinklistUri(fromCharacterId, linkType)
-  //   return {
-  //     data: uri,
-  //     transactionHash: undefined,
-  //   }
-  // }
+  async getLinklistUri(fromCharacterId: string): Promise<Result<string>> {
+    const uri = await this.base.contract.read.getLinklistUri([
+      BigInt(fromCharacterId),
+    ])
+    return {
+      data: uri,
+    }
+  }
 }
