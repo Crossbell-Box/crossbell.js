@@ -17,26 +17,34 @@ describe('tips', () => {
 
   describe('tip', () => {
     test('tip character', async () => {
-      const res = await contract.tips.tipCharacter(
-        { fromCharacterId: characterId!, toCharacterId: characterId!, amount: 0 },
-      )
+      const res = await contract.tips.tipCharacter({
+        fromCharacterId: characterId!,
+        toCharacterId: characterId!,
+        amount: 0,
+      })
 
       expect(res.transactionHash).toBeDefined()
     })
 
     test('tip character for a note', async () => {
-      const res = await contract.tips.tipCharacterForNote(
-        { fromCharacterId: characterId!, toCharacterId: characterId!, toNoteId: 1n, amount: 0 },
-      )
+      const res = await contract.tips.tipCharacterForNote({
+        fromCharacterId: characterId!,
+        toCharacterId: characterId!,
+        toNoteId: 1n,
+        amount: 0,
+      })
 
       expect(res.transactionHash).toBeDefined()
     })
 
     test('tip failed when amount not enough', () => {
       expect(
-        contract.tips.tipCharacterForNote(
-          { fromCharacterId: characterId!, toCharacterId: characterId!, toNoteId: 1n, amount: 1000000000000n },
-        ),
+        contract.tips.tipCharacterForNote({
+          fromCharacterId: characterId!,
+          toCharacterId: characterId!,
+          toNoteId: 1n,
+          amount: 1000000000000n,
+        }),
       ).rejects.toThrow()
     })
   })
