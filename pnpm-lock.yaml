@@ -59,7 +59,7 @@ importers:
 
   examples/vite:
     dependencies:
-      crossbell.js:
+      crossbell:
         specifier: workspace:*
         version: link:../..
       vue:

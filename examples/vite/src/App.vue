@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { createContract, createIndexer } from 'crossbell.js'
+import { createContract, createIndexer } from 'crossbell'
 import { onErrorCaptured, ref } from 'vue'
 import { useDark, useEventListener, useLocalStorage } from '@vueuse/core'
 import { type Address } from 'abitype'

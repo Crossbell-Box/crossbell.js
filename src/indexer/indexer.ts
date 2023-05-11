@@ -20,7 +20,7 @@ import { NewbieIndexer } from './subapis/newbie'
  *
  * @example
  * ```js
- * import { createIndexer } from 'crossbell.js'
+ * import { createIndexer } from 'crossbell'
  *
  * const indexer = createIndexer()
  * const res = await indexer.character.getMany('0x...')
@@ -52,7 +52,7 @@ export class Indexer extends BaseIndexer {
  *
  * @example
  * ```js
- * import { createIndexer } from 'crossbell.js'
+ * import { createIndexer } from 'crossbell'
  *
  * const indexer = createIndexer()
  * const res = await indexer.character.getMany('0x...')

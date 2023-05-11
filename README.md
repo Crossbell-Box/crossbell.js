@@ -2,7 +2,7 @@
 
 A JavaScript SDK to interact with the Crossbell. It works for both browser and Node.js.
 
-[![npm version](https://badgen.net/npm/v/crossbell.js)](https://npm.im/crossbell.js) [![npm downloads](https://badgen.net/npm/dm/crossbell.js)](https://npm.im/crossbell.js)
+[![npm version](https://badgen.net/npm/v/crossbell)](https://npm.im/crossbell) [![npm downloads](https://badgen.net/npm/dm/crossbell)](https://npm.im/crossbell)
 
 - [API Reference](https://crossbell-box.github.io/crossbell.js/)
 - [Vite Example](https://crossbell-js.netlify.app/)
@@ -10,7 +10,7 @@ A JavaScript SDK to interact with the Crossbell. It works for both browser and N
 ## Installation
 
 ```bash
-npm install crossbell.js
+npm install crossbell
 ```
 
 ## Usage
@@ -24,7 +24,7 @@ Node.js >= 18.0.0 or Node.js >= 16.14.0 with [fetch polyfill](https://github.com
 #### Connect with Metamask
 
 ```typescript
-import { Contract } from 'crossbell.js'
+import { Contract } from 'crossbell'
 
 // Create a new contract instance with metamask provider
 const provider = window.ethereum
@@ -49,7 +49,7 @@ try {
 You can also connect with a private key directly.
 
 ```typescript
-import { Contract } from 'crossbell.js'
+import { Contract } from 'crossbell'
 
 const privateKey =
   '0xabcdef0123456789012345678901234567890123456789012345678901234'
@@ -61,7 +61,7 @@ const contract = new Contract(privateKey)
 You can also connect with a read-only provider. Note that in this case, you can't do write operations like `createCharacter`.
 
 ```typescript
-import { Contract } from 'crossbell.js'
+import { Contract } from 'crossbell'
 
 const contract = new Contract() // just pass nothing to use a read-only provider
 ```
@@ -73,7 +73,7 @@ For more contract api, see [docs](https://crossbell-box.github.io/crossbell.js/c
 You can fetch data from the crossbell indexer.
 
 ```typescript
-import { createIndexer } from 'crossbell.js'
+import { createIndexer } from 'crossbell'
 
 const indexer = createIndexer()
 

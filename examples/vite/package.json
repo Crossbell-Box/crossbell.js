@@ -9,7 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "crossbell.js": "workspace:*",
+    "crossbell": "workspace:*",
     "vue": "^3.2.47"
   },
   "devDependencies": {

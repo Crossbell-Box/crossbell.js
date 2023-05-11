@@ -110,21 +110,21 @@ export class BaseContract<THasWallet extends boolean = boolean> {
    *
    * @example Connect with Metamask
    * ```js
-   * import { Contract } from 'crossbell.js'
+   * import { Contract } from 'crossbell'
    * const provider = window.ethereum // the metamask provider
    * const contract = new Contract(provider)
    * ```
    *
    * @example Connect with Private Key
    * ```js
-   * import { Contract } from 'crossbell.js'
+   * import { Contract } from 'crossbell'
    * const privateKey = '0xabcdef0123456789012345678901234567890123456789012345678901234'
    * const contract = new Contract(privateKey)
    * ```
    *
    * @example Connect with a Readonly Contract
    * ```js
-   * import { Contract } from 'crossbell.js'
+   * import { Contract } from 'crossbell'
    * const contract = new Contract() // readonly contract
    * ```
    */

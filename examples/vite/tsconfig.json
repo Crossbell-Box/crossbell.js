@@ -13,7 +13,7 @@
     "skipLibCheck": true,
     "noEmit": true,
     "paths": {
-      "crossbell.js": ["../../src/index.ts"]
+      "crossbell": ["../../src/index.ts"]
     },
     "experimentalDecorators": true
   },

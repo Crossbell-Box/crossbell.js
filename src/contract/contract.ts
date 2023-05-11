@@ -20,7 +20,7 @@ import {
  *
  * @example
  * ```ts
- * import { createContract } from 'crossbell.js'
+ * import { createContract } from 'crossbell'
  *
  * // Create a new contract instance with metamask provider
  * const provider = window.ethereum
@@ -62,21 +62,21 @@ export class Contract<
  *
  * @example Connect with Metamask
  * ```js
- * import { createContract } from 'crossbell.js'
+ * import { createContract } from 'crossbell'
  * const provider = window.ethereum // the metamask provider
  * const contract = createContract(provider)
  * ```
  *
  * @example Connect with Private Key
  * ```js
- * import { createContract } from 'crossbell.js'
+ * import { createContract } from 'crossbell'
  * const privateKey = '0xabcdef0123456789012345678901234567890123456789012345678901234'
  * const contract = createContract(privateKey)
  * ```
  *
  * @example Connect with a Readonly Contract
  * ```js
- * import { createContract } from 'crossbell.js'
+ * import { createContract } from 'crossbell'
  * const contract = createContract() // readonly contract
  * ```
  */

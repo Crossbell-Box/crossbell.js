@@ -8,7 +8,7 @@ export default defineConfig(({ mode }) => {
   return {
     resolve: {
       alias: {
-        'crossbell.js': path.resolve(__dirname, '../../src/index.ts'),
+        crossbell: path.resolve(__dirname, '../../src/index.ts'),
       },
     },
     define: {

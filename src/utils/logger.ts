@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 
-const PREFIX = '[crossbell.js]'
+const PREFIX = '[crossbell]'
 const isProduction = globalThis?.process?.env?.NODE_ENV === 'production'
 
 export function log(...message: any[]) {
