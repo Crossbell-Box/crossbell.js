@@ -88,8 +88,13 @@ export class OperatorContract {
   async grantForNote(
     characterId: Numberish,
     noteId: Numberish,
-    allowlist: Address[],
-    blocklist: Address[] = [],
+    {
+      allowlist,
+      blocklist = [],
+    }: {
+      allowlist: Address[]
+      blocklist: Address[]
+    },
     overrides: WriteOverrides<Entry, 'grantOperators4Note'> = {},
   ): Promise<Result<{}, true>> {
     validateAddress(allowlist)

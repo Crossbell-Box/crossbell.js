@@ -29,13 +29,15 @@ export class CharacterContract {
   @autoSwitchMainnet()
   async create(
     owner: Address,
-    handle: string,
-    metadataOrUri: CharacterMetadata | string,
     {
+      handle,
+      metadataOrUri,
       linkModule,
     }: {
+      handle: string
+      metadataOrUri: CharacterMetadata | string
       linkModule?: MintOrLinkModuleConfig
-    } = {},
+    },
     overrides: WriteOverrides<Entry, 'createCharacter'> = {},
   ): Promise<Result<bigint, true>> {
     validateAddress(owner)
@@ -499,11 +501,19 @@ export class CharacterContract {
    */
   @autoSwitchMainnet()
   async withdrawFromNewbieVilla(
-    toAddress: Address,
-    characterId: Numberish,
-    nonce: Numberish,
-    expires: Numberish,
-    proof: Address,
+    {
+      toAddress,
+      characterId,
+      nonce,
+      expires,
+      proof,
+    }: {
+      toAddress: Address
+      characterId: Numberish
+      nonce: Numberish
+      expires: Numberish
+      proof: Address
+    },
     overrides: WriteOverrides<NewbieVilla, 'withdraw'> = {},
   ): Promise<Result<undefined, true>> {
     validateAddress(toAddress)

@@ -26,10 +26,17 @@ export class LinkContract {
    */
   @autoSwitchMainnet()
   async linkCharacter(
-    fromCharacterId: Numberish,
-    toCharacterId: Numberish,
-    linkType: string,
-    data?: Hex,
+    {
+      fromCharacterId,
+      toCharacterId,
+      linkType,
+      data,
+    }: {
+      fromCharacterId: Numberish
+      toCharacterId: Numberish
+      linkType: string
+      data?: Hex
+    },
     overrides: WriteOverrides<Entry, 'linkCharacter'> = {},
   ): Promise<Result<bigint, true>> {
     const hash = await this.base.contract.write.linkCharacter(
@@ -71,11 +78,19 @@ export class LinkContract {
    */
   @autoSwitchMainnet()
   async linkCharactersInBatch(
-    fromCharacterId: Numberish,
-    toCharacterIds: Numberish[],
-    toAddresses: Address[],
-    linkType: string,
-    data?: Address[],
+    {
+      fromCharacterId,
+      toCharacterIds,
+      toAddresses,
+      linkType,
+      data,
+    }: {
+      fromCharacterId: Numberish
+      toCharacterIds: Numberish[]
+      toAddresses: Address[]
+      linkType: string
+      data?: Address[]
+    },
     overrides: WriteOverrides<Periphery, 'linkCharactersInBatch'> = {},
   ): Promise<Result<bigint, true>> {
     toAddresses.forEach((address) => {
@@ -141,9 +156,15 @@ export class LinkContract {
    */
   @autoSwitchMainnet()
   async createThenLinkCharacter(
-    fromCharacterId: Numberish,
-    toAddress: Address,
-    linkType: string,
+    {
+      fromCharacterId,
+      toAddress,
+      linkType,
+    }: {
+      fromCharacterId: Numberish
+      toAddress: Address
+      linkType: string
+    },
     overrides: WriteOverrides<Entry, 'createThenLinkCharacter'> = {},
   ): Promise<Result<{ toCharacterId: bigint; linklistId: bigint }, true>> {
     validateAddress(toAddress)
@@ -185,9 +206,15 @@ export class LinkContract {
    */
   @autoSwitchMainnet()
   async unlinkCharacter(
-    fromCharacterId: Numberish,
-    toCharacterId: Numberish,
-    linkType: string,
+    {
+      fromCharacterId,
+      toCharacterId,
+      linkType,
+    }: {
+      fromCharacterId: Numberish
+      toCharacterId: Numberish
+      linkType: string
+    },
     overrides: WriteOverrides<Entry, 'unlinkCharacter'> = {},
   ): Promise<Result<undefined, true>> {
     const hash = await this.base.contract.write.unlinkCharacter(
@@ -268,10 +295,17 @@ export class LinkContract {
    */
   @autoSwitchMainnet()
   async linkAddress(
-    fromCharacterId: Numberish,
-    toAddress: Address,
-    linkType: string,
-    data: Address = NIL_ADDRESS,
+    {
+      fromCharacterId,
+      toAddress,
+      linkType,
+      data = NIL_ADDRESS,
+    }: {
+      fromCharacterId: Numberish
+      toAddress: Address
+      linkType: string
+      data: Address
+    },
     overrides: WriteOverrides<Entry, 'linkAddress'> = {},
   ): Promise<Result<bigint, true>> {
     const hash = await this.base.contract.write.linkAddress(
@@ -308,9 +342,15 @@ export class LinkContract {
    */
   @autoSwitchMainnet()
   async unlinkAddress(
-    fromCharacterId: Numberish,
-    toAddress: Address,
-    linkType: string,
+    {
+      fromCharacterId,
+      toAddress,
+      linkType,
+    }: {
+      fromCharacterId: Numberish
+      toAddress: Address
+      linkType: string
+    },
     overrides: WriteOverrides<Entry, 'unlinkAddress'> = {},
   ): Promise<Result<undefined, true>> {
     const hash = await this.base.contract.write.unlinkAddress(
@@ -345,10 +385,17 @@ export class LinkContract {
    */
   @autoSwitchMainnet()
   async linkAnyUri(
-    fromCharacterId: Numberish,
-    toUri: string,
-    linkType: string,
-    data: Address = NIL_ADDRESS,
+    {
+      fromCharacterId,
+      toUri,
+      linkType,
+      data = NIL_ADDRESS,
+    }: {
+      fromCharacterId: Numberish
+      toUri: string
+      linkType: string
+      data: Address
+    },
     overrides: WriteOverrides<Entry, 'linkAnyUri'> = {},
   ): Promise<Result<bigint, true>> {
     const hash = await this.base.contract.write.linkAnyUri(
@@ -385,9 +432,15 @@ export class LinkContract {
    */
   @autoSwitchMainnet()
   async unlinkAnyUri(
-    fromCharacterId: Numberish,
-    toUri: string,
-    linkType: string,
+    {
+      fromCharacterId,
+      toUri,
+      linkType,
+    }: {
+      fromCharacterId: Numberish
+      toUri: string
+      linkType: string
+    },
     overrides: WriteOverrides<Entry, 'unlinkAnyUri'> = {},
   ): Promise<Result<undefined, true>> {
     const hash = await this.base.contract.write.unlinkAnyUri(
@@ -423,11 +476,19 @@ export class LinkContract {
    */
   @autoSwitchMainnet()
   async linkErc721(
-    fromCharacterId: Numberish,
-    toContractAddress: Address,
-    toTokenId: Numberish,
-    linkType: string,
-    data: Address = NIL_ADDRESS,
+    {
+      fromCharacterId,
+      toContractAddress,
+      toTokenId,
+      linkType,
+      data = NIL_ADDRESS,
+    }: {
+      fromCharacterId: Numberish
+      toContractAddress: Address
+      toTokenId: Numberish
+      linkType: string
+      data: Address
+    },
     overrides: WriteOverrides<Entry, 'linkERC721'> = {},
   ): Promise<Result<bigint, true>> {
     const hash = await this.base.contract.write.linkERC721(
@@ -466,10 +527,17 @@ export class LinkContract {
    */
   @autoSwitchMainnet()
   async unlinkErc721(
-    fromCharacterId: Numberish,
-    toContractAddress: Address,
-    toTokenId: Numberish,
-    linkType: string,
+    {
+      fromCharacterId,
+      toContractAddress,
+      toTokenId,
+      linkType,
+    }: {
+      fromCharacterId: Numberish
+      toContractAddress: Address
+      toTokenId: Numberish
+      linkType: string
+    },
     overrides: WriteOverrides<Entry, 'unlinkERC721'> = {},
   ): Promise<Result<undefined, true>> {
     const hash = await this.base.contract.write.unlinkERC721(
@@ -506,11 +574,19 @@ export class LinkContract {
    */
   @autoSwitchMainnet()
   async linkNote(
-    fromCharacterId: Numberish,
-    toCharacterId: Numberish,
-    toNoteId: Numberish,
-    linkType: string,
-    data?: Address,
+    {
+      fromCharacterId,
+      toCharacterId,
+      toNoteId,
+      linkType,
+      data,
+    }: {
+      fromCharacterId: Numberish
+      toCharacterId: Numberish
+      toNoteId: Numberish
+      linkType: string
+      data?: Address
+    },
     overrides: WriteOverrides<Entry, 'linkNote'> = {},
   ): Promise<Result<bigint, true>> {
     const hash = await this.base.contract.write.linkNote(
@@ -549,10 +625,17 @@ export class LinkContract {
    */
   @autoSwitchMainnet()
   async unlinkNote(
-    fromCharacterId: Numberish,
-    toCharacterId: Numberish,
-    toNoteId: Numberish,
-    linkType: string,
+    {
+      fromCharacterId,
+      toCharacterId,
+      toNoteId,
+      linkType,
+    }: {
+      fromCharacterId: Numberish
+      toCharacterId: Numberish
+      toNoteId: Numberish
+      linkType: string
+    },
     overrides: WriteOverrides<Entry, 'unlinkNote'> = {},
   ): Promise<Result<undefined, true>> {
     const hash = await this.base.contract.write.unlinkNote(
@@ -590,10 +673,17 @@ export class LinkContract {
    */
   @autoSwitchMainnet()
   async linkLinklist(
-    fromCharacterId: Numberish,
-    toLinkListId: Numberish,
-    linkType: string,
-    data: Address = NIL_ADDRESS,
+    {
+      fromCharacterId,
+      toLinkListId,
+      linkType,
+      data = NIL_ADDRESS,
+    }: {
+      fromCharacterId: Numberish
+      toLinkListId: Numberish
+      linkType: string
+      data: Address
+    },
     overrides: WriteOverrides<Entry, 'linkLinklist'> = {},
   ): Promise<Result<bigint, true>> {
     const hash = await this.base.contract.write.linkLinklist(
@@ -630,9 +720,15 @@ export class LinkContract {
    */
   @autoSwitchMainnet()
   async unlinkLinklist(
-    fromCharacterId: Numberish,
-    toLinklistId: Numberish,
-    linkType: string,
+    {
+      fromCharacterId,
+      toLinklistId,
+      linkType,
+    }: {
+      fromCharacterId: Numberish
+      toLinklistId: Numberish
+      linkType: string
+    },
     overrides: WriteOverrides<Entry, 'unlinkLinklist'> = {},
   ): Promise<Result<undefined, true>> {
     const hash = await this.base.contract.write.unlinkLinklist(

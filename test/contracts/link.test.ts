@@ -11,10 +11,16 @@ describe('link and check', () => {
   let characterId2: bigint | null = null
   test('create two characters to link with', async () => {
     characterId1 = await contract.character
-      .create(mockUser.address, genRandomHandle(), metadataUri)
+      .create(mockUser.address, {
+        handle: genRandomHandle(),
+        metadataOrUri: metadataUri,
+      })
       .then(({ data }) => data)
     characterId2 = await contract.character
-      .create(mockUser.address, genRandomHandle(), metadataUri)
+      .create(mockUser.address, {
+        handle: genRandomHandle(),
+        metadataOrUri: metadataUri,
+      })
       .then(({ data }) => data)
 
     expect(characterId1).not.toBeNull()
@@ -24,11 +30,11 @@ describe('link and check', () => {
   const linkType = 'follow'
   let linklistId: bigint | null = null
   test('linkCharacter', async () => {
-    const result = await contract.link.linkCharacter(
-      characterId1!,
-      characterId2!,
+    const result = await contract.link.linkCharacter({
+      fromCharacterId: characterId1!,
+      toCharacterId: characterId2!,
       linkType,
-    )
+    })
     linklistId = result.data
     expect(linklistId).not.toBeNull()
 
@@ -39,12 +45,12 @@ describe('link and check', () => {
   })
 
   test('linkCharactersInBatch', async () => {
-    const result = await contract.link.linkCharactersInBatch(
-      characterId1!,
-      [characterId2!],
-      [],
+    const result = await contract.link.linkCharactersInBatch({
+      fromCharacterId: characterId1!,
+      toCharacterIds: [characterId2!],
+      toAddresses: [],
       linkType,
-    )
+    })
 
     expect(result.data).toBe(linklistId)
   })
@@ -59,7 +65,11 @@ describe('link and check', () => {
 
   test('unlinkCharacter and check', async () => {
     await contract.link
-      .unlinkCharacter(characterId1!, characterId2!, linkType)
+      .unlinkCharacter({
+        fromCharacterId: characterId1!,
+        toCharacterId: characterId2!,
+        linkType,
+      })
       .then(({ data }) => data)
 
     const { data } = await contract.link.getLinkingCharacterIds(
@@ -72,11 +82,11 @@ describe('link and check', () => {
   test('createThenLinkCharacter and check', async () => {
     const randomAddress = privateKeyToAccount(generatePrivateKey()).address
 
-    const result = await contract.link.createThenLinkCharacter(
-      characterId1!,
-      randomAddress,
+    const result = await contract.link.createThenLinkCharacter({
+      fromCharacterId: characterId1!,
+      toAddress: randomAddress,
       linkType,
-    )
+    })
 
     expect(result.data.toCharacterId).not.toBeNull()
     expect(linklistId).not.toBeNull()
@@ -106,21 +116,21 @@ describe('link and check', () => {
     })
 
     // like this note
-    const result1 = await contract.link.linkNote(
-      characterId1!,
-      characterId1!,
-      note.data.noteId,
-      'like',
-    )
+    const result1 = await contract.link.linkNote({
+      fromCharacterId: characterId1!,
+      toCharacterId: characterId1!,
+      toNoteId: note.data.noteId,
+      linkType: 'like',
+    })
     expect(result1.data).not.toBeNull()
 
     // unlike this note
-    const result2 = await contract.link.unlinkNote(
-      characterId1!,
-      characterId1!,
-      note.data.noteId,
-      'like',
-    )
+    const result2 = await contract.link.unlinkNote({
+      fromCharacterId: characterId1!,
+      toCharacterId: characterId1!,
+      toNoteId: note.data.noteId,
+      linkType: 'like',
+    })
     expect(result2.data).not.toBeNull()
   })
 })

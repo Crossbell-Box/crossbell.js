@@ -18,19 +18,18 @@ describe('character', () => {
   describe('create a character and check', () => {
     test('should fail to createCharacter if the handle is not in correct format', () => {
       expect(
-        contract.character.create(
-          mockUser.address,
-          'cannot contain whitespace',
-          metadataUri,
-        ),
+        contract.character.create(mockUser.address, {
+          handle: 'cannot contain whitespace',
+          metadataOrUri: metadataUri,
+        }),
       ).rejects.toThrow(/Invalid handle/)
 
       expect(
-        contract.character.create(
-          mockUser.address,
-          'cannot-contain-be-more-than-32-characters-longlonglonglonglonglonglonglonglong',
-          metadataUri,
-        ),
+        contract.character.create(mockUser.address, {
+          handle:
+            'cannot-contain-be-more-than-32-characters-longlonglonglonglonglonglonglonglong',
+          metadataOrUri: metadataUri,
+        }),
       ).rejects.toThrow(/Invalid handle/)
     })
 
@@ -51,7 +50,7 @@ describe('character', () => {
 
       // create one
       const characterId = await contract.character
-        .create(randAddr, randHandle, metadataUri)
+        .create(randAddr, { handle: randHandle, metadataOrUri: metadataUri })
         .then(({ data }) => data)
 
       expect(characterId).not.toBeNull()
@@ -68,11 +67,10 @@ describe('character', () => {
     })
 
     test('createCharacter and getCharacterByTransaction', async () => {
-      const result = await contract.character.create(
-        mockUser.address,
-        randomHandle,
-        metadataUri,
-      )
+      const result = await contract.character.create(mockUser.address, {
+        handle: randomHandle,
+        metadataOrUri: metadataUri,
+      })
       characterId = result.data
       expect(result.data).not.toBeNull()
 
