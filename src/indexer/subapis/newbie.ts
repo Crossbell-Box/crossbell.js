@@ -1,12 +1,12 @@
 import { type Address } from 'viem'
 import {
-  type Numberish,
   type CharacterMetadata,
   type EmailUserEntity,
   type LinkItemNote,
   type LinkItemType,
   type NoteEntity,
   type NoteMetadata,
+  type Numberish,
 } from '../../types'
 import { type BaseIndexer } from './base'
 
