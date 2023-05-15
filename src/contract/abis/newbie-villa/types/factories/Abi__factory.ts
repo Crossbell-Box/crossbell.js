@@ -336,6 +336,11 @@ const _abi = [
         name: "admin_",
         type: "address",
       },
+      {
+        internalType: "address",
+        name: "tips_",
+        type: "address",
+      },
     ],
     name: "initialize",
     outputs: [],
@@ -429,6 +434,57 @@ const _abi = [
       },
     ],
     stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "fromCharacterId",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "toCharacterId",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "amount",
+        type: "uint256",
+      },
+    ],
+    name: "tipCharacter",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "fromCharacterId",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "toCharacterId",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "toNoteId",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "amount",
+        type: "uint256",
+      },
+    ],
+    name: "tipCharacterForNote",
+    outputs: [],
+    stateMutability: "nonpayable",
     type: "function",
   },
   {

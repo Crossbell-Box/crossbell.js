@@ -40,11 +40,13 @@ export interface AbiInterface extends utils.Interface {
     "getToken()": FunctionFragment;
     "grantRole(bytes32,address)": FunctionFragment;
     "hasRole(bytes32,address)": FunctionFragment;
-    "initialize(address,address,address,address)": FunctionFragment;
+    "initialize(address,address,address,address,address)": FunctionFragment;
     "onERC721Received(address,address,uint256,bytes)": FunctionFragment;
     "renounceRole(bytes32,address)": FunctionFragment;
     "revokeRole(bytes32,address)": FunctionFragment;
     "supportsInterface(bytes4)": FunctionFragment;
+    "tipCharacter(uint256,uint256,uint256)": FunctionFragment;
+    "tipCharacterForNote(uint256,uint256,uint256,uint256)": FunctionFragment;
     "tokensReceived(address,address,address,uint256,bytes,bytes)": FunctionFragment;
     "web3Entry()": FunctionFragment;
     "withdraw(address,uint256,uint256,uint256,bytes)": FunctionFragment;
@@ -69,6 +71,8 @@ export interface AbiInterface extends utils.Interface {
       | "renounceRole"
       | "revokeRole"
       | "supportsInterface"
+      | "tipCharacter"
+      | "tipCharacterForNote"
       | "tokensReceived"
       | "web3Entry"
       | "withdraw"
@@ -122,6 +126,7 @@ export interface AbiInterface extends utils.Interface {
       PromiseOrValue<string>,
       PromiseOrValue<string>,
       PromiseOrValue<string>,
+      PromiseOrValue<string>,
       PromiseOrValue<string>
     ]
   ): string;
@@ -145,6 +150,23 @@ export interface AbiInterface extends utils.Interface {
   encodeFunctionData(
     functionFragment: "supportsInterface",
     values: [PromiseOrValue<BytesLike>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "tipCharacter",
+    values: [
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<BigNumberish>
+    ]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "tipCharacterForNote",
+    values: [
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<BigNumberish>
+    ]
   ): string;
   encodeFunctionData(
     functionFragment: "tokensReceived",
@@ -214,6 +236,14 @@ export interface AbiInterface extends utils.Interface {
   decodeFunctionResult(functionFragment: "revokeRole", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "supportsInterface",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "tipCharacter",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "tipCharacterForNote",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -376,6 +406,7 @@ export interface Abi extends BaseContract {
       xsyncOperator_: PromiseOrValue<string>,
       token_: PromiseOrValue<string>,
       admin_: PromiseOrValue<string>,
+      tips_: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
@@ -403,6 +434,21 @@ export interface Abi extends BaseContract {
       interfaceId: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
     ): Promise<[boolean]>;
+
+    tipCharacter(
+      fromCharacterId: PromiseOrValue<BigNumberish>,
+      toCharacterId: PromiseOrValue<BigNumberish>,
+      amount: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
+    tipCharacterForNote(
+      fromCharacterId: PromiseOrValue<BigNumberish>,
+      toCharacterId: PromiseOrValue<BigNumberish>,
+      toNoteId: PromiseOrValue<BigNumberish>,
+      amount: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
 
     tokensReceived(
       arg0: PromiseOrValue<string>,
@@ -476,6 +522,7 @@ export interface Abi extends BaseContract {
     xsyncOperator_: PromiseOrValue<string>,
     token_: PromiseOrValue<string>,
     admin_: PromiseOrValue<string>,
+    tips_: PromiseOrValue<string>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
@@ -503,6 +550,21 @@ export interface Abi extends BaseContract {
     interfaceId: PromiseOrValue<BytesLike>,
     overrides?: CallOverrides
   ): Promise<boolean>;
+
+  tipCharacter(
+    fromCharacterId: PromiseOrValue<BigNumberish>,
+    toCharacterId: PromiseOrValue<BigNumberish>,
+    amount: PromiseOrValue<BigNumberish>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  tipCharacterForNote(
+    fromCharacterId: PromiseOrValue<BigNumberish>,
+    toCharacterId: PromiseOrValue<BigNumberish>,
+    toNoteId: PromiseOrValue<BigNumberish>,
+    amount: PromiseOrValue<BigNumberish>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
 
   tokensReceived(
     arg0: PromiseOrValue<string>,
@@ -576,6 +638,7 @@ export interface Abi extends BaseContract {
       xsyncOperator_: PromiseOrValue<string>,
       token_: PromiseOrValue<string>,
       admin_: PromiseOrValue<string>,
+      tips_: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -603,6 +666,21 @@ export interface Abi extends BaseContract {
       interfaceId: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
     ): Promise<boolean>;
+
+    tipCharacter(
+      fromCharacterId: PromiseOrValue<BigNumberish>,
+      toCharacterId: PromiseOrValue<BigNumberish>,
+      amount: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    tipCharacterForNote(
+      fromCharacterId: PromiseOrValue<BigNumberish>,
+      toCharacterId: PromiseOrValue<BigNumberish>,
+      toNoteId: PromiseOrValue<BigNumberish>,
+      amount: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<void>;
 
     tokensReceived(
       arg0: PromiseOrValue<string>,
@@ -730,6 +808,7 @@ export interface Abi extends BaseContract {
       xsyncOperator_: PromiseOrValue<string>,
       token_: PromiseOrValue<string>,
       admin_: PromiseOrValue<string>,
+      tips_: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
@@ -756,6 +835,21 @@ export interface Abi extends BaseContract {
     supportsInterface(
       interfaceId: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    tipCharacter(
+      fromCharacterId: PromiseOrValue<BigNumberish>,
+      toCharacterId: PromiseOrValue<BigNumberish>,
+      amount: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    tipCharacterForNote(
+      fromCharacterId: PromiseOrValue<BigNumberish>,
+      toCharacterId: PromiseOrValue<BigNumberish>,
+      toNoteId: PromiseOrValue<BigNumberish>,
+      amount: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     tokensReceived(
@@ -835,6 +929,7 @@ export interface Abi extends BaseContract {
       xsyncOperator_: PromiseOrValue<string>,
       token_: PromiseOrValue<string>,
       admin_: PromiseOrValue<string>,
+      tips_: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -861,6 +956,21 @@ export interface Abi extends BaseContract {
     supportsInterface(
       interfaceId: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    tipCharacter(
+      fromCharacterId: PromiseOrValue<BigNumberish>,
+      toCharacterId: PromiseOrValue<BigNumberish>,
+      amount: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    tipCharacterForNote(
+      fromCharacterId: PromiseOrValue<BigNumberish>,
+      toCharacterId: PromiseOrValue<BigNumberish>,
+      toNoteId: PromiseOrValue<BigNumberish>,
+      amount: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     tokensReceived(

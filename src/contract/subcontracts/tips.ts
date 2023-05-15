@@ -42,6 +42,39 @@ export class TipsContract extends BaseContract {
   }
 
   /**
+   * Only for newbie.
+   *
+   * This tips a character with $MIRA token from a newbie character.
+   *
+   * @category TipsContract
+   * @param fromCharacterId - The character ID of the character that is tipping.
+   * @param toCharacterId - The character ID of the character that is being tipped.
+   * @param amount - The amount of $MIRA token to tip. Unit: wei.
+   * @returns The transaction hash.
+   */
+  @autoSwitchMainnet()
+  async tipCharacterFromNewbie(
+    fromCharacterId: BigNumberish,
+    toCharacterId: BigNumberish,
+    amount: BigNumberish,
+    overrides: Overrides = {},
+  ): Promise<Result<undefined, true>> | never {
+    const tx = await this.newbieVillaContract.tipCharacter(
+      fromCharacterId,
+      toCharacterId,
+      amount,
+      overrides,
+    )
+
+    const receipt = await tx.wait()
+
+    return {
+      data: undefined,
+      transactionHash: receipt.transactionHash,
+    }
+  }
+
+  /**
    * This tips a character for a note with $MIRA token.
    *
    * @category TipsContract
@@ -78,6 +111,44 @@ export class TipsContract extends BaseContract {
       transactionHash: receipt.transactionHash,
     }
   }
+
+
+  /**
+   * Only for newbie.
+   *
+   * This tips a character for a note with $MIRA token from a newbie character.
+   *
+   * @category TipsContract
+   * @param fromCharacterId - The character ID of the character that is tipping.
+   * @param toCharacterId - The character ID of the character that is being tipped.
+   * @param toNoteId - The note ID of the note that is being tipped.
+   * @param amount - The amount of $MIRA token to tip. Unit: wei.
+   * @returns The transaction hash.
+   */
+  @autoSwitchMainnet()
+  async tipCharacterForNoteFromNewbie(
+    fromCharacterId: BigNumberish,
+    toCharacterId: BigNumberish,
+    toNoteId: BigNumberish,
+    amount: BigNumberish,
+    overrides: Overrides = {},
+  ): Promise<Result<undefined, true>> | never {
+    const tx = await this.newbieVillaContract.tipCharacterForNote(
+      fromCharacterId,
+      toCharacterId,
+      toNoteId,
+      amount,
+      overrides,
+    )
+
+    const receipt = await tx.wait()
+
+    return {
+      data: undefined,
+      transactionHash: receipt.transactionHash,
+    }
+  }
+
   /**
    * This gets the balance of $MIRA token of a character.
    *
