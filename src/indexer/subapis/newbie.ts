@@ -1,5 +1,6 @@
 import { type Address } from 'viem'
 import {
+  type Numberish,
   type CharacterMetadata,
   type EmailUserEntity,
   type LinkItemNote,
@@ -272,6 +273,44 @@ export class NewbieIndexer {
       {
         method: 'POST',
         data: { metadata, mode },
+        token: this.token,
+      },
+    )
+  }
+
+  tipCharacter({
+    characterId,
+    amount,
+  }: {
+    characterId: Numberish
+    /** amount to tip. (CSB in wei) */
+    amount: Numberish
+  }) {
+    return this.base.fetch<{ transactionHash: string; data: boolean }>(
+      `/newbie/contract/tips`,
+      {
+        method: 'POST',
+        data: { characterId, amount },
+        token: this.token,
+      },
+    )
+  }
+
+  tipCharacterForNote({
+    characterId,
+    noteId,
+    amount,
+  }: {
+    characterId: Numberish
+    noteId: Numberish
+    /** amount to tip. (CSB in wei) */
+    amount: Numberish
+  }) {
+    return this.base.fetch<{ transactionHash: string; data: boolean }>(
+      `/newbie/contract/tips`,
+      {
+        method: 'POST',
+        data: { characterId, noteId, amount },
         token: this.token,
       },
     )
