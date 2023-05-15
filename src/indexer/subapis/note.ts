@@ -9,8 +9,10 @@ import {
 import { type BaseIndexer } from './base'
 
 export type NoteQueryOptions = {
-  /** The owner of this note */
-  characterId?: Numberish
+  /** The owner(s) of notes */
+  characterId?: Numberish | Numberish[]
+  /** Excluded owner(s) of notes. This has higher priority than `characterId` */
+  excludeCharacterId?: Numberish | Numberish[]
   /** The link item type to filter by. e.g. 'Character' */
   linkItemType?: LinkItemType
   /** The toCharacterId to filter by. */
