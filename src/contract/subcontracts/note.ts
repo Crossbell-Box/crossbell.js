@@ -1,4 +1,5 @@
 import {
+  type Address,
   encodeFunctionData,
   encodePacked,
   fromHex,
@@ -6,7 +7,6 @@ import {
   trim,
 } from 'viem'
 import pLimit from 'p-limit'
-import { type Address } from 'viem'
 import {
   type LinkItemMap,
   type LinkItemType,
