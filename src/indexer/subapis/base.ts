@@ -1,5 +1,6 @@
 import { type MaybeArray } from '../../types/utils'
 import { createSearchParamsString } from '../../utils'
+import { getHeadersScope } from '../utils'
 
 export type FetchOptions = Omit<RequestInit, 'method'>
 export type IndexerOptions =
@@ -46,6 +47,7 @@ export class BaseIndexer {
     const headers = new Headers({
       ...this.fetchOptions.headers,
       ...options.headers,
+      ...getHeadersScope(),
     })
     let body: string | undefined
 
