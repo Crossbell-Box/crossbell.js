@@ -100,4 +100,14 @@ export class NotificationIndexer {
       },
     })
   }
+
+  /**
+   * This returns the count of unread notifications.
+   * @category Notification
+   * @param characterId - The characterId of the notification owner.
+   */
+  getUnreadCount(characterId: Numberish) {
+    const url = `/characters/${characterId}/notifications/unread/count`
+    return this.base.fetch<{ count: number }>(url)
+  }
 }
