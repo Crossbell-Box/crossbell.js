@@ -14,6 +14,8 @@ export const entry = [
   { inputs: [], name: 'ErrNoteIsDeleted', type: 'error' },
   { inputs: [], name: 'ErrNoteLocked', type: 'error' },
   { inputs: [], name: 'ErrNoteNotExists', type: 'error' },
+  { inputs: [], name: 'ErrSignatureExpired', type: 'error' },
+  { inputs: [], name: 'ErrSignatureInvalid', type: 'error' },
   { inputs: [], name: 'ErrSocialTokenExists', type: 'error' },
   {
     inputs: [
@@ -172,6 +174,13 @@ export const entry = [
     type: 'function',
   },
   {
+    inputs: [],
+    name: 'getDomainSeparator',
+    outputs: [{ name: '', type: 'bytes32' }],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
     inputs: [{ name: 'characterId', type: 'uint256' }],
     name: 'getHandle',
     outputs: [{ name: '', type: 'string' }],
@@ -309,6 +318,27 @@ export const entry = [
       { name: 'permissionBitMap', type: 'uint256' },
     ],
     name: 'grantOperatorPermissions',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      { name: 'characterId', type: 'uint256' },
+      { name: 'operator', type: 'address' },
+      { name: 'permissionBitMap', type: 'uint256' },
+      {
+        components: [
+          { name: 'v', type: 'uint8' },
+          { name: 'r', type: 'bytes32' },
+          { name: 's', type: 'bytes32' },
+          { name: 'deadline', type: 'uint256' },
+        ],
+        name: 'sig',
+        type: 'tuple',
+      },
+    ],
+    name: 'grantOperatorPermissionsWithSig',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',
@@ -516,6 +546,13 @@ export const entry = [
     inputs: [],
     name: 'name',
     outputs: [{ name: '', type: 'string' }],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [{ name: 'owner', type: 'address' }],
+    name: 'nonces',
+    outputs: [{ name: '', type: 'uint256' }],
     stateMutability: 'view',
     type: 'function',
   },
