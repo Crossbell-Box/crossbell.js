@@ -606,6 +606,16 @@ export class CharacterContract {
     }
   }
 
+  balanceOfNewbie(
+    { characterId }: { characterId: Numberish },
+    overrides: ReadOverrides<NewbieVilla, 'balanceOf'> = {},
+  ) {
+    return this.base.newbieVillaContract.read.balanceOf(
+      [BigInt(characterId)],
+      overrides,
+    )
+  }
+
   /**
    * This validates if a handle is in a correct format.
    * @param handle - The handle of the character you want to get the social token for.
