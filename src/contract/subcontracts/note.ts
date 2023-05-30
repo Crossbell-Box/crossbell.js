@@ -29,6 +29,28 @@ import { autoSwitchMainnet } from '../decorators'
 import { type Entry, entry } from '../abi'
 import { type BaseContract } from './base'
 
+async function buildPostNoteData({
+  linkModule,
+  mintModule,
+  characterId,
+  metadataOrUri,
+  locked = false,
+}: PostNoteOptions) {
+  const { uri } = await ipfsParseMetadataOrUri('note', metadataOrUri)
+  const linkModuleConfig = await getModuleConfig(linkModule)
+  const mintModuleConfig = await getModuleConfig(mintModule)
+
+  return {
+    characterId: BigInt(characterId),
+    contentUri: uri,
+    linkModule: linkModuleConfig.address,
+    linkModuleInitData: linkModuleConfig.initData,
+    mintModule: mintModuleConfig.address,
+    mintModuleInitData: mintModuleConfig.initData,
+    locked,
+  }
+}
+
 export class NoteContract {
   constructor(private base: BaseContract) {}
 
@@ -39,39 +61,11 @@ export class NoteContract {
    */
   @autoSwitchMainnet()
   async post(
-    {
-      characterId,
-      metadataOrUri,
-      locked = false,
-      linkModule,
-      mintModule,
-    }: PostNoteOptions & {
-      /** The character ID of the owner who post this note. Must be your own character, otherwise it will be rejected. */
-      characterId: Numberish
-      /** The metadata or URI of the content you want to post. */
-      metadataOrUri: NoteMetadata | string
-    },
+    options: PostNoteOptions,
     overrides: WriteOverrides<Entry, 'postNote'> = {},
   ): Promise<Result<{ noteId: bigint }, true>> {
-    const { uri } = await ipfsParseMetadataOrUri('note', metadataOrUri)
-
-    const linkModuleConfig = await getModuleConfig(linkModule)
-    const mintModuleConfig = await getModuleConfig(mintModule)
-
-    const hash = await this.base.contract.write.postNote(
-      [
-        {
-          characterId: BigInt(characterId),
-          contentUri: uri,
-          linkModule: linkModuleConfig.address,
-          linkModuleInitData: linkModuleConfig.initData,
-          mintModule: mintModuleConfig.address,
-          mintModuleInitData: mintModuleConfig.initData,
-          locked,
-        },
-      ],
-      overrides,
-    )
+    const data = await buildPostNoteData(options)
+    const hash = await this.base.contract.write.postNote([data], overrides)
 
     const receipt = await this.base.publicClient.waitForTransactionReceipt({
       hash,
@@ -98,6 +92,7 @@ export class NoteContract {
       notes,
     }: {
       notes: {
+        // TODO: move to options
         /** The character ID of the owner who post this note. Must be your own character, otherwise it will be rejected. */
         characterId: Numberish
         /** The metadata or URI of the content you want to post. */
@@ -109,33 +104,18 @@ export class NoteContract {
   ): Promise<Result<{ noteIds: bigint[] }, true>> {
     const limitedPromise = pLimit(10)
     const encodedDataArr = await Promise.all(
-      notes.map((note) => {
+      notes.map(({ options, characterId, metadataOrUri }) => {
         return limitedPromise(async () => {
-          const { uri } = await ipfsParseMetadataOrUri(
-            'note',
-            note.metadataOrUri,
-          )
-          const linkModuleConfig = await getModuleConfig(
-            note.options?.linkModule,
-          )
-          const mintModuleConfig = await getModuleConfig(
-            note.options?.mintModule,
-          )
+          const data = await buildPostNoteData({
+            ...options,
+            characterId,
+            metadataOrUri,
+          })
 
           return encodeFunctionData({
             abi: entry,
             functionName: 'postNote',
-            args: [
-              {
-                characterId: BigInt(note.characterId),
-                contentUri: uri,
-                linkModule: linkModuleConfig.address,
-                linkModuleInitData: linkModuleConfig.initData,
-                mintModule: mintModuleConfig.address,
-                mintModuleInitData: mintModuleConfig.initData,
-                locked: note.options?.locked ?? false,
-              },
-            ],
+            args: [data],
           })
         })
       }),
@@ -173,40 +153,18 @@ export class NoteContract {
   @autoSwitchMainnet()
   async postForAnyUri(
     {
-      characterId,
-      metadataOrUri,
       targetUri,
-      locked = false,
-      linkModule,
-      mintModule,
+      ...options
     }: PostNoteOptions & {
-      /** The character ID of the owner who post this note. Must be your own character, otherwise it will be rejected. */
-      characterId: Numberish
-      /** The metadata or URI of the content you want to post. */
-      metadataOrUri: NoteMetadata | string
       /** The target uri of the note. */
       targetUri: string
     },
     overrides: WriteOverrides<Entry, 'postNote4AnyUri'> = {},
   ): Promise<Result<{ noteId: bigint }, true>> {
-    const { uri } = await ipfsParseMetadataOrUri('note', metadataOrUri)
-
-    const linkModuleConfig = await getModuleConfig(linkModule)
-    const mintModuleConfig = await getModuleConfig(mintModule)
+    const data = await buildPostNoteData(options)
 
     const hash = await this.base.contract.write.postNote4AnyUri(
-      [
-        {
-          characterId: BigInt(characterId),
-          contentUri: uri,
-          linkModule: linkModuleConfig.address,
-          linkModuleInitData: linkModuleConfig.initData,
-          mintModule: mintModuleConfig.address,
-          mintModuleInitData: mintModuleConfig.initData,
-          locked,
-        },
-        targetUri,
-      ],
+      [data, targetUri],
       overrides,
     )
 
@@ -232,45 +190,172 @@ export class NoteContract {
   @autoSwitchMainnet()
   async postForNote(
     {
-      characterId,
-      metadataOrUri,
       targetCharacterId,
       targetNoteId,
-      locked = false,
-      linkModule,
-      mintModule,
+      ...options
     }: PostNoteOptions & {
-      /** The character ID of the owner who post this note. Must be your own character, otherwise it will be rejected. */
-      characterId: Numberish
-      /** The metadata or URI of the content you want to post. */
-      metadataOrUri: NoteMetadata | string
       /** The target uri of the note. */
       targetCharacterId: Numberish
       targetNoteId: Numberish
     },
     overrides: WriteOverrides<Entry, 'postNote4Note'> = {},
   ): Promise<Result<{ noteId: bigint }, true>> {
-    const { uri } = await ipfsParseMetadataOrUri('note', metadataOrUri)
-
-    const linkModuleConfig = await getModuleConfig(linkModule)
-    const mintModuleConfig = await getModuleConfig(mintModule)
-
+    const data = await buildPostNoteData(options)
     const hash = await this.base.contract.write.postNote4Note(
       [
-        {
-          characterId: BigInt(characterId),
-          contentUri: uri,
-          linkModule: linkModuleConfig.address,
-          linkModuleInitData: linkModuleConfig.initData,
-          mintModule: mintModuleConfig.address,
-          mintModuleInitData: mintModuleConfig.initData,
-          locked,
-        },
+        data,
         {
           characterId: BigInt(targetCharacterId),
           noteId: BigInt(targetNoteId),
         },
       ],
+      overrides,
+    )
+
+    const receipt = await this.base.publicClient.waitForTransactionReceipt({
+      hash,
+    })
+
+    const log = parseLog(receipt.logs, 'PostNote')
+
+    return {
+      data: {
+        noteId: log.args.noteId,
+      },
+      transactionHash: receipt.transactionHash,
+    }
+  }
+
+  /**
+   * This creates a new note for a character.
+   * @category Note
+   * @returns The id of the new note.
+   */
+  @autoSwitchMainnet()
+  async postForCharacter(
+    {
+      toCharacterId,
+      ...options
+    }: PostNoteOptions & {
+      /** The target characterId. */
+      toCharacterId: Numberish
+    },
+    overrides: WriteOverrides<Entry, 'postNote4Character'> = {},
+  ): Promise<Result<{ noteId: bigint }, true>> {
+    const data = await buildPostNoteData(options)
+    const hash = await this.base.contract.write.postNote4Character(
+      [data, BigInt(toCharacterId)],
+      overrides,
+    )
+
+    const receipt = await this.base.publicClient.waitForTransactionReceipt({
+      hash,
+    })
+
+    const log = parseLog(receipt.logs, 'PostNote')
+
+    return {
+      data: {
+        noteId: log.args.noteId,
+      },
+      transactionHash: receipt.transactionHash,
+    }
+  }
+
+  /**
+   * This creates a new note for linklist.
+   * @category Note
+   * @returns The id of the new note.
+   */
+  @autoSwitchMainnet()
+  async postForLinklist(
+    {
+      toLinklistId,
+      ...options
+    }: PostNoteOptions & {
+      /** The target linklistId. */
+      toLinklistId: Numberish
+    },
+    overrides: WriteOverrides<Entry, 'postNote4Linklist'> = {},
+  ): Promise<Result<{ noteId: bigint }, true>> {
+    const data = await buildPostNoteData(options)
+    const hash = await this.base.contract.write.postNote4Linklist(
+      [data, BigInt(toLinklistId)],
+      overrides,
+    )
+
+    const receipt = await this.base.publicClient.waitForTransactionReceipt({
+      hash,
+    })
+
+    const log = parseLog(receipt.logs, 'PostNote')
+
+    return {
+      data: {
+        noteId: log.args.noteId,
+      },
+      transactionHash: receipt.transactionHash,
+    }
+  }
+
+  /**
+   * This creates a new note for linklist.
+   * @category Note
+   * @returns The id of the new note.
+   */
+  @autoSwitchMainnet()
+  async postForAddress(
+    {
+      toAddress,
+      ...options
+    }: PostNoteOptions & {
+      /** The target address. */
+      toAddress: Address
+    },
+    overrides: WriteOverrides<Entry, 'postNote4Address'> = {},
+  ): Promise<Result<{ noteId: bigint }, true>> {
+    const data = await buildPostNoteData(options)
+
+    const hash = await this.base.contract.write.postNote4Address(
+      [data, toAddress],
+      overrides,
+    )
+
+    const receipt = await this.base.publicClient.waitForTransactionReceipt({
+      hash,
+    })
+
+    const log = parseLog(receipt.logs, 'PostNote')
+
+    return {
+      data: {
+        noteId: log.args.noteId,
+      },
+      transactionHash: receipt.transactionHash,
+    }
+  }
+
+  /**
+   * This creates a new note for ERC721.
+   * @category Note
+   * @returns The id of the new note.
+   */
+  @autoSwitchMainnet()
+  async postForERC721(
+    {
+      tokenAddress,
+      tokenId,
+      ...options
+    }: PostNoteOptions & {
+      tokenAddress: Address
+      tokenId: Numberish
+    },
+    overrides: WriteOverrides<Entry, 'postNote4ERC721'> = {},
+  ): Promise<Result<{ noteId: bigint }, true>> {
+    const data = await buildPostNoteData(options)
+
+    const hash = await this.base.contract.write.postNote4ERC721(
+      [data, { tokenAddress, erc721TokenId: BigInt(tokenId) }],
       overrides,
     )
 

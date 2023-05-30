@@ -1,5 +1,6 @@
 import { type Address } from 'viem'
 import { type NoteMetadata } from '../metadata'
+import { type Numberish } from '../utils'
 import { type LinkItem, type LinkItemType } from './link'
 import { type MintOrLinkModuleConfig } from './module'
 
@@ -47,4 +48,8 @@ export interface PostNoteOptions {
   mintModule?: MintOrLinkModuleConfig
   /** The link module */
   linkModule?: MintOrLinkModuleConfig
+  /** The character ID of the owner who post this note. Must be your own character, otherwise it will be rejected. */
+  characterId: Numberish
+  /** The metadata or URI of the content you want to post. */
+  metadataOrUri: NoteMetadata | string
 }
