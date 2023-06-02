@@ -1,4 +1,4 @@
-import type { Indexer } from '../indexer'
+import { type Indexer } from '../indexer'
 
 export type ValidateHandleError = 'existed' | 'lengthInvalid' | 'charsInvalid'
 
