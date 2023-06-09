@@ -7,7 +7,11 @@ import {
   type Result,
   type WriteOverrides,
 } from '../../types'
-import { parseLog, validateAddress } from '../../utils'
+import {
+  parseLog,
+  validateAddress,
+  waitForTransactionReceiptWithRetry,
+} from '../../utils'
 import { warn } from '../../utils/logger'
 import { type Entry } from '../abi'
 import { type BaseContract } from './base'
@@ -57,9 +61,10 @@ export class OperatorContract {
       overrides,
     )
 
-    const receipt = await this.base.publicClient.waitForTransactionReceipt({
+    const receipt = await waitForTransactionReceiptWithRetry(
+      this.base.publicClient,
       hash,
-    })
+    )
 
     const log = parseLog(receipt.logs, 'GrantOperatorPermissions')
 
@@ -115,9 +120,10 @@ export class OperatorContract {
       overrides,
     )
 
-    const receipt = await this.base.publicClient.waitForTransactionReceipt({
+    const receipt = await waitForTransactionReceiptWithRetry(
+      this.base.publicClient,
       hash,
-    })
+    )
 
     // const log = parseLog(receipt.logs, 'grantOperators4Note')
 

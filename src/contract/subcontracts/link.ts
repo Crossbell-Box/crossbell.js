@@ -1,5 +1,10 @@
 import { type Address, type Hex, pad, toHex } from 'viem'
-import { NIL_ADDRESS, parseLog, validateAddress } from '../../utils'
+import {
+  NIL_ADDRESS,
+  parseLog,
+  validateAddress,
+  waitForTransactionReceiptWithRetry,
+} from '../../utils'
 import { autoSwitchMainnet } from '../decorators'
 import { type Entry, type Periphery } from '../abi'
 import {
@@ -51,9 +56,10 @@ export class LinkContract {
       overrides,
     )
 
-    const receipt = await this.base.publicClient.waitForTransactionReceipt({
+    const receipt = await waitForTransactionReceiptWithRetry(
+      this.base.publicClient,
       hash,
-    })
+    )
 
     const parser = parseLog(receipt.logs, 'LinkCharacter')
 
@@ -110,9 +116,10 @@ export class LinkContract {
       overrides,
     )
 
-    const receipt = await this.base.publicClient.waitForTransactionReceipt({
+    const receipt = await waitForTransactionReceiptWithRetry(
+      this.base.publicClient,
       hash,
-    })
+    )
 
     const log = parseLog(receipt.logs, 'LinkCharacter', {
       throwOnMultipleLogsFound: false,
@@ -184,9 +191,10 @@ export class LinkContract {
       overrides,
     )
 
-    const receipt = await this.base.publicClient.waitForTransactionReceipt({
+    const receipt = await waitForTransactionReceiptWithRetry(
+      this.base.publicClient,
       hash,
-    })
+    )
 
     const createCharacterParser = parseLog(receipt.logs, 'CharacterCreated')
     const linkCharacterParser = parseLog(receipt.logs, 'LinkCharacter')
@@ -231,9 +239,10 @@ export class LinkContract {
       ],
       overrides,
     )
-    const receipt = await this.base.publicClient.waitForTransactionReceipt({
+    const receipt = await waitForTransactionReceiptWithRetry(
+      this.base.publicClient,
       hash,
-    })
+    )
     return {
       data: undefined,
       transactionHash: receipt.transactionHash,
@@ -334,9 +343,10 @@ export class LinkContract {
       overrides,
     )
 
-    const receipt = await this.base.publicClient.waitForTransactionReceipt({
+    const receipt = await waitForTransactionReceiptWithRetry(
+      this.base.publicClient,
       hash,
-    })
+    )
 
     const parser = parseLog(receipt.logs, 'LinkAddress')
 
@@ -377,9 +387,10 @@ export class LinkContract {
       ],
       overrides,
     )
-    const receipt = await this.base.publicClient.waitForTransactionReceipt({
+    const receipt = await waitForTransactionReceiptWithRetry(
+      this.base.publicClient,
       hash,
-    })
+    )
     return {
       data: undefined,
       transactionHash: receipt.transactionHash,
@@ -424,9 +435,10 @@ export class LinkContract {
       overrides,
     )
 
-    const receipt = await this.base.publicClient.waitForTransactionReceipt({
+    const receipt = await waitForTransactionReceiptWithRetry(
+      this.base.publicClient,
       hash,
-    })
+    )
 
     const parser = parseLog(receipt.logs, 'LinkAnyUri')
 
@@ -467,9 +479,10 @@ export class LinkContract {
       ],
       overrides,
     )
-    const receipt = await this.base.publicClient.waitForTransactionReceipt({
+    const receipt = await waitForTransactionReceiptWithRetry(
+      this.base.publicClient,
       hash,
-    })
+    )
     return {
       data: undefined,
       transactionHash: receipt.transactionHash,
@@ -518,9 +531,10 @@ export class LinkContract {
       overrides,
     )
 
-    const receipt = await this.base.publicClient.waitForTransactionReceipt({
+    const receipt = await waitForTransactionReceiptWithRetry(
+      this.base.publicClient,
       hash,
-    })
+    )
 
     const parser = parseLog(receipt.logs, 'LinkAnyUri')
 
@@ -565,9 +579,10 @@ export class LinkContract {
       ],
       overrides,
     )
-    const receipt = await this.base.publicClient.waitForTransactionReceipt({
+    const receipt = await waitForTransactionReceiptWithRetry(
+      this.base.publicClient,
       hash,
-    })
+    )
     return {
       data: undefined,
       transactionHash: receipt.transactionHash,
@@ -616,9 +631,10 @@ export class LinkContract {
       overrides,
     )
 
-    const receipt = await this.base.publicClient.waitForTransactionReceipt({
+    const receipt = await waitForTransactionReceiptWithRetry(
+      this.base.publicClient,
       hash,
-    })
+    )
 
     const parser = parseLog(receipt.logs, 'LinkNote')
 
@@ -664,9 +680,10 @@ export class LinkContract {
       overrides,
     )
 
-    const receipt = await this.base.publicClient.waitForTransactionReceipt({
+    const receipt = await waitForTransactionReceiptWithRetry(
+      this.base.publicClient,
       hash,
-    })
+    )
 
     return {
       data: undefined,
@@ -712,9 +729,10 @@ export class LinkContract {
       overrides,
     )
 
-    const receipt = await this.base.publicClient.waitForTransactionReceipt({
+    const receipt = await waitForTransactionReceiptWithRetry(
+      this.base.publicClient,
       hash,
-    })
+    )
 
     const parser = parseLog(receipt.logs, 'LinkNote')
 
@@ -756,9 +774,10 @@ export class LinkContract {
       overrides,
     )
 
-    const receipt = await this.base.publicClient.waitForTransactionReceipt({
+    const receipt = await waitForTransactionReceiptWithRetry(
+      this.base.publicClient,
       hash,
-    })
+    )
 
     return {
       data: undefined,
@@ -770,13 +789,14 @@ export class LinkContract {
     { fromCharacterId, uri }: { fromCharacterId: Numberish; uri: string },
     overrides: WriteOverrides<Entry, 'setLinklistUri'> = {},
   ): Promise<Result<undefined, true>> {
-    const tx = await this.base.contract.write.setLinklistUri(
+    const hash = await this.base.contract.write.setLinklistUri(
       [BigInt(fromCharacterId), uri],
       overrides,
     )
-    const receipt = await this.base.publicClient.waitForTransactionReceipt({
-      hash: tx,
-    })
+    const receipt = await waitForTransactionReceiptWithRetry(
+      this.base.publicClient,
+      hash,
+    )
     return {
       data: undefined,
       transactionHash: receipt.transactionHash,

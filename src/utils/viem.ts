@@ -14,6 +14,7 @@ import {
   decodeEventLog,
   http,
   webSocket,
+  TransactionReceipt,
 } from 'viem'
 import {
   type AbiType,
@@ -179,4 +180,31 @@ export function addressToAccount(address: Address | Account): Account {
       address,
     }
   return address
+}
+
+/** @see https://github.com/Crossbell-Box/crossbell.js/issues/40 */
+export function waitForTransactionReceiptWithRetry(
+  client: PublicClient,
+  hash: Address,
+  retryCount = 5,
+): Promise<TransactionReceipt> {
+  return new Promise(async (resolve, reject) => {
+    let count = 0
+    while (count < retryCount) {
+      try {
+        const receipt = await client.waitForTransactionReceipt({ hash })
+        if (receipt) {
+          resolve(receipt)
+          return
+        }
+      } catch (e) {
+        if (count === retryCount - 1) {
+          reject(e)
+          return
+        } else {
+          count++
+        }
+      }
+    }
+  })
 }
