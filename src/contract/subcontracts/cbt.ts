@@ -6,8 +6,8 @@ import {
   type Result,
   type WriteOverrides,
 } from '../../types'
-import { type BaseContract } from './base'
 import { waitForTransactionReceiptWithRetry } from '../../utils'
+import { type BaseContract } from './base'
 
 export class CbtContract {
   constructor(private base: BaseContract) {}
