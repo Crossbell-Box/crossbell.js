@@ -23,5 +23,7 @@ describe('with-headers', () => {
       (fakeFetch.mock.calls[0][1]!.headers as Headers).entries(),
     )
     expect(requestHeaders).toEqual(headers)
+
+    vi.unstubAllGlobals()
   })
 })
