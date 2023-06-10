@@ -32,6 +32,7 @@ export interface NoteEntity {
   operator: Address
   owner: Address
   createdAt: string
+  publishedAt: string
   updatedAt: string
   deletedAt: string | null
   transactionHash: Hash
