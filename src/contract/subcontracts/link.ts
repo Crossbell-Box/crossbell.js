@@ -1,4 +1,4 @@
-import { type Address, type Hex, pad, toHex } from 'viem'
+import { type Address, type Hex, stringToHex } from 'viem'
 import { NIL_ADDRESS, parseLog, validateAddress } from '../../utils'
 import { autoSwitchMainnet } from '../decorators'
 import { type Entry, type Periphery } from '../abi'
@@ -44,7 +44,7 @@ export class LinkContract {
         {
           fromCharacterId: BigInt(fromCharacterId),
           toCharacterId: BigInt(toCharacterId),
-          linkType: pad(toHex(linkType), { dir: 'right' }),
+          linkType: stringToHex(linkType, { size: 32 }),
           data: data ?? NIL_ADDRESS,
         },
       ],
@@ -103,7 +103,7 @@ export class LinkContract {
           fromCharacterId: BigInt(fromCharacterId),
           toCharacterIds: toCharacterIds.map((id) => BigInt(id)),
           toAddresses,
-          linkType: pad(toHex(linkType), { dir: 'right' }),
+          linkType: stringToHex(linkType, { size: 32 }),
           data: data ?? toCharacterIds.map(() => NIL_ADDRESS),
         },
       ],
@@ -178,7 +178,7 @@ export class LinkContract {
         {
           fromCharacterId: BigInt(fromCharacterId),
           to: toAddress,
-          linkType: pad(toHex(linkType), { dir: 'right' }),
+          linkType: stringToHex(linkType, { size: 32 }),
         },
       ],
       overrides,
@@ -226,7 +226,7 @@ export class LinkContract {
         {
           fromCharacterId: BigInt(fromCharacterId),
           toCharacterId: BigInt(toCharacterId),
-          linkType: pad(toHex(linkType), { dir: 'right' }),
+          linkType: stringToHex(linkType, { size: 32 }),
         },
       ],
       overrides,
@@ -259,7 +259,7 @@ export class LinkContract {
   ): Promise<Result<bigint[]>> {
     const linkList =
       await this.base.peripheryContract.read.getLinkingCharacterIds(
-        [BigInt(fromCharacterId), pad(toHex(linkType), { dir: 'right' })],
+        [BigInt(fromCharacterId), stringToHex(linkType, { size: 32 })],
         overrides,
       )
     return {
@@ -285,7 +285,7 @@ export class LinkContract {
     overrides: ReadOverrides<Periphery, 'getLinkingCharacterIds'> = {},
   ): Promise<Result<Character[]>> {
     const ids = await this.base.peripheryContract.read.getLinkingCharacterIds(
-      [BigInt(fromCharacterId), pad(toHex(linkType), { dir: 'right' })],
+      [BigInt(fromCharacterId), stringToHex(linkType, { size: 32 })],
       overrides,
     )
     const characters = await Promise.all(
@@ -327,7 +327,7 @@ export class LinkContract {
         {
           fromCharacterId: BigInt(fromCharacterId),
           ethAddress: toAddress,
-          linkType: pad(toHex(linkType), { dir: 'right' }),
+          linkType: stringToHex(linkType, { size: 32 }),
           data,
         },
       ],
@@ -372,7 +372,7 @@ export class LinkContract {
         {
           fromCharacterId: BigInt(fromCharacterId),
           ethAddress: toAddress,
-          linkType: pad(toHex(linkType), { dir: 'right' }),
+          linkType: stringToHex(linkType, { size: 32 }),
         },
       ],
       overrides,
@@ -417,7 +417,7 @@ export class LinkContract {
         {
           fromCharacterId: BigInt(fromCharacterId),
           toUri,
-          linkType: pad(toHex(linkType), { dir: 'right' }),
+          linkType: stringToHex(linkType, { size: 32 }),
           data,
         },
       ],
@@ -462,7 +462,7 @@ export class LinkContract {
         {
           fromCharacterId: BigInt(fromCharacterId),
           toUri,
-          linkType: pad(toHex(linkType), { dir: 'right' }),
+          linkType: stringToHex(linkType, { size: 32 }),
         },
       ],
       overrides,
@@ -511,7 +511,7 @@ export class LinkContract {
           fromCharacterId: BigInt(fromCharacterId),
           tokenAddress: toContractAddress,
           tokenId: BigInt(toTokenId),
-          linkType: pad(toHex(linkType), { dir: 'right' }),
+          linkType: stringToHex(linkType, { size: 32 }),
           data,
         },
       ],
@@ -560,7 +560,7 @@ export class LinkContract {
           fromCharacterId: BigInt(fromCharacterId),
           tokenAddress: toContractAddress,
           tokenId: BigInt(toTokenId),
-          linkType: pad(toHex(linkType), { dir: 'right' }),
+          linkType: stringToHex(linkType, { size: 32 }),
         },
       ],
       overrides,
@@ -609,7 +609,7 @@ export class LinkContract {
           fromCharacterId: BigInt(fromCharacterId),
           toCharacterId: BigInt(toCharacterId),
           toNoteId: BigInt(toNoteId),
-          linkType: pad(toHex(linkType), { dir: 'right' }),
+          linkType: stringToHex(linkType, { size: 32 }),
           data: data ?? NIL_ADDRESS,
         },
       ],
@@ -658,7 +658,7 @@ export class LinkContract {
           fromCharacterId: BigInt(fromCharacterId),
           toCharacterId: BigInt(toCharacterId),
           toNoteId: BigInt(toNoteId),
-          linkType: pad(toHex(linkType), { dir: 'right' }),
+          linkType: stringToHex(linkType, { size: 32 }),
         },
       ],
       overrides,
@@ -705,7 +705,7 @@ export class LinkContract {
         {
           fromCharacterId: BigInt(fromCharacterId),
           toLinkListId: BigInt(toLinkListId),
-          linkType: pad(toHex(linkType), { dir: 'right' }),
+          linkType: stringToHex(linkType, { size: 32 }),
           data,
         },
       ],
@@ -750,7 +750,7 @@ export class LinkContract {
         {
           fromCharacterId: BigInt(fromCharacterId),
           toLinkListId: BigInt(toLinklistId),
-          linkType: pad(toHex(linkType), { dir: 'right' }),
+          linkType: stringToHex(linkType, { size: 32 }),
         },
       ],
       overrides,
