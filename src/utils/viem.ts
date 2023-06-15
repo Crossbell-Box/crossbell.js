@@ -47,6 +47,9 @@ export function createDefaultPublicClient(): PublicClient {
     transport,
     chain: crossbell,
     pollingInterval: 100,
+    batch: {
+      multicall: true,
+    },
   })
 }
 

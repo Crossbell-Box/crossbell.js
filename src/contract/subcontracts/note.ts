@@ -2,9 +2,8 @@ import {
   type Address,
   encodeFunctionData,
   encodePacked,
-  fromHex,
+  hexToString,
   keccak256,
-  trim,
 } from 'viem'
 import pLimit from 'p-limit'
 import {
@@ -541,10 +540,8 @@ export class NoteContract {
     )
 
     const linkItemTypeString: LinkItemType | undefined =
-      (fromHex(
-        trim(data.linkItemType, { dir: 'right' }),
-        'string',
-      ) as LinkItemType) || undefined
+      (hexToString(data.linkItemType, { size: 32 }) as LinkItemType) ||
+      undefined
     const metadata = data.contentUri
       ? await ipfsUriToMetadata<NoteMetadata>(data.contentUri)
       : undefined
