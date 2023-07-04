@@ -14,6 +14,7 @@ import {
   RevisionContract,
   TipsContract,
 } from './subcontracts'
+import { TipsWithFeeContract } from './subcontracts/tips_with_fee'
 
 /**
  * This class is used to interact with the contract.
@@ -50,6 +51,7 @@ export class Contract<
   note = new NoteContract(this)
   operator = new OperatorContract(this)
   tips = new TipsContract(this)
+  tipsWithFee = new TipsWithFeeContract(this)
   revision = new RevisionContract(this)
   linkModule = new LinkModuleContract(this)
   mintModule = new MintModuleContract(this)

@@ -31,6 +31,7 @@ export interface AddressOptions {
   cbtContract: Address
   newbieVillaContract: Address
   tipsContract: Address
+  tipsWithFeeContract: Address
   miraContract: Address
   linklistContract: Address
 }
@@ -102,6 +103,11 @@ export class BaseContract<THasWallet extends boolean = boolean> {
     PublicClient,
     WalletClient<Transport, Chain, Account>
   >
+  tipsWithFeeContract!: GetContractReturnType<
+    Abi.TipsWithFee,
+    PublicClient,
+    WalletClient<Transport, Chain, Account>
+  >
 
   /**
    * This creates a new Contract instance to interact with.
@@ -167,6 +173,7 @@ export class BaseContract<THasWallet extends boolean = boolean> {
         peripheryContract: CONTRACT_ADDRESS.PERIPHERY,
         cbtContract: CONTRACT_ADDRESS.CBT,
         tipsContract: CONTRACT_ADDRESS.TIPS,
+        tipsWithFeeContract: CONTRACT_ADDRESS.TIPS_WITH_FEE,
         miraContract: CONTRACT_ADDRESS.MIRA,
         newbieVillaContract: CONTRACT_ADDRESS.NEWBIE_VILLA,
         linklistContract: CONTRACT_ADDRESS.LINKLIST,
@@ -220,6 +227,14 @@ export class BaseContract<THasWallet extends boolean = boolean> {
       getContract({
         address: this.options.address.tipsContract,
         abi: Abi.tips,
+        publicClient: this.publicClient,
+        walletClient: this.#walletClient,
+      }),
+    )
+    this.tipsWithFeeContract = this.proxyContract(
+      getContract({
+        address: this.options.address.tipsWithFeeContract,
+        abi: Abi.tipsWithFee,
         publicClient: this.publicClient,
         walletClient: this.#walletClient,
       }),
