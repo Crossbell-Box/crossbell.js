@@ -110,4 +110,30 @@ export class NotificationIndexer {
     const url = `/characters/${characterId}/notifications/unread/count`
     return this.base.fetch<{ count: number }>(url)
   }
+
+  /**
+   * This adds a notification device for the character.
+   * @category Notification
+   * @param characterId - The characterId of the notification owner.
+   * @param deviceToken - The expo device token.
+   */
+  addDevice(characterId: Numberish, deviceToken: string) {
+    const url = `/characters/${characterId}/notifications/devices/${deviceToken}`
+    return this.base.fetch<{ ok: boolean }>(url, {
+      method: 'POST',
+    })
+  }
+
+  /**
+   * This removes a notification device for the character.
+   * @category Notification
+   * @param characterId - The characterId of the notification owner.
+   * @param deviceToken - The expo device token.
+   */
+  removeDevice(characterId: Numberish, deviceToken: string) {
+    const url = `/characters/${characterId}/notifications/devices/${deviceToken}`
+    return this.base.fetch<{ ok: boolean }>(url, {
+      method: 'DELETE',
+    })
+  }
 }

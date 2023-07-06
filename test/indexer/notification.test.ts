@@ -3,6 +3,7 @@ import { createIndexer } from '../../src'
 
 const indexer = createIndexer()
 const characterId = 55926
+const expoDeviceToken = 'ExponentPushToken[_H0PtKNE8Kv4YxEsprdyUS]'
 
 describe('notification', () => {
   test('get many', async () => {
@@ -14,5 +15,21 @@ describe('notification', () => {
   test('unread count', async () => {
     const { count } = await indexer.notification.getUnreadCount(characterId)
     expect(count).is.a('number')
+  })
+
+  test('add notification device', async () => {
+    const { ok } = await indexer.notification.addDevice(
+      characterId,
+      expoDeviceToken,
+    )
+    expect(ok).toBeTruthy()
+  })
+
+  test('remove notification device', async () => {
+    const { ok } = await indexer.notification.removeDevice(
+      characterId,
+      expoDeviceToken,
+    )
+    expect(ok).toBeTruthy()
   })
 })
