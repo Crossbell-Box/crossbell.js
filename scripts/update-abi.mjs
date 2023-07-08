@@ -90,7 +90,7 @@ function getAbi(name) {
 async function writeAbi(name, abi) {
   const camelName = camelCase(name)
   const pascalName = pascalCase(name)
-  const contents = format(
+  const contents = await format(
     `export const ${camelName} = ${JSON.stringify(abi)} as const;
     export type ${pascalName} = typeof ${camelName};`,
     { ...prettierConfig, parser: 'babel-ts' },

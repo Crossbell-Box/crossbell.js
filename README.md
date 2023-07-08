@@ -4,7 +4,7 @@ A JavaScript SDK to interact with the Crossbell. It works for both browser and N
 
 [![npm version](https://badgen.net/npm/v/crossbell)](https://npm.im/crossbell) [![npm downloads](https://badgen.net/npm/dm/crossbell)](https://npm.im/crossbell)
 
-- [API Reference](https://crossbell-box.github.io/crossbell.js/)
+- [API Reference](https://crossbell.js.org/)
 - [Vite Example](https://crossbell-js.netlify.app/)
 
 ## Installation
@@ -66,7 +66,7 @@ import { createContract } from 'crossbell'
 const contract = new createContract(provider) // just pass nothing to use a read-only provider
 ```
 
-For more contract api, see [docs](https://crossbell-box.github.io/crossbell.js/classes/Contract.html).
+For more contract api, see [docs](https://crossbell.js.org/classes/Contract.html).
 
 ### Indexer
 
@@ -84,4 +84,4 @@ const res = await indexer.character.getMany(
 console.log(res.list)
 ```
 
-For more indexer api, see [docs](https://crossbell-box.github.io/crossbell.js/classes/Indexer.html).
+For more indexer api, see [docs](https://crossbell.js.org/classes/Indexer.html).
