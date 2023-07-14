@@ -70,6 +70,16 @@ const _abi = [
   },
   {
     inputs: [],
+    name: "ErrSignatureExpired",
+    type: "error",
+  },
+  {
+    inputs: [],
+    name: "ErrSignatureInvalid",
+    type: "error",
+  },
+  {
+    inputs: [],
     name: "ErrSocialTokenExists",
     type: "error",
   },
@@ -452,6 +462,19 @@ const _abi = [
     type: "function",
   },
   {
+    inputs: [],
+    name: "getDomainSeparator",
+    outputs: [
+      {
+        internalType: "bytes32",
+        name: "",
+        type: "bytes32",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
     inputs: [
       {
         internalType: "uint256",
@@ -796,6 +819,56 @@ const _abi = [
       },
     ],
     name: "grantOperatorPermissions",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "characterId",
+        type: "uint256",
+      },
+      {
+        internalType: "address",
+        name: "operator",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "permissionBitMap",
+        type: "uint256",
+      },
+      {
+        components: [
+          {
+            internalType: "uint8",
+            name: "v",
+            type: "uint8",
+          },
+          {
+            internalType: "bytes32",
+            name: "r",
+            type: "bytes32",
+          },
+          {
+            internalType: "bytes32",
+            name: "s",
+            type: "bytes32",
+          },
+          {
+            internalType: "uint256",
+            name: "deadline",
+            type: "uint256",
+          },
+        ],
+        internalType: "struct DataTypes.EIP712Signature",
+        name: "sig",
+        type: "tuple",
+      },
+    ],
+    name: "grantOperatorPermissionsWithSig",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
@@ -1244,6 +1317,25 @@ const _abi = [
         internalType: "string",
         name: "",
         type: "string",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "owner",
+        type: "address",
+      },
+    ],
+    name: "nonces",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
       },
     ],
     stateMutability: "view",

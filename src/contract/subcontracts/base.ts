@@ -35,6 +35,10 @@ import {
   Abi__factory as TipsAbi__factory,
 } from '../abis/tips/types'
 import {
+  type Abi as TipsWithFeeAbi,
+  Abi__factory as TipsWithFeeAbi__factory,
+} from '../abis/tips-with-fee/types'
+import {
   type Abi as MiraAbi,
   Abi__factory as MiraAbi__factory,
 } from '../abis/mira/types'
@@ -95,6 +99,7 @@ type ContractOptions = {
   cbtContractAddress: string
   newbieVillaContractAddress: string
   tipsContractAddress: string
+  tipsWithFeeContractAddress: string
   miraContractAddress: string
   linklistContractAddress: string
 }
@@ -179,6 +184,21 @@ export class BaseContract {
   ) {
     return TipsAbi__factory.connect(
       this.options.tipsContractAddress,
+      signerOrProvider,
+    )
+  }
+
+  get tipsWithFeeContract(): TipsWithFeeAbi {
+    return this.getTipsWithFeeContract(this._signerOrProvider)
+  }
+
+  protected getTipsWithFeeContract(
+    signerOrProvider:
+     | ethers.Signer
+     | ethers.providers.Provider = this.getDefaultProvider()
+  ) {
+    return TipsWithFeeAbi__factory.connect(
+      this.options.tipsWithFeeContractAddress,
       signerOrProvider,
     )
   }
@@ -325,6 +345,8 @@ export class BaseContract {
         options?.cbtContractAddress ?? Network.getCbtContractAddress(),
       tipsContractAddress:
         options?.tipsContractAddress ?? Network.getTipsContractAddress(),
+      tipsWithFeeContractAddress:
+        options?.tipsWithFeeContractAddress ?? Network.getTipsWithFeeContractAddress(),
       miraContractAddress:
         options?.miraContractAddress ?? Network.getMiraContractAddress(),
       newbieVillaContractAddress:
