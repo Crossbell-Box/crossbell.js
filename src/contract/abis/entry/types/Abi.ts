@@ -118,6 +118,20 @@ export declare namespace DataTypes {
     locked: boolean;
   };
 
+  export type EIP712SignatureStruct = {
+    v: PromiseOrValue<BigNumberish>;
+    r: PromiseOrValue<BytesLike>;
+    s: PromiseOrValue<BytesLike>;
+    deadline: PromiseOrValue<BigNumberish>;
+  };
+
+  export type EIP712SignatureStructOutput = [
+    number,
+    string,
+    string,
+    BigNumber
+  ] & { v: number; r: string; s: string; deadline: BigNumber };
+
   export type LinkAddressDataStruct = {
     fromCharacterId: PromiseOrValue<BigNumberish>;
     ethAddress: PromiseOrValue<string>;
@@ -451,6 +465,7 @@ export interface AbiInterface extends utils.Interface {
     "getCharacter(uint256)": FunctionFragment;
     "getCharacterByHandle(string)": FunctionFragment;
     "getCharacterUri(uint256)": FunctionFragment;
+    "getDomainSeparator()": FunctionFragment;
     "getHandle(uint256)": FunctionFragment;
     "getLinkModule4Address(address)": FunctionFragment;
     "getLinkModule4ERC721(address,uint256)": FunctionFragment;
@@ -466,6 +481,7 @@ export interface AbiInterface extends utils.Interface {
     "getPrimaryCharacterId(address)": FunctionFragment;
     "getRevision()": FunctionFragment;
     "grantOperatorPermissions(uint256,address,uint256)": FunctionFragment;
+    "grantOperatorPermissionsWithSig(uint256,address,uint256,(uint8,bytes32,bytes32,uint256))": FunctionFragment;
     "grantOperators4Note(uint256,uint256,address[],address[])": FunctionFragment;
     "initialize(string,string,address,address,address,address)": FunctionFragment;
     "isApprovedForAll(address,address)": FunctionFragment;
@@ -481,6 +497,7 @@ export interface AbiInterface extends utils.Interface {
     "mintNote((uint256,uint256,address,bytes))": FunctionFragment;
     "multicall(bytes[])": FunctionFragment;
     "name()": FunctionFragment;
+    "nonces(address)": FunctionFragment;
     "ownerOf(uint256)": FunctionFragment;
     "postNote((uint256,string,address,bytes,address,bytes,bool))": FunctionFragment;
     "postNote4Address((uint256,string,address,bytes,address,bytes,bool),address)": FunctionFragment;
@@ -529,6 +546,7 @@ export interface AbiInterface extends utils.Interface {
       | "getCharacter"
       | "getCharacterByHandle"
       | "getCharacterUri"
+      | "getDomainSeparator"
       | "getHandle"
       | "getLinkModule4Address"
       | "getLinkModule4ERC721"
@@ -544,6 +562,7 @@ export interface AbiInterface extends utils.Interface {
       | "getPrimaryCharacterId"
       | "getRevision"
       | "grantOperatorPermissions"
+      | "grantOperatorPermissionsWithSig"
       | "grantOperators4Note"
       | "initialize"
       | "isApprovedForAll"
@@ -559,6 +578,7 @@ export interface AbiInterface extends utils.Interface {
       | "mintNote"
       | "multicall"
       | "name"
+      | "nonces"
       | "ownerOf"
       | "postNote"
       | "postNote4Address"
@@ -636,6 +656,10 @@ export interface AbiInterface extends utils.Interface {
     values: [PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
+    functionFragment: "getDomainSeparator",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
     functionFragment: "getHandle",
     values: [PromiseOrValue<BigNumberish>]
   ): string;
@@ -697,6 +721,15 @@ export interface AbiInterface extends utils.Interface {
       PromiseOrValue<BigNumberish>,
       PromiseOrValue<string>,
       PromiseOrValue<BigNumberish>
+    ]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "grantOperatorPermissionsWithSig",
+    values: [
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<string>,
+      PromiseOrValue<BigNumberish>,
+      DataTypes.EIP712SignatureStruct
     ]
   ): string;
   encodeFunctionData(
@@ -772,6 +805,10 @@ export interface AbiInterface extends utils.Interface {
     values: [PromiseOrValue<BytesLike>[]]
   ): string;
   encodeFunctionData(functionFragment: "name", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "nonces",
+    values: [PromiseOrValue<string>]
+  ): string;
   encodeFunctionData(
     functionFragment: "ownerOf",
     values: [PromiseOrValue<BigNumberish>]
@@ -948,6 +985,10 @@ export interface AbiInterface extends utils.Interface {
     functionFragment: "getCharacterUri",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(
+    functionFragment: "getDomainSeparator",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "getHandle", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "getLinkModule4Address",
@@ -1003,6 +1044,10 @@ export interface AbiInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
+    functionFragment: "grantOperatorPermissionsWithSig",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "grantOperators4Note",
     data: BytesLike
   ): Result;
@@ -1038,6 +1083,7 @@ export interface AbiInterface extends utils.Interface {
   decodeFunctionResult(functionFragment: "mintNote", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "multicall", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "name", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "nonces", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "ownerOf", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "postNote", data: BytesLike): Result;
   decodeFunctionResult(
@@ -1879,6 +1925,8 @@ export interface Abi extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[string]>;
 
+    getDomainSeparator(overrides?: CallOverrides): Promise<[string]>;
+
     getHandle(
       characterId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
@@ -1954,6 +2002,14 @@ export interface Abi extends BaseContract {
       characterId: PromiseOrValue<BigNumberish>,
       operator: PromiseOrValue<string>,
       permissionBitMap: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
+    grantOperatorPermissionsWithSig(
+      characterId: PromiseOrValue<BigNumberish>,
+      operator: PromiseOrValue<string>,
+      permissionBitMap: PromiseOrValue<BigNumberish>,
+      sig: DataTypes.EIP712SignatureStruct,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
@@ -2040,6 +2096,11 @@ export interface Abi extends BaseContract {
     ): Promise<ContractTransaction>;
 
     name(overrides?: CallOverrides): Promise<[string]>;
+
+    nonces(
+      owner: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
 
     ownerOf(
       tokenId: PromiseOrValue<BigNumberish>,
@@ -2276,6 +2337,8 @@ export interface Abi extends BaseContract {
     overrides?: CallOverrides
   ): Promise<string>;
 
+  getDomainSeparator(overrides?: CallOverrides): Promise<string>;
+
   getHandle(
     characterId: PromiseOrValue<BigNumberish>,
     overrides?: CallOverrides
@@ -2351,6 +2414,14 @@ export interface Abi extends BaseContract {
     characterId: PromiseOrValue<BigNumberish>,
     operator: PromiseOrValue<string>,
     permissionBitMap: PromiseOrValue<BigNumberish>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  grantOperatorPermissionsWithSig(
+    characterId: PromiseOrValue<BigNumberish>,
+    operator: PromiseOrValue<string>,
+    permissionBitMap: PromiseOrValue<BigNumberish>,
+    sig: DataTypes.EIP712SignatureStruct,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
@@ -2437,6 +2508,11 @@ export interface Abi extends BaseContract {
   ): Promise<ContractTransaction>;
 
   name(overrides?: CallOverrides): Promise<string>;
+
+  nonces(
+    owner: PromiseOrValue<string>,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
 
   ownerOf(
     tokenId: PromiseOrValue<BigNumberish>,
@@ -2673,6 +2749,8 @@ export interface Abi extends BaseContract {
       overrides?: CallOverrides
     ): Promise<string>;
 
+    getDomainSeparator(overrides?: CallOverrides): Promise<string>;
+
     getHandle(
       characterId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
@@ -2748,6 +2826,14 @@ export interface Abi extends BaseContract {
       characterId: PromiseOrValue<BigNumberish>,
       operator: PromiseOrValue<string>,
       permissionBitMap: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    grantOperatorPermissionsWithSig(
+      characterId: PromiseOrValue<BigNumberish>,
+      operator: PromiseOrValue<string>,
+      permissionBitMap: PromiseOrValue<BigNumberish>,
+      sig: DataTypes.EIP712SignatureStruct,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -2834,6 +2920,11 @@ export interface Abi extends BaseContract {
     ): Promise<string[]>;
 
     name(overrides?: CallOverrides): Promise<string>;
+
+    nonces(
+      owner: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
     ownerOf(
       tokenId: PromiseOrValue<BigNumberish>,
@@ -3592,6 +3683,8 @@ export interface Abi extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    getDomainSeparator(overrides?: CallOverrides): Promise<BigNumber>;
+
     getHandle(
       characterId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
@@ -3665,6 +3758,14 @@ export interface Abi extends BaseContract {
       characterId: PromiseOrValue<BigNumberish>,
       operator: PromiseOrValue<string>,
       permissionBitMap: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    grantOperatorPermissionsWithSig(
+      characterId: PromiseOrValue<BigNumberish>,
+      operator: PromiseOrValue<string>,
+      permissionBitMap: PromiseOrValue<BigNumberish>,
+      sig: DataTypes.EIP712SignatureStruct,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
@@ -3751,6 +3852,11 @@ export interface Abi extends BaseContract {
     ): Promise<BigNumber>;
 
     name(overrides?: CallOverrides): Promise<BigNumber>;
+
+    nonces(
+      owner: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
     ownerOf(
       tokenId: PromiseOrValue<BigNumberish>,
@@ -3988,6 +4094,10 @@ export interface Abi extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
+    getDomainSeparator(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
     getHandle(
       characterId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
@@ -4063,6 +4173,14 @@ export interface Abi extends BaseContract {
       characterId: PromiseOrValue<BigNumberish>,
       operator: PromiseOrValue<string>,
       permissionBitMap: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    grantOperatorPermissionsWithSig(
+      characterId: PromiseOrValue<BigNumberish>,
+      operator: PromiseOrValue<string>,
+      permissionBitMap: PromiseOrValue<BigNumberish>,
+      sig: DataTypes.EIP712SignatureStruct,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -4149,6 +4267,11 @@ export interface Abi extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     name(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    nonces(
+      owner: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
 
     ownerOf(
       tokenId: PromiseOrValue<BigNumberish>,

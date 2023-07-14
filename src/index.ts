@@ -6,6 +6,7 @@ import type { Abi as EntryAbi } from './contract/abis/entry/types'
 import type { Abi as PeripheryAbi } from './contract/abis/periphery/types'
 import type { Abi as CbtAbi } from './contract/abis/cbt/types'
 import type { Abi as TipsAbi } from './contract/abis/tips/types'
+import type { Abi as TipsWithFeeAbi } from './contract/abis/tips-with-fee/types'
 import type { Abi as LinklistAbi } from './contract/abis/linklist/types'
 
 export default { Network, Contract, Indexer, Ipfs }
@@ -18,6 +19,7 @@ export {
   PeripheryAbi,
   CbtAbi,
   TipsAbi,
+  TipsWithFeeAbi,
   LinklistAbi,
 }
 export * from './types'
