@@ -1,7 +1,13 @@
 import { type Address, encodeAbiParameters } from 'viem'
 import { autoSwitchMainnet } from '../decorators'
 import { type Mira } from '../abi'
-import { type Numberish, type Result, type WriteOverrides } from '../../types'
+import { type TipsWithFee } from '../abi/tips-with-fee'
+import {
+  type Numberish,
+  type ReadOverrides,
+  type Result,
+  type WriteOverrides,
+} from '../../types'
 import { type BaseContract } from './base'
 
 export class TipsWithFeeContract {
@@ -52,6 +58,12 @@ export class TipsWithFeeContract {
     }
   }
 
+  /**
+   * This tips a character for a note with $MIRA token.
+   *
+   * @category TipsWithFeeContract
+   * @returns The transaction hash.
+   */
   @autoSwitchMainnet()
   async tipCharacterForNote(
     {
@@ -101,6 +113,51 @@ export class TipsWithFeeContract {
     return {
       data: undefined,
       transactionHash: receipt.transactionHash,
+    }
+  }
+
+  /**
+   * This gets the fee percentage of specific <receiver, note>.
+   *
+   * @category TipsWithFeeContract
+   * @returns The fee percentage of specific <receiver, note>.
+   */
+  async getFeeFraction(
+    feeReceiver: Address,
+    characterId: Numberish,
+    noteId: Numberish,
+    overrides: ReadOverrides<TipsWithFee, 'getFeeFraction'> = {},
+  ): Promise<Result<bigint>> {
+    const res = await this.base.tipsWithFeeContract.read.getFeeFraction(
+      [feeReceiver, BigInt(characterId), BigInt(noteId)],
+      overrides,
+    )
+
+    return {
+      data: res,
+    }
+  }
+
+  /**
+   * This gets the fee is owed by <feeFraction, tipAmount>.
+   *
+   * @category TipsWithFeeContract
+   * @returns The fee is owed by <feeFraction, tipAmount>.
+   */
+  async getFeeAmount(
+    feeReceiver: Address,
+    characterId: Numberish,
+    noteId: Numberish,
+    tipAmount: Numberish,
+    overrides: ReadOverrides<TipsWithFee, 'getFeeAmount'> = {},
+  ): Promise<Result<bigint>> {
+    const res = await this.base.tipsWithFeeContract.read.getFeeAmount(
+      [feeReceiver, BigInt(characterId), BigInt(noteId), BigInt(tipAmount)],
+      overrides,
+    )
+
+    return {
+      data: res,
     }
   }
 }
