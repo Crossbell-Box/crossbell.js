@@ -42,6 +42,7 @@ async function getAllAbis() {
     { abi: cbt },
     { abi: newbieVilla },
     { abi: tips },
+    { abi: tipsWithFee },
     mira,
     { abi: linklist },
   ] = await Promise.all([
@@ -51,6 +52,7 @@ async function getAllAbis() {
     getAbi('CharacterBoundToken'),
     getAbi('NewbieVilla'),
     getAbi('Tips'),
+    getAbi('TipsWithFee'),
     getAbi(
       'https://raw.githubusercontent.com/Crossbell-Box/crossbell-bridge-contracts/main/build-info/MiraToken.abi',
     ),
@@ -65,6 +67,7 @@ async function getAllAbis() {
     ['cbt', simplifyAbi(cbt)],
     ['newbie-villa', simplifyAbi(newbieVilla)],
     ['tips', simplifyAbi(tips)],
+    ['tips-with-fee', simplifyAbi(tipsWithFee)],
     ['mira', simplifyAbi(mira)],
     ['linklist', simplifyAbi(linklist)],
   ]

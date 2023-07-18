@@ -10,6 +10,8 @@ export interface TipEntity {
   toNoteId: number | null
   toNote?: NoteEntity | null
   amount: string
+  fee: string | null
+  feeReceiverAddress: Address | null
   tokenAddress: Address
   createdAt: Date
   transactionHash: Hash
