@@ -70,11 +70,10 @@ export interface NoteMetadata extends BaseMetadata, AttributesMetadata {
   /**
    * The attachments of this note.
    */
-  attachments?:
-    | (
-        | NoteMetadataAttachmentBase<'address'>
-        | NoteMetadataAttachmentBase<'content'>
-      )[]
+  attachments?: (
+    | NoteMetadataAttachmentBase<'address'>
+    | NoteMetadataAttachmentBase<'content'>
+  )[]
 
   /**
    * The source of this note. I.e. where it was originally created.

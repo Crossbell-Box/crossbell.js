@@ -80,7 +80,7 @@ export function getProviderAccount(
 
 export function createWalletClientFromProvider(
   provider: EIP1193Provider,
-  account?: Address | Account,
+  account: Address | Account,
 ): WalletClient<Transport, Chain, Account> {
   return createWalletClient({
     transport: custom(provider),
