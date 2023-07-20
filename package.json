@@ -1,7 +1,7 @@
 {
   "name": "crossbell",
   "version": "1.5.0",
-  "packageManager": "pnpm@8.6.6",
+  "packageManager": "pnpm@8.6.9",
   "description": "JavaScript SDK to interact with Crossbell",
   "keywords": [
     "crossbell",
@@ -77,7 +77,7 @@
     "@sxzz/eslint-config": "3.2.3",
     "@types/async-retry": "^1.4.5",
     "@types/node": "^20.4.2",
-    "abitype": "^0.9.2",
+    "abitype": "^0.9.3",
     "bumpp": "^9.1.1",
     "change-case": "^4.1.2",
     "eslint": "^8.45.0",
