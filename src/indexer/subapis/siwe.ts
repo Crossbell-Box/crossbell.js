@@ -12,7 +12,7 @@ export type BaseSigner = {
   getAddress: () => Promise<string | null>
 }
 
-export class SwieIndexer {
+export class SiweIndexer {
   constructor(private base: BaseIndexer) {}
 
   token: string | undefined
