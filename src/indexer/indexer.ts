@@ -14,6 +14,7 @@ import { LinkModuleIndexer } from './subapis/link_module'
 import { MintModuleIndexer } from './subapis/mint_module'
 import { BaseIndexer, type IndexerOptions } from './subapis/base'
 import { NewbieIndexer } from './subapis/newbie'
+import { SiweIndexer } from './subapis/siwe'
 
 /**
  * This class is used to fetch data like characters, links from the indexer.
@@ -45,6 +46,7 @@ export class Indexer extends BaseIndexer {
   linkModule = new LinkModuleIndexer(this)
   mintModule = new MintModuleIndexer(this)
   newbie = new NewbieIndexer(this)
+  siwe = new SiweIndexer(this)
 }
 
 /**
