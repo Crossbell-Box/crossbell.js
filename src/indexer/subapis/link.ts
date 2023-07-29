@@ -7,6 +7,35 @@ import {
 } from '../../types'
 import { type BaseIndexer } from './base'
 
+type LinksQuery = {
+  /** Limit the count of items returned. */
+  limit?: Numberish
+  /** Used for pagination. */
+  cursor?: string
+  /** The link type to filter by. e.g. 'follow' */
+  linkType?: string
+  /** The link item type to filter by. e.g. 'Character' */
+  linkItemType?: LinkItemType
+  /** The fromCharacterId to filter by. */
+  fromCharacterId?: Numberish
+  /** The toCharacterId to filter by. */
+  toCharacterId?: Numberish
+  /** The toAddress to filter by. */
+  toAddress?: Address
+  /** The toNoteId to filter by. */
+  toNoteId?: Numberish
+  /** The toContractAddress to filter by. */
+  toContractAddress?: Address
+  /** The toTokenId to filter by. */
+  toTokenId?: Numberish
+  /** The toLinklistId to filter by. */
+  toLinklistId?: Numberish
+  /** The toUri to filter by. */
+  toUri?: string
+  /** The order to sort by. */
+  order?: 'asc' | 'desc'
+}
+
 export class LinkIndexer {
   constructor(private base: BaseIndexer) {}
 
@@ -20,68 +49,27 @@ export class LinkIndexer {
    * @param options - The options to send to the indexer.
    * @returns The list of links.
    */
-  getMany(
-    characterId: Numberish,
-    {
-      limit = 20,
-      cursor,
-      linkType,
-      linkItemType,
-      fromCharacterId,
-      toCharacterId,
-      toAddress,
-      toNoteId,
-      toContractAddress,
-      toTokenId,
-      toLinklistId,
-      toUri,
-      order,
-    }: {
-      /** Limit the count of items returned. */
-      limit?: Numberish
-      /** Used for pagination. */
-      cursor?: string
-      /** The link type to filter by. e.g. 'follow' */
-      linkType?: string
-      /** The link item type to filter by. e.g. 'Character' */
-      linkItemType?: LinkItemType
-      /** The fromCharacterId to filter by. */
-      fromCharacterId?: Numberish
-      /** The toCharacterId to filter by. */
-      toCharacterId?: Numberish
-      /** The toAddress to filter by. */
-      toAddress?: Address
-      /** The toNoteId to filter by. */
-      toNoteId?: Numberish
-      /** The toContractAddress to filter by. */
-      toContractAddress?: Address
-      /** The toTokenId to filter by. */
-      toTokenId?: Numberish
-      /** The toLinklistId to filter by. */
-      toLinklistId?: Numberish
-      /** The toUri to filter by. */
-      toUri?: string
-      /** The order to sort by. */
-      order?: 'asc' | 'desc'
-    } = {},
-  ) {
+  getMany(characterId: Numberish, options: LinksQuery = {}) {
     const url = `/characters/${characterId}/links`
     return this.base.fetch<ListResponse<LinkEntity>>(url, {
-      params: {
-        limit,
-        cursor,
-        linkType,
-        linkItemType,
-        fromCharacterId,
-        toCharacterId,
-        toAddress,
-        toNoteId,
-        toContractAddress,
-        toTokenId,
-        toLinklistId,
-        toUri,
-        order,
-      },
+      params: options,
+    })
+  }
+
+  /**
+   * This returns a list of links from a linklist.
+   *
+   * Note that all links can only start from characters, but can end to characters, notes or other item types.
+   *
+   * @category Link
+   * @param linklistId - The id of the linklist.
+   * @param options - The options to send to the indexer.
+   * @returns The list of links.
+   */
+  getManyByLinklistId(linklistId: Numberish, options: LinksQuery = {}) {
+    const url = `/linklists/${linklistId}/links`
+    return this.base.fetch<ListResponse<LinkEntity>>(url, {
+      params: options,
     })
   }
 
