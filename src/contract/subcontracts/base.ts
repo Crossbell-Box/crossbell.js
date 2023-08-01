@@ -78,6 +78,11 @@ export class BaseContract<THasWallet extends boolean = boolean> {
     PublicClient,
     WalletClient<Transport, Chain, Account>
   >
+  linklistContract!: GetContractReturnType<
+    Abi.Linklist,
+    PublicClient,
+    WalletClient<Transport, Chain, Account>
+  >
   newbieVillaContract!: GetContractReturnType<
     Abi.NewbieVilla,
     PublicClient,
@@ -187,6 +192,14 @@ export class BaseContract<THasWallet extends boolean = boolean> {
       getContract({
         address: this.options.address.entryContract,
         abi: Abi.entry,
+        publicClient: this.publicClient,
+        walletClient: this.#walletClient,
+      }),
+    )
+    this.linklistContract = this.proxyContract(
+      getContract({
+        address: this.options.address.linklistContract,
+        abi: Abi.linklist,
         publicClient: this.publicClient,
         walletClient: this.#walletClient,
       }),

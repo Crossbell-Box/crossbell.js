@@ -1,7 +1,7 @@
 import { type Address, type Hex, stringToHex } from 'viem'
 import { NIL_ADDRESS, parseLog, validateAddress } from '../../utils'
 import { autoSwitchMainnet } from '../decorators'
-import { type Entry, type Periphery } from '../abi'
+import { Linklist, type Entry, type Periphery } from '../abi'
 import {
   type Character,
   type Numberish,
@@ -241,10 +241,38 @@ export class LinkContract {
   }
 
   /**
-   * This returns the *attached* linked character ID of a character with a given link type.
+   * This returns the *attached* linked character ID of a character
+   * with a given link type or with a given linklist id.
+   *
+   * @example
+   * ```ts
+   * // Get the linked character ids of a character
+   * const linkedCharacterIds = await contract.link.getLinkingCharacterIds({ linklistId })
+   * ```
+   *
+   * @example
+   * ```ts
+   * // Get the linked character ids of a character with a given link type
+   * const linkedCharacterIds = await contract.link.getLinkingCharacterIds({ fromCharacterId, linkType })
+   * ```
+   *
+   * Note that you can either pass in:
+   * - `linklistId`
+   * - or `fromCharacterId` and `linkType`
+   * as the first argument.
+   *
    * @category Link
    * @returns An array of character ids that are linked to the character id passed in.
    */
+  async getLinkingCharacterIds(
+    {
+      linklistId,
+    }: {
+      /** The linklist ID of the linklist you want to get the linked characters from. */
+      linklistId: Numberish
+    },
+    overrides?: ReadOverrides<Linklist, 'getLinkingCharacterIds'>,
+  ): Promise<Result<bigint[]>>
   async getLinkingCharacterIds(
     {
       fromCharacterId,
@@ -255,15 +283,46 @@ export class LinkContract {
       /** The type of link you want to get. */
       linkType: string
     },
-    overrides: ReadOverrides<Periphery, 'getLinkingCharacterIds'> = {},
+    overrides?: ReadOverrides<Periphery, 'getLinkingCharacterIds'>,
+  ): Promise<Result<bigint[]>>
+  async getLinkingCharacterIds(
+    {
+      linklistId,
+      fromCharacterId,
+      linkType,
+    }:
+      | {
+          linklistId: never
+          fromCharacterId: Numberish
+          linkType: string
+        }
+      | {
+          linklistId: Numberish
+          fromCharacterId: never
+          linkType: never
+        },
+    overrides:
+      | ReadOverrides<Periphery, 'getLinkingCharacterIds'>
+      | ReadOverrides<Linklist, 'getLinkingCharacterIds'> = {},
   ): Promise<Result<bigint[]>> {
-    const linkList =
+    if (linklistId) {
+      const linklist =
+        await this.base.linklistContract.read.getLinkingCharacterIds(
+          [BigInt(linklistId)],
+          overrides,
+        )
+      return {
+        data: linklist.map((link) => link),
+      }
+    }
+
+    const linklist =
       await this.base.peripheryContract.read.getLinkingCharacterIds(
         [BigInt(fromCharacterId), stringToHex(linkType, { size: 32 })],
         overrides,
       )
     return {
-      data: linkList.map((link) => link),
+      data: linklist.map((link) => link),
     }
   }
 
