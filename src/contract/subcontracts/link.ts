@@ -1,7 +1,7 @@
 import { type Address, type Hex, stringToHex } from 'viem'
 import { NIL_ADDRESS, parseLog, validateAddress } from '../../utils'
 import { autoSwitchMainnet } from '../decorators'
-import { Linklist, type Entry, type Periphery } from '../abi'
+import { type Entry, type Linklist, type Periphery } from '../abi'
 import {
   type Character,
   type Numberish,
