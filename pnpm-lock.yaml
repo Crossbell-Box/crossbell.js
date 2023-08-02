@@ -21,8 +21,8 @@ importers:
         specifier: ^3.1.0
         version: 3.1.0
       viem:
-        specifier: ^1.4.2
-        version: 1.4.2(typescript@5.1.6)
+        specifier: ^1.5.0
+        version: 1.5.0(typescript@5.1.6)
     devDependencies:
       '@sxzz/eslint-config':
         specifier: 3.2.3
@@ -4466,8 +4466,8 @@ packages:
       spdx-expression-parse: 3.0.1
     dev: true
 
-  /viem@1.4.2(typescript@5.1.6):
-    resolution: {integrity: sha512-125E7HoOr5PrL+Iwt8853dQexwRoiPpLwPsrRvlDX94su2xoe7AYqrdfR6N9nmy6vd6mt8eQy8+LWiP3A+1dqw==}
+  /viem@1.5.0(typescript@5.1.6):
+    resolution: {integrity: sha512-+SVCVaXJRR+fE9q6Sf6q9droB6TunPGY1JfwB3uTdxwWrkgr3qq/NbXaRdtEk+TyaOEjzZQr7t6vUzjOL0zL0Q==}
     peerDependencies:
       typescript: '>=5.0.4'
     peerDependenciesMeta:
