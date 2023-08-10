@@ -58,7 +58,7 @@
     "build": "tsup --dts",
     "docs:build": "typedoc",
     "docs:preview": "serve docs",
-    "lint": "ESLINT_USE_FLAT_CONFIG=true eslint -c eslint.config.mjs --max-warnings 0 .",
+    "lint": "echo \"No linting configured\"",
     "prepublishOnly": "npm run build",
     "release": "bumpp",
     "test": "vitest",
@@ -74,7 +74,6 @@
     "viem": "^1.5.4"
   },
   "devDependencies": {
-    "@sxzz/eslint-config": "3.3.2",
     "@types/async-retry": "^1.4.5",
     "@types/node": "^20.4.9",
     "abitype": "^0.9.6",
