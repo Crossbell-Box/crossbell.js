@@ -23,6 +23,7 @@ import {
   getModuleConfig,
   parseLog,
   validateAddress,
+  waitForTransactionReceiptWithRetry,
 } from '../../utils'
 import { autoSwitchMainnet } from '../decorators'
 import { type Entry, entry } from '../abi'
@@ -66,9 +67,10 @@ export class NoteContract {
     const data = await buildPostNoteData(options)
     const hash = await this.base.contract.write.postNote([data], overrides)
 
-    const receipt = await this.base.publicClient.waitForTransactionReceipt({
+    const receipt = await waitForTransactionReceiptWithRetry(
+      this.base.publicClient,
       hash,
-    })
+    )
 
     const log = parseLog(receipt.logs, 'PostNote')
 
@@ -125,9 +127,10 @@ export class NoteContract {
       overrides,
     )
 
-    const receipt = await this.base.publicClient.waitForTransactionReceipt({
+    const receipt = await waitForTransactionReceiptWithRetry(
+      this.base.publicClient,
       hash,
-    })
+    )
 
     const logs = parseLog(receipt.logs, 'PostNote', {
       throwOnMultipleLogsFound: false,
@@ -167,9 +170,10 @@ export class NoteContract {
       overrides,
     )
 
-    const receipt = await this.base.publicClient.waitForTransactionReceipt({
+    const receipt = await waitForTransactionReceiptWithRetry(
+      this.base.publicClient,
       hash,
-    })
+    )
 
     const log = parseLog(receipt.logs, 'PostNote')
 
@@ -211,9 +215,10 @@ export class NoteContract {
       overrides,
     )
 
-    const receipt = await this.base.publicClient.waitForTransactionReceipt({
+    const receipt = await waitForTransactionReceiptWithRetry(
+      this.base.publicClient,
       hash,
-    })
+    )
 
     const log = parseLog(receipt.logs, 'PostNote')
 
@@ -247,9 +252,10 @@ export class NoteContract {
       overrides,
     )
 
-    const receipt = await this.base.publicClient.waitForTransactionReceipt({
+    const receipt = await waitForTransactionReceiptWithRetry(
+      this.base.publicClient,
       hash,
-    })
+    )
 
     const log = parseLog(receipt.logs, 'PostNote')
 
@@ -283,9 +289,10 @@ export class NoteContract {
       overrides,
     )
 
-    const receipt = await this.base.publicClient.waitForTransactionReceipt({
+    const receipt = await waitForTransactionReceiptWithRetry(
+      this.base.publicClient,
       hash,
-    })
+    )
 
     const log = parseLog(receipt.logs, 'PostNote')
 
@@ -320,9 +327,10 @@ export class NoteContract {
       overrides,
     )
 
-    const receipt = await this.base.publicClient.waitForTransactionReceipt({
+    const receipt = await waitForTransactionReceiptWithRetry(
+      this.base.publicClient,
       hash,
-    })
+    )
 
     const log = parseLog(receipt.logs, 'PostNote')
 
@@ -358,9 +366,10 @@ export class NoteContract {
       overrides,
     )
 
-    const receipt = await this.base.publicClient.waitForTransactionReceipt({
+    const receipt = await waitForTransactionReceiptWithRetry(
+      this.base.publicClient,
       hash,
-    })
+    )
 
     const log = parseLog(receipt.logs, 'PostNote')
 
@@ -404,9 +413,10 @@ export class NoteContract {
       overrides,
     )
 
-    const receipt = await this.base.publicClient.waitForTransactionReceipt({
+    const receipt = await waitForTransactionReceiptWithRetry(
+      this.base.publicClient,
       hash,
-    })
+    )
 
     return {
       data: {
@@ -617,9 +627,10 @@ export class NoteContract {
       overrides,
     )
 
-    const receipt = await this.base.publicClient.waitForTransactionReceipt({
+    const receipt = await waitForTransactionReceiptWithRetry(
+      this.base.publicClient,
       hash,
-    })
+    )
 
     return {
       data: undefined,
@@ -656,9 +667,10 @@ export class NoteContract {
       overrides,
     )
 
-    const receipt = await this.base.publicClient.waitForTransactionReceipt({
+    const receipt = await waitForTransactionReceiptWithRetry(
+      this.base.publicClient,
       hash,
-    })
+    )
 
     return {
       data: undefined,
@@ -701,9 +713,10 @@ export class NoteContract {
       overrides,
     )
 
-    const receipt = await this.base.publicClient.waitForTransactionReceipt({
+    const receipt = await waitForTransactionReceiptWithRetry(
+      this.base.publicClient,
       hash,
-    })
+    )
 
     const log = parseLog(receipt.logs, 'MintNote')
 

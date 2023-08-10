@@ -6,6 +6,7 @@ import {
   type Result,
   type WriteOverrides,
 } from '../../types'
+import { waitForTransactionReceiptWithRetry } from '../../utils'
 import { type BaseContract } from './base'
 
 export class CbtContract {
@@ -35,9 +36,10 @@ export class CbtContract {
       overrides,
     )
 
-    const receipt = await this.base.publicClient.waitForTransactionReceipt({
+    const receipt = await waitForTransactionReceiptWithRetry(
+      this.base.publicClient,
       hash,
-    })
+    )
 
     return {
       data: undefined,
@@ -69,9 +71,10 @@ export class CbtContract {
       overrides,
     )
 
-    const receipt = await this.base.publicClient.waitForTransactionReceipt({
+    const receipt = await waitForTransactionReceiptWithRetry(
+      this.base.publicClient,
       hash,
-    })
+    )
 
     return {
       data: undefined,

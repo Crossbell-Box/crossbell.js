@@ -5,7 +5,10 @@ import {
   type Result,
   type WriteOverrides,
 } from '../../types'
-import { getModuleConfig } from '../../utils'
+import {
+  getModuleConfig,
+  waitForTransactionReceiptWithRetry,
+} from '../../utils'
 import { type Entry } from '../abi'
 import { autoSwitchMainnet } from '../decorators'
 import { type BaseContract } from './base'
@@ -41,9 +44,10 @@ export class LinkModuleContract {
       overrides,
     )
 
-    const receipt = await this.base.publicClient.waitForTransactionReceipt({
+    const receipt = await waitForTransactionReceiptWithRetry(
+      this.base.publicClient,
       hash,
-    })
+    )
 
     return {
       data: undefined,
@@ -79,9 +83,10 @@ export class LinkModuleContract {
       overrides,
     )
 
-    const receipt = await this.base.publicClient.waitForTransactionReceipt({
+    const receipt = await waitForTransactionReceiptWithRetry(
+      this.base.publicClient,
       hash,
-    })
+    )
 
     return {
       data: undefined,

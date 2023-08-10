@@ -1,7 +1,10 @@
 import { type Address, type Hex } from 'viem'
 import { autoSwitchMainnet } from '../decorators'
 import { type Numberish, type Result } from '../../types'
-import { validateAddress } from '../../utils'
+import {
+  validateAddress,
+  waitForTransactionReceiptWithRetry,
+} from '../../utils'
 import { type BaseContract } from './base'
 
 export class CsbContract {
@@ -47,9 +50,10 @@ export class CsbContract {
       to: toAddress,
       value: BigInt(amount),
     })
-    const receipt = await this.base.publicClient.waitForTransactionReceipt({
+    const receipt = await waitForTransactionReceiptWithRetry(
+      this.base.publicClient,
       hash,
-    })
+    )
 
     return {
       data: {},

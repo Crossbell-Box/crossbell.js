@@ -10,7 +10,12 @@ import {
 } from '../../types'
 import { ipfsParseMetadataOrUri, ipfsUriToMetadata } from '../../ipfs'
 import { autoSwitchMainnet } from '../decorators'
-import { getModuleConfig, parseLog, validateAddress } from '../../utils'
+import {
+  getModuleConfig,
+  parseLog,
+  validateAddress,
+  waitForTransactionReceiptWithRetry,
+} from '../../utils'
 import { type Entry, type NewbieVilla } from '../abi'
 import { type BaseContract } from './base'
 
@@ -61,9 +66,10 @@ export class CharacterContract {
       overrides,
     )
 
-    const receipt = await this.base.publicClient.waitForTransactionReceipt({
+    const receipt = await waitForTransactionReceiptWithRetry(
+      this.base.publicClient,
       hash,
-    })
+    )
 
     const parser = parseLog(receipt.logs, 'CharacterCreated')
 
@@ -97,9 +103,10 @@ export class CharacterContract {
       [BigInt(characterId), handle],
       overrides,
     )
-    const receipt = await this.base.publicClient.waitForTransactionReceipt({
+    const receipt = await waitForTransactionReceiptWithRetry(
+      this.base.publicClient,
       hash,
-    })
+    )
     return {
       data: undefined,
       transactionHash: receipt.transactionHash,
@@ -134,9 +141,10 @@ export class CharacterContract {
       [BigInt(characterId), uri],
       overrides,
     )
-    const receipt = await this.base.publicClient.waitForTransactionReceipt({
+    const receipt = await waitForTransactionReceiptWithRetry(
+      this.base.publicClient,
       hash,
-    })
+    )
 
     return {
       data: {
@@ -249,9 +257,10 @@ export class CharacterContract {
       [BigInt(characterId), socialToken],
       overrides,
     )
-    const receipt = await this.base.publicClient.waitForTransactionReceipt({
+    const receipt = await waitForTransactionReceiptWithRetry(
+      this.base.publicClient,
       hash,
-    })
+    )
     return {
       data: undefined,
       transactionHash: receipt.transactionHash,
@@ -277,9 +286,10 @@ export class CharacterContract {
       [BigInt(characterId)],
       overrides,
     )
-    const receipt = await this.base.publicClient.waitForTransactionReceipt({
+    const receipt = await waitForTransactionReceiptWithRetry(
+      this.base.publicClient,
       hash,
-    })
+    )
     return {
       data: undefined,
       transactionHash: receipt.transactionHash,
@@ -306,9 +316,10 @@ export class CharacterContract {
       overrides,
     )
 
-    const receipt = await this.base.publicClient.waitForTransactionReceipt({
+    const receipt = await waitForTransactionReceiptWithRetry(
+      this.base.publicClient,
       hash,
-    })
+    )
 
     return {
       data: undefined,
@@ -499,9 +510,10 @@ export class CharacterContract {
     },
     overrides: ReadOverrides<Entry, 'getCharacter'> = {},
   ): Promise<Result<Character>> {
-    const receipt = await this.base.publicClient.waitForTransactionReceipt({
-      hash: txHash,
-    })
+    const receipt = await waitForTransactionReceiptWithRetry(
+      this.base.publicClient,
+      txHash,
+    )
 
     const parser = parseLog(receipt.logs, 'CharacterCreated')
     const result = await this.get(
@@ -596,9 +608,10 @@ export class CharacterContract {
       overrides,
     )
 
-    const receipt = await this.base.publicClient.waitForTransactionReceipt({
+    const receipt = await waitForTransactionReceiptWithRetry(
+      this.base.publicClient,
       hash,
-    })
+    )
 
     return {
       data: undefined,
