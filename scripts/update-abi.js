@@ -48,6 +48,7 @@ const main = async () => {
     { abi: newbie_villa_abi },
     { abi: tips_abi },
     { abi: tips_with_fee_abi },
+    { abi: tips_with_config_abi },
     mira_abi,
     { abi: linklist_abi },
   ] = await Promise.all([
@@ -58,6 +59,7 @@ const main = async () => {
     getAbi('NewbieVilla'),
     getAbi('Tips'),
     getAbi('TipsWithFee'),
+    getAbi('TipsWithConfig'),
     getAbi(
       'https://raw.githubusercontent.com/Crossbell-Box/crossbell-bridge-contracts/main/build-info/MiraToken.abi',
     ),
@@ -72,6 +74,7 @@ const main = async () => {
   const newbieVillaDir = resolve(__dirname, '../src/contract/abis/newbie-villa')
   const tipsDir = resolve(__dirname, '../src/contract/abis/tips')
   const tipsWithFeeDir = resolve(__dirname, '../src/contract/abis/tips-with-fee')
+  const tipsWithConfigDir = resolve(__dirname, '../src/contract/abis/tips-with-config')
   const miraDir = resolve(__dirname, '../src/contract/abis/mira')
   const linklistDir = resolve(__dirname, '../src/contract/abis/linklist')
 
@@ -82,6 +85,7 @@ const main = async () => {
     writeJson(newbieVillaDir, newbie_villa_abi),
     writeJson(tipsDir, tips_abi),
     writeJson(tipsWithFeeDir, tips_with_fee_abi),
+    writeJson(tipsWithConfigDir, tips_with_config_abi),
     writeJson(miraDir, mira_abi),
     writeJson(linklistDir, linklist_abi),
   ])
@@ -93,6 +97,7 @@ const main = async () => {
     genTypes(newbieVillaDir),
     genTypes(tipsDir),
     genTypes(tipsWithFeeDir),
+    genTypes(tipsWithConfigDir),
     genTypes(miraDir),
     genTypes(linklistDir),
   ])

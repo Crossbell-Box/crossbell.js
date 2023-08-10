@@ -7,6 +7,7 @@ import type { Abi as PeripheryAbi } from './contract/abis/periphery/types'
 import type { Abi as CbtAbi } from './contract/abis/cbt/types'
 import type { Abi as TipsAbi } from './contract/abis/tips/types'
 import type { Abi as TipsWithFeeAbi } from './contract/abis/tips-with-fee/types'
+import type { Abi as TipsWithConfigAbi } from './contract/abis/tips-with-config/types'
 import type { Abi as LinklistAbi } from './contract/abis/linklist/types'
 
 export default { Network, Contract, Indexer, Ipfs }
@@ -20,6 +21,7 @@ export {
   CbtAbi,
   TipsAbi,
   TipsWithFeeAbi,
+  TipsWithConfigAbi,
   LinklistAbi,
 }
 export * from './types'
@@ -30,4 +32,5 @@ export * as PeripheryTypes from './contract/abis/periphery/types/Abi'
 export * as CbtTypes from './contract/abis/cbt/types/Abi'
 export * as TipsTypes from './contract/abis/tips/types/Abi'
 export * as TipsWithFeeTypes from './contract/abis/tips-with-fee/types/Abi'
+export * as TipsWithConfigTypes from './contract/abis/tips-with-config/types/Abi'
 export * as LinklistTypes from './contract/abis/linklist/types/Abi'
