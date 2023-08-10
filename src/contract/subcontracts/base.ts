@@ -39,6 +39,10 @@ import {
   Abi__factory as TipsWithFeeAbi__factory,
 } from '../abis/tips-with-fee/types'
 import {
+  type Abi as TipsWithConfigAbi,
+  Abi__factory as TipsWithConfigAbi__factory,
+} from '../abis/tips-with-config/types'
+import {
   type Abi as MiraAbi,
   Abi__factory as MiraAbi__factory,
 } from '../abis/mira/types'
@@ -100,6 +104,7 @@ type ContractOptions = {
   newbieVillaContractAddress: string
   tipsContractAddress: string
   tipsWithFeeContractAddress: string
+  tipsWithConfigContractAddress: string
   miraContractAddress: string
   linklistContractAddress: string
 }
@@ -194,11 +199,26 @@ export class BaseContract {
 
   protected getTipsWithFeeContract(
     signerOrProvider:
-     | ethers.Signer
-     | ethers.providers.Provider = this.getDefaultProvider()
+      | ethers.Signer
+      | ethers.providers.Provider = this.getDefaultProvider(),
   ) {
     return TipsWithFeeAbi__factory.connect(
       this.options.tipsWithFeeContractAddress,
+      signerOrProvider,
+    )
+  }
+
+  get tipsWithConfigContract(): TipsWithConfigAbi {
+    return this.getTipsWithConfigContract(this._signerOrProvider)
+  }
+
+  protected getTipsWithConfigContract(
+    signerOrProvider:
+      | ethers.Signer
+      | ethers.providers.Provider = this.getDefaultProvider(),
+  ) {
+    return TipsWithConfigAbi__factory.connect(
+      this.options.tipsWithConfigContractAddress,
       signerOrProvider,
     )
   }
@@ -346,7 +366,11 @@ export class BaseContract {
       tipsContractAddress:
         options?.tipsContractAddress ?? Network.getTipsContractAddress(),
       tipsWithFeeContractAddress:
-        options?.tipsWithFeeContractAddress ?? Network.getTipsWithFeeContractAddress(),
+        options?.tipsWithFeeContractAddress ??
+        Network.getTipsWithFeeContractAddress(),
+      tipsWithConfigContractAddress:
+        options?.tipsWithConfigContractAddress ??
+        Network.getTipsWithConfigContractAddress(),
       miraContractAddress:
         options?.miraContractAddress ?? Network.getMiraContractAddress(),
       newbieVillaContractAddress:

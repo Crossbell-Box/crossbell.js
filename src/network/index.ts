@@ -11,7 +11,10 @@ export class Network {
     '0xD0c83f0BB2c61D55B3d33950b70C59ba2f131caA'
   static readonly #CONTRACT_CBT = '0x3D1b588a6Bcd728Bb61570ced6656eA4C05e404f'
   static readonly #CONTRACT_TIPS = '0x0058be0845952D887D1668B5545de995E12e8783'
-  static readonly #CONTRACT_TIPS_WITH_FEE = '0xf3158018f932981d0005701dDC22Ce51477E436d'
+  static readonly #CONTRACT_TIPS_WITH_FEE =
+    '0xf3158018f932981d0005701dDC22Ce51477E436d'
+  static readonly #CONTRACT_TIPS_WITH_CONFIG =
+    '0xF1375C069998d06E123B800cF0566e44DA1BE30E'
   static readonly #CONTRACT_MIRA = '0xAfB95CC0BD320648B3E8Df6223d9CDD05EbeDC64'
   static readonly #CONTRACT_LINKLIST =
     '0xFc8C75bD5c26F50798758f387B698f207a016b6A'
@@ -88,11 +91,17 @@ export class Network {
   }
 
   /**
-   * This returns the contract address of the tips with fee contract
    * @returns The contract address of the tips contract
    */
   static getTipsWithFeeContractAddress() {
     return this.#CONTRACT_TIPS_WITH_FEE
+  }
+
+  /**
+   * @returns The contract address of the tips contract
+   */
+  static getTipsWithConfigContractAddress() {
+    return this.#CONTRACT_TIPS_WITH_CONFIG
   }
 
   /**
