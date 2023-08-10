@@ -189,12 +189,13 @@ export function addressToAccount(address: Address | Account): Account {
 export async function waitForTransactionReceiptWithRetry(
   client: PublicClient,
   hash: Address,
-  retryCount = 5,
+  retryCount = 10,
 ): Promise<TransactionReceipt> {
   let count = 0
   while (count < retryCount) {
     try {
       const receipt = await client.waitForTransactionReceipt({ hash })
+      await new Promise((resolve) => setTimeout(resolve, 100))
       return receipt
     } catch (e: any) {
       if (count === retryCount - 1) throw e
