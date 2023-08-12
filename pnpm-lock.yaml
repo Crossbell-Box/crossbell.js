@@ -17,6 +17,9 @@ importers:
       eip1193-types:
         specifier: ^0.2.1
         version: 0.2.1
+      exponential-backoff:
+        specifier: ^3.1.1
+        version: 3.1.1
       p-limit:
         specifier: ^3.1.0
         version: 3.1.0
@@ -1766,6 +1769,10 @@ packages:
       signal-exit: 3.0.7
       strip-final-newline: 2.0.0
     dev: true
+
+  /exponential-backoff@3.1.1:
+    resolution: {integrity: sha512-dX7e/LHVJ6W3DE1MHWi9S1EYzDESENfLrYohG2G++ovZrYOkm4Knwa0mc1cn84xJOR4KEU0WSchhLbd0UklbHw==}
+    dev: false
 
   /fast-deep-equal@3.1.3:
     resolution: {integrity: sha512-f3qQ9oQy9j2AhBe/H9VC91wLmKBCCU/gDOnKNAYG5hswO7BLKj09Hc5HYNz9cGI++xlpDCIgDaitVs03ATR84Q==}

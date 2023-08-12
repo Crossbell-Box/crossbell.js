@@ -26,6 +26,8 @@ import {
 import { type EIP1193Provider } from 'eip1193-types'
 import { crossbell, getJsonRpcAddress } from '../network'
 import * as Abi from '../contract/abi'
+import { backOff } from 'exponential-backoff'
+import { log } from './logger'
 
 export function createDefaultTransport(addr = getJsonRpcAddress()): Transport {
   if (addr.startsWith('ws://') || addr.startsWith('wss://')) {
@@ -185,22 +187,27 @@ export function addressToAccount(address: Address | Account): Account {
   return address
 }
 
-/** @see https://github.com/Crossbell-Box/crossbell.js/issues/40 */
+/**
+ * @see https://github.com/Crossbell-Box/crossbell.js/issues/40
+ *
+ * This function is used to retry waitForTransactionReceipt
+ * because sometimes the transaction is not mined on a load-balanced node.
+ *
+ * The retry time is
+ * `100ms`, `200ms`, `400ms`, `800ms`, `1600ms`, `3200ms`,
+ * i.e. `6300ms` in total.
+ **/
 export async function waitForTransactionReceiptWithRetry(
   client: PublicClient,
   hash: Address,
-  retryCount = 10,
 ): Promise<TransactionReceipt> {
-  let count = 0
-  while (count < retryCount) {
-    try {
-      const receipt = await client.waitForTransactionReceipt({ hash })
-      await new Promise((resolve) => setTimeout(resolve, 100))
-      return receipt
-    } catch (e: any) {
-      if (count === retryCount - 1) throw e
-      count++
-    }
-  }
-  throw new Error('unreachable') // for type check
+  return backOff(() => client.waitForTransactionReceipt({ hash }), {
+    retry: (e, i) => {
+      log('retrying waitForTransactionReceipt', { hash, i, e })
+      return true
+    },
+    numOfAttempts: 6,
+    timeMultiple: 2,
+    startingDelay: 100,
+  })
 }
