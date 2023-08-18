@@ -122,8 +122,6 @@ export interface AbiInterface extends utils.Interface {
     "setUri(uint256,string)": FunctionFragment;
     "supportsInterface(bytes4)": FunctionFragment;
     "symbol()": FunctionFragment;
-    "tokenByIndex(uint256)": FunctionFragment;
-    "tokenOfOwnerByIndex(address,uint256)": FunctionFragment;
     "tokenURI(uint256)": FunctionFragment;
     "totalSupply()": FunctionFragment;
     "transferFrom(address,address,uint256)": FunctionFragment;
@@ -186,8 +184,6 @@ export interface AbiInterface extends utils.Interface {
       | "setUri"
       | "supportsInterface"
       | "symbol"
-      | "tokenByIndex"
-      | "tokenOfOwnerByIndex"
       | "tokenURI"
       | "totalSupply"
       | "transferFrom"
@@ -434,14 +430,6 @@ export interface AbiInterface extends utils.Interface {
   ): string;
   encodeFunctionData(functionFragment: "symbol", values?: undefined): string;
   encodeFunctionData(
-    functionFragment: "tokenByIndex",
-    values: [PromiseOrValue<BigNumberish>]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "tokenOfOwnerByIndex",
-    values: [PromiseOrValue<string>, PromiseOrValue<BigNumberish>]
-  ): string;
-  encodeFunctionData(
     functionFragment: "tokenURI",
     values: [PromiseOrValue<BigNumberish>]
   ): string;
@@ -648,14 +636,6 @@ export interface AbiInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "symbol", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "tokenByIndex",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "tokenOfOwnerByIndex",
-    data: BytesLike
-  ): Result;
   decodeFunctionResult(functionFragment: "tokenURI", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "totalSupply",
@@ -669,14 +649,22 @@ export interface AbiInterface extends utils.Interface {
   events: {
     "Approval(address,address,uint256)": EventFragment;
     "ApprovalForAll(address,address,bool)": EventFragment;
+    "Burn(address,uint256,uint256)": EventFragment;
     "Initialized(uint8)": EventFragment;
     "Transfer(address,uint256,uint256)": EventFragment;
+    "Transfer(address,address,uint256)": EventFragment;
   };
 
   getEvent(nameOrSignatureOrTopic: "Approval"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "ApprovalForAll"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "Burn"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Initialized"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "Transfer"): EventFragment;
+  getEvent(
+    nameOrSignatureOrTopic: "Transfer(address,uint256,uint256)"
+  ): EventFragment;
+  getEvent(
+    nameOrSignatureOrTopic: "Transfer(address,address,uint256)"
+  ): EventFragment;
 }
 
 export interface ApprovalEventObject {
@@ -703,6 +691,18 @@ export type ApprovalForAllEvent = TypedEvent<
 
 export type ApprovalForAllEventFilter = TypedEventFilter<ApprovalForAllEvent>;
 
+export interface BurnEventObject {
+  from: string;
+  characterId: BigNumber;
+  tokenId: BigNumber;
+}
+export type BurnEvent = TypedEvent<
+  [string, BigNumber, BigNumber],
+  BurnEventObject
+>;
+
+export type BurnEventFilter = TypedEventFilter<BurnEvent>;
+
 export interface InitializedEventObject {
   version: number;
 }
@@ -710,17 +710,31 @@ export type InitializedEvent = TypedEvent<[number], InitializedEventObject>;
 
 export type InitializedEventFilter = TypedEventFilter<InitializedEvent>;
 
-export interface TransferEventObject {
+export interface Transfer_address_uint256_uint256_EventObject {
   from: string;
   characterId: BigNumber;
   tokenId: BigNumber;
 }
-export type TransferEvent = TypedEvent<
+export type Transfer_address_uint256_uint256_Event = TypedEvent<
   [string, BigNumber, BigNumber],
-  TransferEventObject
+  Transfer_address_uint256_uint256_EventObject
 >;
 
-export type TransferEventFilter = TypedEventFilter<TransferEvent>;
+export type Transfer_address_uint256_uint256_EventFilter =
+  TypedEventFilter<Transfer_address_uint256_uint256_Event>;
+
+export interface Transfer_address_address_uint256_EventObject {
+  from: string;
+  to: string;
+  tokenId: BigNumber;
+}
+export type Transfer_address_address_uint256_Event = TypedEvent<
+  [string, string, BigNumber],
+  Transfer_address_address_uint256_EventObject
+>;
+
+export type Transfer_address_address_uint256_EventFilter =
+  TypedEventFilter<Transfer_address_address_uint256_Event>;
 
 export interface Abi extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
@@ -834,7 +848,7 @@ export interface Abi extends BaseContract {
     getCurrentTakeOver(
       tokenId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
-    ): Promise<[BigNumber] & { characterId: BigNumber }>;
+    ): Promise<[BigNumber]>;
 
     getLinkType(
       tokenId: PromiseOrValue<BigNumberish>,
@@ -1056,17 +1070,6 @@ export interface Abi extends BaseContract {
     ): Promise<[boolean]>;
 
     symbol(overrides?: CallOverrides): Promise<[string]>;
-
-    tokenByIndex(
-      index: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<[BigNumber]>;
-
-    tokenOfOwnerByIndex(
-      owner: PromiseOrValue<string>,
-      index: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<[BigNumber]>;
 
     tokenURI(
       tokenId: PromiseOrValue<BigNumberish>,
@@ -1379,17 +1382,6 @@ export interface Abi extends BaseContract {
 
   symbol(overrides?: CallOverrides): Promise<string>;
 
-  tokenByIndex(
-    index: PromiseOrValue<BigNumberish>,
-    overrides?: CallOverrides
-  ): Promise<BigNumber>;
-
-  tokenOfOwnerByIndex(
-    owner: PromiseOrValue<string>,
-    index: PromiseOrValue<BigNumberish>,
-    overrides?: CallOverrides
-  ): Promise<BigNumber>;
-
   tokenURI(
     tokenId: PromiseOrValue<BigNumberish>,
     overrides?: CallOverrides
@@ -1701,17 +1693,6 @@ export interface Abi extends BaseContract {
 
     symbol(overrides?: CallOverrides): Promise<string>;
 
-    tokenByIndex(
-      index: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    tokenOfOwnerByIndex(
-      owner: PromiseOrValue<string>,
-      index: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
     tokenURI(
       tokenId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
@@ -1750,6 +1731,17 @@ export interface Abi extends BaseContract {
       approved?: null
     ): ApprovalForAllEventFilter;
 
+    "Burn(address,uint256,uint256)"(
+      from?: PromiseOrValue<string> | null,
+      characterId?: PromiseOrValue<BigNumberish> | null,
+      tokenId?: PromiseOrValue<BigNumberish> | null
+    ): BurnEventFilter;
+    Burn(
+      from?: PromiseOrValue<string> | null,
+      characterId?: PromiseOrValue<BigNumberish> | null,
+      tokenId?: PromiseOrValue<BigNumberish> | null
+    ): BurnEventFilter;
+
     "Initialized(uint8)"(version?: null): InitializedEventFilter;
     Initialized(version?: null): InitializedEventFilter;
 
@@ -1757,12 +1749,12 @@ export interface Abi extends BaseContract {
       from?: PromiseOrValue<string> | null,
       characterId?: PromiseOrValue<BigNumberish> | null,
       tokenId?: PromiseOrValue<BigNumberish> | null
-    ): TransferEventFilter;
-    Transfer(
+    ): Transfer_address_uint256_uint256_EventFilter;
+    "Transfer(address,address,uint256)"(
       from?: PromiseOrValue<string> | null,
-      characterId?: PromiseOrValue<BigNumberish> | null,
+      to?: PromiseOrValue<string> | null,
       tokenId?: PromiseOrValue<BigNumberish> | null
-    ): TransferEventFilter;
+    ): Transfer_address_address_uint256_EventFilter;
   };
 
   estimateGas: {
@@ -2061,17 +2053,6 @@ export interface Abi extends BaseContract {
     ): Promise<BigNumber>;
 
     symbol(overrides?: CallOverrides): Promise<BigNumber>;
-
-    tokenByIndex(
-      index: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    tokenOfOwnerByIndex(
-      owner: PromiseOrValue<string>,
-      index: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
 
     tokenURI(
       tokenId: PromiseOrValue<BigNumberish>,
@@ -2384,17 +2365,6 @@ export interface Abi extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     symbol(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    tokenByIndex(
-      index: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    tokenOfOwnerByIndex(
-      owner: PromiseOrValue<string>,
-      index: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
 
     tokenURI(
       tokenId: PromiseOrValue<BigNumberish>,

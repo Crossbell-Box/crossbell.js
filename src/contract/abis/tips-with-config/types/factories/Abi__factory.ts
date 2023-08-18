@@ -16,6 +16,19 @@ const _abi = [
         name: "tipConfigId",
         type: "uint256",
       },
+    ],
+    name: "CancelTips4Character",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "uint256",
+        name: "tipConfigId",
+        type: "uint256",
+      },
       {
         indexed: true,
         internalType: "uint256",
@@ -141,6 +154,19 @@ const _abi = [
     ],
     name: "SetTipsConfig4Character",
     type: "event",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "tipConfigId",
+        type: "uint256",
+      },
+    ],
+    name: "cancelTips4Character",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
   },
   {
     inputs: [
