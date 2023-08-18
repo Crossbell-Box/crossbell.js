@@ -71,6 +71,7 @@ export declare namespace ITipsWithConfig {
 
 export interface AbiInterface extends utils.Interface {
   functions: {
+    "cancelTips4Character(uint256)": FunctionFragment;
     "collectTips4Character(uint256)": FunctionFragment;
     "getFeeAmount(address,uint256,uint256)": FunctionFragment;
     "getFeeFraction(address,uint256)": FunctionFragment;
@@ -85,6 +86,7 @@ export interface AbiInterface extends utils.Interface {
 
   getFunction(
     nameOrSignatureOrTopic:
+      | "cancelTips4Character"
       | "collectTips4Character"
       | "getFeeAmount"
       | "getFeeFraction"
@@ -97,6 +99,10 @@ export interface AbiInterface extends utils.Interface {
       | "setTipsConfig4Character"
   ): FunctionFragment;
 
+  encodeFunctionData(
+    functionFragment: "cancelTips4Character",
+    values: [PromiseOrValue<BigNumberish>]
+  ): string;
   encodeFunctionData(
     functionFragment: "collectTips4Character",
     values: [PromiseOrValue<BigNumberish>]
@@ -156,6 +162,10 @@ export interface AbiInterface extends utils.Interface {
   ): string;
 
   decodeFunctionResult(
+    functionFragment: "cancelTips4Character",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "collectTips4Character",
     data: BytesLike
   ): Result;
@@ -194,15 +204,28 @@ export interface AbiInterface extends utils.Interface {
   ): Result;
 
   events: {
+    "CancelTips4Character(uint256)": EventFragment;
     "CollectTips4Character(uint256,uint256,uint256,address,uint256,uint256,address,uint256)": EventFragment;
     "Initialized(uint8)": EventFragment;
     "SetTipsConfig4Character(uint256,uint256,uint256,address,uint256,uint256,uint256,uint256,address,uint256)": EventFragment;
   };
 
+  getEvent(nameOrSignatureOrTopic: "CancelTips4Character"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "CollectTips4Character"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Initialized"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "SetTipsConfig4Character"): EventFragment;
 }
+
+export interface CancelTips4CharacterEventObject {
+  tipConfigId: BigNumber;
+}
+export type CancelTips4CharacterEvent = TypedEvent<
+  [BigNumber],
+  CancelTips4CharacterEventObject
+>;
+
+export type CancelTips4CharacterEventFilter =
+  TypedEventFilter<CancelTips4CharacterEvent>;
 
 export interface CollectTips4CharacterEventObject {
   tipConfigId: BigNumber;
@@ -296,6 +319,11 @@ export interface Abi extends BaseContract {
   removeListener: OnEvent<this>;
 
   functions: {
+    cancelTips4Character(
+      tipConfigId: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
     collectTips4Character(
       tipConfigId: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -362,6 +390,11 @@ export interface Abi extends BaseContract {
     ): Promise<ContractTransaction>;
   };
 
+  cancelTips4Character(
+    tipConfigId: PromiseOrValue<BigNumberish>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
   collectTips4Character(
     tipConfigId: PromiseOrValue<BigNumberish>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -424,6 +457,11 @@ export interface Abi extends BaseContract {
   ): Promise<ContractTransaction>;
 
   callStatic: {
+    cancelTips4Character(
+      tipConfigId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
     collectTips4Character(
       tipConfigId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
@@ -487,6 +525,13 @@ export interface Abi extends BaseContract {
   };
 
   filters: {
+    "CancelTips4Character(uint256)"(
+      tipConfigId?: PromiseOrValue<BigNumberish> | null
+    ): CancelTips4CharacterEventFilter;
+    CancelTips4Character(
+      tipConfigId?: PromiseOrValue<BigNumberish> | null
+    ): CancelTips4CharacterEventFilter;
+
     "CollectTips4Character(uint256,uint256,uint256,address,uint256,uint256,address,uint256)"(
       tipConfigId?: PromiseOrValue<BigNumberish> | null,
       fromCharacterId?: PromiseOrValue<BigNumberish> | null,
@@ -538,6 +583,11 @@ export interface Abi extends BaseContract {
   };
 
   estimateGas: {
+    cancelTips4Character(
+      tipConfigId: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
     collectTips4Character(
       tipConfigId: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -601,6 +651,11 @@ export interface Abi extends BaseContract {
   };
 
   populateTransaction: {
+    cancelTips4Character(
+      tipConfigId: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
     collectTips4Character(
       tipConfigId: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
