@@ -1,6 +1,7 @@
 export const linklist = [
   { inputs: [], name: 'ErrCallerNotWeb3Entry', type: 'error' },
   { inputs: [], name: 'ErrCallerNotWeb3EntryOrNotOwner', type: 'error' },
+  { inputs: [], name: 'ErrNotOwner', type: 'error' },
   {
     inputs: [
       { indexed: true, name: 'owner', type: 'address' },
@@ -20,6 +21,15 @@ export const linklist = [
     type: 'event',
   },
   {
+    inputs: [
+      { indexed: true, name: 'from', type: 'address' },
+      { indexed: true, name: 'characterId', type: 'uint256' },
+      { indexed: true, name: 'tokenId', type: 'uint256' },
+    ],
+    name: 'Burn',
+    type: 'event',
+  },
+  {
     inputs: [{ indexed: false, name: 'version', type: 'uint8' }],
     name: 'Initialized',
     type: 'event',
@@ -28,6 +38,15 @@ export const linklist = [
     inputs: [
       { indexed: true, name: 'from', type: 'address' },
       { indexed: true, name: 'characterId', type: 'uint256' },
+      { indexed: true, name: 'tokenId', type: 'uint256' },
+    ],
+    name: 'Transfer',
+    type: 'event',
+  },
+  {
+    inputs: [
+      { indexed: true, name: 'from', type: 'address' },
+      { indexed: true, name: 'to', type: 'address' },
       { indexed: true, name: 'tokenId', type: 'uint256' },
     ],
     name: 'Transfer',
@@ -175,7 +194,7 @@ export const linklist = [
   {
     inputs: [{ name: 'tokenId', type: 'uint256' }],
     name: 'getCurrentTakeOver',
-    outputs: [{ name: 'characterId', type: 'uint256' }],
+    outputs: [{ name: '', type: 'uint256' }],
     stateMutability: 'view',
     type: 'function',
   },
@@ -561,23 +580,6 @@ export const linklist = [
     inputs: [],
     name: 'symbol',
     outputs: [{ name: '', type: 'string' }],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [{ name: 'index', type: 'uint256' }],
-    name: 'tokenByIndex',
-    outputs: [{ name: '', type: 'uint256' }],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [
-      { name: 'owner', type: 'address' },
-      { name: 'index', type: 'uint256' },
-    ],
-    name: 'tokenOfOwnerByIndex',
-    outputs: [{ name: '', type: 'uint256' }],
     stateMutability: 'view',
     type: 'function',
   },
