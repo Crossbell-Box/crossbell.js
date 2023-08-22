@@ -19,7 +19,7 @@ const _abi = [
   },
   {
     inputs: [],
-    name: "ErrNotOwner",
+    name: "ErrTokenNotExists",
     type: "error",
   },
   {
@@ -77,14 +77,8 @@ const _abi = [
     inputs: [
       {
         indexed: true,
-        internalType: "address",
-        name: "from",
-        type: "address",
-      },
-      {
-        indexed: true,
         internalType: "uint256",
-        name: "characterId",
+        name: "from",
         type: "uint256",
       },
       {
@@ -124,31 +118,6 @@ const _abi = [
         internalType: "uint256",
         name: "characterId",
         type: "uint256",
-      },
-      {
-        indexed: true,
-        internalType: "uint256",
-        name: "tokenId",
-        type: "uint256",
-      },
-    ],
-    name: "Transfer",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: "address",
-        name: "from",
-        type: "address",
-      },
-      {
-        indexed: true,
-        internalType: "address",
-        name: "to",
-        type: "address",
       },
       {
         indexed: true,
@@ -248,41 +217,6 @@ const _abi = [
       },
     ],
     name: "addLinkingCharacterId",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "tokenId",
-        type: "uint256",
-      },
-      {
-        components: [
-          {
-            internalType: "uint256",
-            name: "fromCharacterId",
-            type: "uint256",
-          },
-          {
-            internalType: "uint256",
-            name: "toCharacterId",
-            type: "uint256",
-          },
-          {
-            internalType: "bytes32",
-            name: "linkType",
-            type: "bytes32",
-          },
-        ],
-        internalType: "struct DataTypes.CharacterLinkStruct",
-        name: "linkData",
-        type: "tuple",
-      },
-    ],
-    name: "addLinkingCharacterLink",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
@@ -636,97 +570,6 @@ const _abi = [
         internalType: "uint256[]",
         name: "",
         type: "uint256[]",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "bytes32",
-        name: "linkKey",
-        type: "bytes32",
-      },
-    ],
-    name: "getLinkingCharacterLink",
-    outputs: [
-      {
-        components: [
-          {
-            internalType: "uint256",
-            name: "fromCharacterId",
-            type: "uint256",
-          },
-          {
-            internalType: "uint256",
-            name: "toCharacterId",
-            type: "uint256",
-          },
-          {
-            internalType: "bytes32",
-            name: "linkType",
-            type: "bytes32",
-          },
-        ],
-        internalType: "struct DataTypes.CharacterLinkStruct",
-        name: "",
-        type: "tuple",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "tokenId",
-        type: "uint256",
-      },
-    ],
-    name: "getLinkingCharacterLinkListLength",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "tokenId",
-        type: "uint256",
-      },
-    ],
-    name: "getLinkingCharacterLinks",
-    outputs: [
-      {
-        components: [
-          {
-            internalType: "uint256",
-            name: "fromCharacterId",
-            type: "uint256",
-          },
-          {
-            internalType: "uint256",
-            name: "toCharacterId",
-            type: "uint256",
-          },
-          {
-            internalType: "bytes32",
-            name: "linkType",
-            type: "bytes32",
-          },
-        ],
-        internalType: "struct DataTypes.CharacterLinkStruct[]",
-        name: "results",
-        type: "tuple[]",
       },
     ],
     stateMutability: "view",
@@ -1135,41 +978,6 @@ const _abi = [
         type: "uint256",
       },
       {
-        components: [
-          {
-            internalType: "uint256",
-            name: "fromCharacterId",
-            type: "uint256",
-          },
-          {
-            internalType: "uint256",
-            name: "toCharacterId",
-            type: "uint256",
-          },
-          {
-            internalType: "bytes32",
-            name: "linkType",
-            type: "bytes32",
-          },
-        ],
-        internalType: "struct DataTypes.CharacterLinkStruct",
-        name: "linkData",
-        type: "tuple",
-      },
-    ],
-    name: "removeLinkingCharacterLink",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "tokenId",
-        type: "uint256",
-      },
-      {
         internalType: "address",
         name: "tokenAddress",
         type: "address",
@@ -1349,7 +1157,7 @@ const _abi = [
     inputs: [
       {
         internalType: "uint256",
-        name: "tokenId",
+        name: "",
         type: "uint256",
       },
     ],

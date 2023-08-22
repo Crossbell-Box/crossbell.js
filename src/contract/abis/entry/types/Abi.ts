@@ -319,29 +319,40 @@ export declare namespace DataTypes {
     noteId: BigNumber;
   };
 
-  export type SetLinkModule4AddressDataStruct = {
-    account: PromiseOrValue<string>;
+  export type SetLinkModule4CharacterDataStruct = {
+    characterId: PromiseOrValue<BigNumberish>;
     linkModule: PromiseOrValue<string>;
     linkModuleInitData: PromiseOrValue<BytesLike>;
   };
 
-  export type SetLinkModule4AddressDataStructOutput = [
-    string,
-    string,
-    string
-  ] & { account: string; linkModule: string; linkModuleInitData: string };
-
-  export type SetLinkModule4LinklistDataStruct = {
-    linklistId: PromiseOrValue<BigNumberish>;
-    linkModule: PromiseOrValue<string>;
-    linkModuleInitData: PromiseOrValue<BytesLike>;
-  };
-
-  export type SetLinkModule4LinklistDataStructOutput = [
+  export type SetLinkModule4CharacterDataStructOutput = [
     BigNumber,
     string,
     string
-  ] & { linklistId: BigNumber; linkModule: string; linkModuleInitData: string };
+  ] & {
+    characterId: BigNumber;
+    linkModule: string;
+    linkModuleInitData: string;
+  };
+
+  export type SetLinkModule4NoteDataStruct = {
+    characterId: PromiseOrValue<BigNumberish>;
+    noteId: PromiseOrValue<BigNumberish>;
+    linkModule: PromiseOrValue<string>;
+    linkModuleInitData: PromiseOrValue<BytesLike>;
+  };
+
+  export type SetLinkModule4NoteDataStructOutput = [
+    BigNumber,
+    BigNumber,
+    string,
+    string
+  ] & {
+    characterId: BigNumber;
+    noteId: BigNumber;
+    linkModule: string;
+    linkModuleInitData: string;
+  };
 
   export type SetMintModule4NoteDataStruct = {
     characterId: PromiseOrValue<BigNumberish>;
@@ -458,6 +469,7 @@ export interface AbiInterface extends utils.Interface {
     "approve(address,uint256)": FunctionFragment;
     "balanceOf(address)": FunctionFragment;
     "burn(uint256)": FunctionFragment;
+    "burnLinklist(uint256)": FunctionFragment;
     "createCharacter((address,string,string,address,bytes))": FunctionFragment;
     "createThenLinkCharacter((uint256,address,bytes32))": FunctionFragment;
     "deleteNote(uint256,uint256)": FunctionFragment;
@@ -467,9 +479,6 @@ export interface AbiInterface extends utils.Interface {
     "getCharacterUri(uint256)": FunctionFragment;
     "getDomainSeparator()": FunctionFragment;
     "getHandle(uint256)": FunctionFragment;
-    "getLinkModule4Address(address)": FunctionFragment;
-    "getLinkModule4ERC721(address,uint256)": FunctionFragment;
-    "getLinkModule4Linklist(uint256)": FunctionFragment;
     "getLinklistContract()": FunctionFragment;
     "getLinklistId(uint256,bytes32)": FunctionFragment;
     "getLinklistType(uint256)": FunctionFragment;
@@ -512,8 +521,8 @@ export interface AbiInterface extends utils.Interface {
     "setApprovalForAll(address,bool)": FunctionFragment;
     "setCharacterUri(uint256,string)": FunctionFragment;
     "setHandle(uint256,string)": FunctionFragment;
-    "setLinkModule4Address((address,address,bytes))": FunctionFragment;
-    "setLinkModule4Linklist((uint256,address,bytes))": FunctionFragment;
+    "setLinkModule4Character((uint256,address,bytes))": FunctionFragment;
+    "setLinkModule4Note((uint256,uint256,address,bytes))": FunctionFragment;
     "setLinklistUri(uint256,string)": FunctionFragment;
     "setMintModule4Note((uint256,uint256,address,bytes))": FunctionFragment;
     "setNoteUri(uint256,uint256,string)": FunctionFragment;
@@ -539,6 +548,7 @@ export interface AbiInterface extends utils.Interface {
       | "approve"
       | "balanceOf"
       | "burn"
+      | "burnLinklist"
       | "createCharacter"
       | "createThenLinkCharacter"
       | "deleteNote"
@@ -548,9 +558,6 @@ export interface AbiInterface extends utils.Interface {
       | "getCharacterUri"
       | "getDomainSeparator"
       | "getHandle"
-      | "getLinkModule4Address"
-      | "getLinkModule4ERC721"
-      | "getLinkModule4Linklist"
       | "getLinklistContract"
       | "getLinklistId"
       | "getLinklistType"
@@ -593,8 +600,8 @@ export interface AbiInterface extends utils.Interface {
       | "setApprovalForAll"
       | "setCharacterUri"
       | "setHandle"
-      | "setLinkModule4Address"
-      | "setLinkModule4Linklist"
+      | "setLinkModule4Character"
+      | "setLinkModule4Note"
       | "setLinklistUri"
       | "setMintModule4Note"
       | "setNoteUri"
@@ -625,6 +632,10 @@ export interface AbiInterface extends utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "burn",
+    values: [PromiseOrValue<BigNumberish>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "burnLinklist",
     values: [PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
@@ -661,18 +672,6 @@ export interface AbiInterface extends utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "getHandle",
-    values: [PromiseOrValue<BigNumberish>]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "getLinkModule4Address",
-    values: [PromiseOrValue<string>]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "getLinkModule4ERC721",
-    values: [PromiseOrValue<string>, PromiseOrValue<BigNumberish>]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "getLinkModule4Linklist",
     values: [PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
@@ -872,12 +871,12 @@ export interface AbiInterface extends utils.Interface {
     values: [PromiseOrValue<BigNumberish>, PromiseOrValue<string>]
   ): string;
   encodeFunctionData(
-    functionFragment: "setLinkModule4Address",
-    values: [DataTypes.SetLinkModule4AddressDataStruct]
+    functionFragment: "setLinkModule4Character",
+    values: [DataTypes.SetLinkModule4CharacterDataStruct]
   ): string;
   encodeFunctionData(
-    functionFragment: "setLinkModule4Linklist",
-    values: [DataTypes.SetLinkModule4LinklistDataStruct]
+    functionFragment: "setLinkModule4Note",
+    values: [DataTypes.SetLinkModule4NoteDataStruct]
   ): string;
   encodeFunctionData(
     functionFragment: "setLinklistUri",
@@ -961,6 +960,10 @@ export interface AbiInterface extends utils.Interface {
   decodeFunctionResult(functionFragment: "balanceOf", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "burn", data: BytesLike): Result;
   decodeFunctionResult(
+    functionFragment: "burnLinklist",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "createCharacter",
     data: BytesLike
   ): Result;
@@ -990,18 +993,6 @@ export interface AbiInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "getHandle", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "getLinkModule4Address",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "getLinkModule4ERC721",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "getLinkModule4Linklist",
-    data: BytesLike
-  ): Result;
   decodeFunctionResult(
     functionFragment: "getLinklistContract",
     data: BytesLike
@@ -1129,11 +1120,11 @@ export interface AbiInterface extends utils.Interface {
   ): Result;
   decodeFunctionResult(functionFragment: "setHandle", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "setLinkModule4Address",
+    functionFragment: "setLinkModule4Character",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "setLinkModule4Linklist",
+    functionFragment: "setLinkModule4Note",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -1889,6 +1880,11 @@ export interface Abi extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
+    burnLinklist(
+      linklistId: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
     createCharacter(
       vars: DataTypes.CreateCharacterDataStruct,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -1929,22 +1925,6 @@ export interface Abi extends BaseContract {
 
     getHandle(
       characterId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<[string]>;
-
-    getLinkModule4Address(
-      account: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<[string]>;
-
-    getLinkModule4ERC721(
-      tokenAddress: PromiseOrValue<string>,
-      tokenId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<[string]>;
-
-    getLinkModule4Linklist(
-      tokenId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<[string]>;
 
@@ -2183,13 +2163,13 @@ export interface Abi extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
-    setLinkModule4Address(
-      vars: DataTypes.SetLinkModule4AddressDataStruct,
+    setLinkModule4Character(
+      vars: DataTypes.SetLinkModule4CharacterDataStruct,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
-    setLinkModule4Linklist(
-      vars: DataTypes.SetLinkModule4LinklistDataStruct,
+    setLinkModule4Note(
+      vars: DataTypes.SetLinkModule4NoteDataStruct,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
@@ -2301,6 +2281,11 @@ export interface Abi extends BaseContract {
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
+  burnLinklist(
+    linklistId: PromiseOrValue<BigNumberish>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
   createCharacter(
     vars: DataTypes.CreateCharacterDataStruct,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -2341,22 +2326,6 @@ export interface Abi extends BaseContract {
 
   getHandle(
     characterId: PromiseOrValue<BigNumberish>,
-    overrides?: CallOverrides
-  ): Promise<string>;
-
-  getLinkModule4Address(
-    account: PromiseOrValue<string>,
-    overrides?: CallOverrides
-  ): Promise<string>;
-
-  getLinkModule4ERC721(
-    tokenAddress: PromiseOrValue<string>,
-    tokenId: PromiseOrValue<BigNumberish>,
-    overrides?: CallOverrides
-  ): Promise<string>;
-
-  getLinkModule4Linklist(
-    tokenId: PromiseOrValue<BigNumberish>,
     overrides?: CallOverrides
   ): Promise<string>;
 
@@ -2595,13 +2564,13 @@ export interface Abi extends BaseContract {
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
-  setLinkModule4Address(
-    vars: DataTypes.SetLinkModule4AddressDataStruct,
+  setLinkModule4Character(
+    vars: DataTypes.SetLinkModule4CharacterDataStruct,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
-  setLinkModule4Linklist(
-    vars: DataTypes.SetLinkModule4LinklistDataStruct,
+  setLinkModule4Note(
+    vars: DataTypes.SetLinkModule4NoteDataStruct,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
@@ -2713,6 +2682,11 @@ export interface Abi extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
+    burnLinklist(
+      linklistId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
     createCharacter(
       vars: DataTypes.CreateCharacterDataStruct,
       overrides?: CallOverrides
@@ -2753,22 +2727,6 @@ export interface Abi extends BaseContract {
 
     getHandle(
       characterId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<string>;
-
-    getLinkModule4Address(
-      account: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<string>;
-
-    getLinkModule4ERC721(
-      tokenAddress: PromiseOrValue<string>,
-      tokenId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<string>;
-
-    getLinkModule4Linklist(
-      tokenId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<string>;
 
@@ -3007,13 +2965,13 @@ export interface Abi extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
-    setLinkModule4Address(
-      vars: DataTypes.SetLinkModule4AddressDataStruct,
+    setLinkModule4Character(
+      vars: DataTypes.SetLinkModule4CharacterDataStruct,
       overrides?: CallOverrides
     ): Promise<void>;
 
-    setLinkModule4Linklist(
-      vars: DataTypes.SetLinkModule4LinklistDataStruct,
+    setLinkModule4Note(
+      vars: DataTypes.SetLinkModule4NoteDataStruct,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -3647,6 +3605,11 @@ export interface Abi extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
+    burnLinklist(
+      linklistId: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
     createCharacter(
       vars: DataTypes.CreateCharacterDataStruct,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -3687,22 +3650,6 @@ export interface Abi extends BaseContract {
 
     getHandle(
       characterId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    getLinkModule4Address(
-      account: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    getLinkModule4ERC721(
-      tokenAddress: PromiseOrValue<string>,
-      tokenId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    getLinkModule4Linklist(
-      tokenId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -3939,13 +3886,13 @@ export interface Abi extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
-    setLinkModule4Address(
-      vars: DataTypes.SetLinkModule4AddressDataStruct,
+    setLinkModule4Character(
+      vars: DataTypes.SetLinkModule4CharacterDataStruct,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
-    setLinkModule4Linklist(
-      vars: DataTypes.SetLinkModule4LinklistDataStruct,
+    setLinkModule4Note(
+      vars: DataTypes.SetLinkModule4NoteDataStruct,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
@@ -4058,6 +4005,11 @@ export interface Abi extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
+    burnLinklist(
+      linklistId: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
     createCharacter(
       vars: DataTypes.CreateCharacterDataStruct,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -4100,22 +4052,6 @@ export interface Abi extends BaseContract {
 
     getHandle(
       characterId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    getLinkModule4Address(
-      account: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    getLinkModule4ERC721(
-      tokenAddress: PromiseOrValue<string>,
-      tokenId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    getLinkModule4Linklist(
-      tokenId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
@@ -4354,13 +4290,13 @@ export interface Abi extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
-    setLinkModule4Address(
-      vars: DataTypes.SetLinkModule4AddressDataStruct,
+    setLinkModule4Character(
+      vars: DataTypes.SetLinkModule4CharacterDataStruct,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
-    setLinkModule4Linklist(
-      vars: DataTypes.SetLinkModule4LinklistDataStruct,
+    setLinkModule4Note(
+      vars: DataTypes.SetLinkModule4NoteDataStruct,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 

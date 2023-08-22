@@ -35,11 +35,6 @@ const _abi = [
   },
   {
     inputs: [],
-    name: "ErrNotAddressOwner",
-    type: "error",
-  },
-  {
-    inputs: [],
     name: "ErrNotCharacterOwner",
     type: "error",
   },
@@ -81,6 +76,11 @@ const _abi = [
   {
     inputs: [],
     name: "ErrSocialTokenExists",
+    type: "error",
+  },
+  {
+    inputs: [],
+    name: "ErrTokenNotExists",
     type: "error",
   },
   {
@@ -217,6 +217,19 @@ const _abi = [
       },
     ],
     name: "burn",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "linklistId",
+        type: "uint256",
+      },
+    ],
+    name: "burnLinklist",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
@@ -488,68 +501,6 @@ const _abi = [
         internalType: "string",
         name: "",
         type: "string",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "account",
-        type: "address",
-      },
-    ],
-    name: "getLinkModule4Address",
-    outputs: [
-      {
-        internalType: "address",
-        name: "",
-        type: "address",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "tokenAddress",
-        type: "address",
-      },
-      {
-        internalType: "uint256",
-        name: "tokenId",
-        type: "uint256",
-      },
-    ],
-    name: "getLinkModule4ERC721",
-    outputs: [
-      {
-        internalType: "address",
-        name: "",
-        type: "address",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "tokenId",
-        type: "uint256",
-      },
-    ],
-    name: "getLinkModule4Linklist",
-    outputs: [
-      {
-        internalType: "address",
-        name: "",
-        type: "address",
       },
     ],
     stateMutability: "view",
@@ -1929,38 +1880,8 @@ const _abi = [
       {
         components: [
           {
-            internalType: "address",
-            name: "account",
-            type: "address",
-          },
-          {
-            internalType: "address",
-            name: "linkModule",
-            type: "address",
-          },
-          {
-            internalType: "bytes",
-            name: "linkModuleInitData",
-            type: "bytes",
-          },
-        ],
-        internalType: "struct DataTypes.setLinkModule4AddressData",
-        name: "vars",
-        type: "tuple",
-      },
-    ],
-    name: "setLinkModule4Address",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        components: [
-          {
             internalType: "uint256",
-            name: "linklistId",
+            name: "characterId",
             type: "uint256",
           },
           {
@@ -1974,12 +1895,47 @@ const _abi = [
             type: "bytes",
           },
         ],
-        internalType: "struct DataTypes.setLinkModule4LinklistData",
+        internalType: "struct DataTypes.setLinkModule4CharacterData",
         name: "vars",
         type: "tuple",
       },
     ],
-    name: "setLinkModule4Linklist",
+    name: "setLinkModule4Character",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        components: [
+          {
+            internalType: "uint256",
+            name: "characterId",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "noteId",
+            type: "uint256",
+          },
+          {
+            internalType: "address",
+            name: "linkModule",
+            type: "address",
+          },
+          {
+            internalType: "bytes",
+            name: "linkModuleInitData",
+            type: "bytes",
+          },
+        ],
+        internalType: "struct DataTypes.setLinkModule4NoteData",
+        name: "vars",
+        type: "tuple",
+      },
+    ],
+    name: "setLinkModule4Note",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",

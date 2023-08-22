@@ -28,22 +28,6 @@ import type {
 } from "./common";
 
 export declare namespace DataTypes {
-  export type CharacterLinkStructStruct = {
-    fromCharacterId: PromiseOrValue<BigNumberish>;
-    toCharacterId: PromiseOrValue<BigNumberish>;
-    linkType: PromiseOrValue<BytesLike>;
-  };
-
-  export type CharacterLinkStructStructOutput = [
-    BigNumber,
-    BigNumber,
-    string
-  ] & {
-    fromCharacterId: BigNumber;
-    toCharacterId: BigNumber;
-    linkType: string;
-  };
-
   export type ERC721StructStruct = {
     tokenAddress: PromiseOrValue<string>;
     erc721TokenId: PromiseOrValue<BigNumberish>;
@@ -72,7 +56,6 @@ export interface AbiInterface extends utils.Interface {
     "addLinkingAddress(uint256,address)": FunctionFragment;
     "addLinkingAnyUri(uint256,string)": FunctionFragment;
     "addLinkingCharacterId(uint256,uint256)": FunctionFragment;
-    "addLinkingCharacterLink(uint256,(uint256,uint256,bytes32))": FunctionFragment;
     "addLinkingERC721(uint256,address,uint256)": FunctionFragment;
     "addLinkingLinklistId(uint256,uint256)": FunctionFragment;
     "addLinkingNote(uint256,uint256,uint256)": FunctionFragment;
@@ -91,9 +74,6 @@ export interface AbiInterface extends utils.Interface {
     "getLinkingAnyUriKeys(uint256)": FunctionFragment;
     "getLinkingAnyUris(uint256)": FunctionFragment;
     "getLinkingCharacterIds(uint256)": FunctionFragment;
-    "getLinkingCharacterLink(bytes32)": FunctionFragment;
-    "getLinkingCharacterLinkListLength(uint256)": FunctionFragment;
-    "getLinkingCharacterLinks(uint256)": FunctionFragment;
     "getLinkingCharacterListLength(uint256)": FunctionFragment;
     "getLinkingERC721(bytes32)": FunctionFragment;
     "getLinkingERC721ListLength(uint256)": FunctionFragment;
@@ -112,7 +92,6 @@ export interface AbiInterface extends utils.Interface {
     "removeLinkingAddress(uint256,address)": FunctionFragment;
     "removeLinkingAnyUri(uint256,string)": FunctionFragment;
     "removeLinkingCharacterId(uint256,uint256)": FunctionFragment;
-    "removeLinkingCharacterLink(uint256,(uint256,uint256,bytes32))": FunctionFragment;
     "removeLinkingERC721(uint256,address,uint256)": FunctionFragment;
     "removeLinkingLinklistId(uint256,uint256)": FunctionFragment;
     "removeLinkingNote(uint256,uint256,uint256)": FunctionFragment;
@@ -134,7 +113,6 @@ export interface AbiInterface extends utils.Interface {
       | "addLinkingAddress"
       | "addLinkingAnyUri"
       | "addLinkingCharacterId"
-      | "addLinkingCharacterLink"
       | "addLinkingERC721"
       | "addLinkingLinklistId"
       | "addLinkingNote"
@@ -153,9 +131,6 @@ export interface AbiInterface extends utils.Interface {
       | "getLinkingAnyUriKeys"
       | "getLinkingAnyUris"
       | "getLinkingCharacterIds"
-      | "getLinkingCharacterLink"
-      | "getLinkingCharacterLinkListLength"
-      | "getLinkingCharacterLinks"
       | "getLinkingCharacterListLength"
       | "getLinkingERC721"
       | "getLinkingERC721ListLength"
@@ -174,7 +149,6 @@ export interface AbiInterface extends utils.Interface {
       | "removeLinkingAddress"
       | "removeLinkingAnyUri"
       | "removeLinkingCharacterId"
-      | "removeLinkingCharacterLink"
       | "removeLinkingERC721"
       | "removeLinkingLinklistId"
       | "removeLinkingNote"
@@ -205,10 +179,6 @@ export interface AbiInterface extends utils.Interface {
   encodeFunctionData(
     functionFragment: "addLinkingCharacterId",
     values: [PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "addLinkingCharacterLink",
-    values: [PromiseOrValue<BigNumberish>, DataTypes.CharacterLinkStructStruct]
   ): string;
   encodeFunctionData(
     functionFragment: "addLinkingERC721",
@@ -291,18 +261,6 @@ export interface AbiInterface extends utils.Interface {
     values: [PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
-    functionFragment: "getLinkingCharacterLink",
-    values: [PromiseOrValue<BytesLike>]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "getLinkingCharacterLinkListLength",
-    values: [PromiseOrValue<BigNumberish>]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "getLinkingCharacterLinks",
-    values: [PromiseOrValue<BigNumberish>]
-  ): string;
-  encodeFunctionData(
     functionFragment: "getLinkingCharacterListLength",
     values: [PromiseOrValue<BigNumberish>]
   ): string;
@@ -374,10 +332,6 @@ export interface AbiInterface extends utils.Interface {
   encodeFunctionData(
     functionFragment: "removeLinkingCharacterId",
     values: [PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "removeLinkingCharacterLink",
-    values: [PromiseOrValue<BigNumberish>, DataTypes.CharacterLinkStructStruct]
   ): string;
   encodeFunctionData(
     functionFragment: "removeLinkingERC721",
@@ -461,10 +415,6 @@ export interface AbiInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "addLinkingCharacterLink",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
     functionFragment: "addLinkingERC721",
     data: BytesLike
   ): Result;
@@ -531,18 +481,6 @@ export interface AbiInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "getLinkingCharacterLink",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "getLinkingCharacterLinkListLength",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "getLinkingCharacterLinks",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
     functionFragment: "getLinkingCharacterListLength",
     data: BytesLike
   ): Result;
@@ -603,10 +541,6 @@ export interface AbiInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "removeLinkingCharacterLink",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
     functionFragment: "removeLinkingERC721",
     data: BytesLike
   ): Result;
@@ -649,22 +583,16 @@ export interface AbiInterface extends utils.Interface {
   events: {
     "Approval(address,address,uint256)": EventFragment;
     "ApprovalForAll(address,address,bool)": EventFragment;
-    "Burn(address,uint256,uint256)": EventFragment;
+    "Burn(uint256,uint256)": EventFragment;
     "Initialized(uint8)": EventFragment;
     "Transfer(address,uint256,uint256)": EventFragment;
-    "Transfer(address,address,uint256)": EventFragment;
   };
 
   getEvent(nameOrSignatureOrTopic: "Approval"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "ApprovalForAll"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Burn"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Initialized"): EventFragment;
-  getEvent(
-    nameOrSignatureOrTopic: "Transfer(address,uint256,uint256)"
-  ): EventFragment;
-  getEvent(
-    nameOrSignatureOrTopic: "Transfer(address,address,uint256)"
-  ): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "Transfer"): EventFragment;
 }
 
 export interface ApprovalEventObject {
@@ -692,14 +620,10 @@ export type ApprovalForAllEvent = TypedEvent<
 export type ApprovalForAllEventFilter = TypedEventFilter<ApprovalForAllEvent>;
 
 export interface BurnEventObject {
-  from: string;
-  characterId: BigNumber;
+  from: BigNumber;
   tokenId: BigNumber;
 }
-export type BurnEvent = TypedEvent<
-  [string, BigNumber, BigNumber],
-  BurnEventObject
->;
+export type BurnEvent = TypedEvent<[BigNumber, BigNumber], BurnEventObject>;
 
 export type BurnEventFilter = TypedEventFilter<BurnEvent>;
 
@@ -710,31 +634,17 @@ export type InitializedEvent = TypedEvent<[number], InitializedEventObject>;
 
 export type InitializedEventFilter = TypedEventFilter<InitializedEvent>;
 
-export interface Transfer_address_uint256_uint256_EventObject {
+export interface TransferEventObject {
   from: string;
   characterId: BigNumber;
   tokenId: BigNumber;
 }
-export type Transfer_address_uint256_uint256_Event = TypedEvent<
+export type TransferEvent = TypedEvent<
   [string, BigNumber, BigNumber],
-  Transfer_address_uint256_uint256_EventObject
+  TransferEventObject
 >;
 
-export type Transfer_address_uint256_uint256_EventFilter =
-  TypedEventFilter<Transfer_address_uint256_uint256_Event>;
-
-export interface Transfer_address_address_uint256_EventObject {
-  from: string;
-  to: string;
-  tokenId: BigNumber;
-}
-export type Transfer_address_address_uint256_Event = TypedEvent<
-  [string, string, BigNumber],
-  Transfer_address_address_uint256_EventObject
->;
-
-export type Transfer_address_address_uint256_EventFilter =
-  TypedEventFilter<Transfer_address_address_uint256_Event>;
+export type TransferEventFilter = TypedEventFilter<TransferEvent>;
 
 export interface Abi extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
@@ -785,12 +695,6 @@ export interface Abi extends BaseContract {
     addLinkingCharacterId(
       tokenId: PromiseOrValue<BigNumberish>,
       toCharacterId: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
-
-    addLinkingCharacterLink(
-      tokenId: PromiseOrValue<BigNumberish>,
-      linkData: DataTypes.CharacterLinkStructStruct,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
@@ -889,25 +793,6 @@ export interface Abi extends BaseContract {
       tokenId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<[BigNumber[]]>;
-
-    getLinkingCharacterLink(
-      linkKey: PromiseOrValue<BytesLike>,
-      overrides?: CallOverrides
-    ): Promise<[DataTypes.CharacterLinkStructStructOutput]>;
-
-    getLinkingCharacterLinkListLength(
-      tokenId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<[BigNumber]>;
-
-    getLinkingCharacterLinks(
-      tokenId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<
-      [DataTypes.CharacterLinkStructStructOutput[]] & {
-        results: DataTypes.CharacterLinkStructStructOutput[];
-      }
-    >;
 
     getLinkingCharacterListLength(
       tokenId: PromiseOrValue<BigNumberish>,
@@ -1011,12 +896,6 @@ export interface Abi extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
-    removeLinkingCharacterLink(
-      tokenId: PromiseOrValue<BigNumberish>,
-      linkData: DataTypes.CharacterLinkStructStruct,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
-
     removeLinkingERC721(
       tokenId: PromiseOrValue<BigNumberish>,
       tokenAddress: PromiseOrValue<string>,
@@ -1072,7 +951,7 @@ export interface Abi extends BaseContract {
     symbol(overrides?: CallOverrides): Promise<[string]>;
 
     tokenURI(
-      tokenId: PromiseOrValue<BigNumberish>,
+      arg0: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<[string]>;
 
@@ -1108,12 +987,6 @@ export interface Abi extends BaseContract {
   addLinkingCharacterId(
     tokenId: PromiseOrValue<BigNumberish>,
     toCharacterId: PromiseOrValue<BigNumberish>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
-
-  addLinkingCharacterLink(
-    tokenId: PromiseOrValue<BigNumberish>,
-    linkData: DataTypes.CharacterLinkStructStruct,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
@@ -1213,21 +1086,6 @@ export interface Abi extends BaseContract {
     overrides?: CallOverrides
   ): Promise<BigNumber[]>;
 
-  getLinkingCharacterLink(
-    linkKey: PromiseOrValue<BytesLike>,
-    overrides?: CallOverrides
-  ): Promise<DataTypes.CharacterLinkStructStructOutput>;
-
-  getLinkingCharacterLinkListLength(
-    tokenId: PromiseOrValue<BigNumberish>,
-    overrides?: CallOverrides
-  ): Promise<BigNumber>;
-
-  getLinkingCharacterLinks(
-    tokenId: PromiseOrValue<BigNumberish>,
-    overrides?: CallOverrides
-  ): Promise<DataTypes.CharacterLinkStructStructOutput[]>;
-
   getLinkingCharacterListLength(
     tokenId: PromiseOrValue<BigNumberish>,
     overrides?: CallOverrides
@@ -1322,12 +1180,6 @@ export interface Abi extends BaseContract {
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
-  removeLinkingCharacterLink(
-    tokenId: PromiseOrValue<BigNumberish>,
-    linkData: DataTypes.CharacterLinkStructStruct,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
-
   removeLinkingERC721(
     tokenId: PromiseOrValue<BigNumberish>,
     tokenAddress: PromiseOrValue<string>,
@@ -1383,7 +1235,7 @@ export interface Abi extends BaseContract {
   symbol(overrides?: CallOverrides): Promise<string>;
 
   tokenURI(
-    tokenId: PromiseOrValue<BigNumberish>,
+    arg0: PromiseOrValue<BigNumberish>,
     overrides?: CallOverrides
   ): Promise<string>;
 
@@ -1419,12 +1271,6 @@ export interface Abi extends BaseContract {
     addLinkingCharacterId(
       tokenId: PromiseOrValue<BigNumberish>,
       toCharacterId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    addLinkingCharacterLink(
-      tokenId: PromiseOrValue<BigNumberish>,
-      linkData: DataTypes.CharacterLinkStructStruct,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -1523,21 +1369,6 @@ export interface Abi extends BaseContract {
       tokenId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<BigNumber[]>;
-
-    getLinkingCharacterLink(
-      linkKey: PromiseOrValue<BytesLike>,
-      overrides?: CallOverrides
-    ): Promise<DataTypes.CharacterLinkStructStructOutput>;
-
-    getLinkingCharacterLinkListLength(
-      tokenId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    getLinkingCharacterLinks(
-      tokenId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<DataTypes.CharacterLinkStructStructOutput[]>;
 
     getLinkingCharacterListLength(
       tokenId: PromiseOrValue<BigNumberish>,
@@ -1633,12 +1464,6 @@ export interface Abi extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
-    removeLinkingCharacterLink(
-      tokenId: PromiseOrValue<BigNumberish>,
-      linkData: DataTypes.CharacterLinkStructStruct,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
     removeLinkingERC721(
       tokenId: PromiseOrValue<BigNumberish>,
       tokenAddress: PromiseOrValue<string>,
@@ -1694,7 +1519,7 @@ export interface Abi extends BaseContract {
     symbol(overrides?: CallOverrides): Promise<string>;
 
     tokenURI(
-      tokenId: PromiseOrValue<BigNumberish>,
+      arg0: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<string>;
 
@@ -1731,14 +1556,12 @@ export interface Abi extends BaseContract {
       approved?: null
     ): ApprovalForAllEventFilter;
 
-    "Burn(address,uint256,uint256)"(
-      from?: PromiseOrValue<string> | null,
-      characterId?: PromiseOrValue<BigNumberish> | null,
+    "Burn(uint256,uint256)"(
+      from?: PromiseOrValue<BigNumberish> | null,
       tokenId?: PromiseOrValue<BigNumberish> | null
     ): BurnEventFilter;
     Burn(
-      from?: PromiseOrValue<string> | null,
-      characterId?: PromiseOrValue<BigNumberish> | null,
+      from?: PromiseOrValue<BigNumberish> | null,
       tokenId?: PromiseOrValue<BigNumberish> | null
     ): BurnEventFilter;
 
@@ -1749,12 +1572,12 @@ export interface Abi extends BaseContract {
       from?: PromiseOrValue<string> | null,
       characterId?: PromiseOrValue<BigNumberish> | null,
       tokenId?: PromiseOrValue<BigNumberish> | null
-    ): Transfer_address_uint256_uint256_EventFilter;
-    "Transfer(address,address,uint256)"(
+    ): TransferEventFilter;
+    Transfer(
       from?: PromiseOrValue<string> | null,
-      to?: PromiseOrValue<string> | null,
+      characterId?: PromiseOrValue<BigNumberish> | null,
       tokenId?: PromiseOrValue<BigNumberish> | null
-    ): Transfer_address_address_uint256_EventFilter;
+    ): TransferEventFilter;
   };
 
   estimateGas: {
@@ -1780,12 +1603,6 @@ export interface Abi extends BaseContract {
     addLinkingCharacterId(
       tokenId: PromiseOrValue<BigNumberish>,
       toCharacterId: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
-
-    addLinkingCharacterLink(
-      tokenId: PromiseOrValue<BigNumberish>,
-      linkData: DataTypes.CharacterLinkStructStruct,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
@@ -1881,21 +1698,6 @@ export interface Abi extends BaseContract {
     ): Promise<BigNumber>;
 
     getLinkingCharacterIds(
-      tokenId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    getLinkingCharacterLink(
-      linkKey: PromiseOrValue<BytesLike>,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    getLinkingCharacterLinkListLength(
-      tokenId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    getLinkingCharacterLinks(
       tokenId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
@@ -1994,12 +1796,6 @@ export interface Abi extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
-    removeLinkingCharacterLink(
-      tokenId: PromiseOrValue<BigNumberish>,
-      linkData: DataTypes.CharacterLinkStructStruct,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
-
     removeLinkingERC721(
       tokenId: PromiseOrValue<BigNumberish>,
       tokenAddress: PromiseOrValue<string>,
@@ -2055,7 +1851,7 @@ export interface Abi extends BaseContract {
     symbol(overrides?: CallOverrides): Promise<BigNumber>;
 
     tokenURI(
-      tokenId: PromiseOrValue<BigNumberish>,
+      arg0: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -2092,12 +1888,6 @@ export interface Abi extends BaseContract {
     addLinkingCharacterId(
       tokenId: PromiseOrValue<BigNumberish>,
       toCharacterId: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
-
-    addLinkingCharacterLink(
-      tokenId: PromiseOrValue<BigNumberish>,
-      linkData: DataTypes.CharacterLinkStructStruct,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -2197,21 +1987,6 @@ export interface Abi extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    getLinkingCharacterLink(
-      linkKey: PromiseOrValue<BytesLike>,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    getLinkingCharacterLinkListLength(
-      tokenId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    getLinkingCharacterLinks(
-      tokenId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
     getLinkingCharacterListLength(
       tokenId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
@@ -2306,12 +2081,6 @@ export interface Abi extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
-    removeLinkingCharacterLink(
-      tokenId: PromiseOrValue<BigNumberish>,
-      linkData: DataTypes.CharacterLinkStructStruct,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
-
     removeLinkingERC721(
       tokenId: PromiseOrValue<BigNumberish>,
       tokenAddress: PromiseOrValue<string>,
@@ -2367,7 +2136,7 @@ export interface Abi extends BaseContract {
     symbol(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     tokenURI(
-      tokenId: PromiseOrValue<BigNumberish>,
+      arg0: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
