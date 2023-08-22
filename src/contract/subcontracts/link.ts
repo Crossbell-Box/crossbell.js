@@ -874,4 +874,31 @@ export class LinkContract {
       data: uri,
     }
   }
+
+  /**
+   * This burns a linklist.
+   * @returns The transaction hash of the transaction that was sent to the blockchain.
+   */
+  async burnLinklist(
+    {
+      linklistId,
+    }: {
+      /** The linklist ID of the linklist to burn. */
+      linklistId: Numberish
+    },
+    overrides: WriteOverrides<Entry, 'burnLinklist'> = {},
+  ): Promise<Result<undefined, true>> {
+    const hash = await this.base.contract.write.burnLinklist(
+      [BigInt(linklistId)],
+      overrides,
+    )
+    const receipt = await waitForTransactionReceiptWithRetry(
+      this.base.publicClient,
+      hash,
+    )
+    return {
+      data: undefined,
+      transactionHash: receipt.transactionHash,
+    }
+  }
 }
