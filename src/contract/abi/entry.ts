@@ -7,7 +7,6 @@ export const entry = [
   { inputs: [], name: 'ErrHandleContainsInvalidCharacters', type: 'error' },
   { inputs: [], name: 'ErrHandleExists', type: 'error' },
   { inputs: [], name: 'ErrHandleLengthInvalid', type: 'error' },
-  { inputs: [], name: 'ErrNotAddressOwner', type: 'error' },
   { inputs: [], name: 'ErrNotCharacterOwner', type: 'error' },
   { inputs: [], name: 'ErrNotEnoughPermission', type: 'error' },
   { inputs: [], name: 'ErrNotEnoughPermissionForThisNote', type: 'error' },
@@ -17,6 +16,7 @@ export const entry = [
   { inputs: [], name: 'ErrSignatureExpired', type: 'error' },
   { inputs: [], name: 'ErrSignatureInvalid', type: 'error' },
   { inputs: [], name: 'ErrSocialTokenExists', type: 'error' },
+  { inputs: [], name: 'ErrTokenNotExists', type: 'error' },
   {
     inputs: [
       { indexed: true, name: 'owner', type: 'address' },
@@ -69,6 +69,13 @@ export const entry = [
   {
     inputs: [{ name: 'tokenId', type: 'uint256' }],
     name: 'burn',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [{ name: 'linklistId', type: 'uint256' }],
+    name: 'burnLinklist',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',
@@ -184,30 +191,6 @@ export const entry = [
     inputs: [{ name: 'characterId', type: 'uint256' }],
     name: 'getHandle',
     outputs: [{ name: '', type: 'string' }],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [{ name: 'account', type: 'address' }],
-    name: 'getLinkModule4Address',
-    outputs: [{ name: '', type: 'address' }],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [
-      { name: 'tokenAddress', type: 'address' },
-      { name: 'tokenId', type: 'uint256' },
-    ],
-    name: 'getLinkModule4ERC721',
-    outputs: [{ name: '', type: 'address' }],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [{ name: 'tokenId', type: 'uint256' }],
-    name: 'getLinkModule4Linklist',
-    outputs: [{ name: '', type: 'address' }],
     stateMutability: 'view',
     type: 'function',
   },
@@ -794,7 +777,7 @@ export const entry = [
     inputs: [
       {
         components: [
-          { name: 'account', type: 'address' },
+          { name: 'characterId', type: 'uint256' },
           { name: 'linkModule', type: 'address' },
           { name: 'linkModuleInitData', type: 'bytes' },
         ],
@@ -802,7 +785,7 @@ export const entry = [
         type: 'tuple',
       },
     ],
-    name: 'setLinkModule4Address',
+    name: 'setLinkModule4Character',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',
@@ -811,7 +794,8 @@ export const entry = [
     inputs: [
       {
         components: [
-          { name: 'linklistId', type: 'uint256' },
+          { name: 'characterId', type: 'uint256' },
+          { name: 'noteId', type: 'uint256' },
           { name: 'linkModule', type: 'address' },
           { name: 'linkModuleInitData', type: 'bytes' },
         ],
@@ -819,7 +803,7 @@ export const entry = [
         type: 'tuple',
       },
     ],
-    name: 'setLinkModule4Linklist',
+    name: 'setLinkModule4Note',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',

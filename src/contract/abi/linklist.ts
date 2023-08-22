@@ -1,7 +1,7 @@
 export const linklist = [
   { inputs: [], name: 'ErrCallerNotWeb3Entry', type: 'error' },
   { inputs: [], name: 'ErrCallerNotWeb3EntryOrNotOwner', type: 'error' },
-  { inputs: [], name: 'ErrNotOwner', type: 'error' },
+  { inputs: [], name: 'ErrTokenNotExists', type: 'error' },
   {
     inputs: [
       { indexed: true, name: 'owner', type: 'address' },
@@ -22,8 +22,7 @@ export const linklist = [
   },
   {
     inputs: [
-      { indexed: true, name: 'from', type: 'address' },
-      { indexed: true, name: 'characterId', type: 'uint256' },
+      { indexed: true, name: 'from', type: 'uint256' },
       { indexed: true, name: 'tokenId', type: 'uint256' },
     ],
     name: 'Burn',
@@ -38,15 +37,6 @@ export const linklist = [
     inputs: [
       { indexed: true, name: 'from', type: 'address' },
       { indexed: true, name: 'characterId', type: 'uint256' },
-      { indexed: true, name: 'tokenId', type: 'uint256' },
-    ],
-    name: 'Transfer',
-    type: 'event',
-  },
-  {
-    inputs: [
-      { indexed: true, name: 'from', type: 'address' },
-      { indexed: true, name: 'to', type: 'address' },
       { indexed: true, name: 'tokenId', type: 'uint256' },
     ],
     name: 'Transfer',
@@ -92,24 +82,6 @@ export const linklist = [
       { name: 'toCharacterId', type: 'uint256' },
     ],
     name: 'addLinkingCharacterId',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [
-      { name: 'tokenId', type: 'uint256' },
-      {
-        components: [
-          { name: 'fromCharacterId', type: 'uint256' },
-          { name: 'toCharacterId', type: 'uint256' },
-          { name: 'linkType', type: 'bytes32' },
-        ],
-        name: 'linkData',
-        type: 'tuple',
-      },
-    ],
-    name: 'addLinkingCharacterLink',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',
@@ -251,47 +223,6 @@ export const linklist = [
     inputs: [{ name: 'tokenId', type: 'uint256' }],
     name: 'getLinkingCharacterIds',
     outputs: [{ name: '', type: 'uint256[]' }],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [{ name: 'linkKey', type: 'bytes32' }],
-    name: 'getLinkingCharacterLink',
-    outputs: [
-      {
-        components: [
-          { name: 'fromCharacterId', type: 'uint256' },
-          { name: 'toCharacterId', type: 'uint256' },
-          { name: 'linkType', type: 'bytes32' },
-        ],
-        name: '',
-        type: 'tuple',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [{ name: 'tokenId', type: 'uint256' }],
-    name: 'getLinkingCharacterLinkListLength',
-    outputs: [{ name: '', type: 'uint256' }],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [{ name: 'tokenId', type: 'uint256' }],
-    name: 'getLinkingCharacterLinks',
-    outputs: [
-      {
-        components: [
-          { name: 'fromCharacterId', type: 'uint256' },
-          { name: 'toCharacterId', type: 'uint256' },
-          { name: 'linkType', type: 'bytes32' },
-        ],
-        name: 'results',
-        type: 'tuple[]',
-      },
-    ],
     stateMutability: 'view',
     type: 'function',
   },
@@ -479,24 +410,6 @@ export const linklist = [
   {
     inputs: [
       { name: 'tokenId', type: 'uint256' },
-      {
-        components: [
-          { name: 'fromCharacterId', type: 'uint256' },
-          { name: 'toCharacterId', type: 'uint256' },
-          { name: 'linkType', type: 'bytes32' },
-        ],
-        name: 'linkData',
-        type: 'tuple',
-      },
-    ],
-    name: 'removeLinkingCharacterLink',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [
-      { name: 'tokenId', type: 'uint256' },
       { name: 'tokenAddress', type: 'address' },
       { name: 'erc721TokenId', type: 'uint256' },
     ],
@@ -584,7 +497,7 @@ export const linklist = [
     type: 'function',
   },
   {
-    inputs: [{ name: 'tokenId', type: 'uint256' }],
+    inputs: [{ name: '', type: 'uint256' }],
     name: 'tokenURI',
     outputs: [{ name: '', type: 'string' }],
     stateMutability: 'view',
