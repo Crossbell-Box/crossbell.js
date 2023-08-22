@@ -28,6 +28,17 @@ jobs:
         with:
           token: ${{ secrets.NPM_TOKEN }}
 
+      - name: Get Tag Version
+        id: get_tag_version
+        run: echo "::set-output name=tag_version::${{ github.ref_name }}"
+
+      - name: Check Tag Version
+        run: |
+          if [[ "${{ steps.get_tag_version.outputs.tag_version }}" < "v1.0.0" ]]; then
+            echo "Tag version is below v1.0.0. Exiting workflow."
+            return
+          fi
+
       - run: npx changelogithub
         env:
           GITHUB_TOKEN: ${{secrets.GH_TOKEN}}
