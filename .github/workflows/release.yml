@@ -36,7 +36,7 @@ jobs:
         run: |
           if [[ "${{ steps.get_tag_version.outputs.tag_version }}" < "v1.0.0" ]]; then
             echo "Tag version is below v1.0.0. Exiting workflow."
-            return
+            exit 0
           fi
 
       - run: npx changelogithub
