@@ -188,7 +188,7 @@ export class BaseContract<THasWallet extends boolean = boolean> {
   }
 
   #initContract() {
-    this.contract = this.proxyContract(
+    this.contract = this.#proxyContract(
       getContract({
         address: this.options.address.entryContract,
         abi: Abi.entry,
@@ -196,7 +196,7 @@ export class BaseContract<THasWallet extends boolean = boolean> {
         walletClient: this.#walletClient,
       }),
     )
-    this.linklistContract = this.proxyContract(
+    this.linklistContract = this.#proxyContract(
       getContract({
         address: this.options.address.linklistContract,
         abi: Abi.linklist,
@@ -204,7 +204,7 @@ export class BaseContract<THasWallet extends boolean = boolean> {
         walletClient: this.#walletClient,
       }),
     )
-    this.newbieVillaContract = this.proxyContract(
+    this.newbieVillaContract = this.#proxyContract(
       getContract({
         address: this.options.address.newbieVillaContract,
         abi: Abi.newbieVilla,
@@ -212,7 +212,7 @@ export class BaseContract<THasWallet extends boolean = boolean> {
         walletClient: this.#walletClient,
       }),
     )
-    this.peripheryContract = this.proxyContract(
+    this.peripheryContract = this.#proxyContract(
       getContract({
         address: this.options.address.peripheryContract,
         abi: Abi.periphery,
@@ -220,7 +220,7 @@ export class BaseContract<THasWallet extends boolean = boolean> {
         walletClient: this.#walletClient,
       }),
     )
-    this.cbtContract = this.proxyContract(
+    this.cbtContract = this.#proxyContract(
       getContract({
         address: this.options.address.cbtContract,
         abi: Abi.cbt,
@@ -228,7 +228,7 @@ export class BaseContract<THasWallet extends boolean = boolean> {
         walletClient: this.#walletClient,
       }),
     )
-    this.miraContract = this.proxyContract(
+    this.miraContract = this.#proxyContract(
       getContract({
         address: this.options.address.miraContract,
         abi: Abi.mira,
@@ -236,7 +236,7 @@ export class BaseContract<THasWallet extends boolean = boolean> {
         walletClient: this.#walletClient,
       }),
     )
-    this.tipsContract = this.proxyContract(
+    this.tipsContract = this.#proxyContract(
       getContract({
         address: this.options.address.tipsContract,
         abi: Abi.tips,
@@ -244,7 +244,7 @@ export class BaseContract<THasWallet extends boolean = boolean> {
         walletClient: this.#walletClient,
       }),
     )
-    this.tipsWithFeeContract = this.proxyContract(
+    this.tipsWithFeeContract = this.#proxyContract(
       getContract({
         address: this.options.address.tipsWithFeeContract,
         abi: Abi.tipsWithFee,
@@ -254,7 +254,7 @@ export class BaseContract<THasWallet extends boolean = boolean> {
     )
   }
 
-  proxyContract<T extends GetContractReturnType>(contract: T): T {
+  #proxyContract<T extends GetContractReturnType>(contract: T): T {
     if ((contract as any).write)
       (contract as any).write = new Proxy((contract as any).write, {
         get: (...args) => {
