@@ -884,6 +884,28 @@ export class LinkContract {
   }
 
   /**
+   * This sets the type for a linklist.
+   * @category Link
+   */
+  async setLinklistType(
+    { linklistId, linkType }: { linklistId: Numberish; linkType: string },
+    overrides: WriteOverrides<Entry, 'setLinklistType'> = {},
+  ) {
+    const hash = await this.base.contract.write.setLinklistType(
+      [BigInt(linklistId), stringToHex(linkType, { size: 32 })],
+      overrides,
+    )
+    const receipt = await waitForTransactionReceiptWithRetry(
+      this.base.publicClient,
+      hash,
+    )
+    return {
+      data: undefined,
+      transactionHash: receipt.transactionHash,
+    }
+  }
+
+  /**
    * This burns a linklist.
    * @category Link
    * @returns The transaction hash of the transaction that was sent to the blockchain.

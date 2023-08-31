@@ -811,6 +811,16 @@ export const entry = [
   {
     inputs: [
       { name: 'linklistId', type: 'uint256' },
+      { name: 'linkType', type: 'bytes32' },
+    ],
+    name: 'setLinklistType',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      { name: 'linklistId', type: 'uint256' },
       { name: 'uri', type: 'string' },
     ],
     name: 'setLinklistUri',
