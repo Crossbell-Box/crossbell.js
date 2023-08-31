@@ -866,10 +866,24 @@ export class LinkContract {
     }
   }
 
-  /**
-   * This gets the metadata for a linklist.
-   * @category Link
-   */
+  async setLinklistType(
+    { linklistId, linkType }: { linklistId: Numberish; linkType: string },
+    overrides: WriteOverrides<Entry, 'setLinklistType'> = {},
+  ) {
+    const hash = await this.base.contract.write.setLinklistType(
+      [BigInt(linklistId), stringToHex(linkType, { size: 32 })],
+      overrides,
+    )
+    const receipt = await waitForTransactionReceiptWithRetry(
+      this.base.publicClient,
+      hash,
+    )
+    return {
+      data: undefined,
+      transactionHash: receipt.transactionHash,
+    }
+  }
+
   async getLinklistUri(
     { fromCharacterId }: { fromCharacterId: string },
     overrides: ReadOverrides<Entry, 'getLinklistUri'> = {},
