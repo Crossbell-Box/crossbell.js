@@ -844,12 +844,16 @@ export class LinkContract {
     }
   }
 
+  /**
+   * This sets the metadata for a linklist.
+   * @category Link
+   */
   async setLinklistUri(
-    { fromCharacterId, uri }: { fromCharacterId: Numberish; uri: string },
+    { linklistId, uri }: { linklistId: Numberish; uri: string },
     overrides: WriteOverrides<Entry, 'setLinklistUri'> = {},
   ): Promise<Result<undefined, true>> {
     const hash = await this.base.contract.write.setLinklistUri(
-      [BigInt(fromCharacterId), uri],
+      [BigInt(linklistId), uri],
       overrides,
     )
     const receipt = await waitForTransactionReceiptWithRetry(
@@ -862,6 +866,10 @@ export class LinkContract {
     }
   }
 
+  /**
+   * This gets the metadata for a linklist.
+   * @category Link
+   */
   async getLinklistUri(
     { fromCharacterId }: { fromCharacterId: string },
     overrides: ReadOverrides<Entry, 'getLinklistUri'> = {},
@@ -877,6 +885,7 @@ export class LinkContract {
 
   /**
    * This burns a linklist.
+   * @category Link
    * @returns The transaction hash of the transaction that was sent to the blockchain.
    */
   async burnLinklist(
