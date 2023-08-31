@@ -35,11 +35,27 @@ export const linklist = [
   },
   {
     inputs: [
+      { indexed: true, name: 'tokenId', type: 'uint256' },
+      { indexed: true, name: 'newlinkType', type: 'bytes32' },
+    ],
+    name: 'LinkTypeSet',
+    type: 'event',
+  },
+  {
+    inputs: [
       { indexed: true, name: 'from', type: 'address' },
       { indexed: true, name: 'characterId', type: 'uint256' },
       { indexed: true, name: 'tokenId', type: 'uint256' },
     ],
     name: 'Transfer',
+    type: 'event',
+  },
+  {
+    inputs: [
+      { indexed: true, name: 'tokenId', type: 'uint256' },
+      { indexed: false, name: 'newUri', type: 'string' },
+    ],
+    name: 'UriSet',
     type: 'event',
   },
   {
@@ -468,6 +484,16 @@ export const linklist = [
       { name: 'approved', type: 'bool' },
     ],
     name: 'setApprovalForAll',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      { name: 'tokenId', type: 'uint256' },
+      { name: 'linkType', type: 'bytes32' },
+    ],
+    name: 'setLinkType',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',
