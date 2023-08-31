@@ -867,6 +867,23 @@ export class LinkContract {
   }
 
   /**
+   * This gets the metadata for a linklist.
+   * @category Link
+   */
+  async getLinklistUri(
+    { fromCharacterId }: { fromCharacterId: string },
+    overrides: ReadOverrides<Entry, 'getLinklistUri'> = {},
+  ): Promise<Result<string>> {
+    const uri = await this.base.contract.read.getLinklistUri(
+      [BigInt(fromCharacterId)],
+      overrides,
+    )
+    return {
+      data: uri,
+    }
+  }
+
+  /**
    * This sets the type for a linklist.
    * @category Link
    */
@@ -885,19 +902,6 @@ export class LinkContract {
     return {
       data: undefined,
       transactionHash: receipt.transactionHash,
-    }
-  }
-
-  async getLinklistUri(
-    { fromCharacterId }: { fromCharacterId: string },
-    overrides: ReadOverrides<Entry, 'getLinklistUri'> = {},
-  ): Promise<Result<string>> {
-    const uri = await this.base.contract.read.getLinklistUri(
-      [BigInt(fromCharacterId)],
-      overrides,
-    )
-    return {
-      data: uri,
     }
   }
 
