@@ -871,11 +871,11 @@ export class LinkContract {
    * @category Link
    */
   async getLinklistUri(
-    { fromCharacterId }: { fromCharacterId: string },
+    { linklistId }: { linklistId: string },
     overrides: ReadOverrides<Entry, 'getLinklistUri'> = {},
   ): Promise<Result<string>> {
     const uri = await this.base.contract.read.getLinklistUri(
-      [BigInt(fromCharacterId)],
+      [BigInt(linklistId)],
       overrides,
     )
     return {
