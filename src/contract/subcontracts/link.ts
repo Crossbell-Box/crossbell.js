@@ -866,6 +866,10 @@ export class LinkContract {
     }
   }
 
+  /**
+   * This sets the type for a linklist.
+   * @category Link
+   */
   async setLinklistType(
     { linklistId, linkType }: { linklistId: Numberish; linkType: string },
     overrides: WriteOverrides<Entry, 'setLinklistType'> = {},
