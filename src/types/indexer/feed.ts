@@ -5,7 +5,7 @@ import { LinkModuleEntity, LinkModuleTargetItemType } from './link_module'
 import { MintedNoteEntity } from './minted_note'
 import { MintModuleEntity, MintModuleTargetItemType } from './mint_module'
 import { NoteEntity } from './note'
-import { TipEntity } from './tip'
+import { TipConfigEntity, TipEntity } from './tip'
 
 export enum FeedType {
   CREATE_CHARACTER = 'CREATE_CHARACTER',
@@ -35,6 +35,7 @@ export enum FeedType {
   SET_LINK_MODULE = 'SET_LINK_MODULE',
   SET_MINT_MODULE = 'SET_MINT_MODULE',
   TIP_CHARACTER = 'TIP_CHARACTER',
+  SET_TIP_CONFIG = 'SET_TIP_CONFIG',
 }
 
 export type FeedTypeKey = keyof typeof FeedType
@@ -57,6 +58,7 @@ export interface FeedEntity {
   mintModuleTargetItemType?: MintModuleTargetItemType
   mintModule?: MintModuleEntity
   tip?: TipEntity
+  tipConfig?: TipConfigEntity
   owner: string
   createdAt: Date
   updatedAt: Date
