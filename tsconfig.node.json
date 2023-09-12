@@ -1,19 +1,19 @@
 {
-  "compilerOptions": {
-    "composite": true,
-    "target": "esnext",
-    "module": "esnext",
-    "lib": ["es2022", "DOM"],
-    "strict": true,
-    "esModuleInterop": true,
-    "moduleResolution": "node",
-    "skipLibCheck": true,
-    "noUnusedLocals": true,
-    "noImplicitAny": true,
-    "allowJs": true,
-    "resolveJsonModule": true,
-    "types": ["node"],
-    "outDir": "dist"
-  },
-  "include": ["scripts"]
+	"compilerOptions": {
+		"composite": true,
+		"target": "esnext",
+		"module": "esnext",
+		"lib": ["es2022", "DOM"],
+		"strict": true,
+		"esModuleInterop": true,
+		"moduleResolution": "node",
+		"skipLibCheck": true,
+		"noUnusedLocals": true,
+		"noImplicitAny": true,
+		"allowJs": true,
+		"resolveJsonModule": true,
+		"types": ["node"],
+		"outDir": "dist"
+	},
+	"include": ["scripts"]
 }

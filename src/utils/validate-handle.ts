@@ -17,27 +17,27 @@ export type ValidateHandleError = 'existed' | 'lengthInvalid' | 'charsInvalid'
  * @returns A Promise that resolves to a ValidateHandleError type error indicator, or null if the handle is valid.
  */
 export async function validateHandle(
-  handle: string,
-  indexer: Indexer,
+	handle: string,
+	indexer: Indexer,
 ): Promise<ValidateHandleError | null> {
-  if (handle.length >= 32 || handle.length <= 2) {
-    return 'lengthInvalid'
-  }
+	if (handle.length >= 32 || handle.length <= 2) {
+		return 'lengthInvalid'
+	}
 
-  if (!/^[\d_a-z-]+$/.test(handle)) {
-    return 'charsInvalid'
-  }
+	if (!/^[\d_a-z-]+$/.test(handle)) {
+		return 'charsInvalid'
+	}
 
-  if (await checkIfExisted(handle, indexer)) {
-    return 'existed'
-  }
+	if (await checkIfExisted(handle, indexer)) {
+		return 'existed'
+	}
 
-  return null
+	return null
 }
 
 async function checkIfExisted(
-  handle: string,
-  indexer: Indexer,
+	handle: string,
+	indexer: Indexer,
 ): Promise<boolean> {
-  return !!(await indexer.character.getByHandle(handle))
+	return !!(await indexer.character.getByHandle(handle))
 }

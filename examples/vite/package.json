@@ -1,26 +1,26 @@
 {
-  "name": "vite",
-  "version": "0.0.0",
-  "private": true,
-  "type": "module",
-  "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview",
-    "typecheck": "vue-tsc --noEmit"
-  },
-  "dependencies": {
-    "crossbell": "workspace:*",
-    "vue": "^3.3.4"
-  },
-  "devDependencies": {
-    "@unocss/reset": "^0.52.3",
-    "@unocss/transformer-directives": "^0.52.3",
-    "@vitejs/plugin-vue": "^4.2.3",
-    "@vueuse/core": "^10.1.2",
-    "typescript": "^5.0.4",
-    "unocss": "^0.52.3",
-    "vite": "^4.3.8",
-    "vue-tsc": "^1.6.5"
-  }
+	"name": "vite",
+	"version": "0.0.0",
+	"private": true,
+	"type": "module",
+	"scripts": {
+		"dev": "vite",
+		"build": "vite build",
+		"preview": "vite preview",
+		"typecheck": "vue-tsc --noEmit"
+	},
+	"dependencies": {
+		"crossbell": "workspace:*",
+		"vue": "^3.3.4"
+	},
+	"devDependencies": {
+		"@unocss/reset": "^0.52.3",
+		"@unocss/transformer-directives": "^0.52.3",
+		"@vitejs/plugin-vue": "^4.2.3",
+		"@vueuse/core": "^10.1.2",
+		"typescript": "^5.0.4",
+		"unocss": "^0.52.3",
+		"vite": "^4.3.8",
+		"vue-tsc": "^1.6.5"
+	}
 }

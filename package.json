@@ -1,93 +1,88 @@
 {
-  "name": "crossbell",
-  "version": "1.6.4",
-  "packageManager": "pnpm@8.7.0",
-  "description": "JavaScript SDK to interact with Crossbell",
-  "keywords": [
-    "crossbell",
-    "eth",
-    "contract",
-    "web3"
-  ],
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/Crossbell-Box/crossbell.js/issues"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/Crossbell-Box/crossbell.js.git"
-  },
-  "files": [
-    "dist"
-  ],
-  "main": "./dist/index.js",
-  "module": "./dist/index.mjs",
-  "types": "./dist/index.d.ts",
-  "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "require": "./dist/index.js",
-      "import": "./dist/index.mjs"
-    },
-    "./network": {
-      "types": "./dist/network.d.ts",
-      "require": "./dist/network.js",
-      "import": "./dist/network.mjs"
-    },
-    "./ipfs": {
-      "types": "./dist/ipfs.d.ts",
-      "require": "./dist/ipfs.js",
-      "import": "./dist/ipfs.mjs"
-    },
-    "./*": "./*"
-  },
-  "typesVersions": {
-    "*": {
-      "network": [
-        "./dist/network.d.ts"
-      ],
-      "ipfs": [
-        "./dist/ipfs.d.ts"
-      ]
-    }
-  },
-  "publishConfig": {
-    "access": "public"
-  },
-  "scripts": {
-    "build": "tsup --dts",
-    "docs:build": "typedoc",
-    "docs:preview": "serve docs",
-    "lint": "echo \"No linting configured\"",
-    "prepublishOnly": "npm run build",
-    "release": "bumpp",
-    "test": "vitest",
-    "typecheck": "tsc --noEmit",
-    "update-abi": "node ./scripts/update-abi.mjs",
-    "watch": "tsup --watch"
-  },
-  "dependencies": {
-    "@crossbell/ipfs-fetch": "^0.0.19",
-    "async-retry": "^1.3.3",
-    "eip1193-types": "^0.2.1",
-    "exponential-backoff": "^3.1.1",
-    "p-limit": "^3.1.0",
-    "viem": "^1.9.2"
-  },
-  "devDependencies": {
-    "@types/async-retry": "^1.4.5",
-    "@types/node": "^20.5.7",
-    "abitype": "^0.9.8",
-    "bumpp": "^9.2.0",
-    "change-case": "^4.1.2",
-    "eslint": "^8.48.0",
-    "prettier": "^3.0.3",
-    "tsup": "^7.2.0",
-    "typedoc": "^0.25.0",
-    "typescript": "^5.2.2",
-    "vitest": "^0.34.3"
-  },
-  "engines": {
-    "node": ">=16.14.0"
-  }
+	"name": "crossbell",
+	"private": true,
+	"version": "1.6.4",
+	"packageManager": "pnpm@8.7.0",
+	"description": "JavaScript SDK to interact with Crossbell",
+	"keywords": ["crossbell", "eth", "contract", "web3"],
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/Crossbell-Box/crossbell.js/issues"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/Crossbell-Box/crossbell.js.git"
+	},
+	"files": ["dist"],
+	"main": "./dist/index.js",
+	"module": "./dist/index.mjs",
+	"types": "./dist/index.d.ts",
+	"exports": {
+		".": {
+			"types": "./dist/index.d.ts",
+			"require": "./dist/index.js",
+			"import": "./dist/index.mjs"
+		},
+		"./network": {
+			"types": "./dist/network.d.ts",
+			"require": "./dist/network.js",
+			"import": "./dist/network.mjs"
+		},
+		"./ipfs": {
+			"types": "./dist/ipfs.d.ts",
+			"require": "./dist/ipfs.js",
+			"import": "./dist/ipfs.mjs"
+		},
+		"./*": "./*"
+	},
+	"typesVersions": {
+		"*": {
+			"network": ["./dist/network.d.ts"],
+			"ipfs": ["./dist/ipfs.d.ts"]
+		}
+	},
+	"publishConfig": {
+		"access": "public"
+	},
+	"scripts": {
+		"build": "tsup --dts",
+		"docs:build": "typedoc",
+		"docs:preview": "serve docs",
+		"format": "biome format . --write",
+		"lint": "biome check .",
+		"lint:fix": "biome check . --apply",
+		"prepublishOnly": "npm run build",
+		"release": "bumpp",
+		"test": "vitest",
+		"typecheck": "tsc --noEmit",
+		"update-abi": "node ./scripts/update-abi.mjs",
+		"watch": "tsup --watch"
+	},
+	"dependencies": {
+		"@crossbell/ipfs-fetch": "^0.0.19",
+		"async-retry": "^1.3.3",
+		"eip1193-types": "^0.2.1",
+		"exponential-backoff": "^3.1.1",
+		"p-limit": "^3.1.0",
+		"viem": "^1.10.9"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "^1.1.2",
+		"@types/async-retry": "^1.4.5",
+		"@types/node": "^20.6.0",
+		"abitype": "^0.9.8",
+		"bumpp": "^9.2.0",
+		"change-case": "^4.1.2",
+		"simple-git-hooks": "^2.9.0",
+		"tsup": "^7.2.0",
+		"typedoc": "^0.25.1",
+		"typescript": "^5.2.2",
+		"vitest": "^0.34.4"
+	},
+	"engines": {
+		"node": ">=16.14.0"
+	},
+	"simple-git-hooks": {
+		"pre-commit": "bun run format && bun run lint:fix"
+	}
 }

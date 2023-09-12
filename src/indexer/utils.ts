@@ -1,6 +1,6 @@
 let headersScope: HeadersInit | undefined
 export function getHeadersScope() {
-  return headersScope
+	return headersScope
 }
 
 /**
@@ -23,13 +23,15 @@ export function getHeadersScope() {
  * @param headers It will be attached to request headers from callback function.
  */
 export function withHeaders<T>(
-  fn: (ensure: () => void) => T,
-  headers: HeadersInit,
+	fn: (ensure: () => void) => T,
+	headers: HeadersInit,
 ): T {
-  const ensure = () => (headersScope = headers)
+	const ensure = () => {
+		headersScope = headers
+	}
 
-  ensure()
-  const ret = fn(ensure)
-  headersScope = undefined
-  return ret
+	ensure()
+	const ret = fn(ensure)
+	headersScope = undefined
+	return ret
 }

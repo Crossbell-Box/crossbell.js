@@ -1,18 +1,18 @@
-import { type Hex } from 'viem'
 import { type EIP1193Provider } from 'eip1193-types'
+import { type Hex } from 'viem'
 import {
-  BaseContract,
-  CbtContract,
-  CharacterContract,
-  type ContractOptions,
-  CsbContract,
-  LinkContract,
-  LinkModuleContract,
-  MintModuleContract,
-  NoteContract,
-  OperatorContract,
-  RevisionContract,
-  TipsContract,
+	BaseContract,
+	CbtContract,
+	CharacterContract,
+	type ContractOptions,
+	CsbContract,
+	LinkContract,
+	LinkModuleContract,
+	MintModuleContract,
+	NoteContract,
+	OperatorContract,
+	RevisionContract,
+	TipsContract,
 } from './subcontracts'
 import { TipsWithFeeContract } from './subcontracts/tips_with_fee'
 
@@ -42,19 +42,19 @@ import { TipsWithFeeContract } from './subcontracts/tips_with_fee'
  * ```
  */
 export class Contract<
-  THasWallet extends boolean = boolean,
+	THasWallet extends boolean = boolean,
 > extends BaseContract<THasWallet> {
-  csb = new CsbContract(this)
-  character = new CharacterContract(this)
-  link = new LinkContract(this)
-  cbt = new CbtContract(this)
-  note = new NoteContract(this)
-  operator = new OperatorContract(this)
-  tips = new TipsContract(this)
-  tipsWithFee = new TipsWithFeeContract(this)
-  revision = new RevisionContract(this)
-  linkModule = new LinkModuleContract(this)
-  mintModule = new MintModuleContract(this)
+	csb = new CsbContract(this)
+	character = new CharacterContract(this)
+	link = new LinkContract(this)
+	cbt = new CbtContract(this)
+	note = new NoteContract(this)
+	operator = new OperatorContract(this)
+	tips = new TipsContract(this)
+	tipsWithFee = new TipsWithFeeContract(this)
+	revision = new RevisionContract(this)
+	linkModule = new LinkModuleContract(this)
+	mintModule = new MintModuleContract(this)
 }
 
 /**
@@ -83,16 +83,16 @@ export class Contract<
  * ```
  */
 export function createContract(
-  providerOrPrivateKey: Hex | EIP1193Provider,
-  options?: Partial<ContractOptions>,
+	providerOrPrivateKey: Hex | EIP1193Provider,
+	options?: Partial<ContractOptions>,
 ): Contract<true>
 export function createContract(
-  providerOrPrivateKey?: Hex | EIP1193Provider,
-  options?: Partial<ContractOptions>,
+	providerOrPrivateKey?: Hex | EIP1193Provider,
+	options?: Partial<ContractOptions>,
 ): Contract<boolean>
 export function createContract(
-  providerOrPrivateKey?: Hex | EIP1193Provider,
-  options?: Partial<ContractOptions>,
+	providerOrPrivateKey?: Hex | EIP1193Provider,
+	options?: Partial<ContractOptions>,
 ) {
-  return new Contract(providerOrPrivateKey, options)
+	return new Contract(providerOrPrivateKey, options)
 }

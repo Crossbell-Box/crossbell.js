@@ -1,5 +1,5 @@
 export * from './contract'
 export type {
-  ContractOptions,
-  ResolvedContractOptions,
+	ContractOptions,
+	ResolvedContractOptions,
 } from './subcontracts/base'
