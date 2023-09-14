@@ -1,15 +1,9 @@
 {
 	"name": "crossbell",
-	"private": true,
 	"version": "1.6.5",
-	"packageManager": "pnpm@8.7.0",
+	"packageManager": "pnpm@8.7.5",
 	"description": "JavaScript SDK to interact with Crossbell",
-	"keywords": [
-		"crossbell",
-		"eth",
-		"contract",
-		"web3"
-	],
+	"keywords": ["crossbell", "eth", "contract", "web3"],
 	"license": "MIT",
 	"bugs": {
 		"url": "https://github.com/Crossbell-Box/crossbell.js/issues"
@@ -18,9 +12,7 @@
 		"type": "git",
 		"url": "https://github.com/Crossbell-Box/crossbell.js.git"
 	},
-	"files": [
-		"dist"
-	],
+	"files": ["dist"],
 	"main": "./dist/index.js",
 	"module": "./dist/index.mjs",
 	"types": "./dist/index.d.ts",
@@ -44,12 +36,8 @@
 	},
 	"typesVersions": {
 		"*": {
-			"network": [
-				"./dist/network.d.ts"
-			],
-			"ipfs": [
-				"./dist/ipfs.d.ts"
-			]
+			"network": ["./dist/network.d.ts"],
+			"ipfs": ["./dist/ipfs.d.ts"]
 		}
 	},
 	"publishConfig": {
