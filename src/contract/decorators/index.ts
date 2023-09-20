@@ -6,7 +6,7 @@ import { warn } from '../../utils/logger'
 // Wait for esbuild
 export function autoSwitchMainnet() {
 	return (
-		target: Object,
+		target: object,
 		propertyKey: string,
 		descriptor: TypedPropertyDescriptor<
 			(this: { base: BaseContract }, ...args: any[]) => Promise<any>

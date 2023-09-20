@@ -12,7 +12,9 @@ import {
  */
 export type Result<T, HasTxHash extends boolean = false> = {
 	data: T
-} & (HasTxHash extends true ? { transactionHash: Address } : {})
+} & (HasTxHash extends true
+	? { transactionHash: Address }
+	: Record<string, never>)
 
 /**
  * @description Construct a type with the properties of union type T except for those in type K.

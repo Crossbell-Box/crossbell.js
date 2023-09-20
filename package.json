@@ -1,7 +1,7 @@
 {
 	"name": "crossbell",
 	"version": "1.6.5",
-	"packageManager": "pnpm@8.7.5",
+	"packageManager": "pnpm@8.7.6",
 	"description": "JavaScript SDK to interact with Crossbell",
 	"keywords": ["crossbell", "eth", "contract", "web3"],
 	"license": "MIT",
@@ -63,12 +63,12 @@
 		"eip1193-types": "^0.2.1",
 		"exponential-backoff": "^3.1.1",
 		"p-limit": "^3.1.0",
-		"viem": "^1.10.11"
+		"viem": "^1.11.0"
 	},
 	"devDependencies": {
-		"@biomejs/biome": "^1.1.2",
+		"@biomejs/biome": "^1.2.2",
 		"@types/async-retry": "^1.4.5",
-		"@types/node": "^20.6.0",
+		"@types/node": "^20.6.3",
 		"abitype": "^0.9.8",
 		"bumpp": "^9.2.0",
 		"change-case": "^4.1.2",

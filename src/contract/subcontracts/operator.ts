@@ -111,7 +111,7 @@ export class OperatorContract {
 			blocklist: Address[]
 		},
 		overrides: WriteOverrides<Entry, 'grantOperators4Note'> = {},
-	): Promise<Result<{}, true>> {
+	): Promise<Result<Record<string, never>, true>> {
 		validateAddress(allowlist)
 		validateAddress(blocklist)
 

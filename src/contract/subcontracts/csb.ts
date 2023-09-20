@@ -22,7 +22,9 @@ export class CsbContract {
 		owner: Address
 	}): Promise<Result<bigint>> {
 		validateAddress(owner)
-		const balance = await this.base.publicClient.getBalance({ address: owner })
+		const balance = await this.base.publicClient.getBalance({
+			address: owner,
+		})
 		return {
 			data: balance,
 		}
@@ -42,7 +44,7 @@ export class CsbContract {
 		toAddress: Hex
 		/** The amount of $CSB to send. (in wei) */
 		amount: Numberish
-	}): Promise<Result<{}, true>> {
+	}): Promise<Result<Record<string, never>, true>> {
 		validateAddress(toAddress)
 
 		if (!this.base.walletClient) {
