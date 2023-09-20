@@ -10,11 +10,15 @@ import {
 /**
  * The result of a call to a transaction / get function.
  */
-export type Result<T, HasTxHash extends boolean = false> = {
-	data: T
-} & (HasTxHash extends true
-	? { transactionHash: Address }
-	: Record<string, never>)
+export type Result<
+	T,
+	HasTxHash extends boolean = false,
+> = HasTxHash extends true
+	? {
+			data: T
+			transactionHash: Address
+	  }
+	: { data: T }
 
 /**
  * @description Construct a type with the properties of union type T except for those in type K.
