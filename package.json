@@ -22,22 +22,40 @@
 			"require": "./dist/index.js",
 			"import": "./dist/index.mjs"
 		},
-		"./network": {
-			"types": "./dist/network.d.ts",
-			"require": "./dist/network.js",
-			"import": "./dist/network.mjs"
+		"./contract": {
+			"types": "./dist/contract/index.d.ts",
+			"require": "./dist/contract/index.js",
+			"import": "./dist/contract/index.mjs"
+		},
+		"./indexer": {
+			"types": "./dist/indexer/index.d.ts",
+			"require": "./dist/indexer/index.js",
+			"import": "./dist/indexer/index.mjs"
 		},
 		"./ipfs": {
-			"types": "./dist/ipfs.d.ts",
-			"require": "./dist/ipfs.js",
-			"import": "./dist/ipfs.mjs"
+			"types": "./dist/ipfs/index.d.ts",
+			"require": "./dist/ipfs/index.js",
+			"import": "./dist/ipfs/index.mjs"
+		},
+		"./network": {
+			"types": "./dist/network/index.d.ts",
+			"require": "./dist/network/index.js",
+			"import": "./dist/network/index.mjs"
+		},
+		"./utils": {
+			"types": "./dist/utils/index.d.ts",
+			"require": "./dist/utils/index.js",
+			"import": "./dist/utils/index.mjs"
 		},
 		"./*": "./*"
 	},
 	"typesVersions": {
 		"*": {
-			"network": ["./dist/network.d.ts"],
-			"ipfs": ["./dist/ipfs.d.ts"]
+			"contract": ["./dist/contract/index.d.ts"],
+			"indexer": ["./dist/indexer/index.d.ts"],
+			"ipfs": ["./dist/ipfs/index.d.ts"],
+			"network": ["./dist/network/index.d.ts"],
+			"utils": ["./dist/utils/index.d.ts"]
 		}
 	},
 	"publishConfig": {
@@ -82,6 +100,6 @@
 		"node": ">=16.14.0"
 	},
 	"simple-git-hooks": {
-		"pre-commit": "bun run format && bun run lint:fix"
+		"pre-commit": "npm run format && npm run lint:fix"
 	}
 }

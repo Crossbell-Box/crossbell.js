@@ -5,7 +5,7 @@ import {
 	type CharacterMetadata,
 	type Metadata,
 	type NoteMetadata,
-} from './types/metadata'
+} from '../types/metadata'
 
 let IPFS_GATEWAY = 'https://w3s.link/ipfs/'
 export function getIpfsGateway() {

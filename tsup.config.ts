@@ -1,7 +1,14 @@
 import { type Options, defineConfig } from 'tsup'
 
 const commonConfig: Options = {
-	entry: ['./src/*.ts'],
+	entry: [
+		'./src/index.ts',
+		'./src/contract/index.ts',
+		'./src/indexer/index.ts',
+		'./src/ipfs/index.ts',
+		'./src/network/index.ts',
+		'./src/utils/index.ts',
+	],
 	outDir: 'dist',
 	clean: true,
 	sourcemap: true,
@@ -15,6 +22,7 @@ export default defineConfig((options) => [
 		platform: 'node',
 		dts: options.dts,
 		target: 'node16.14',
+		bundle: false,
 	},
 	{
 		...commonConfig,
