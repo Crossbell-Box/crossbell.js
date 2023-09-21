@@ -9,12 +9,9 @@ import {
 	type Result,
 	type WriteOverrides,
 } from '../../types'
-import {
-	getModuleConfig,
-	parseLog,
-	validateAddress,
-	waitForTransactionReceiptWithRetry,
-} from '../../utils'
+import { validateAddress } from '../../utils/address'
+import { getModuleConfig } from '../../utils/module'
+import { parseLog, waitForTransactionReceiptWithRetry } from '../../utils/viem'
 import { type Entry, type NewbieVilla } from '../abi'
 import { autoSwitchMainnet } from '../decorators'
 import { type BaseContract } from './base'

@@ -19,7 +19,7 @@ import {
 	createWalletClientFromPrivateKeyAccount,
 	createWalletClientFromProvider,
 	getProviderAccount,
-} from '../../utils'
+} from '../../utils/viem'
 import * as Abi from '../abi'
 
 export interface AccountOptions {

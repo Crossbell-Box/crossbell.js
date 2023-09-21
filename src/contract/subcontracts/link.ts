@@ -6,12 +6,8 @@ import {
 	type Result,
 	type WriteOverrides,
 } from '../../types'
-import {
-	NIL_ADDRESS,
-	parseLog,
-	validateAddress,
-	waitForTransactionReceiptWithRetry,
-} from '../../utils'
+import { NIL_ADDRESS, validateAddress } from '../../utils/address'
+import { parseLog, waitForTransactionReceiptWithRetry } from '../../utils/viem'
 import { type Entry, type Linklist, type Periphery } from '../abi'
 import { autoSwitchMainnet } from '../decorators'
 import { type BaseContract } from './base'

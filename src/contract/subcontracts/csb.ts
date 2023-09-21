@@ -1,9 +1,7 @@
 import { type Address, type Hex } from 'viem'
 import { type Numberish, type Result } from '../../types'
-import {
-	validateAddress,
-	waitForTransactionReceiptWithRetry,
-} from '../../utils'
+import { validateAddress } from '../../utils/address'
+import { waitForTransactionReceiptWithRetry } from '../../utils/viem'
 import { autoSwitchMainnet } from '../decorators'
 import { type BaseContract } from './base'
 

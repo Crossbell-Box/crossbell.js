@@ -1,3 +1,5 @@
+import { MaybeArray, Numberish } from '../types/utils'
+
 let headersScope: HeadersInit | undefined
 export function getHeadersScope() {
 	return headersScope
@@ -34,4 +36,21 @@ export function withHeaders<T>(
 	const ret = fn(ensure)
 	headersScope = undefined
 	return ret
+}
+
+export function createSearchParamsString(
+	params: Record<string, MaybeArray<Numberish> | boolean | undefined | null>,
+) {
+	return new URLSearchParams(
+		Object.entries(params)
+			.filter(
+				(entry): entry is [string, string | string[]] =>
+					entry[1] !== undefined && entry[1] !== null,
+			)
+			.flatMap(([key, values]) =>
+				Array.isArray(values)
+					? values.map((value) => [key, value.toString()])
+					: [[key, values.toString()]],
+			),
+	).toString()
 }

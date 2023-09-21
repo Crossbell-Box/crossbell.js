@@ -4,10 +4,8 @@ import {
 	type Result,
 	type WriteOverrides,
 } from '../../types'
-import {
-	getModuleConfig,
-	waitForTransactionReceiptWithRetry,
-} from '../../utils'
+import { getModuleConfig } from '../../utils/module'
+import { waitForTransactionReceiptWithRetry } from '../../utils/viem'
 import { type Entry } from '../abi'
 import { autoSwitchMainnet } from '../decorators'
 import { type BaseContract } from './base'

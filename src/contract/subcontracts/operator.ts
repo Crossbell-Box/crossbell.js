@@ -6,12 +6,9 @@ import {
 	type Result,
 	type WriteOverrides,
 } from '../../types'
-import {
-	parseLog,
-	validateAddress,
-	waitForTransactionReceiptWithRetry,
-} from '../../utils'
+import { validateAddress } from '../../utils/address'
 import { warn } from '../../utils/logger'
+import { parseLog, waitForTransactionReceiptWithRetry } from '../../utils/viem'
 import { type Entry } from '../abi'
 import { autoSwitchMainnet } from '../decorators'
 import { type BaseContract } from './base'

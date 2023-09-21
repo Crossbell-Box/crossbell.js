@@ -18,13 +18,9 @@ import {
 	type Result,
 	type WriteOverrides,
 } from '../../types'
-import {
-	NIL_ADDRESS,
-	getModuleConfig,
-	parseLog,
-	validateAddress,
-	waitForTransactionReceiptWithRetry,
-} from '../../utils'
+import { NIL_ADDRESS, validateAddress } from '../../utils/address'
+import { getModuleConfig } from '../../utils/module'
+import { parseLog, waitForTransactionReceiptWithRetry } from '../../utils/viem'
 import { type Entry, entry } from '../abi'
 import { autoSwitchMainnet } from '../decorators'
 import { type BaseContract } from './base'

@@ -1,6 +1,5 @@
 import { type MaybeArray } from '../../types/utils'
-import { createSearchParamsString } from '../../utils'
-import { getHeadersScope } from '../utils'
+import { createSearchParamsString, getHeadersScope } from '../utils'
 
 export type FetchOptions = Omit<RequestInit, 'method'>
 export type IndexerOptions =
