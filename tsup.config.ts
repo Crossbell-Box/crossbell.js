@@ -22,7 +22,6 @@ export default defineConfig((options) => [
 		platform: 'node',
 		dts: options.dts,
 		target: 'node16.14',
-		bundle: false,
 	},
 	{
 		...commonConfig,
