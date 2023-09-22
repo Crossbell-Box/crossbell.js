@@ -9,14 +9,24 @@ export type IndexerOptions =
 			endpoint?: string
 			fetchOptions?: FetchOptions
 			/**
-			 * This option is used to enable the experimental cache dedupe feature for performance.
+			/**
+			 * This option is used to enable the experimental request dedupe feature for performance.
 			 *
-			 * When this option is enabled, the indexer will cache the response of same requests until the promises are resolved.
+			 * When this option is enabled, the `indexer` client will cache the response of same requests until the promises are resolved.
 			 *
-			 * For example, if you call `indexer.character.getMany(...)` twice at the same time,
-			 * the indexer will only send one request to the server.
+			 * For example, if you call `indexer.character.getMany('0x123')` many times **at the same time**, the indexer will only send one request to the server.
 			 *
-			 * This only works for `GET` requests.
+			 * ```ts
+			 * await Promise.all([
+			 *   indexer.character.getMany('0x123'),
+			 *   indexer.character.getMany('0x123'),
+			 *   indexer.character.getMany('0x123'),
+			 *   indexer.character.getMany('0xabc'),
+			 *   indexer.character.getMany('0xabc'),
+			 * ]) // only 2 requests (one for `0x123`; one for `0xabc`) will be sent to the indexer server
+			 * ```
+			 *
+			 * This only works for GET requests.
 			 *
 			 * @default false
 			 */
