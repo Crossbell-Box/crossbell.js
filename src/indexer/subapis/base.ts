@@ -1,10 +1,27 @@
+import { createCache } from 'async-cache-dedupe'
 import { type MaybeArray } from '../../types/utils'
 import { createSearchParamsString, getHeadersScope } from '../utils'
 
 export type FetchOptions = Omit<RequestInit, 'method'>
 export type IndexerOptions =
 	| string
-	| { endpoint?: string; fetchOptions?: FetchOptions }
+	| {
+			endpoint?: string
+			fetchOptions?: FetchOptions
+			/**
+			 * This option is used to enable the experimental cache dedupe feature for performance.
+			 *
+			 * When this option is enabled, the indexer will cache the response of same requests until the promises are resolved.
+			 *
+			 * For example, if you call `indexer.character.getMany(...)` twice at the same time,
+			 * the indexer will only send one request to the server.
+			 *
+			 * This only works for `GET` requests.
+			 *
+			 * @default false
+			 */
+			experimentalRequestDedupe: boolean
+	  }
 
 type InternalFetchOptions = RequestInit & {
 	params?: Record<
@@ -22,7 +39,35 @@ export class BaseIndexer {
 	/** The options to send to the fetch function. */
 	fetchOptions: FetchOptions = {}
 
-	constructor(endpointOrOptions?: IndexerOptions) {
+	#cache = createCache({
+		ttl: 0,
+		storage: { type: 'memory' },
+	}).define(
+		'fetch',
+		{
+			serialize(
+				args: [input: RequestInfo | URL, init?: RequestInit | undefined],
+			) {
+				const url = args[0]
+				const options = args[1]
+				const body = options?.body
+				const headers = Object.fromEntries(
+					(options?.headers as Headers)?.entries(),
+				)
+				return {
+					url,
+					...options,
+					body,
+					headers,
+				}
+			},
+		},
+		(args: [input: RequestInfo | URL, init?: RequestInit | undefined]) => {
+			return fetch.call(this, ...args)
+		},
+	)
+
+	constructor(private endpointOrOptions?: IndexerOptions) {
 		if (typeof endpointOrOptions === 'string') {
 			this.endpoint = endpointOrOptions
 		} else if (typeof endpointOrOptions === 'object') {
@@ -59,22 +104,38 @@ export class BaseIndexer {
 			headers.set('Authorization', `Bearer ${token}`)
 		}
 
-		return fetch(this.endpoint + newUrl, {
-			...this.fetchOptions,
-			body,
-			...options,
-			headers,
-		}).then(async (r) => {
-			if (!r.ok) {
+		const fetched =
+			typeof this.endpointOrOptions === 'object' &&
+			this.endpointOrOptions.experimentalRequestDedupe &&
+			(!options.method || options.method === 'GET')
+				? this.#cache.fetch([
+						this.endpoint + newUrl,
+						{
+							...this.fetchOptions,
+							body,
+							...options,
+							headers,
+						},
+				  ])
+				: fetch(this.endpoint + newUrl, {
+						...this.fetchOptions,
+						body,
+						...options,
+						headers,
+				  })
+
+		return fetched.then(async (r) => {
+			const res = r.clone()
+			if (!res.ok) {
 				return Promise.reject(
 					new Error(
 						`Request failed, status code: ${
 							r.status
-						}\nResponse:\n${await r.text()}`,
+						}\nResponse:\n${await res.text()}`,
 					),
 				)
 			}
-			return r.json()
+			return res.json()
 		})
 	}
 }

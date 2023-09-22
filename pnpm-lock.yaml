@@ -11,6 +11,9 @@ importers:
       '@crossbell/ipfs-fetch':
         specifier: ^0.0.19
         version: 0.0.19
+      async-cache-dedupe:
+        specifier: ^1.12.0
+        version: 1.12.0
       async-retry:
         specifier: ^1.3.3
         version: 1.3.3
@@ -1232,6 +1235,13 @@ packages:
     resolution: {integrity: sha512-jgsaNduz+ndvGyFt3uSuWqvy4lCnIJiovtouQN5JZHOKCS2QuhEdbcQHFhVksz2N2U9hXJo8odG7ETyWlEeuDw==}
     dev: true
 
+  /async-cache-dedupe@1.12.0:
+    resolution: {integrity: sha512-LKumaBNhzvZrbrRi3DtIf0ETgjqcGOa/M2U+0DpTp8f+RzIiWubiQmBjuYUaihxetR3cWWC6hQj/uDVBuYajRA==}
+    dependencies:
+      mnemonist: 0.39.5
+      safe-stable-stringify: 2.4.3
+    dev: false
+
   /async-retry@1.3.3:
     resolution: {integrity: sha512-wfr/jstw9xNi/0teMHrRW7dsz3Lt5ARhYNZ2ewpadnhaIp5mbALhOAP+EAdsC7t4Z6wqsDVv9+W6gm1Dk9mEyw==}
     dependencies:
@@ -1982,6 +1992,12 @@ packages:
       ufo: 1.1.2
     dev: true
 
+  /mnemonist@0.39.5:
+    resolution: {integrity: sha512-FPUtkhtJ0efmEFGpU14x7jGbTB+s18LrzRL2KgoWz9YvcY3cPomz8tih01GbHwnGk/OmkOKfqd/RAQoc8Lm7DQ==}
+    dependencies:
+      obliterator: 2.0.4
+    dev: false
+
   /mri@1.2.0:
     resolution: {integrity: sha512-tzzskb3bG8LvYGFF/mDTpq3jpI6Q9wc3LEmBaghu+DdCssd1FakN7Bc0hVNmEyGq1bq3RgfkCb3cmQLpNPOroA==}
     engines: {node: '>=4'}
@@ -2040,6 +2056,10 @@ packages:
     resolution: {integrity: sha512-rJgTQnkUnH1sFw8yT6VSU3zD3sWmu6sZhIseY8VX+GRu3P6F7Fu+JNDoXfklElbLJSnc3FUQHVe4cU5hj+BcUg==}
     engines: {node: '>=0.10.0'}
     dev: true
+
+  /obliterator@2.0.4:
+    resolution: {integrity: sha512-lgHwxlxV1qIg1Eap7LgIeoBWIMFibOjbrYPIPJZcI1mmGAI2m3lNYpK12Y+GBdPQ0U1hRwSord7GIaawz962qQ==}
+    dev: false
 
   /ofetch@1.0.1:
     resolution: {integrity: sha512-icBz2JYfEpt+wZz1FRoGcrMigjNKjzvufE26m9+yUiacRQRHwnNlGRPiDnW4op7WX/MR6aniwS8xw8jyVelF2g==}
@@ -2266,6 +2286,11 @@ packages:
     dependencies:
       queue-microtask: 1.2.3
     dev: true
+
+  /safe-stable-stringify@2.4.3:
+    resolution: {integrity: sha512-e2bDA2WJT0wxseVd4lsDP4+3ONX6HpMXQa1ZhFQ7SU+GjvORCmShbCMltrtIDfkYhVHrOcPtj+KhmDBdPdZD1g==}
+    engines: {node: '>=10'}
+    dev: false
 
   /semver@7.5.1:
     resolution: {integrity: sha512-Wvss5ivl8TMRZXXESstBA4uR5iXgEN/VC5/sOcuXdVLzcdkz4HWetIoRfG5gb5X+ij/G9rw9YoGn3QoQ8OCSpw==}
