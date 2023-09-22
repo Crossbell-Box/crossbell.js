@@ -34,8 +34,8 @@ importers:
         specifier: ^1.2.2
         version: 1.2.2
       '@types/async-retry':
-        specifier: ^1.4.5
-        version: 1.4.5
+        specifier: ^1.4.6
+        version: 1.4.6
       '@types/node':
         specifier: ^20.6.3
         version: 20.6.3
@@ -754,8 +754,8 @@ packages:
     resolution: {integrity: sha512-+Fj43pSMwJs4KRrH/938Uf+uAELIgVBmQzg/q1YG10djyfA3TnrU8N8XzqCh/okZdszqBQTZf96idMfE5lnwTA==}
     dev: true
 
-  /@types/async-retry@1.4.5:
-    resolution: {integrity: sha512-YrdjSD+yQv7h6d5Ip+PMxh3H6ZxKyQk0Ts+PvaNRInxneG9PFVZjFg77ILAN+N6qYf7g4giSJ1l+ZjQ1zeegvA==}
+  /@types/async-retry@1.4.6:
+    resolution: {integrity: sha512-or8JPgYUtyPpO0ddHImwUWmSjVE/UalxgMm2d0r3698QhjzlM7eke0PT60bOxs1NG7HxU232RQ1vy1iQKGGRTw==}
     dependencies:
       '@types/retry': 0.12.2
     dev: true

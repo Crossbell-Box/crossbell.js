@@ -73,7 +73,7 @@ export class BaseIndexer {
 			},
 		},
 		(args: [input: RequestInfo | URL, init?: RequestInit | undefined]) => {
-			return fetch.call(this, ...args)
+			return fetch.call(globalThis, ...args)
 		},
 	)
 
