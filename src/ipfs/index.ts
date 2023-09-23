@@ -38,8 +38,6 @@ export function ipfsUploadJson(json: any): Promise<IpfsResponse> {
 	)
 }
 
-ipfsUploadJson({})
-
 export function ipfsUploadFile(file: File | Blob): Promise<IpfsResponse> {
 	return retry(
 		async () => {
