@@ -12,8 +12,8 @@ importers:
         specifier: ^0.0.19
         version: 0.0.19
       async-cache-dedupe:
-        specifier: ^1.12.0
-        version: 1.12.0
+        specifier: ^2.0.0
+        version: 2.0.0
       async-retry:
         specifier: ^1.3.3
         version: 1.3.3
@@ -1235,8 +1235,8 @@ packages:
     resolution: {integrity: sha512-jgsaNduz+ndvGyFt3uSuWqvy4lCnIJiovtouQN5JZHOKCS2QuhEdbcQHFhVksz2N2U9hXJo8odG7ETyWlEeuDw==}
     dev: true
 
-  /async-cache-dedupe@1.12.0:
-    resolution: {integrity: sha512-LKumaBNhzvZrbrRi3DtIf0ETgjqcGOa/M2U+0DpTp8f+RzIiWubiQmBjuYUaihxetR3cWWC6hQj/uDVBuYajRA==}
+  /async-cache-dedupe@2.0.0:
+    resolution: {integrity: sha512-SrW6PbmCHRQBSpPG8mkPIZZC5AgC08sbzl56GyGemBLVdVUl8mQW4+WCYHp5XZfixIdkL40jKf3UlT/P6Q3p5w==}
     dependencies:
       mnemonist: 0.39.5
       safe-stable-stringify: 2.4.3
