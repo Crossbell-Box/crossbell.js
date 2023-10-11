@@ -73,6 +73,7 @@ export class BaseIndexer {
 			},
 		},
 		(args: [input: RequestInfo | URL, init?: RequestInit | undefined]) => {
+			// @ts-ignore built-in type conflicts
 			return fetch.call(globalThis, ...args)
 		},
 	)
