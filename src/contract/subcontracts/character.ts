@@ -325,6 +325,53 @@ export class CharacterContract {
 	}
 
 	/**
+	 * This transfers a character to another address.
+	 * @category Character
+	 * @returns The transaction hash.
+	 */
+	@autoSwitchMainnet()
+	async transfer(
+		{
+			fromAddress,
+			toAddress,
+			characterId,
+		}: {
+			/**
+			 * The address of the user that will send the character. Must be the owner of the character.
+			 *
+			 * Default is The address of the current wallet.
+			 **/
+			fromAddress?: Address
+			/** The address of the user that will receive the character. */
+			toAddress: Address
+			/** The character ID of the character you want to transfer. */
+			characterId: Numberish
+		},
+		overrides: WriteOverrides<Entry, 'safeTransferFrom'> = {},
+	): Promise<Result<undefined, true>> {
+		validateAddress(toAddress)
+
+		const owner = fromAddress ?? this.base.walletClient.account.address
+
+		validateAddress(owner)
+
+		const hash = await this.base.contract.write.safeTransferFrom(
+			[owner, toAddress, BigInt(characterId)],
+			overrides,
+		)
+
+		const receipt = await waitForTransactionReceiptWithRetry(
+			this.base.publicClient,
+			hash,
+		)
+
+		return {
+			data: undefined,
+			transactionHash: receipt.transactionHash,
+		}
+	}
+
+	/**
 	 * This returns the primary character ID of the given address.
 	 * @category Character
 	 * @returns The characterId of the primary character of the address.
