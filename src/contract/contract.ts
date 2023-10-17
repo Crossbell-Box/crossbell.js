@@ -41,9 +41,7 @@ import { TipsWithFeeContract } from './subcontracts/tips_with_fee'
  * }
  * ```
  */
-export class Contract<
-	THasWallet extends boolean = boolean,
-> extends BaseContract<THasWallet> {
+export class Contract extends BaseContract {
 	csb = new CsbContract(this)
 	character = new CharacterContract(this)
 	link = new LinkContract(this)
@@ -82,14 +80,6 @@ export class Contract<
  * const contract = createContract() // readonly contract
  * ```
  */
-export function createContract(
-	providerOrPrivateKey: Hex | EIP1193Provider,
-	options?: Partial<ContractOptions>,
-): Contract<true>
-export function createContract(
-	providerOrPrivateKey?: Hex | EIP1193Provider,
-	options?: Partial<ContractOptions>,
-): Contract<boolean>
 export function createContract(
 	providerOrPrivateKey?: Hex | EIP1193Provider,
 	options?: Partial<ContractOptions>,

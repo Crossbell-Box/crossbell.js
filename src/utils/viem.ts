@@ -3,7 +3,6 @@ import {
 	type AbiType,
 	type AbiTypeToPrimitiveType,
 	type ExtractAbiEvent,
-	type ExtractAbiEventNames,
 } from 'abitype'
 import { type EIP1193Provider } from 'eip1193-types'
 import { backOff } from 'exponential-backoff'
@@ -12,6 +11,7 @@ import {
 	type Account,
 	type Address,
 	type Chain,
+	type ContractEventName,
 	type DecodeEventLogReturnType,
 	type Log,
 	type PrivateKeyAccount,
@@ -33,8 +33,8 @@ export function createDefaultTransport(addr = getJsonRpcAddress()): Transport {
 	if (addr.startsWith('ws://') || addr.startsWith('wss://')) {
 		return webSocket(addr, {
 			timeout: 30_000,
-			key: crossbell.network,
-			name: crossbell.network,
+			key: crossbell.name,
+			name: crossbell.name,
 			retryCount: 5,
 			retryDelay: 5000,
 		})
@@ -95,22 +95,19 @@ export function createWalletClientFromProvider(
 
 type EventInputs<
 	TAbi extends _Abi,
-	TName extends ExtractAbiEventNames<TAbi>,
+	TName extends ContractEventName<TAbi>,
 > = ExtractAbiEvent<TAbi, TName>['inputs']
 
 type GetAbiType<
 	TAbi extends _Abi,
-	TName extends ExtractAbiEventNames<TAbi>,
+	TName extends ContractEventName<TAbi>,
 	Key,
 > = Extract<
 	NonNullable<EventInputs<TAbi, TName>[number]>,
 	{ name: Key }
 >['type']
 
-type GetEventArgs<
-	TAbi extends _Abi,
-	TName extends ExtractAbiEventNames<TAbi>,
-> = {
+type GetEventArgs<TAbi extends _Abi, TName extends ContractEventName<TAbi>> = {
 	[K in
 		NonNullable<
 			EventInputs<TAbi, TName>[number]['name']
@@ -123,30 +120,39 @@ type GetEventArgs<
 
 export type FixedEventReturn<
 	TAbi extends _Abi,
-	TName extends ExtractAbiEventNames<TAbi>,
+	TName extends ContractEventName<TAbi>,
 > = Omit<DecodeEventLogReturnType<TAbi, TName>, 'args'> & {
 	args: GetEventArgs<TAbi, TName>
 }
 
-export function parseLog<TName extends ExtractAbiEventNames<Abi.Entry>>(
+export function parseLog<
+	TAbi extends _Abi = Abi.Entry,
+	TName extends ContractEventName<TAbi> = ContractEventName<TAbi>,
+>(
 	logs: Log[],
 	filterTopic: TName,
 	options: {
 		throwOnMultipleLogsFound?: boolean
 		returnMultipleLogs: true
-		abi?: Abi.Entry
+		abi?: TAbi
 	},
-): FixedEventReturn<Abi.Entry, TName>[]
-export function parseLog<TName extends ExtractAbiEventNames<Abi.Entry>>(
+): FixedEventReturn<TAbi, TName>[]
+export function parseLog<
+	TAbi extends _Abi = Abi.Entry,
+	TName extends ContractEventName<TAbi> = ContractEventName<TAbi>,
+>(
 	logs: Log[],
 	filterTopic: TName,
 	options?: {
 		throwOnMultipleLogsFound?: boolean
 		returnMultipleLogs?: boolean
-		abi?: Abi.Entry
+		abi?: TAbi
 	},
-): FixedEventReturn<Abi.Entry, TName>
-export function parseLog<TName extends ExtractAbiEventNames<Abi.Entry>>(
+): FixedEventReturn<TAbi, TName>
+export function parseLog<
+	TAbi extends _Abi = Abi.Entry,
+	TName extends ContractEventName<TAbi> = ContractEventName<TAbi>,
+>(
 	logs: Log[],
 	targetTopic: TName,
 	{
@@ -161,10 +167,7 @@ export function parseLog<TName extends ExtractAbiEventNames<Abi.Entry>>(
 		.map((log) =>
 			decodeEventLog({ abi: [...Abi.entry, ...Abi.linklist], ...log }),
 		)
-		.filter(
-			(log): log is DecodeEventLogReturnType<Abi.Entry, TName> =>
-				log.eventName === targetTopic,
-		)
+		.filter((log) => log.eventName === targetTopic)
 
 	if (parsedLogs.length === 0) {
 		throw new Error(`Log with topic ${targetTopic} not found`)

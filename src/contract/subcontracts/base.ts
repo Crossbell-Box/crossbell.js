@@ -53,9 +53,9 @@ export type ResolvedContractOptions = Overwrite<
 	{ address: AddressOptions }
 >
 
-export class BaseContract<THasWallet extends boolean = boolean> {
+export class BaseContract {
 	publicClient: PublicClient = createDefaultPublicClient()
-	#walletClient: WalletClient<Transport, Chain, Account> | undefined
+	walletClient!: WalletClient<Transport, Chain, Account>
 	#account: Account | undefined
 
 	get account(): Account {
@@ -63,55 +63,66 @@ export class BaseContract<THasWallet extends boolean = boolean> {
 	}
 	set account(value: Address | Account) {
 		this.#account = typeof value === 'string' ? addressToAccount(value) : value
-		if (this.#walletClient) this.#walletClient.account = this.#account
-	}
-	get walletClient():
-		| WalletClient<Transport, Chain, Account>
-		| (THasWallet extends true ? never : undefined) {
-		return this.#walletClient as any
+		if (this.walletClient) this.walletClient.account = this.#account
 	}
 
 	options: ResolvedContractOptions
 
 	contract!: GetContractReturnType<
 		Abi.Entry,
-		PublicClient,
-		WalletClient<Transport, Chain, Account>
+		{
+			publicClient: typeof BaseContract.prototype.publicClient
+			walletClient: typeof BaseContract.prototype.walletClient
+		}
 	>
 	linklistContract!: GetContractReturnType<
 		Abi.Linklist,
-		PublicClient,
-		WalletClient<Transport, Chain, Account>
+		{
+			publicClient: typeof BaseContract.prototype.publicClient
+			walletClient: typeof BaseContract.prototype.walletClient
+		}
 	>
 	newbieVillaContract!: GetContractReturnType<
 		Abi.NewbieVilla,
-		PublicClient,
-		WalletClient<Transport, Chain, Account>
+		{
+			publicClient: typeof BaseContract.prototype.publicClient
+			walletClient: typeof BaseContract.prototype.walletClient
+		}
 	>
 	peripheryContract!: GetContractReturnType<
 		Abi.Periphery,
-		PublicClient,
-		WalletClient<Transport, Chain, Account>
+		{
+			publicClient: typeof BaseContract.prototype.publicClient
+			walletClient: typeof BaseContract.prototype.walletClient
+		}
 	>
 	cbtContract!: GetContractReturnType<
 		Abi.Cbt,
-		PublicClient,
-		WalletClient<Transport, Chain, Account>
+		{
+			publicClient: typeof BaseContract.prototype.publicClient
+			walletClient: typeof BaseContract.prototype.walletClient
+		}
 	>
 	miraContract!: GetContractReturnType<
 		Abi.Mira,
-		PublicClient,
-		WalletClient<Transport, Chain, Account>
+		{
+			publicClient: typeof BaseContract.prototype.publicClient
+			walletClient: typeof BaseContract.prototype.walletClient
+		}
 	>
 	tipsContract!: GetContractReturnType<
 		Abi.Tips,
-		PublicClient,
-		WalletClient<Transport, Chain, Account>
+		{
+			publicClient: typeof BaseContract.prototype.publicClient
+			walletClient: typeof BaseContract.prototype.walletClient
+		}
 	>
 	tipsWithFeeContract!: GetContractReturnType<
 		Abi.TipsWithFee,
-		PublicClient,
-		WalletClient<Transport, Chain, Account>
+		{
+			publicClient: typeof BaseContract.prototype.publicClient
+			walletClient: typeof BaseContract.prototype.walletClient
+		}
 	>
 
 	/**
@@ -140,17 +151,17 @@ export class BaseContract<THasWallet extends boolean = boolean> {
 	 * ```
 	 */
 	constructor(
-		providerOrPrivateKey:
-			| Hex
-			| EIP1193Provider
-			| (THasWallet extends true ? never : undefined),
+		providerOrPrivateKey: Hex | EIP1193Provider | undefined,
 		options?: Partial<ContractOptions>,
 	) {
 		if (typeof providerOrPrivateKey === 'string') {
 			const account = privateKeyToAccount(providerOrPrivateKey)
 			this.#account = account
-			this.#walletClient = createWalletClientFromPrivateKeyAccount(account)
-		} else if (providerOrPrivateKey) {
+			this.walletClient = createWalletClientFromPrivateKeyAccount(account)
+		} else if (
+			providerOrPrivateKey &&
+			typeof providerOrPrivateKey === 'object'
+		) {
 			const provider = providerOrPrivateKey
 			this.#account = options?.account
 				? addressToAccount(options.account)
@@ -160,10 +171,7 @@ export class BaseContract<THasWallet extends boolean = boolean> {
 					this.account = accounts[0]
 				})
 			}
-			this.#walletClient = createWalletClientFromProvider(
-				provider,
-				this.account,
-			)
+			this.walletClient = createWalletClientFromProvider(provider, this.account)
 		}
 		this.options = this.#resolveOptions(options)
 		this.#initContract()
@@ -192,64 +200,80 @@ export class BaseContract<THasWallet extends boolean = boolean> {
 			getContract({
 				address: this.options.address.entryContract,
 				abi: Abi.entry,
-				publicClient: this.publicClient,
-				walletClient: this.#walletClient,
+				client: {
+					publicClient: this.publicClient,
+					walletClient: this.walletClient,
+				},
 			}),
 		)
 		this.linklistContract = this.#proxyContract(
 			getContract({
 				address: this.options.address.linklistContract,
 				abi: Abi.linklist,
-				publicClient: this.publicClient,
-				walletClient: this.#walletClient,
+				client: {
+					publicClient: this.publicClient,
+					walletClient: this.walletClient,
+				},
 			}),
 		)
 		this.newbieVillaContract = this.#proxyContract(
 			getContract({
 				address: this.options.address.newbieVillaContract,
 				abi: Abi.newbieVilla,
-				publicClient: this.publicClient,
-				walletClient: this.#walletClient,
+				client: {
+					publicClient: this.publicClient,
+					walletClient: this.walletClient,
+				},
 			}),
 		)
 		this.peripheryContract = this.#proxyContract(
 			getContract({
 				address: this.options.address.peripheryContract,
 				abi: Abi.periphery,
-				publicClient: this.publicClient,
-				walletClient: this.#walletClient,
+				client: {
+					publicClient: this.publicClient,
+					walletClient: this.walletClient,
+				},
 			}),
 		)
 		this.cbtContract = this.#proxyContract(
 			getContract({
 				address: this.options.address.cbtContract,
 				abi: Abi.cbt,
-				publicClient: this.publicClient,
-				walletClient: this.#walletClient,
+				client: {
+					publicClient: this.publicClient,
+					walletClient: this.walletClient,
+				},
 			}),
 		)
 		this.miraContract = this.#proxyContract(
 			getContract({
 				address: this.options.address.miraContract,
 				abi: Abi.mira,
-				publicClient: this.publicClient,
-				walletClient: this.#walletClient,
+				client: {
+					publicClient: this.publicClient,
+					walletClient: this.walletClient,
+				},
 			}),
 		)
 		this.tipsContract = this.#proxyContract(
 			getContract({
 				address: this.options.address.tipsContract,
 				abi: Abi.tips,
-				publicClient: this.publicClient,
-				walletClient: this.#walletClient,
+				client: {
+					publicClient: this.publicClient,
+					walletClient: this.walletClient,
+				},
 			}),
 		)
 		this.tipsWithFeeContract = this.#proxyContract(
 			getContract({
 				address: this.options.address.tipsWithFeeContract,
 				abi: Abi.tipsWithFee,
-				publicClient: this.publicClient,
-				walletClient: this.#walletClient,
+				client: {
+					publicClient: this.publicClient,
+					walletClient: this.walletClient,
+				},
 			}),
 		)
 	}

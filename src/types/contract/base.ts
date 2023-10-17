@@ -1,8 +1,10 @@
-import { type Abi, type ExtractAbiFunctionNames } from 'abitype'
+import { type Abi } from 'abitype'
 import {
 	type Account,
 	type Address,
 	type Chain,
+	type ContractFunctionArgs,
+	type ContractFunctionName,
 	type ReadContractParameters,
 	type WriteContractParameters,
 } from 'viem'
@@ -30,15 +32,26 @@ type UnionOmit<T, K extends keyof any> = T extends any ? Omit<T, K> : never
 
 export type ReadOverrides<
 	TAbi extends Abi,
-	TFunctionName extends ExtractAbiFunctionNames<TAbi, 'pure' | 'view'>,
+	TFunctionName extends ContractFunctionName<TAbi, 'pure' | 'view'>,
 > = UnionOmit<
-	ReadContractParameters<TAbi, TFunctionName>,
+	ReadContractParameters<
+		TAbi,
+		TFunctionName,
+		ContractFunctionArgs<TAbi, 'nonpayable' | 'payable', TFunctionName>
+	>,
 	'abi' | 'address' | 'args' | 'functionName'
 >
+
 export type WriteOverrides<
 	TAbi extends Abi,
-	TFunctionName extends ExtractAbiFunctionNames<TAbi, 'nonpayable' | 'payable'>,
+	TFunctionName extends ContractFunctionName<TAbi, 'nonpayable' | 'payable'>,
 > = UnionOmit<
-	WriteContractParameters<TAbi, TFunctionName, Chain, Account>,
+	WriteContractParameters<
+		TAbi,
+		TFunctionName,
+		ContractFunctionArgs<TAbi, 'nonpayable' | 'payable', TFunctionName>,
+		Chain,
+		Account
+	>,
 	'abi' | 'address' | 'args' | 'functionName'
 >
