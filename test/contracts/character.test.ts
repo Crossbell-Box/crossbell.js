@@ -23,9 +23,7 @@ describe('character', () => {
 					handle: 'cannot contain whitespace',
 					metadataOrUri: metadataUri,
 				}),
-			).rejects.toThrow(
-				/Handle must only containHandle must only contain \[a-z0-9-_\]./,
-			)
+			).rejects.toThrow(/Handle must only contain \[a-z0-9-_\]./)
 
 			expect(
 				contract.character.create({
