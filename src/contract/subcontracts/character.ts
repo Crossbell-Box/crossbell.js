@@ -11,6 +11,7 @@ import {
 } from '../../types'
 import { validateAddress } from '../../utils/address'
 import { getModuleConfig } from '../../utils/module'
+import { validateHandleFormat } from '../../utils/validate-handle'
 import { parseLog, waitForTransactionReceiptWithRetry } from '../../utils/viem'
 import { type Entry, type NewbieVilla } from '../abi'
 import { autoSwitchMainnet } from '../decorators'
@@ -44,7 +45,12 @@ export class CharacterContract {
 		overrides: WriteOverrides<Entry, 'createCharacter'> = {},
 	): Promise<Result<bigint, true>> {
 		validateAddress(owner)
-		this.#validateHandleFormat(handle)
+		const { valid, message } = validateHandleFormat(handle, {
+			disallowAddress: true,
+		})
+		if (!valid) {
+			throw new TypeError(message)
+		}
 
 		const { uri } = await ipfsParseMetadataOrUri('character', metadataOrUri)
 
@@ -94,7 +100,12 @@ export class CharacterContract {
 		},
 		overrides: WriteOverrides<Entry, 'setHandle'> = {},
 	): Promise<Result<undefined, true>> {
-		this.#validateHandleFormat(handle)
+		const { valid, message } = validateHandleFormat(handle, {
+			disallowAddress: true,
+		})
+		if (!valid) {
+			throw new TypeError(message)
+		}
 
 		const hash = await this.base.contract.write.setHandle(
 			[BigInt(characterId), handle],
@@ -671,21 +682,5 @@ export class CharacterContract {
 			[BigInt(characterId)],
 			overrides,
 		)
-	}
-
-	/**
-	 * This validates if a handle is in a correct format.
-	 * @param handle - The handle of the character you want to get the social token for.
-	 */
-	#validateHandleFormat(handle: string): void {
-		if (handle.length >= 32 || handle.length <= 2) {
-			throw new Error(
-				'Invalid handle: handle must be between 3 and 31 characters.',
-			)
-		}
-
-		if (!/^[\d_a-z-]+$/.test(handle)) {
-			throw new Error('Invalid handle: handle must only contain [a-z0-9-_].')
-		}
 	}
 }
