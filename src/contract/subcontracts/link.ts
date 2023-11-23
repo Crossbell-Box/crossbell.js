@@ -95,9 +95,7 @@ export class LinkContract {
 		},
 		overrides: WriteOverrides<Periphery, 'linkCharactersInBatch'> = {},
 	): Promise<Result<bigint, true>> {
-		toAddresses.forEach((address) => {
-			validateAddress(address)
-		})
+		validateAddress(toAddresses)
 
 		const hash = await this.base.peripheryContract.write.linkCharactersInBatch(
 			[

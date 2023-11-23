@@ -272,9 +272,9 @@ export class OperatorContract {
 
 		const uint256Array = Array.from<number>({ length: 256 }).fill(0)
 
-		bits.forEach((bit) => {
+		for (const bit of bits) {
 			uint256Array[bit] = 1
-		})
+		}
 
 		uint256Array.reverse()
 
