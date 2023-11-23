@@ -1,6 +1,9 @@
 import { type Indexer } from '../indexer'
 
 /**
+ *
+ * @deprecated Use {@link validateHandleFormat} and {@link indexer.character.checkIfHandleExists} instead.
+ *
  * The ValidateHandleError type represents the type of validation errors that can occur.
  *
  * - 'existed': The handle is already in use.
@@ -11,6 +14,8 @@ export type ValidateHandleError = 'existed' | 'lengthInvalid' | 'charsInvalid'
 
 /**
  * Validate a handle.
+ *
+ * @deprecated Use {@link validateHandleFormat} and {@link indexer.character.checkIfHandleExists} instead.
  *
  * @param handle - The handle to be validated.
  * @param indexer - Indexer for checking the existence of the handle.
