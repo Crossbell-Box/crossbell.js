@@ -23,7 +23,9 @@ describe('character', () => {
 					handle: 'cannot contain whitespace',
 					metadataOrUri: metadataUri,
 				}),
-			).rejects.toThrow(/Invalid handle/)
+			).rejects.toThrow(
+				/Handle must only containHandle must only contain \[a-z0-9-_\]./,
+			)
 
 			expect(
 				contract.character.create({
@@ -32,7 +34,7 @@ describe('character', () => {
 						'cannot-contain-be-more-than-32-characters-longlonglonglonglonglonglonglonglong',
 					metadataOrUri: metadataUri,
 				}),
-			).rejects.toThrow(/Invalid handle/)
+			).rejects.toThrow(/Handle must be between 3 and 31 characters/)
 		})
 
 		test('check if a character exists', async () => {
