@@ -70,4 +70,16 @@ export class CharacterIndexer {
 		const url = `/handles/${handle}/character`
 		return this.base.fetch<CharacterEntity | null>(url)
 	}
+
+	/**
+	 * This checks if a handle exists.
+	 *
+	 * @category Character
+	 * @param handle - The handle to be checked.
+	 * @returns Whether the handle exists.
+	 */
+	async checkIfHandleExists(handle: string): Promise<boolean> {
+		const res = await this.getByHandle(handle)
+		return res !== null
+	}
 }
