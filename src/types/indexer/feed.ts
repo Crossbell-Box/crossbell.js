@@ -12,7 +12,7 @@ import {
 } from './mint_module'
 import { type MintedNoteEntity } from './minted_note'
 import { type NoteEntity } from './note'
-import { type TipEntity } from './tip'
+import { type TipConfigEntity, type TipEntity } from './tip'
 
 export enum FeedType {
 	CREATE_CHARACTER = 'CREATE_CHARACTER',
@@ -64,6 +64,7 @@ export interface FeedEntity {
 	mintModuleTargetItemType?: MintModuleTargetItemType
 	mintModule?: MintModuleEntity
 	tip?: TipEntity
+	tipConfig?: TipConfigEntity
 	owner: Address
 	createdAt: Date
 	updatedAt: Date
