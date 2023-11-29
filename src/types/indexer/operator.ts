@@ -51,18 +51,3 @@ export interface CharacterOperatorEntity {
 	updatedBlockNumber: number
 	updatedLogIndex: number
 }
-
-export interface NoteOperatorEntity {
-	characterId: number
-	noteId: number
-	allowlist: Address[]
-	blocklist: Address[]
-	createdAt: Date
-	updatedAt: Date
-	transactionHash: Hash
-	blockNumber: number
-	logIndex: number
-	updatedTransactionHash: Hash
-	updatedBlockNumber: number
-	updatedLogIndex: number
-}
