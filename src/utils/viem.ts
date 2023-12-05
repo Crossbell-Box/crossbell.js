@@ -38,9 +38,9 @@ export function createDefaultTransport(addr = getJsonRpcAddress()): Transport {
 			retryCount: 5,
 			retryDelay: 5000,
 		})
-	} else {
-		return http(addr)
 	}
+
+	return http(addr)
 }
 
 export function createDefaultPublicClient(): PublicClient {
@@ -108,10 +108,9 @@ type GetAbiType<
 >['type']
 
 type GetEventArgs<TAbi extends _Abi, TName extends ContractEventName<TAbi>> = {
-	[K in
-		NonNullable<
-			EventInputs<TAbi, TName>[number]['name']
-		>]: AbiTypeToPrimitiveType<
+	[K in NonNullable<
+		EventInputs<TAbi, TName>[number]['name']
+	>]: AbiTypeToPrimitiveType<
 		GetAbiType<TAbi, TName, K> extends AbiType
 			? GetAbiType<TAbi, TName, K>
 			: never

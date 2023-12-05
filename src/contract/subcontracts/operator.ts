@@ -301,9 +301,8 @@ export class OperatorContract {
 				if (bit === 1) {
 					if (this.#isPermissionBitForCharacter(index)) {
 						return CHARACTER_PERMISSION_BITMAP[index]
-					} else {
-						warn('Found invalid permission bit.', index)
 					}
+					warn('Found invalid permission bit.', index)
 				}
 				return undefined
 			})
@@ -328,9 +327,8 @@ export class OperatorContract {
 			.reduce((acc, bit, index) => {
 				if (bit === '1') {
 					return acc + 2n ** BigInt(index)
-				} else {
-					return acc
 				}
+				return acc
 			}, 0n)
 
 		return n

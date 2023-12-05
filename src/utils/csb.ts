@@ -12,7 +12,7 @@ export function parseCsbUri(uri: string) {
 	const url = new URL(newUri)
 
 	const scheme = CSB_PROTOCOL
-	const scope = url.username as typeof SUPPORTED_SCOPES[number]
+	const scope = url.username as (typeof SUPPORTED_SCOPES)[number]
 	const identity = url.password
 	const host = url.host
 

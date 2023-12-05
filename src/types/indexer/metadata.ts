@@ -9,7 +9,7 @@ export interface MetadataEntity<T extends MetadataType> {
 		| (T extends 'CHARACTER'
 				? CharacterMetadata
 				: T extends 'NOTE'
-				? NoteMetadata
-				: object)
+				  ? NoteMetadata
+				  : object)
 		| null
 }
