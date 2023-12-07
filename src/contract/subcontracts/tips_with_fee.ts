@@ -44,7 +44,7 @@ export class TipsWithFeeContract {
 		)
 
 		const hash = await this.base.miraContract.write.send(
-			[this.base.options.address.tipsWithFeeContract, BigInt(amount), data],
+			[this.base.options.contractAddresses.tipsWithFee, BigInt(amount), data],
 			overrides,
 		)
 
@@ -102,7 +102,7 @@ export class TipsWithFeeContract {
 		)
 
 		const hash = await this.base.miraContract.write.send(
-			[this.base.options.address.tipsWithFeeContract, BigInt(amount), data],
+			[this.base.options.contractAddresses.tipsWithFee, BigInt(amount), data],
 			overrides,
 		)
 

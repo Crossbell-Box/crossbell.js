@@ -1,7 +1,8 @@
 import { type Address, type WalletClient } from 'viem'
 import { crossbell } from 'viem/chains'
+import { crossbellTestnet } from './chains'
 
-export { crossbell }
+export { crossbell, crossbellTestnet }
 
 export const CONTRACT_ADDRESS = {
 	ENTRY: '0xa6f969045641Cf486a747A2688F3a5A6d43cd0D8',
@@ -14,11 +15,27 @@ export const CONTRACT_ADDRESS = {
 	LINKLIST: '0xFc8C75bD5c26F50798758f387B698f207a016b6A',
 } as const satisfies Record<string, Address>
 
-let JSON_RPC_ADDRESS = 'https://rpc.crossbell.io'
+let JSON_RPC_ADDRESS: string | undefined
 
+/**
+ * @deprecated
+ *
+ * **This still works, but it'll be removed in the next major version.**
+ *
+ * Instead, please set the `options.chain` or `options.rpcUrl` in `createContract()`
+ * to change the JSON RPC address.
+ */
 export function getJsonRpcAddress() {
 	return JSON_RPC_ADDRESS
 }
+/**
+ * @deprecated
+ *
+ * **This still works, but it'll be removed in the next major version.**
+ *
+ * Instead, please set the `options.chain` or `options.rpcUrl` in `createContract()`
+ * to change the JSON RPC address.
+ */
 export function setJsonRpcAddress(address: string) {
 	JSON_RPC_ADDRESS = address
 }
@@ -30,4 +47,23 @@ export function setJsonRpcAddress(address: string) {
  */
 export async function isCrossbellMainnet(client: WalletClient) {
 	return (await client.getChainId()) === crossbell.id
+}
+
+/**
+ * This checks if the current network is the Crossbell testnet.
+ * @param client - The wallet client to check if it's the Crossbell testnet.
+ * @returns A boolean value indicating if the current network is the Crossbell testnet.
+ */
+export async function isCrossbellTestnet(client: WalletClient) {
+	return (await client.getChainId()) === crossbellTestnet.id
+}
+
+/**
+ * This checks if the current network is the Crossbell mainnet or testnet.
+ * @param client - The wallet client to check if it's the Crossbell mainnet or testnet.
+ * @returns A boolean value indicating if the current network is the Crossbell mainnet or testnet.
+ */
+export async function isCrossbellChain(client: WalletClient) {
+	const chainId = await client.getChainId()
+	return chainId === crossbell.id || chainId === crossbellTestnet.id
 }

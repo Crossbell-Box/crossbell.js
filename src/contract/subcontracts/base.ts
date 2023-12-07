@@ -11,50 +11,100 @@ import {
 	getContract,
 } from 'viem'
 import { privateKeyToAccount } from 'viem/accounts'
-import { CONTRACT_ADDRESS } from '../../network'
+import { CONTRACT_ADDRESS, crossbell, crossbellTestnet } from '../../network'
 import { type Overwrite } from '../../types'
 import {
 	addressToAccount,
-	createDefaultPublicClient,
+	createPublicClientFromChain,
 	createWalletClientFromPrivateKeyAccount,
 	createWalletClientFromProvider,
 	getProviderAccount,
 } from '../../utils/viem'
 import * as Abi from '../abi'
 
-export interface AccountOptions {
-	account: Account | Address
-}
 export interface AddressOptions {
-	entryContract: Address
-	peripheryContract: Address
-	cbtContract: Address
-	newbieVillaContract: Address
-	tipsContract: Address
-	tipsWithFeeContract: Address
-	miraContract: Address
-	linklistContract: Address
+	entry: Address
+	periphery: Address
+	cbt: Address
+	newbieVilla: Address
+	tips: Address
+	tipsWithFee: Address
+	mira: Address
+	linklist: Address
 }
-export interface ContractOptions extends Partial<AccountOptions> {
-	address?: Partial<AddressOptions>
+
+export interface ContractOptions {
+	/**
+	 * The wallet account.
+	 *
+	 * By default:
+	 * - If the `providerOrPrivateKey` is a private key, the account is the private key account.
+	 * - If the `providerOrPrivateKey` is a provider, the account is the first account in the provider.
+	 *   **The change of this option will only affect in this case**.
+	 */
+	account?: Account | Address
+
+	/**
+	 * The contract addresses.
+	 *
+	 * Normally you don't need to set this option as all the contract
+	 * addresses are the same across all Crossbell chains (mainnet or testnet).
+	 *
+	 * @default
+	 *{
+	 *	entry: '0xa6f969045641Cf486a747A2688F3a5A6d43cd0D8',
+	 *	periphery: '0x96e96b7af62d628ce7eb2016d2c1d2786614ea73',
+	 *	newbieVilla: '0xD0c83f0BB2c61D55B3d33950b70C59ba2f131caA',
+	 *	cbt: '0x3D1b588a6Bcd728Bb61570ced6656eA4C05e404f',
+	 *	tips: '0x0058be0845952D887D1668B5545de995E12e8783',
+	 *	tipsWithFee: '0xf3158018f932981d0005701dDC22Ce51477E436d',
+	 *	mira: '0xAfB95CC0BD320648B3E8Df6223d9CDD05EbeDC64',
+	 *	linklist: '0xFc8C75bD5c26F50798758f387B698f207a016b6A',
+	 *}
+	 */
+	contractAddresses?: Partial<AddressOptions>
+
 	/**
 	 * Gas price for transaction costs.
 	 *
-	 * `estimate`: Estimate the gas price from the network.
+	 * Options:
+	 * - `'estimate'`: Estimate the gas price from the network.
+	 * - bigint: Use a fixed gas price.
 	 *
 	 * @default 10n ** 9n
 	 *
 	 */
 	gasPrice?: 'estimate' | bigint
+
+	/**
+	 * The chain to connect to.
+	 *
+	 * Options:
+	 * - `'mainnet'`: Connect to the Crossbell mainnet.
+	 * - `'testnet'`: Connect to the Crossbell testnet.
+	 * - Custom chain: Connect to a custom Crossbell chain.
+	 *
+	 * @default 'mainnet'
+	 */
+	chain?: 'mainnet' | 'testnet' | Chain
+
+	/**
+	 * The RPC URL to connect to.
+	 *
+	 * This will override the `rpcUrl` field in the `chain` option.
+	 *
+	 * @default chain.rpcUrls.default.http[0]
+	 */
+	rpcUrl?: string
 }
 
 export type ResolvedContractOptions = Overwrite<
 	Required<ContractOptions>,
-	{ address: AddressOptions }
+	{ contractAddresses: AddressOptions; chain: Chain }
 >
 
 export class BaseContract {
-	publicClient: PublicClient = createDefaultPublicClient()
+	publicClient!: PublicClient
 	walletClient!: WalletClient<Transport, Chain, Account>
 	#account: Account | undefined
 
@@ -154,51 +204,83 @@ export class BaseContract {
 		providerOrPrivateKey: Hex | EIP1193Provider | undefined,
 		options?: Partial<ContractOptions>,
 	) {
-		if (typeof providerOrPrivateKey === 'string') {
-			const account = privateKeyToAccount(providerOrPrivateKey)
-			this.#account = account
-			this.walletClient = createWalletClientFromPrivateKeyAccount(account)
-		} else if (
-			providerOrPrivateKey &&
-			typeof providerOrPrivateKey === 'object'
-		) {
-			const provider = providerOrPrivateKey
-			this.#account = options?.account
-				? addressToAccount(options.account)
-				: getProviderAccount(provider)
-			if (!options?.account) {
-				provider.on('accountsChanged', (accounts) => {
-					this.account = accounts[0]
-				})
-			}
-			this.walletClient = createWalletClientFromProvider(provider, this.account)
-		}
 		this.options = this.#resolveOptions(options)
+
+		this.#initPublicClient()
+		this.#initWalletClient(providerOrPrivateKey)
+
 		this.#initContract()
 	}
 
 	#resolveOptions(options?: ContractOptions): ResolvedContractOptions {
+		const chain =
+			options?.chain === 'mainnet'
+				? crossbell
+				: options?.chain === 'testnet'
+				  ? crossbellTestnet
+				  : options?.chain ?? crossbell
 		return {
 			account: this.account,
 			gasPrice: options?.gasPrice ?? 10n ** 9n,
-			address: {
-				entryContract: CONTRACT_ADDRESS.ENTRY,
-				peripheryContract: CONTRACT_ADDRESS.PERIPHERY,
-				cbtContract: CONTRACT_ADDRESS.CBT,
-				tipsContract: CONTRACT_ADDRESS.TIPS,
-				tipsWithFeeContract: CONTRACT_ADDRESS.TIPS_WITH_FEE,
-				miraContract: CONTRACT_ADDRESS.MIRA,
-				newbieVillaContract: CONTRACT_ADDRESS.NEWBIE_VILLA,
-				linklistContract: CONTRACT_ADDRESS.LINKLIST,
-				...options?.address,
+			contractAddresses: {
+				entry: CONTRACT_ADDRESS.ENTRY,
+				periphery: CONTRACT_ADDRESS.PERIPHERY,
+				cbt: CONTRACT_ADDRESS.CBT,
+				tips: CONTRACT_ADDRESS.TIPS,
+				tipsWithFee: CONTRACT_ADDRESS.TIPS_WITH_FEE,
+				mira: CONTRACT_ADDRESS.MIRA,
+				newbieVilla: CONTRACT_ADDRESS.NEWBIE_VILLA,
+				linklist: CONTRACT_ADDRESS.LINKLIST,
+				...options?.contractAddresses,
 			},
+			chain,
+			rpcUrl: options?.rpcUrl ?? chain.rpcUrls.default.http[0],
+		}
+	}
+
+	#initPublicClient() {
+		this.publicClient = createPublicClientFromChain(
+			this.options.chain,
+			this.options.rpcUrl,
+		)
+	}
+
+	#initWalletClient(providerOrPrivateKey: Hex | EIP1193Provider | undefined) {
+		if (typeof providerOrPrivateKey === 'string') {
+			// private key
+			const privateKeyAccount = privateKeyToAccount(providerOrPrivateKey)
+			this.#account = privateKeyAccount
+			this.walletClient = createWalletClientFromPrivateKeyAccount(
+				privateKeyAccount,
+				this.options.chain,
+				this.options.rpcUrl,
+			)
+		} else if (
+			providerOrPrivateKey &&
+			typeof providerOrPrivateKey === 'object'
+		) {
+			// provider
+			const provider = providerOrPrivateKey
+			this.#account = this.options.account
+				? addressToAccount(this.options.account)
+				: getProviderAccount(provider)
+			if (!this.options?.account) {
+				provider.on('accountsChanged', (accounts) => {
+					this.account = accounts[0]
+				})
+			}
+			this.walletClient = createWalletClientFromProvider(
+				provider,
+				this.account,
+				this.options.chain,
+			)
 		}
 	}
 
 	#initContract() {
 		this.contract = this.#proxyContract(
 			getContract({
-				address: this.options.address.entryContract,
+				address: this.options.contractAddresses.entry,
 				abi: Abi.entry,
 				client: {
 					publicClient: this.publicClient,
@@ -208,7 +290,7 @@ export class BaseContract {
 		)
 		this.linklistContract = this.#proxyContract(
 			getContract({
-				address: this.options.address.linklistContract,
+				address: this.options.contractAddresses.linklist,
 				abi: Abi.linklist,
 				client: {
 					publicClient: this.publicClient,
@@ -218,7 +300,7 @@ export class BaseContract {
 		)
 		this.newbieVillaContract = this.#proxyContract(
 			getContract({
-				address: this.options.address.newbieVillaContract,
+				address: this.options.contractAddresses.newbieVilla,
 				abi: Abi.newbieVilla,
 				client: {
 					publicClient: this.publicClient,
@@ -228,7 +310,7 @@ export class BaseContract {
 		)
 		this.peripheryContract = this.#proxyContract(
 			getContract({
-				address: this.options.address.peripheryContract,
+				address: this.options.contractAddresses.periphery,
 				abi: Abi.periphery,
 				client: {
 					publicClient: this.publicClient,
@@ -238,7 +320,7 @@ export class BaseContract {
 		)
 		this.cbtContract = this.#proxyContract(
 			getContract({
-				address: this.options.address.cbtContract,
+				address: this.options.contractAddresses.cbt,
 				abi: Abi.cbt,
 				client: {
 					publicClient: this.publicClient,
@@ -248,7 +330,7 @@ export class BaseContract {
 		)
 		this.miraContract = this.#proxyContract(
 			getContract({
-				address: this.options.address.miraContract,
+				address: this.options.contractAddresses.mira,
 				abi: Abi.mira,
 				client: {
 					publicClient: this.publicClient,
@@ -258,7 +340,7 @@ export class BaseContract {
 		)
 		this.tipsContract = this.#proxyContract(
 			getContract({
-				address: this.options.address.tipsContract,
+				address: this.options.contractAddresses.tips,
 				abi: Abi.tips,
 				client: {
 					publicClient: this.publicClient,
@@ -268,7 +350,7 @@ export class BaseContract {
 		)
 		this.tipsWithFeeContract = this.#proxyContract(
 			getContract({
-				address: this.options.address.tipsWithFeeContract,
+				address: this.options.contractAddresses.tipsWithFee,
 				abi: Abi.tipsWithFee,
 				client: {
 					publicClient: this.publicClient,

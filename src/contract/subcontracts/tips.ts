@@ -41,7 +41,7 @@ export class TipsContract {
 		)
 
 		const hash = await this.base.miraContract.write.send(
-			[this.base.options.address.tipsContract, BigInt(amount), data],
+			[this.base.options.contractAddresses.tips, BigInt(amount), data],
 			overrides,
 		)
 
@@ -145,7 +145,7 @@ export class TipsContract {
 		)
 
 		const hash = await this.base.miraContract.write.send(
-			[this.base.options.address.tipsContract, BigInt(amount), data],
+			[this.base.options.contractAddresses.tips, BigInt(amount), data],
 			overrides,
 		)
 
@@ -186,7 +186,7 @@ export class TipsContract {
 
 		const balance = isAddressEqual(
 			address,
-			this.base.options.address.newbieVillaContract,
+			this.base.options.contractAddresses.newbieVilla,
 		)
 			? await this.base.newbieVillaContract.read.balanceOf(
 					[BigInt(characterId)],

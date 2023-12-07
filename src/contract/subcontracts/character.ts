@@ -445,6 +445,11 @@ export class CharacterContract {
 		},
 		overrides: ReadOverrides<Entry, 'getCharacterByHandle'> = {},
 	): Promise<Result<Character>> {
+		const validates = validateHandleFormat(handle)
+		if (!validates.valid) {
+			throw new TypeError(validates.message)
+		}
+
 		handle = handle.toLowerCase()
 
 		const character = await this.base.contract.read.getCharacterByHandle(

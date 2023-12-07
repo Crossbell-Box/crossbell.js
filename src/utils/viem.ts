@@ -14,6 +14,7 @@ import {
 	type ContractEventName,
 	type DecodeEventLogReturnType,
 	type Log,
+	ParseAccount,
 	type PrivateKeyAccount,
 	type PublicClient,
 	type TransactionReceipt,
@@ -26,28 +27,37 @@ import {
 	webSocket,
 } from 'viem'
 import * as Abi from '../contract/abi'
-import { crossbell, getJsonRpcAddress } from '../network'
+import { getJsonRpcAddress } from '../network'
 import { log } from './logger'
 
-export function createDefaultTransport(addr = getJsonRpcAddress()): Transport {
-	if (addr.startsWith('ws://') || addr.startsWith('wss://')) {
-		return webSocket(addr, {
+export function createTransport(url: string): Transport {
+	const url_ = getJsonRpcAddress() ?? url
+
+	if (url_.startsWith('ws')) {
+		return webSocket(url_, {
 			timeout: 30_000,
-			key: crossbell.name,
-			name: crossbell.name,
+			key: 'crossbell',
+			name: 'crossbell',
 			retryCount: 5,
 			retryDelay: 5000,
 		})
 	}
 
-	return http(addr)
+	return http(url_, {
+		timeout: 30_000,
+		key: 'crossbell',
+		name: 'crossbell',
+	})
 }
 
-export function createDefaultPublicClient(): PublicClient {
-	const transport = createDefaultTransport()
+export function createPublicClientFromChain<TChain extends Chain>(
+	chain: TChain,
+	rpcUrl?: string,
+): PublicClient<Transport, TChain> {
+	const transport = createTransport(rpcUrl ?? chain.rpcUrls.default.http[0])
 	return createPublicClient({
 		transport,
-		chain: crossbell,
+		chain,
 		pollingInterval: 100,
 		batch: {
 			multicall: true,
@@ -55,13 +65,18 @@ export function createDefaultPublicClient(): PublicClient {
 	})
 }
 
-export function createWalletClientFromPrivateKeyAccount(
-	account: PrivateKeyAccount,
-): WalletClient<Transport, Chain, Account> {
-	const transport = createDefaultTransport()
+export function createWalletClientFromPrivateKeyAccount<
+	TChain extends Chain,
+	TAccount extends PrivateKeyAccount,
+>(
+	account: TAccount,
+	chain: TChain,
+	rpcUrl?: string,
+): WalletClient<Transport, TChain, ParseAccount<TAccount>> {
+	const transport = createTransport(rpcUrl ?? chain.rpcUrls.default.http[0])
 	return createWalletClient({
 		transport,
-		chain: crossbell,
+		chain,
 		account,
 		pollingInterval: 100,
 	})
@@ -81,13 +96,17 @@ export function getProviderAccount(
 	}
 }
 
-export function createWalletClientFromProvider(
+export function createWalletClientFromProvider<
+	TChain extends Chain,
+	TAccount extends Address | Account,
+>(
 	provider: EIP1193Provider,
-	account: Address | Account,
-): WalletClient<Transport, Chain, Account> {
+	account: TAccount,
+	chain: TChain,
+): WalletClient<Transport, TChain, ParseAccount<TAccount>> {
 	return createWalletClient({
 		transport: custom(provider),
-		chain: crossbell,
+		chain,
 		account,
 		pollingInterval: 100,
 	})
