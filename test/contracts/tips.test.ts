@@ -1,14 +1,12 @@
 import { beforeAll, describe, expect, test } from 'vitest'
-import { Contract } from '../../src'
-import { mockUser } from '../mock'
 
-const contract = new Contract(mockUser.privateKey)
+import { mockUser, testContract } from '../mock'
 
 let characterId: bigint | null = null
 
 describe('tips', () => {
 	beforeAll(async () => {
-		characterId = await contract.character
+		characterId = await testContract.character
 			.getPrimaryId({ address: mockUser.address })
 			.then((res) => res.data)
 
@@ -18,7 +16,7 @@ describe('tips', () => {
 	describe('tip', () => {
 		test('tip character', async () => {
 			if (!characterId) throw new Error('characterId is null')
-			const res = await contract.tips.tipCharacter({
+			const res = await testContract.tips.tipCharacter({
 				fromCharacterId: characterId,
 				toCharacterId: characterId,
 				amount: 0,
@@ -29,7 +27,7 @@ describe('tips', () => {
 
 		test('tip character for a note', async () => {
 			if (!characterId) throw new Error('characterId is null')
-			const res = await contract.tips.tipCharacterForNote({
+			const res = await testContract.tips.tipCharacterForNote({
 				fromCharacterId: characterId,
 				toCharacterId: characterId,
 				toNoteId: 1n,
@@ -42,7 +40,7 @@ describe('tips', () => {
 		test('tip failed when amount not enough', () => {
 			if (!characterId) throw new Error('characterId is null')
 			expect(
-				contract.tips.tipCharacterForNote({
+				testContract.tips.tipCharacterForNote({
 					fromCharacterId: characterId,
 					toCharacterId: characterId,
 					toNoteId: 1n,

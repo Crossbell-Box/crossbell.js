@@ -1,6 +1,5 @@
 import { generatePrivateKey, privateKeyToAccount } from 'viem/accounts'
 import { describe, expect, test } from 'vitest'
-import { Contract } from '../../src'
 import {
 	genRandomHandle,
 	metadataUri,
@@ -8,9 +7,8 @@ import {
 	mockUser,
 	randomHandle,
 	randomHandle2,
+	testContract,
 } from '../mock'
-
-const contract = new Contract(mockUser.privateKey)
 
 let characterId: bigint | null = null
 
@@ -18,7 +16,7 @@ describe('character', () => {
 	describe('create a character and check', () => {
 		test('should fail to createCharacter if the handle is not in correct format', () => {
 			expect(
-				contract.character.create({
+				testContract.character.create({
 					owner: mockUser.address,
 					handle: 'cannot contain whitespace',
 					metadataOrUri: metadataUri,
@@ -26,7 +24,7 @@ describe('character', () => {
 			).rejects.toThrow(/Handle must only contain \[a-z0-9-_\]./)
 
 			expect(
-				contract.character.create({
+				testContract.character.create({
 					owner: mockUser.address,
 					handle:
 						'cannot-contain-be-more-than-32-characters-longlonglonglonglonglonglonglonglong',
@@ -41,17 +39,17 @@ describe('character', () => {
 			const randHandle = genRandomHandle()
 
 			// not exists if not created
-			const { data: exists } = await contract.character.existsForAddress({
+			const { data: exists } = await testContract.character.existsForAddress({
 				address: randAddr,
 			})
 			expect(exists).toBe(false)
-			const { data: exists2 } = await contract.character.existsForHandle({
+			const { data: exists2 } = await testContract.character.existsForHandle({
 				handle: randHandle,
 			})
 			expect(exists2).toBe(false)
 
 			// create one
-			const characterId = await contract.character
+			const characterId = await testContract.character
 				.create({
 					owner: randAddr,
 					handle: randHandle,
@@ -62,18 +60,18 @@ describe('character', () => {
 			expect(characterId).not.toBeNull()
 
 			// should exist now
-			const { data: exists3 } = await contract.character.existsForAddress({
+			const { data: exists3 } = await testContract.character.existsForAddress({
 				address: randAddr,
 			})
 			expect(exists3).toBe(true)
-			const { data: exists4 } = await contract.character.existsForHandle({
+			const { data: exists4 } = await testContract.character.existsForHandle({
 				handle: randHandle,
 			})
 			expect(exists4).toBe(true)
 		})
 
 		test('createCharacter and getCharacterByTransaction', async () => {
-			const result = await contract.character.create({
+			const result = await testContract.character.create({
 				owner: mockUser.address,
 				handle: randomHandle,
 				metadataOrUri: metadataUri,
@@ -81,7 +79,7 @@ describe('character', () => {
 			characterId = result.data
 			expect(result.data).not.toBeNull()
 
-			const character = await contract.character.getByTransaction({
+			const character = await testContract.character.getByTransaction({
 				txHash: result.transactionHash,
 			})
 			expect(character.data.characterId).toBe(characterId)
@@ -89,7 +87,7 @@ describe('character', () => {
 
 		test.concurrent('getCharacter', async () => {
 			if (!characterId) throw new Error('characterId is null')
-			const { data } = await contract.character.get({
+			const { data } = await testContract.character.get({
 				characterId: characterId,
 			})
 			expect(data.handle).toBe(randomHandle)
@@ -97,7 +95,7 @@ describe('character', () => {
 		})
 
 		test.concurrent('getCharacterByHandle', async () => {
-			const { data } = await contract.character.getByHandle({
+			const { data } = await testContract.character.getByHandle({
 				handle: randomHandle,
 			})
 			// expect(data.characterId).toBe(characterId)
@@ -107,7 +105,7 @@ describe('character', () => {
 
 		test.concurrent('getHandle', async () => {
 			if (!characterId) throw new Error('characterId is null')
-			const { data } = await contract.character.getHandle({
+			const { data } = await testContract.character.getHandle({
 				characterId: characterId,
 			})
 			expect(data).toBe(randomHandle)
@@ -115,7 +113,7 @@ describe('character', () => {
 
 		test.concurrent('getCharacterMetadataUri', async () => {
 			if (!characterId) throw new Error('characterId is null')
-			const { data } = await contract.character.getUri({
+			const { data } = await testContract.character.getUri({
 				characterId: characterId,
 			})
 			expect(data).toBe(metadataUri)
@@ -125,11 +123,11 @@ describe('character', () => {
 	describe('change a character and check', () => {
 		test('setPrimaryCharacter', async () => {
 			if (!characterId) throw new Error('characterId is null')
-			await contract.character.setPrimaryId({ characterId: characterId })
+			await testContract.character.setPrimaryId({ characterId: characterId })
 		})
 
 		test('getPrimaryCharacter', async () => {
-			const { data } = await contract.character.getPrimaryId({
+			const { data } = await testContract.character.getPrimaryId({
 				address: mockUser.address,
 			})
 			expect(data).toBe(characterId)
@@ -137,7 +135,7 @@ describe('character', () => {
 
 		test('isPrimaryCharacterId', async () => {
 			if (!characterId) throw new Error('characterId is null')
-			const { data } = await contract.character.isPrimaryId({
+			const { data } = await testContract.character.isPrimaryId({
 				characterId: characterId,
 			})
 			expect(data).toBe(true)
@@ -145,7 +143,7 @@ describe('character', () => {
 
 		test('setHandle', async () => {
 			if (!characterId) throw new Error('characterId is null')
-			await contract.character.setHandle({
+			await testContract.character.setHandle({
 				characterId: characterId,
 				handle: randomHandle2,
 			})
@@ -153,7 +151,7 @@ describe('character', () => {
 
 		test('getHandle - after changed', async () => {
 			if (!characterId) throw new Error('characterId is null')
-			const { data } = await contract.character.getHandle({
+			const { data } = await testContract.character.getHandle({
 				characterId: characterId,
 			})
 			expect(data).toBe(randomHandle2)
@@ -161,7 +159,7 @@ describe('character', () => {
 
 		test('setMetadataUri', async () => {
 			if (!characterId) throw new Error('characterId is null')
-			await contract.character.setUri({
+			await testContract.character.setUri({
 				characterId: characterId,
 				metadataOrUri: metadataUri2,
 			})
@@ -169,7 +167,7 @@ describe('character', () => {
 
 		test('getMetadataUri', async () => {
 			if (!characterId) throw new Error('characterId is null')
-			const { data } = await contract.character.getUri({
+			const { data } = await testContract.character.getUri({
 				characterId: characterId,
 			})
 			expect(data).toBe(metadataUri2)
@@ -179,7 +177,7 @@ describe('character', () => {
 	describe('change character metadata and check', () => {
 		test('setCharacterMetadata', async () => {
 			if (!characterId) throw new Error('characterId is null')
-			await contract.character.setMetadata({
+			await testContract.character.setMetadata({
 				characterId: characterId,
 				metadata: {
 					name: 'test-name',
@@ -187,7 +185,7 @@ describe('character', () => {
 				},
 			})
 
-			const { data } = await contract.character.get({
+			const { data } = await testContract.character.get({
 				characterId: characterId,
 			})
 
@@ -197,7 +195,7 @@ describe('character', () => {
 
 		test('changeCharacterMetadata', async () => {
 			if (!characterId) throw new Error('characterId is null')
-			await contract.character.changeMetadata({
+			await testContract.character.changeMetadata({
 				characterId: characterId,
 				modifier: (metadata) => {
 					return {
@@ -206,7 +204,7 @@ describe('character', () => {
 					}
 				},
 			})
-			const { data } = await contract.character.get({
+			const { data } = await testContract.character.get({
 				characterId: characterId,
 			})
 

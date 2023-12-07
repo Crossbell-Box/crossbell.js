@@ -1,14 +1,11 @@
 import { beforeAll, describe, expect, test } from 'vitest'
-import { Contract } from '../../src'
-import { NIL_ADDRESS, mockUser } from '../mock'
-
-const contract = new Contract(mockUser.privateKey)
+import { NIL_ADDRESS, mockUser, testContract } from '../mock'
 
 let characterId: bigint | null = null
 
 describe('operator', () => {
 	beforeAll(async () => {
-		characterId = await contract.character
+		characterId = await testContract.character
 			.getPrimaryId({ address: mockUser.address })
 			.then((res) => res.data)
 
@@ -18,7 +15,7 @@ describe('operator', () => {
 	describe('grant a permission and check', () => {
 		test('grant permission', async () => {
 			if (!characterId) throw new Error('characterId is null')
-			const res = await contract.operator.grantForCharacter({
+			const res = await testContract.operator.grantForCharacter({
 				characterId: characterId,
 				operator: NIL_ADDRESS,
 				permissions: ['POST_NOTE', 'SET_NOTE_URI', 'LINK_CHARACTER'],
@@ -29,7 +26,7 @@ describe('operator', () => {
 
 		test('check permission', async () => {
 			if (!characterId) throw new Error('characterId is null')
-			const res = await contract.operator.getPermissionsForCharacter({
+			const res = await testContract.operator.getPermissionsForCharacter({
 				characterId: characterId,
 				operator: NIL_ADDRESS,
 			})

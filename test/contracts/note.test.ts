@@ -1,13 +1,10 @@
 import { beforeAll, describe, expect, test } from 'vitest'
-import { Contract } from '../../src'
-import { mockUser } from '../mock'
-
-const contract = new Contract(mockUser.privateKey)
+import { mockUser, testContract } from '../mock'
 
 describe('should post note', () => {
 	let characterId: bigint | null = null
 	beforeAll(async () => {
-		const { data: pid } = await contract.character.getPrimaryId({
+		const { data: pid } = await testContract.character.getPrimaryId({
 			address: mockUser.address,
 		})
 		characterId = pid
@@ -15,7 +12,7 @@ describe('should post note', () => {
 
 	test('postNote and check', async () => {
 		if (!characterId) throw new Error('characterId is null')
-		const { data } = await contract.note.post({
+		const { data } = await testContract.note.post({
 			characterId,
 			metadataOrUri: {
 				title: 'test',
@@ -25,7 +22,7 @@ describe('should post note', () => {
 
 		expect(data.noteId).toBeDefined()
 
-		const { data: note } = await contract.note.get({
+		const { data: note } = await testContract.note.get({
 			characterId,
 			noteId: data.noteId,
 		})
@@ -34,7 +31,7 @@ describe('should post note', () => {
 
 	test('postNotes and check', async () => {
 		if (!characterId) throw new Error('characterId is null')
-		const { data } = await contract.note.postMany({
+		const { data } = await testContract.note.postMany({
 			notes: [
 				{
 					characterId,
@@ -55,13 +52,13 @@ describe('should post note', () => {
 
 		expect(data.noteIds).toHaveLength(2)
 
-		const { data: note1 } = await contract.note.get({
+		const { data: note1 } = await testContract.note.get({
 			characterId,
 			noteId: data.noteIds[0],
 		})
 		expect(note1.metadata?.title).toBe('test1')
 
-		const { data: note2 } = await contract.note.get({
+		const { data: note2 } = await testContract.note.get({
 			characterId,
 			noteId: data.noteIds[1],
 		})
@@ -70,7 +67,7 @@ describe('should post note', () => {
 
 	test('mintNote', async () => {
 		if (!characterId) throw new Error('characterId is null')
-		const { data } = await contract.note.post({
+		const { data } = await testContract.note.post({
 			characterId,
 			metadataOrUri: {
 				title: 'test',
@@ -80,7 +77,7 @@ describe('should post note', () => {
 
 		expect(data.noteId).toBeDefined()
 
-		const { transactionHash: mintHash } = await contract.note.mint({
+		const { transactionHash: mintHash } = await testContract.note.mint({
 			characterId,
 			noteId: data.noteId,
 			toAddress: mockUser.address,
@@ -93,7 +90,7 @@ describe('should post note', () => {
 
 	test('deleteNote', async () => {
 		if (!characterId) throw new Error('characterId is null')
-		const { data } = await contract.note.post({
+		const { data } = await testContract.note.post({
 			characterId,
 			metadataOrUri: {
 				title: 'test',
@@ -103,14 +100,14 @@ describe('should post note', () => {
 
 		expect(data.noteId).toBeDefined()
 
-		const { transactionHash: deleteHash } = await contract.note.delete({
+		const { transactionHash: deleteHash } = await testContract.note.delete({
 			characterId,
 			noteId: data.noteId,
 		})
 
 		expect(deleteHash).toBeDefined()
 
-		const { data: note } = await contract.note.get({
+		const { data: note } = await testContract.note.get({
 			characterId,
 			noteId: data.noteId,
 		})
@@ -119,7 +116,7 @@ describe('should post note', () => {
 
 	test('postNoteForAnyUri', async () => {
 		if (!characterId) throw new Error('characterId is null')
-		const { data } = await contract.note.postForAnyUri({
+		const { data } = await testContract.note.postForAnyUri({
 			characterId,
 			metadataOrUri: { title: 'test', content: 'test' },
 			targetUri: 'https://example.com',
@@ -127,12 +124,12 @@ describe('should post note', () => {
 
 		expect(data.noteId).toBeDefined()
 
-		const { data: note } = await contract.note.get({
+		const { data: note } = await testContract.note.get({
 			characterId,
 			noteId: data.noteId,
 		})
 		expect(note.linkKey).toBe(
-			contract.note.getLinkKeyForAnyUri({ toUri: 'https://example.com' }),
+			testContract.note.getLinkKeyForAnyUri({ toUri: 'https://example.com' }),
 		)
 	})
 })

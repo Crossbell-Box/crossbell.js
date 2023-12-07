@@ -1,4 +1,5 @@
 import { type Address, type Hex } from 'viem'
+import { Contract } from '../src'
 
 export const mockUser = {
 	address: process.env.VITE_MOCK_USER_ADDRESS as Address,
@@ -24,3 +25,7 @@ export function genRandomHandle(): string {
 }
 
 export const NIL_ADDRESS = '0x0000000000000000000000000000000000000000'
+
+export const testContract = new Contract(mockUser.privateKey, {
+	chain: 'testnet',
+})
