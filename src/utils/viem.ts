@@ -182,10 +182,17 @@ export function parseLog<
 	} = {},
 ): any {
 	const parsedLogs = logs
-		.map((log) =>
-			decodeEventLog({ abi: [...Abi.entry, ...Abi.linklist], ...log }),
-		)
-		.filter((log) => log.eventName === targetTopic)
+		.map((log) => {
+			try {
+				return decodeEventLog({
+					abi: [...Abi.entry, ...Abi.linklist],
+					...log,
+				})
+			} catch {
+				return undefined
+			}
+		})
+		.filter((log) => log?.eventName === targetTopic)
 
 	if (parsedLogs.length === 0) {
 		throw new Error(`Log with topic ${targetTopic} not found`)

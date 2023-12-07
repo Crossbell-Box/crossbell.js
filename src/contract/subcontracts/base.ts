@@ -8,6 +8,7 @@ import {
 	type PublicClient,
 	type Transport,
 	type WalletClient,
+	erc20Abi,
 	getContract,
 } from 'viem'
 import { privateKeyToAccount } from 'viem/accounts'
@@ -31,6 +32,7 @@ export interface AddressOptions {
 	tipsWithFee: Address
 	mira: Address
 	linklist: Address
+	gcsb: Address
 }
 
 export interface ContractOptions {
@@ -60,6 +62,7 @@ export interface ContractOptions {
 	 *	tipsWithFee: '0xf3158018f932981d0005701dDC22Ce51477E436d',
 	 *	mira: '0xAfB95CC0BD320648B3E8Df6223d9CDD05EbeDC64',
 	 *	linklist: '0xFc8C75bD5c26F50798758f387B698f207a016b6A',
+	 *  gcsb: '0x4200000000000000000000000000000000000301',
 	 *}
 	 */
 	contractAddresses?: Partial<AddressOptions>
@@ -68,13 +71,36 @@ export interface ContractOptions {
 	 * Gas price for transaction costs.
 	 *
 	 * Options:
-	 * - `'estimate'`: Estimate the gas price from the network.
+	 * - `'estimate'`: Dynamically estimate the gas price from the network.
 	 * - bigint: Use a fixed gas price.
+	 *
+	 * Note that when $gCSB is used as gas for a transaction via the `gCsbAsGas` option,
+	 * the gas price will be automatically set to 0 for that transaction.
+	 * This is true vice versa - when the `gasPrice` option is set to 0,
+	 * $gCSB will be used as gas for that transaction.
 	 *
 	 * @default 10n ** 9n
 	 *
 	 */
 	gasPrice?: 'estimate' | bigint
+
+	/**
+	 * Whether to use $gCSB as gas.
+	 *
+	 * When $gCSB is used as gas for a transaction via the `gCsbAsGas` option,
+	 * the gas price will be automatically set to 0 for that transaction.
+	 * This is true vice versa - when the `gasPrice` option is set to 0,
+	 * $gCSB will be used as gas for that transaction.
+	 *
+	 * Options:
+	 * - `'asDefault'`: Use $gCSB as gas if the $gCSB owned by the wallet is enough,
+	 *   otherwise use the native token as gas from the wallet. (Recommended)
+	 * - `true`: Always use $gCSB as gas.
+	 * - `false`: Always use the native token as gas from the wallet.
+	 *
+	 * @default 'asDefault'
+	 */
+	gCsbAsGas?: boolean | 'asDefault'
 
 	/**
 	 * The chain to connect to.
@@ -104,7 +130,7 @@ export type ResolvedContractOptions = Overwrite<
 >
 
 export class BaseContract {
-	publicClient!: PublicClient
+	publicClient!: PublicClient<Transport, Chain>
 	walletClient!: WalletClient<Transport, Chain, Account>
 	#account: Account | undefined
 
@@ -222,6 +248,7 @@ export class BaseContract {
 		return {
 			account: this.account,
 			gasPrice: options?.gasPrice ?? 10n ** 9n,
+			gCsbAsGas: options?.gCsbAsGas ?? 'asDefault',
 			contractAddresses: {
 				entry: CONTRACT_ADDRESS.ENTRY,
 				periphery: CONTRACT_ADDRESS.PERIPHERY,
@@ -231,6 +258,7 @@ export class BaseContract {
 				mira: CONTRACT_ADDRESS.MIRA,
 				newbieVilla: CONTRACT_ADDRESS.NEWBIE_VILLA,
 				linklist: CONTRACT_ADDRESS.LINKLIST,
+				gcsb: CONTRACT_ADDRESS.GCSB,
 				...options?.contractAddresses,
 			},
 			chain,
@@ -360,24 +388,45 @@ export class BaseContract {
 		)
 	}
 
+	async #hasEnoughCsb() {
+		const balance = await this.publicClient.readContract({
+			abi: erc20Abi,
+			functionName: 'balanceOf',
+			args: [this.account.address],
+			address: this.options.contractAddresses.gcsb,
+		})
+
+		return balance >= 1n
+	}
+
 	#proxyContract<T extends GetContractReturnType>(contract: T): T {
 		if ((contract as any).write)
 			(contract as any).write = new Proxy((contract as any).write, {
 				get: (...args) => {
 					return new Proxy(Reflect.get(...args), {
-						apply: (target, thisArg, argArray) => {
+						apply: async (target, thisArg, argArray) => {
 							const hasArgs = argArray.length > 0 && Array.isArray(argArray[0])
 							const options = {
 								...((hasArgs ? argArray[1] : argArray[0]) ?? {}),
 							}
 
-							if (typeof this.options.gasPrice === 'bigint')
-								options.gasPrice = this.options.gasPrice
+							// calculate gas price
+							if (!options.gasPrice) {
+								if (typeof this.options.gasPrice === 'bigint') {
+									options.gasPrice = this.options.gasPrice
+								}
+								if (this.options.gCsbAsGas === true) {
+									options.gasPrice = 0n
+								} else if (this.options.gCsbAsGas === false) {
+									// do nothing
+								} else if (this.options.gCsbAsGas === 'asDefault') {
+									if (await this.#hasEnoughCsb()) {
+										options.gasPrice = 0n
+									}
+								}
+							}
 
-							if (argArray.length > 0) {
-								if (hasArgs) argArray[1] = options
-								else argArray[0] = options
-							} else argArray.push(options)
+							argArray[hasArgs ? 1 : 0] = options
 
 							return Reflect.apply(target, thisArg, argArray)
 						},
