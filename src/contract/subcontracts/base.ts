@@ -388,7 +388,7 @@ export class BaseContract {
 		)
 	}
 
-	async #hasEnoughCsb() {
+	async #hasEnoughGCsb() {
 		const balance = await this.publicClient.readContract({
 			abi: erc20Abi,
 			functionName: 'balanceOf',
@@ -396,7 +396,7 @@ export class BaseContract {
 			address: this.options.contractAddresses.gcsb,
 		})
 
-		return balance >= 1n
+		return balance >= 10n ** 18n
 	}
 
 	#proxyContract<T extends GetContractReturnType>(contract: T): T {
@@ -420,7 +420,7 @@ export class BaseContract {
 								} else if (this.options.gCsbAsGas === false) {
 									// do nothing
 								} else if (this.options.gCsbAsGas === 'asDefault') {
-									if (await this.#hasEnoughCsb()) {
+									if (await this.#hasEnoughGCsb()) {
 										options.gasPrice = 0n
 									}
 								}
