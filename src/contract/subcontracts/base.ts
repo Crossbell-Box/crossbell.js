@@ -29,6 +29,7 @@ export interface AddressOptions {
 	cbt: Address
 	newbieVilla: Address
 	tips: Address
+	tipsWithConfig: Address
 	tipsWithFee: Address
 	mira: Address
 	linklist: Address
@@ -193,6 +194,13 @@ export class BaseContract {
 			walletClient: typeof BaseContract.prototype.walletClient
 		}
 	>
+	tipsWithConfigContract!: GetContractReturnType<
+		Abi.TipsWithConfig,
+		{
+			publicClient: typeof BaseContract.prototype.publicClient
+			walletClient: typeof BaseContract.prototype.walletClient
+		}
+	>
 	tipsWithFeeContract!: GetContractReturnType<
 		Abi.TipsWithFee,
 		{
@@ -254,6 +262,7 @@ export class BaseContract {
 				periphery: CONTRACT_ADDRESS.PERIPHERY,
 				cbt: CONTRACT_ADDRESS.CBT,
 				tips: CONTRACT_ADDRESS.TIPS,
+				tipsWithConfig: CONTRACT_ADDRESS.TIPS_WITH_CONFIG,
 				tipsWithFee: CONTRACT_ADDRESS.TIPS_WITH_FEE,
 				mira: CONTRACT_ADDRESS.MIRA,
 				newbieVilla: CONTRACT_ADDRESS.NEWBIE_VILLA,
@@ -370,6 +379,16 @@ export class BaseContract {
 			getContract({
 				address: this.options.contractAddresses.tips,
 				abi: Abi.tips,
+				client: {
+					publicClient: this.publicClient,
+					walletClient: this.walletClient,
+				},
+			}),
+		)
+		this.tipsWithConfigContract = this.#proxyContract(
+			getContract({
+				address: this.options.contractAddresses.tipsWithConfig,
+				abi: Abi.tipsWithConfig,
 				client: {
 					publicClient: this.publicClient,
 					walletClient: this.walletClient,
