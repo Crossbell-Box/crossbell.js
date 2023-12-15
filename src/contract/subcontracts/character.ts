@@ -11,6 +11,7 @@ import {
 } from '../../types'
 import { validateAddress } from '../../utils/address'
 import { getModuleConfig } from '../../utils/module'
+import { normalizeCharacterMetadata } from '../../utils/normalize-character-metadata'
 import { validateHandleFormat } from '../../utils/validate-handle'
 import { parseLog, waitForTransactionReceiptWithRetry } from '../../utils/viem'
 import { type Entry, type NewbieVilla } from '../abi'
@@ -457,9 +458,11 @@ export class CharacterContract {
 			overrides,
 		)
 
-		const metadata = character.uri
-			? await ipfsUriToMetadata<CharacterMetadata>(character.uri)
-			: undefined
+		const metadata = normalizeCharacterMetadata(
+			character.uri
+				? await ipfsUriToMetadata<CharacterMetadata>(character.uri)
+				: undefined,
+		)
 
 		return {
 			data: {

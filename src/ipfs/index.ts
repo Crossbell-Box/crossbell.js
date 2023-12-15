@@ -6,6 +6,7 @@ import {
 	type Metadata,
 	type NoteMetadata,
 } from '../types/metadata'
+import { normalizeCharacterMetadata } from '../utils/normalize-character-metadata'
 
 let IPFS_GATEWAY = 'https://w3s.link/ipfs/'
 export function getIpfsGateway() {
@@ -136,6 +137,10 @@ export async function ipfsParseMetadataOrUri<T extends Metadata>(
 			metadata.type = type
 		}
 		uri = await ipfsMetadataToUri(metadata)
+	}
+
+	if (metadata && type === 'character') {
+		metadata = normalizeCharacterMetadata(metadata)
 	}
 
 	return {
