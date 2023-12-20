@@ -429,18 +429,26 @@ export class BaseContract {
 								...((hasArgs ? argArray[1] : argArray[0]) ?? {}),
 							}
 
-							// calculate gas price
-							if (!options.gasPrice) {
+							if (this.options.chain.id === 3737) {
+								// mainnet
+								// TODO: remove this once our mainnet is on L2
 								if (typeof this.options.gasPrice === 'bigint') {
 									options.gasPrice = this.options.gasPrice
 								}
-								if (this.options.gCsbAsGas === true) {
-									options.gasPrice = 0n
-								} else if (this.options.gCsbAsGas === false) {
-									// do nothing
-								} else if (this.options.gCsbAsGas === 'asDefault') {
-									if (await this.#hasEnoughGCsb()) {
+							} else {
+								// calculate L2 gas price
+								if (!options.gasPrice) {
+									if (typeof this.options.gasPrice === 'bigint') {
+										options.gasPrice = this.options.gasPrice
+									}
+									if (this.options.gCsbAsGas === true) {
 										options.gasPrice = 0n
+									} else if (this.options.gCsbAsGas === false) {
+										// do nothing
+									} else if (this.options.gCsbAsGas === 'asDefault') {
+										if (await this.#hasEnoughGCsb()) {
+											options.gasPrice = 0n
+										}
 									}
 								}
 							}
