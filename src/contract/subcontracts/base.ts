@@ -148,64 +148,64 @@ export class BaseContract {
 	contract!: GetContractReturnType<
 		Abi.Entry,
 		{
-			publicClient: typeof BaseContract.prototype.publicClient
-			walletClient: typeof BaseContract.prototype.walletClient
+			public: typeof BaseContract.prototype.publicClient
+			wallet: typeof BaseContract.prototype.walletClient
 		}
 	>
 	linklistContract!: GetContractReturnType<
 		Abi.Linklist,
 		{
-			publicClient: typeof BaseContract.prototype.publicClient
-			walletClient: typeof BaseContract.prototype.walletClient
+			public: typeof BaseContract.prototype.publicClient
+			wallet: typeof BaseContract.prototype.walletClient
 		}
 	>
 	newbieVillaContract!: GetContractReturnType<
 		Abi.NewbieVilla,
 		{
-			publicClient: typeof BaseContract.prototype.publicClient
-			walletClient: typeof BaseContract.prototype.walletClient
+			public: typeof BaseContract.prototype.publicClient
+			wallet: typeof BaseContract.prototype.walletClient
 		}
 	>
 	peripheryContract!: GetContractReturnType<
 		Abi.Periphery,
 		{
-			publicClient: typeof BaseContract.prototype.publicClient
-			walletClient: typeof BaseContract.prototype.walletClient
+			public: typeof BaseContract.prototype.publicClient
+			wallet: typeof BaseContract.prototype.walletClient
 		}
 	>
 	cbtContract!: GetContractReturnType<
 		Abi.Cbt,
 		{
-			publicClient: typeof BaseContract.prototype.publicClient
-			walletClient: typeof BaseContract.prototype.walletClient
+			public: typeof BaseContract.prototype.publicClient
+			wallet: typeof BaseContract.prototype.walletClient
 		}
 	>
 	miraContract!: GetContractReturnType<
 		Abi.Mira,
 		{
-			publicClient: typeof BaseContract.prototype.publicClient
-			walletClient: typeof BaseContract.prototype.walletClient
+			public: typeof BaseContract.prototype.publicClient
+			wallet: typeof BaseContract.prototype.walletClient
 		}
 	>
 	tipsContract!: GetContractReturnType<
 		Abi.Tips,
 		{
-			publicClient: typeof BaseContract.prototype.publicClient
-			walletClient: typeof BaseContract.prototype.walletClient
+			public: typeof BaseContract.prototype.publicClient
+			wallet: typeof BaseContract.prototype.walletClient
 		}
 	>
 	tipsWithConfigContract!: GetContractReturnType<
 		Abi.TipsWithConfig,
 		{
-			publicClient: typeof BaseContract.prototype.publicClient
-			walletClient: typeof BaseContract.prototype.walletClient
+			public: typeof BaseContract.prototype.publicClient
+			wallet: typeof BaseContract.prototype.walletClient
 		}
 	>
 	tipsWithFeeContract!: GetContractReturnType<
 		Abi.TipsWithFee,
 		{
-			publicClient: typeof BaseContract.prototype.publicClient
-			walletClient: typeof BaseContract.prototype.walletClient
+			public: typeof BaseContract.prototype.publicClient
+			wallet: typeof BaseContract.prototype.walletClient
 		}
 	>
 
@@ -320,8 +320,8 @@ export class BaseContract {
 				address: this.options.contractAddresses.entry,
 				abi: Abi.entry,
 				client: {
-					publicClient: this.publicClient,
-					walletClient: this.walletClient,
+					public: this.publicClient,
+					wallet: this.walletClient,
 				},
 			}),
 		)
@@ -330,8 +330,8 @@ export class BaseContract {
 				address: this.options.contractAddresses.linklist,
 				abi: Abi.linklist,
 				client: {
-					publicClient: this.publicClient,
-					walletClient: this.walletClient,
+					public: this.publicClient,
+					wallet: this.walletClient,
 				},
 			}),
 		)
@@ -340,8 +340,8 @@ export class BaseContract {
 				address: this.options.contractAddresses.newbieVilla,
 				abi: Abi.newbieVilla,
 				client: {
-					publicClient: this.publicClient,
-					walletClient: this.walletClient,
+					public: this.publicClient,
+					wallet: this.walletClient,
 				},
 			}),
 		)
@@ -350,8 +350,8 @@ export class BaseContract {
 				address: this.options.contractAddresses.periphery,
 				abi: Abi.periphery,
 				client: {
-					publicClient: this.publicClient,
-					walletClient: this.walletClient,
+					public: this.publicClient,
+					wallet: this.walletClient,
 				},
 			}),
 		)
@@ -360,8 +360,8 @@ export class BaseContract {
 				address: this.options.contractAddresses.cbt,
 				abi: Abi.cbt,
 				client: {
-					publicClient: this.publicClient,
-					walletClient: this.walletClient,
+					public: this.publicClient,
+					wallet: this.walletClient,
 				},
 			}),
 		)
@@ -370,8 +370,8 @@ export class BaseContract {
 				address: this.options.contractAddresses.mira,
 				abi: Abi.mira,
 				client: {
-					publicClient: this.publicClient,
-					walletClient: this.walletClient,
+					public: this.publicClient,
+					wallet: this.walletClient,
 				},
 			}),
 		)
@@ -380,8 +380,8 @@ export class BaseContract {
 				address: this.options.contractAddresses.tips,
 				abi: Abi.tips,
 				client: {
-					publicClient: this.publicClient,
-					walletClient: this.walletClient,
+					public: this.publicClient,
+					wallet: this.walletClient,
 				},
 			}),
 		)
@@ -390,8 +390,8 @@ export class BaseContract {
 				address: this.options.contractAddresses.tipsWithConfig,
 				abi: Abi.tipsWithConfig,
 				client: {
-					publicClient: this.publicClient,
-					walletClient: this.walletClient,
+					public: this.publicClient,
+					wallet: this.walletClient,
 				},
 			}),
 		)
@@ -400,8 +400,8 @@ export class BaseContract {
 				address: this.options.contractAddresses.tipsWithFee,
 				abi: Abi.tipsWithFee,
 				client: {
-					publicClient: this.publicClient,
-					walletClient: this.walletClient,
+					public: this.publicClient,
+					wallet: this.walletClient,
 				},
 			}),
 		)
