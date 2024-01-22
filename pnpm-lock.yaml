@@ -40,8 +40,8 @@ importers:
         specifier: ^20.10.6
         version: 20.10.6
       abitype:
-        specifier: ^0.10.3
-        version: 0.10.3(typescript@5.3.3)
+        specifier: ^1.0.0
+        version: 1.0.0(typescript@5.3.3)
       bumpp:
         specifier: ^9.2.1
         version: 9.2.1
@@ -1310,8 +1310,8 @@ packages:
       typescript: 5.3.3
     dev: false
 
-  /abitype@0.10.3(typescript@5.3.3):
-    resolution: {integrity: sha512-tRN+7XIa7J9xugdbRzFv/95ka5ivR/sRe01eiWvM0HWWjHuigSZEACgKa0sj4wGuekTDtghCx+5Izk/cOi78pQ==}
+  /abitype@1.0.0(typescript@5.3.3):
+    resolution: {integrity: sha512-NMeMah//6bJ56H5XRj8QCV4AwuW6hB6zqz2LnhhLdcWVQOsXki6/Pn3APeqxCma62nXIcmZWdu1DlHWS74umVQ==}
     peerDependencies:
       typescript: '>=5.0.4'
       zod: ^3 >=3.22.0
