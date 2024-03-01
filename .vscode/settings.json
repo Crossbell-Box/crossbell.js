@@ -1,7 +1,21 @@
 {
 	"unocss.root": ["./examples/vite"],
-	"eslint.experimental.useFlatConfig": true,
-	"eslint.options": {
-		"overrideConfigFile": "./eslint.config.mjs"
+	"editor.codeActionsOnSave": {
+		"source.fixAll.eslint": "always",
+		"quickfix.biome": "always",
+		"source.organizeImports.biome": "always"
+	},
+	"editor.defaultFormatter": "biomejs.biome",
+	"[json]": {
+		"editor.defaultFormatter": "biomejs.biome"
+	},
+	"[html]": {
+		"editor.defaultFormatter": "biomejs.biome"
+	},
+	"[javascriptreact]": {
+		"editor.defaultFormatter": "biomejs.biome"
+	},
+	"[javascript]": {
+		"editor.defaultFormatter": "biomejs.biome"
 	}
 }
