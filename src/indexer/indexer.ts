@@ -14,6 +14,7 @@ import { NotificationIndexer } from './subapis/notification'
 import { OperatorIndexer } from './subapis/operators'
 import { SearchIndexer } from './subapis/search'
 import { SiweIndexer } from './subapis/siwe'
+import { StatIndexer } from './subapis/stat'
 import { TipIndexer } from './subapis/tip'
 
 /**
@@ -47,6 +48,7 @@ export class Indexer extends BaseIndexer {
 	mintModule = new MintModuleIndexer(this)
 	newbie = new NewbieIndexer(this)
 	siwe = new SiweIndexer(this)
+	stat = new StatIndexer(this)
 }
 
 /**
