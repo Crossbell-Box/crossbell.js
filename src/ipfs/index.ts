@@ -80,14 +80,16 @@ export function ipfsUriToMetadata<T extends Metadata>(uri: string) {
 				}
 			}
 
-			let res
+			let res: T | string = ''
 			try {
-				res = await fetch(uri).then((res) => res.text())
+				res = (await fetch(uri).then((res) => res.text())) as string
 				res = JSON.parse(res)
 				return res as T
 			} catch {
 				throw new Error(
-					`Failed to fetch metadata from uri: ${uri} . Response: ${res}`,
+					`Failed to fetch metadata from uri: ${uri} . Response: ${
+						res as string
+					}`,
 				)
 			}
 		},
@@ -124,7 +126,7 @@ export async function ipfsParseMetadataOrUri<T extends Metadata>(
 		return { uri: '', metadata: undefined }
 	}
 
-	let uri
+	let uri: string
 	let metadata: T | undefined
 	if (typeof metadataOrUri === 'string') {
 		uri = metadataOrUri
