@@ -429,13 +429,7 @@ export class BaseContract {
 								...((hasArgs ? argArray[1] : argArray[0]) ?? {}),
 							}
 
-							if (this.options.chain.id === 3737) {
-								// mainnet
-								// TODO: remove this once our mainnet is on L2
-								if (typeof this.options.gasPrice === 'bigint') {
-									options.gasPrice = this.options.gasPrice
-								}
-							} else {
+							if (this.options.chain.id === crossbellTestnet.id) {
 								// calculate L2 gas price
 								if (!options.gasPrice) {
 									if (typeof this.options.gasPrice === 'bigint') {
@@ -450,6 +444,12 @@ export class BaseContract {
 											options.gasPrice = 0n
 										}
 									}
+								}
+							} else {
+								// mainnet
+								// TODO: remove this once our mainnet is on L2
+								if (typeof this.options.gasPrice === 'bigint') {
+									options.gasPrice = this.options.gasPrice
 								}
 							}
 
