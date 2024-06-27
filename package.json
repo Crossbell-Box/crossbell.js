@@ -1,6 +1,6 @@
 {
 	"name": "crossbell",
-	"version": "1.11.9",
+	"version": "1.12.0",
 	"packageManager": "pnpm@9.4.0",
 	"description": "JavaScript SDK to interact with Crossbell",
 	"keywords": [
