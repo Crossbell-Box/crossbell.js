@@ -1,4 +1,4 @@
-import { type EIP1193Provider } from 'eip1193-types'
+import type { EIP1193Provider } from 'eip1193-types'
 import {
 	type Account,
 	type Address,
@@ -13,7 +13,8 @@ import {
 } from 'viem'
 import { privateKeyToAccount } from 'viem/accounts'
 import { CONTRACT_ADDRESS, crossbell, crossbellTestnet } from '../../network'
-import { type Overwrite } from '../../types'
+import type { Overwrite } from '../../types'
+import { nonceManager } from '../../utils/nonce-manager'
 import {
 	addressToAccount,
 	createPublicClientFromChain,
@@ -251,8 +252,8 @@ export class BaseContract {
 			options?.chain === 'mainnet'
 				? crossbell
 				: options?.chain === 'testnet'
-				  ? crossbellTestnet
-				  : options?.chain ?? crossbell
+					? crossbellTestnet
+					: options?.chain ?? crossbell
 		return {
 			account: this.account,
 			gasPrice: options?.gasPrice ?? 10n ** 9n,
@@ -285,7 +286,9 @@ export class BaseContract {
 	#initWalletClient(providerOrPrivateKey: Hex | EIP1193Provider | undefined) {
 		if (typeof providerOrPrivateKey === 'string') {
 			// private key
-			const privateKeyAccount = privateKeyToAccount(providerOrPrivateKey)
+			const privateKeyAccount = privateKeyToAccount(providerOrPrivateKey, {
+				nonceManager: nonceManager,
+			})
 			this.#account = privateKeyAccount
 			this.walletClient = createWalletClientFromPrivateKeyAccount(
 				privateKeyAccount,
