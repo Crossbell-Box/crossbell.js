@@ -1,7 +1,7 @@
 {
 	"name": "crossbell",
 	"version": "1.12.0",
-	"packageManager": "pnpm@9.4.0",
+	"packageManager": "pnpm@9.12.2",
 	"description": "JavaScript SDK to interact with Crossbell",
 	"keywords": [
 		"crossbell",
@@ -99,19 +99,19 @@
 		"eip1193-types": "^0.2.1",
 		"exponential-backoff": "^3.1.1",
 		"p-limit": "3.1.0",
-		"viem": "^2.16.3"
+		"viem": "^2.21.32"
 	},
 	"devDependencies": {
-		"@biomejs/biome": "^1.8.3",
-		"@types/async-retry": "^1.4.8",
-		"@types/node": "^20.14.9",
-		"abitype": "^1.0.4",
-		"bumpp": "^9.4.1",
+		"@biomejs/biome": "^1.9.4",
+		"@types/async-retry": "^1.4.9",
+		"@types/node": "^20.16.13",
+		"abitype": "^1.0.6",
+		"bumpp": "^9.7.1",
 		"change-case": "^5.4.4",
 		"simple-git-hooks": "^2.11.1",
-		"tsup": "^8.1.0",
-		"typedoc": "^0.26.2",
-		"typescript": "^5.5.2",
+		"tsup": "^8.3.0",
+		"typedoc": "^0.26.10",
+		"typescript": "^5.6.3",
 		"vitest": "^1.6.0"
 	},
 	"engines": {
