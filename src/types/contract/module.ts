@@ -1,38 +1,38 @@
-import { type AbiType, type Address } from 'abitype'
+import type { AbiType, Address } from "abitype";
 
-export interface MintOrLinkModule<T extends 'mint' | 'link' = 'mint' | 'link'> {
+export interface MintOrLinkModule<T extends "mint" | "link" = "mint" | "link"> {
 	/* Global unique id */
-	id: string
+	id: string;
 	/* Type of the module */
-	type: T
+	type: T;
 	/* The contract address of this module */
-	address: Address
+	address: Address;
 	/* Display name */
-	name: string
+	name: string;
 	/* Display Description */
-	description: string
+	description: string;
 	/* Module icon, an image url, in 256*256px */
-	icon?: string
+	icon?: string;
 	/* The character id of the author */
-	authorCharacterId?: number
+	authorCharacterId?: number;
 	/* Data structure of init data, a form to fill out in frontend */
 	initDataStructure: {
 		/* Label of this field */
-		label: string
+		label: string;
 		/* Data type of this field. E.g. "address[]", "uint256", ... see https://docs.soliditylang.org/en/latest/abi-spec.html#types */
-		type: AbiType
+		type: AbiType;
 		/* Description of this field */
-		description: string
+		description: string;
 		/* Whether or not required, default: true */
-		required?: boolean
-	}[]
+		required?: boolean;
+	}[];
 	/* Published date string */
-	createdAt?: string
+	createdAt?: string;
 }
 
 export interface MintOrLinkModuleConfig {
 	/** The contract address of this module */
-	address: Address
+	address: Address;
 	/** The init data */
-	data: any[]
+	data: any[];
 }

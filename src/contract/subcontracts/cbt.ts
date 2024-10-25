@@ -1,13 +1,13 @@
-import {
-	type Numberish,
-	type ReadOverrides,
-	type Result,
-	type WriteOverrides,
-} from '../../types'
-import { waitForTransactionReceiptWithRetry } from '../../utils/viem'
-import { type Cbt } from '../abi'
-import { autoSwitchMainnet } from '../decorators'
-import { type BaseContract } from './base'
+import type {
+	Numberish,
+	ReadOverrides,
+	Result,
+	WriteOverrides,
+} from "../../types";
+import { waitForTransactionReceiptWithRetry } from "../../utils/viem";
+import type { Cbt } from "../abi";
+import { autoSwitchMainnet } from "../decorators";
+import type { BaseContract } from "./base";
 
 export class CbtContract {
 	constructor(private base: BaseContract) {}
@@ -25,26 +25,26 @@ export class CbtContract {
 			tokenId,
 		}: {
 			/** The id of the character. */
-			characterId: Numberish
+			characterId: Numberish;
 			/**  The id of the token. */
-			tokenId: Numberish
+			tokenId: Numberish;
 		},
-		overrides: WriteOverrides<Cbt, 'mint'> = {},
+		overrides: WriteOverrides<Cbt, "mint"> = {},
 	): Promise<Result<undefined, true>> {
 		const hash = await this.base.cbtContract.write.mint(
 			[BigInt(characterId), BigInt(tokenId)],
 			overrides,
-		)
+		);
 
 		const receipt = await waitForTransactionReceiptWithRetry(
 			this.base.publicClient,
 			hash,
-		)
+		);
 
 		return {
 			data: undefined,
 			transactionHash: receipt.transactionHash,
-		}
+		};
 	}
 
 	/**
@@ -60,26 +60,26 @@ export class CbtContract {
 			uri,
 		}: {
 			/** The id of the token.*/
-			tokenId: Numberish
+			tokenId: Numberish;
 			/** The URI of the token. */
-			uri: string
+			uri: string;
 		},
-		overrides: WriteOverrides<Cbt, 'setTokenURI'> = {},
+		overrides: WriteOverrides<Cbt, "setTokenURI"> = {},
 	): Promise<Result<undefined, true>> {
 		const hash = await this.base.cbtContract.write.setTokenURI(
 			[BigInt(tokenId), uri],
 			overrides,
-		)
+		);
 
 		const receipt = await waitForTransactionReceiptWithRetry(
 			this.base.publicClient,
 			hash,
-		)
+		);
 
 		return {
 			data: undefined,
 			transactionHash: receipt.transactionHash,
-		}
+		};
 	}
 
 	/**
@@ -92,17 +92,17 @@ export class CbtContract {
 			tokenId,
 		}: {
 			/** The id of the token. */
-			tokenId: Numberish
+			tokenId: Numberish;
 		},
-		overrides: ReadOverrides<Cbt, 'uri'> = {},
+		overrides: ReadOverrides<Cbt, "uri"> = {},
 	): Promise<Result<string>> {
 		const uri = await this.base.cbtContract.read.uri(
 			[BigInt(tokenId)],
 			overrides,
-		)
+		);
 
 		return {
 			data: uri,
-		}
+		};
 	}
 }

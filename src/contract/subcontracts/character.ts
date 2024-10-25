@@ -1,22 +1,22 @@
-import { type Address } from 'viem'
-import { ipfsParseMetadataOrUri, ipfsUriToMetadata } from '../../ipfs'
-import {
-	type Character,
-	type CharacterMetadata,
-	type MintOrLinkModuleConfig,
-	type Numberish,
-	type ReadOverrides,
-	type Result,
-	type WriteOverrides,
-} from '../../types'
-import { validateAddress } from '../../utils/address'
-import { getModuleConfig } from '../../utils/module'
-import { normalizeCharacterMetadata } from '../../utils/normalize-character-metadata'
-import { validateHandleFormat } from '../../utils/validate-handle'
-import { parseLog, waitForTransactionReceiptWithRetry } from '../../utils/viem'
-import { type Entry, type NewbieVilla } from '../abi'
-import { autoSwitchMainnet } from '../decorators'
-import { type BaseContract } from './base'
+import type { Address } from "viem";
+import { ipfsParseMetadataOrUri, ipfsUriToMetadata } from "../../ipfs";
+import type {
+	Character,
+	CharacterMetadata,
+	MintOrLinkModuleConfig,
+	Numberish,
+	ReadOverrides,
+	Result,
+	WriteOverrides,
+} from "../../types";
+import { validateAddress } from "../../utils/address";
+import { getModuleConfig } from "../../utils/module";
+import { normalizeCharacterMetadata } from "../../utils/normalize-character-metadata";
+import { validateHandleFormat } from "../../utils/validate-handle";
+import { parseLog, waitForTransactionReceiptWithRetry } from "../../utils/viem";
+import type { Entry, NewbieVilla } from "../abi";
+import { autoSwitchMainnet } from "../decorators";
+import type { BaseContract } from "./base";
 
 export class CharacterContract {
 	constructor(private base: BaseContract) {}
@@ -36,26 +36,26 @@ export class CharacterContract {
 			linkModule,
 		}: {
 			/** The Ethereum address of the character owner. */
-			owner: Address
+			owner: Address;
 			/** The handle of the character you want to create. */
-			handle: string
+			handle: string;
 			/** The metadata or URI of the character. */
-			metadataOrUri: CharacterMetadata | string
-			linkModule?: MintOrLinkModuleConfig
+			metadataOrUri: CharacterMetadata | string;
+			linkModule?: MintOrLinkModuleConfig;
 		},
-		overrides: WriteOverrides<Entry, 'createCharacter'> = {},
+		overrides: WriteOverrides<Entry, "createCharacter"> = {},
 	): Promise<Result<bigint, true>> {
-		validateAddress(owner)
+		validateAddress(owner);
 		const { valid, message } = validateHandleFormat(handle, {
 			disallowAddress: true,
-		})
+		});
 		if (!valid) {
-			throw new TypeError(message)
+			throw new TypeError(message);
 		}
 
-		const { uri } = await ipfsParseMetadataOrUri('character', metadataOrUri)
+		const { uri } = await ipfsParseMetadataOrUri("character", metadataOrUri);
 
-		const moduleConfig = await getModuleConfig(linkModule)
+		const moduleConfig = await getModuleConfig(linkModule);
 
 		const hash = await this.base.contract.write.createCharacter(
 			[
@@ -68,19 +68,19 @@ export class CharacterContract {
 				},
 			],
 			overrides,
-		)
+		);
 
 		const receipt = await waitForTransactionReceiptWithRetry(
 			this.base.publicClient,
 			hash,
-		)
+		);
 
-		const parser = parseLog(receipt.logs, 'CharacterCreated')
+		const parser = parseLog(receipt.logs, "CharacterCreated");
 
 		return {
 			data: parser.args.characterId,
 			transactionHash: receipt.transactionHash,
-		}
+		};
 	}
 
 	/**
@@ -95,31 +95,31 @@ export class CharacterContract {
 			handle,
 		}: {
 			/** The character ID of the user you want to set the handle for. */
-			characterId: Numberish
+			characterId: Numberish;
 			/** The handle you want to set. */
-			handle: string
+			handle: string;
 		},
-		overrides: WriteOverrides<Entry, 'setHandle'> = {},
+		overrides: WriteOverrides<Entry, "setHandle"> = {},
 	): Promise<Result<undefined, true>> {
 		const { valid, message } = validateHandleFormat(handle, {
 			disallowAddress: true,
-		})
+		});
 		if (!valid) {
-			throw new TypeError(message)
+			throw new TypeError(message);
 		}
 
 		const hash = await this.base.contract.write.setHandle(
 			[BigInt(characterId), handle],
 			overrides,
-		)
+		);
 		const receipt = await waitForTransactionReceiptWithRetry(
 			this.base.publicClient,
 			hash,
-		)
+		);
 		return {
 			data: undefined,
 			transactionHash: receipt.transactionHash,
-		}
+		};
 	}
 
 	/**
@@ -134,26 +134,26 @@ export class CharacterContract {
 			metadataOrUri,
 		}: {
 			/** The character ID of the user you want to set the URI for. */
-			characterId: Numberish
+			characterId: Numberish;
 			/** The metadata or URI you want to set. */
-			metadataOrUri: CharacterMetadata | string
+			metadataOrUri: CharacterMetadata | string;
 		},
-		overrides: WriteOverrides<Entry, 'setCharacterUri'> = {},
+		overrides: WriteOverrides<Entry, "setCharacterUri"> = {},
 	): Promise<Result<{ uri: string; metadata: CharacterMetadata }, true>> {
 		const { uri, metadata } = await ipfsParseMetadataOrUri(
-			'character',
+			"character",
 			metadataOrUri,
 			true,
-		)
+		);
 
 		const hash = await this.base.contract.write.setCharacterUri(
 			[BigInt(characterId), uri],
 			overrides,
-		)
+		);
 		const receipt = await waitForTransactionReceiptWithRetry(
 			this.base.publicClient,
 			hash,
-		)
+		);
 
 		return {
 			data: {
@@ -161,7 +161,7 @@ export class CharacterContract {
 				metadata,
 			},
 			transactionHash: receipt.transactionHash,
-		}
+		};
 	}
 
 	/**
@@ -173,12 +173,12 @@ export class CharacterContract {
 			characterId,
 			metadata,
 		}: {
-			characterId: Numberish
-			metadata: CharacterMetadata
+			characterId: Numberish;
+			metadata: CharacterMetadata;
 		},
-		overrides: WriteOverrides<Entry, 'setCharacterUri'> = {},
+		overrides: WriteOverrides<Entry, "setCharacterUri"> = {},
 	) {
-		return this.setUri({ characterId, metadataOrUri: metadata }, overrides)
+		return this.setUri({ characterId, metadataOrUri: metadata }, overrides);
 	}
 
 	/**
@@ -223,25 +223,25 @@ export class CharacterContract {
 			characterId,
 			modifier,
 		}: {
-			characterId: Numberish
-			modifier: (metadata?: CharacterMetadata) => CharacterMetadata
+			characterId: Numberish;
+			modifier: (metadata?: CharacterMetadata) => CharacterMetadata;
 		},
-		overrides: WriteOverrides<Entry, 'setCharacterUri'> = {},
+		overrides: WriteOverrides<Entry, "setCharacterUri"> = {},
 	) {
-		const character = await this.get({ characterId })
+		const character = await this.get({ characterId });
 
-		const metadata = modifier(character.data.metadata)
-		if (typeof metadata === 'undefined') {
+		const metadata = modifier(character.data.metadata);
+		if (typeof metadata === "undefined") {
 			throw new TypeError(
-				'The modified metadata is undefined. Did you return it?',
-			)
+				"The modified metadata is undefined. Did you return it?",
+			);
 		}
 
 		if (!metadata.type) {
-			metadata.type = 'character'
+			metadata.type = "character";
 		}
 
-		return this.setMetadata({ characterId, metadata }, overrides)
+		return this.setMetadata({ characterId, metadata }, overrides);
 	}
 
 	/**
@@ -256,24 +256,24 @@ export class CharacterContract {
 			socialToken,
 		}: {
 			/** The character ID of the user you want to set the social token for. */
-			characterId: Numberish
+			characterId: Numberish;
 			/** The token address you want to set for the character. */
-			socialToken: Address
+			socialToken: Address;
 		},
-		overrides: WriteOverrides<Entry, 'setSocialToken'> = {},
+		overrides: WriteOverrides<Entry, "setSocialToken"> = {},
 	): Promise<Result<undefined, true>> {
 		const hash = await this.base.contract.write.setSocialToken(
 			[BigInt(characterId), socialToken],
 			overrides,
-		)
+		);
 		const receipt = await waitForTransactionReceiptWithRetry(
 			this.base.publicClient,
 			hash,
-		)
+		);
 		return {
 			data: undefined,
 			transactionHash: receipt.transactionHash,
-		}
+		};
 	}
 
 	/**
@@ -287,22 +287,22 @@ export class CharacterContract {
 			characterId,
 		}: {
 			/** The character ID of the character you want to set as primary. */
-			characterId: Numberish
+			characterId: Numberish;
 		},
-		overrides: WriteOverrides<Entry, 'setPrimaryCharacterId'> = {},
+		overrides: WriteOverrides<Entry, "setPrimaryCharacterId"> = {},
 	): Promise<Result<undefined, true>> {
 		const hash = await this.base.contract.write.setPrimaryCharacterId(
 			[BigInt(characterId)],
 			overrides,
-		)
+		);
 		const receipt = await waitForTransactionReceiptWithRetry(
 			this.base.publicClient,
 			hash,
-		)
+		);
 		return {
 			data: undefined,
 			transactionHash: receipt.transactionHash,
-		}
+		};
 	}
 
 	/**
@@ -316,24 +316,24 @@ export class CharacterContract {
 			characterId,
 		}: {
 			/** The character ID of the character you want to burn. */
-			characterId: Numberish
+			characterId: Numberish;
 		},
-		overrides: WriteOverrides<Entry, 'burn'> = {},
+		overrides: WriteOverrides<Entry, "burn"> = {},
 	): Promise<Result<undefined, true>> {
 		const hash = await this.base.contract.write.burn(
 			[BigInt(characterId)],
 			overrides,
-		)
+		);
 
 		const receipt = await waitForTransactionReceiptWithRetry(
 			this.base.publicClient,
 			hash,
-		)
+		);
 
 		return {
 			data: undefined,
 			transactionHash: receipt.transactionHash,
-		}
+		};
 	}
 
 	/**
@@ -353,34 +353,34 @@ export class CharacterContract {
 			 *
 			 * Default is The address of the current wallet.
 			 **/
-			fromAddress?: Address
+			fromAddress?: Address;
 			/** The address of the user that will receive the character. */
-			toAddress: Address
+			toAddress: Address;
 			/** The character ID of the character you want to transfer. */
-			characterId: Numberish
+			characterId: Numberish;
 		},
-		overrides: WriteOverrides<Entry, 'safeTransferFrom'> = {},
+		overrides: WriteOverrides<Entry, "safeTransferFrom"> = {},
 	): Promise<Result<undefined, true>> {
-		validateAddress(toAddress)
+		validateAddress(toAddress);
 
-		const owner = fromAddress ?? this.base.walletClient.account.address
+		const owner = fromAddress ?? this.base.walletClient.account.address;
 
-		validateAddress(owner)
+		validateAddress(owner);
 
 		const hash = await this.base.contract.write.safeTransferFrom(
 			[owner, toAddress, BigInt(characterId)],
 			overrides,
-		)
+		);
 
 		const receipt = await waitForTransactionReceiptWithRetry(
 			this.base.publicClient,
 			hash,
-		)
+		);
 
 		return {
 			data: undefined,
 			transactionHash: receipt.transactionHash,
-		}
+		};
 	}
 
 	/**
@@ -393,20 +393,20 @@ export class CharacterContract {
 			address,
 		}: {
 			/** The address of the user you want to get the primary character ID for. */
-			address: Address
+			address: Address;
 		},
-		overrides: ReadOverrides<Entry, 'getPrimaryCharacterId'> = {},
+		overrides: ReadOverrides<Entry, "getPrimaryCharacterId"> = {},
 	): Promise<Result<bigint>> {
-		validateAddress(address)
+		validateAddress(address);
 
 		const characterId = await this.base.contract.read.getPrimaryCharacterId(
 			[address],
 			overrides,
-		)
+		);
 
 		return {
 			data: characterId,
-		}
+		};
 	}
 
 	/**
@@ -419,17 +419,17 @@ export class CharacterContract {
 			/** The character ID of the character you want to check. */
 			characterId,
 		}: {
-			characterId: Numberish
+			characterId: Numberish;
 		},
-		overrides: ReadOverrides<Entry, 'isPrimaryCharacter'> = {},
+		overrides: ReadOverrides<Entry, "isPrimaryCharacter"> = {},
 	): Promise<Result<boolean>> {
 		const isPrimary = await this.base.contract.read.isPrimaryCharacter(
 			[BigInt(characterId)],
 			overrides,
-		)
+		);
 		return {
 			data: isPrimary,
-		}
+		};
 	}
 
 	/**
@@ -442,27 +442,27 @@ export class CharacterContract {
 			handle,
 		}: {
 			/** The handle of the character you want to get the content of. */
-			handle: string
+			handle: string;
 		},
-		overrides: ReadOverrides<Entry, 'getCharacterByHandle'> = {},
+		overrides: ReadOverrides<Entry, "getCharacterByHandle"> = {},
 	): Promise<Result<Character>> {
-		const validates = validateHandleFormat(handle)
+		const validates = validateHandleFormat(handle);
 		if (!validates.valid) {
-			throw new TypeError(validates.message)
+			throw new TypeError(validates.message);
 		}
 
-		handle = handle.toLowerCase()
+		handle = handle.toLowerCase();
 
 		const character = await this.base.contract.read.getCharacterByHandle(
 			[handle],
 			overrides,
-		)
+		);
 
 		const metadata = normalizeCharacterMetadata(
 			character.uri
 				? await ipfsUriToMetadata<CharacterMetadata>(character.uri)
 				: undefined,
-		)
+		);
 
 		return {
 			data: {
@@ -473,7 +473,7 @@ export class CharacterContract {
 				socialToken: character.socialToken,
 				noteCount: character.noteCount,
 			},
-		}
+		};
 	}
 
 	/**
@@ -486,20 +486,20 @@ export class CharacterContract {
 			characterId,
 		}: {
 			/** The character ID of the character you want to get. */
-			characterId: Numberish
+			characterId: Numberish;
 		},
-		overrides: ReadOverrides<Entry, 'getCharacter'> = {},
+		overrides: ReadOverrides<Entry, "getCharacter"> = {},
 	): Promise<Result<Character>> {
 		const character = await this.base.contract.read.getCharacter(
 			[BigInt(characterId)],
 			overrides,
-		)
+		);
 
 		const { metadata } = await ipfsParseMetadataOrUri(
-			'character',
+			"character",
 			character.uri,
 			true,
-		)
+		);
 
 		return {
 			data: {
@@ -510,7 +510,7 @@ export class CharacterContract {
 				noteCount: character.noteCount,
 				metadata,
 			},
-		}
+		};
 	}
 
 	/**
@@ -523,17 +523,17 @@ export class CharacterContract {
 			characterId,
 		}: {
 			/** The characterId of the character you want to get the handle for. */
-			characterId: Numberish
+			characterId: Numberish;
 		},
-		overrides: ReadOverrides<Entry, 'getHandle'> = {},
+		overrides: ReadOverrides<Entry, "getHandle"> = {},
 	): Promise<Result<string>> {
 		const handle = await this.base.contract.read.getHandle(
 			[BigInt(characterId)],
 			overrides,
-		)
+		);
 		return {
 			data: handle,
-		}
+		};
 	}
 
 	/**
@@ -546,17 +546,17 @@ export class CharacterContract {
 			characterId,
 		}: {
 			/** The character ID of the character you want to get the URI for. */
-			characterId: Numberish
+			characterId: Numberish;
 		},
-		overrides: ReadOverrides<Entry, 'getCharacterUri'> = {},
+		overrides: ReadOverrides<Entry, "getCharacterUri"> = {},
 	): Promise<Result<string>> {
 		const uri = await this.base.contract.read.getCharacterUri(
 			[BigInt(characterId)],
 			overrides,
-		)
+		);
 		return {
 			data: uri,
-		}
+		};
 	}
 
 	/**
@@ -569,22 +569,22 @@ export class CharacterContract {
 			txHash,
 		}: {
 			/** The transaction hash of the {@link create} transaction. */
-			txHash: Address
+			txHash: Address;
 		},
-		overrides: ReadOverrides<Entry, 'getCharacter'> = {},
+		overrides: ReadOverrides<Entry, "getCharacter"> = {},
 	): Promise<Result<Character>> {
 		const receipt = await waitForTransactionReceiptWithRetry(
 			this.base.publicClient,
 			txHash,
-		)
+		);
 
-		const parser = parseLog(receipt.logs, 'CharacterCreated')
+		const parser = parseLog(receipt.logs, "CharacterCreated");
 		const result = await this.get(
 			{ characterId: parser.args.characterId },
 			overrides,
-		)
+		);
 
-		return result
+		return result;
 	}
 
 	/**
@@ -597,20 +597,20 @@ export class CharacterContract {
 			address,
 		}: {
 			/** The address of a user. */
-			address: Address
+			address: Address;
 		},
-		overrides: ReadOverrides<Entry, 'getPrimaryCharacterId'> = {},
+		overrides: ReadOverrides<Entry, "getPrimaryCharacterId"> = {},
 	): Promise<Result<boolean>> {
-		validateAddress(address)
+		validateAddress(address);
 		const characterId = await this.base.contract.read.getPrimaryCharacterId(
 			[address],
 			overrides,
-		)
+		);
 
-		const exists = characterId !== 0n
+		const exists = characterId !== 0n;
 		return {
 			data: exists,
-		}
+		};
 	}
 
 	/**
@@ -623,18 +623,18 @@ export class CharacterContract {
 			handle,
 		}: {
 			/** The handle of a character. */
-			handle: string
+			handle: string;
 		},
-		overrides: ReadOverrides<Entry, 'getCharacterByHandle'> = {},
+		overrides: ReadOverrides<Entry, "getCharacterByHandle"> = {},
 	): Promise<Result<boolean>> {
 		const data = await this.base.contract.read.getCharacterByHandle(
 			[handle],
 			overrides,
-		)
-		const exists = data.handle !== ''
+		);
+		const exists = data.handle !== "";
 		return {
 			data: exists,
-		}
+		};
 	}
 
 	/**
@@ -652,43 +652,43 @@ export class CharacterContract {
 			proof,
 		}: {
 			/** The address of the user that will receive the character. */
-			toAddress: Address
+			toAddress: Address;
 			/** The character ID of the character you want to withdraw. */
-			characterId: Numberish
+			characterId: Numberish;
 			/** The nonce given from the server. */
-			nonce: Numberish
+			nonce: Numberish;
 			/** The expiration time given from the server. */
-			expires: Numberish
+			expires: Numberish;
 			/** The proof given from the server. */
-			proof: Address
+			proof: Address;
 		},
-		overrides: WriteOverrides<NewbieVilla, 'withdraw'> = {},
+		overrides: WriteOverrides<NewbieVilla, "withdraw"> = {},
 	): Promise<Result<undefined, true>> {
-		validateAddress(toAddress)
+		validateAddress(toAddress);
 
 		const hash = await this.base.newbieVillaContract.write.withdraw(
 			[toAddress, BigInt(characterId), BigInt(nonce), BigInt(expires), proof],
 			overrides,
-		)
+		);
 
 		const receipt = await waitForTransactionReceiptWithRetry(
 			this.base.publicClient,
 			hash,
-		)
+		);
 
 		return {
 			data: undefined,
 			transactionHash: receipt.transactionHash,
-		}
+		};
 	}
 
 	balanceOfNewbie(
 		{ characterId }: { characterId: Numberish },
-		overrides: ReadOverrides<NewbieVilla, 'balanceOf'> = {},
+		overrides: ReadOverrides<NewbieVilla, "balanceOf"> = {},
 	) {
 		return this.base.newbieVillaContract.read.balanceOf(
 			[BigInt(characterId)],
 			overrides,
-		)
+		);
 	}
 }

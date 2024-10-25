@@ -1,4 +1,4 @@
-import { type Indexer } from '../indexer'
+import type { Indexer } from "../indexer";
 
 /**
  *
@@ -10,7 +10,7 @@ import { type Indexer } from '../indexer'
  * - 'lengthInvalid': The handle must be between 3 and 31 characters.
  * - 'charsInvalid': The handle must only contain lower-case letters, numbers, hyphens (-), or underscores (_).
  */
-export type ValidateHandleError = 'existed' | 'lengthInvalid' | 'charsInvalid'
+export type ValidateHandleError = "existed" | "lengthInvalid" | "charsInvalid";
 
 /**
  * Validate a handle.
@@ -26,25 +26,25 @@ export async function validateHandle(
 	indexer: Indexer,
 ): Promise<ValidateHandleError | null> {
 	if (handle.length >= 32 || handle.length <= 2) {
-		return 'lengthInvalid'
+		return "lengthInvalid";
 	}
 
 	if (!/^[\d_a-z-]+$/.test(handle)) {
-		return 'charsInvalid'
+		return "charsInvalid";
 	}
 
 	if (await checkIfExisted(handle, indexer)) {
-		return 'existed'
+		return "existed";
 	}
 
-	return null
+	return null;
 }
 
 async function checkIfExisted(
 	handle: string,
 	indexer: Indexer,
 ): Promise<boolean> {
-	return !!(await indexer.character.getByHandle(handle))
+	return !!(await indexer.character.getByHandle(handle));
 }
 
 /**
@@ -97,57 +97,57 @@ export function validateHandleFormat(
 		 *
 		 * @default `false`.
 		 */
-		disallowAddress?: boolean
+		disallowAddress?: boolean;
 	} = {},
 ):
 	| {
-			readonly valid: true
-			readonly code: 'valid'
-			readonly message: null
+			readonly valid: true;
+			readonly code: "valid";
+			readonly message: null;
 	  }
 	| {
-			readonly valid: false
+			readonly valid: false;
 			readonly code:
-				| 'invalidLength'
-				| 'invalidChars'
-				| 'shouldNotBeAddress'
-				| 'notAString'
-			readonly message: string
+				| "invalidLength"
+				| "invalidChars"
+				| "shouldNotBeAddress"
+				| "notAString";
+			readonly message: string;
 	  } {
-	if (typeof value !== 'string') {
+	if (typeof value !== "string") {
 		return {
 			valid: false,
-			code: 'notAString',
-			message: 'Handle must be a string.',
-		}
+			code: "notAString",
+			message: "Handle must be a string.",
+		};
 	}
 
-	if (value.length === 42 && value.startsWith('0x')) {
+	if (value.length === 42 && value.startsWith("0x")) {
 		if (disallowAddress) {
 			return {
 				valid: false,
-				code: 'shouldNotBeAddress',
-				message: 'Handle must not be an Ethereum address.',
-			}
+				code: "shouldNotBeAddress",
+				message: "Handle must not be an Ethereum address.",
+			};
 		}
-		return { valid: true, code: 'valid', message: null }
+		return { valid: true, code: "valid", message: null };
 	}
 
 	if (value.length < 3 || value.length > 31) {
 		return {
 			valid: false,
-			code: 'invalidLength',
-			message: 'Handle must be between 3 and 31 characters.',
-		}
+			code: "invalidLength",
+			message: "Handle must be between 3 and 31 characters.",
+		};
 	}
 
 	if (/^[\d_a-z-]+$/i.test(value)) {
-		return { valid: true, code: 'valid', message: null }
+		return { valid: true, code: "valid", message: null };
 	}
 
 	return {
 		valid: false,
-		code: 'invalidChars',
-		message: 'Handle must only contain [a-z0-9-_].',
-	}
+		code: "invalidChars",
+		message: "Handle must only contain [a-z0-9-_].",
+	};
 }

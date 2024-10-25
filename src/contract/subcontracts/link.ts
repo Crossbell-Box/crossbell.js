@@ -1,17 +1,17 @@
-import { type Address, type Hex, stringToHex } from 'viem'
-import {
-	type Character,
-	type Numberish,
-	type ReadOverrides,
-	type Result,
-	type WriteOverrides,
-} from '../../types'
-import { NIL_ADDRESS, validateAddress } from '../../utils/address'
-import { parseLog, waitForTransactionReceiptWithRetry } from '../../utils/viem'
-import { type Entry, type Linklist, type Periphery } from '../abi'
-import { autoSwitchMainnet } from '../decorators'
-import { type BaseContract } from './base'
-import { type CharacterContract } from './character'
+import { type Address, type Hex, stringToHex } from "viem";
+import type {
+	Character,
+	Numberish,
+	ReadOverrides,
+	Result,
+	WriteOverrides,
+} from "../../types";
+import { NIL_ADDRESS, validateAddress } from "../../utils/address";
+import { parseLog, waitForTransactionReceiptWithRetry } from "../../utils/viem";
+import type { Entry, Linklist, Periphery } from "../abi";
+import { autoSwitchMainnet } from "../decorators";
+import type { BaseContract } from "./base";
+import type { CharacterContract } from "./character";
 
 export class LinkContract {
 	constructor(private base: BaseContract & { character: CharacterContract }) {}
@@ -30,15 +30,15 @@ export class LinkContract {
 			data,
 		}: {
 			/** The character ID of the character that is linking to another character. Must be your own character, otherwise it will be rejected. */
-			fromCharacterId: Numberish
+			fromCharacterId: Numberish;
 			/** The character ID of the character you want to link to. */
-			toCharacterId: Numberish
+			toCharacterId: Numberish;
 			/** The type of link. */
-			linkType: string
+			linkType: string;
 			/** The data to be passed to the link module if the character has one. */
-			data?: Hex
+			data?: Hex;
 		},
-		overrides: WriteOverrides<Entry, 'linkCharacter'> = {},
+		overrides: WriteOverrides<Entry, "linkCharacter"> = {},
 	): Promise<Result<bigint, true>> {
 		const hash = await this.base.contract.write.linkCharacter(
 			[
@@ -50,19 +50,19 @@ export class LinkContract {
 				},
 			],
 			overrides,
-		)
+		);
 
 		const receipt = await waitForTransactionReceiptWithRetry(
 			this.base.publicClient,
 			hash,
-		)
+		);
 
-		const parser = parseLog(receipt.logs, 'LinkCharacter')
+		const parser = parseLog(receipt.logs, "LinkCharacter");
 
 		return {
 			data: parser.args.linklistId,
 			transactionHash: receipt.transactionHash,
-		}
+		};
 	}
 
 	/**
@@ -83,19 +83,19 @@ export class LinkContract {
 			data,
 		}: {
 			/** The character ID of the character that is linking to another character. Must be your own character, otherwise it will be rejected. */
-			fromCharacterId: Numberish
+			fromCharacterId: Numberish;
 			/** The character IDs of the character you want to link to. */
-			toCharacterIds: Numberish[]
+			toCharacterIds: Numberish[];
 			/** The addresses of the characters you want to link to (who don't have a character). See more on {@link createThenLinkCharacter} */
-			toAddresses: Address[]
+			toAddresses: Address[];
 			/** The type of link. */
-			linkType: string
+			linkType: string;
 			/** The data to be passed to the link module if the character has one. It should has the same length as `toCharacterIds`. */
-			data?: Address[]
+			data?: Address[];
 		},
-		overrides: WriteOverrides<Periphery, 'linkCharactersInBatch'> = {},
+		overrides: WriteOverrides<Periphery, "linkCharactersInBatch"> = {},
 	): Promise<Result<bigint, true>> {
-		validateAddress(toAddresses)
+		validateAddress(toAddresses);
 
 		const hash = await this.base.peripheryContract.write.linkCharactersInBatch(
 			[
@@ -108,21 +108,21 @@ export class LinkContract {
 				},
 			],
 			overrides,
-		)
+		);
 
 		const receipt = await waitForTransactionReceiptWithRetry(
 			this.base.publicClient,
 			hash,
-		)
+		);
 
-		const log = parseLog(receipt.logs, 'LinkCharacter', {
+		const log = parseLog(receipt.logs, "LinkCharacter", {
 			throwOnMultipleLogsFound: false,
-		})
+		});
 
 		return {
 			data: log.args.linklistId,
 			transactionHash: receipt.transactionHash,
-		}
+		};
 	}
 
 	/**
@@ -134,14 +134,16 @@ export class LinkContract {
 		hash,
 	}: {
 		/** The transaction hash of the transaction you want to get the linklist id of. */
-		hash: Address
+		hash: Address;
 	}): Promise<Result<bigint>> {
-		const receipt = await this.base.publicClient.getTransactionReceipt({ hash })
-		const parser = parseLog(receipt.logs, 'LinkCharacter')
+		const receipt = await this.base.publicClient.getTransactionReceipt({
+			hash,
+		});
+		const parser = parseLog(receipt.logs, "LinkCharacter");
 
 		return {
 			data: parser.args.linklistId,
-		}
+		};
 	}
 
 	/**
@@ -164,15 +166,15 @@ export class LinkContract {
 			linkType,
 		}: {
 			/** The character ID of the character that is creating the new character. Must be your own character, otherwise it will be rejected. */
-			fromCharacterId: Numberish
+			fromCharacterId: Numberish;
 			/** The address of the character you want to link to. */
-			toAddress: Address
+			toAddress: Address;
 			/** The type of link you want to create. This is a string. */
-			linkType: string
+			linkType: string;
 		},
-		overrides: WriteOverrides<Entry, 'createThenLinkCharacter'> = {},
+		overrides: WriteOverrides<Entry, "createThenLinkCharacter"> = {},
 	): Promise<Result<{ toCharacterId: bigint; linklistId: bigint }, true>> {
-		validateAddress(toAddress)
+		validateAddress(toAddress);
 
 		const hash = await this.base.contract.write.createThenLinkCharacter(
 			[
@@ -183,15 +185,15 @@ export class LinkContract {
 				},
 			],
 			overrides,
-		)
+		);
 
 		const receipt = await waitForTransactionReceiptWithRetry(
 			this.base.publicClient,
 			hash,
-		)
+		);
 
-		const createCharacterParser = parseLog(receipt.logs, 'CharacterCreated')
-		const linkCharacterParser = parseLog(receipt.logs, 'LinkCharacter')
+		const createCharacterParser = parseLog(receipt.logs, "CharacterCreated");
+		const linkCharacterParser = parseLog(receipt.logs, "LinkCharacter");
 
 		return {
 			data: {
@@ -199,7 +201,7 @@ export class LinkContract {
 				linklistId: linkCharacterParser.args.linklistId,
 			},
 			transactionHash: receipt.transactionHash,
-		}
+		};
 	}
 
 	/**
@@ -215,13 +217,13 @@ export class LinkContract {
 			linkType,
 		}: {
 			/** The character ID of the character that is linking to another character. */
-			fromCharacterId: Numberish
+			fromCharacterId: Numberish;
 			/** The character you want to link to. */
-			toCharacterId: Numberish
+			toCharacterId: Numberish;
 			/** The type of link. */
-			linkType: string
+			linkType: string;
 		},
-		overrides: WriteOverrides<Entry, 'unlinkCharacter'> = {},
+		overrides: WriteOverrides<Entry, "unlinkCharacter"> = {},
 	): Promise<Result<undefined, true>> {
 		const hash = await this.base.contract.write.unlinkCharacter(
 			[
@@ -232,15 +234,15 @@ export class LinkContract {
 				},
 			],
 			overrides,
-		)
+		);
 		const receipt = await waitForTransactionReceiptWithRetry(
 			this.base.publicClient,
 			hash,
-		)
+		);
 		return {
 			data: undefined,
 			transactionHash: receipt.transactionHash,
-		}
+		};
 	}
 
 	/**
@@ -272,22 +274,22 @@ export class LinkContract {
 			linklistId,
 		}: {
 			/** The linklist ID of the linklist you want to get the linked characters from. */
-			linklistId: Numberish
+			linklistId: Numberish;
 		},
-		overrides?: ReadOverrides<Linklist, 'getLinkingCharacterIds'>,
-	): Promise<Result<bigint[]>>
+		overrides?: ReadOverrides<Linklist, "getLinkingCharacterIds">,
+	): Promise<Result<bigint[]>>;
 	async getLinkingCharacterIds(
 		{
 			fromCharacterId,
 			linkType,
 		}: {
 			/** The character ID of the character you want to get the linked characters from. */
-			fromCharacterId: Numberish
+			fromCharacterId: Numberish;
 			/** The type of link you want to get. */
-			linkType: string
+			linkType: string;
 		},
-		overrides?: ReadOverrides<Periphery, 'getLinkingCharacterIds'>,
-	): Promise<Result<bigint[]>>
+		overrides?: ReadOverrides<Periphery, "getLinkingCharacterIds">,
+	): Promise<Result<bigint[]>>;
 	async getLinkingCharacterIds(
 		{
 			linklistId,
@@ -295,38 +297,38 @@ export class LinkContract {
 			linkType,
 		}:
 			| {
-					linklistId: never
-					fromCharacterId: Numberish
-					linkType: string
+					linklistId: never;
+					fromCharacterId: Numberish;
+					linkType: string;
 			  }
 			| {
-					linklistId: Numberish
-					fromCharacterId: never
-					linkType: never
+					linklistId: Numberish;
+					fromCharacterId: never;
+					linkType: never;
 			  },
 		overrides:
-			| ReadOverrides<Periphery, 'getLinkingCharacterIds'>
-			| ReadOverrides<Linklist, 'getLinkingCharacterIds'> = {},
+			| ReadOverrides<Periphery, "getLinkingCharacterIds">
+			| ReadOverrides<Linklist, "getLinkingCharacterIds"> = {},
 	): Promise<Result<bigint[]>> {
 		if (linklistId) {
 			const linklist =
 				await this.base.linklistContract.read.getLinkingCharacterIds(
 					[BigInt(linklistId)],
 					overrides,
-				)
+				);
 			return {
 				data: linklist.map((link) => link),
-			}
+			};
 		}
 
 		const linklist =
 			await this.base.peripheryContract.read.getLinkingCharacterIds(
 				[BigInt(fromCharacterId), stringToHex(linkType, { size: 32 })],
 				overrides,
-			)
+			);
 		return {
 			data: linklist.map((link) => link),
-		}
+		};
 	}
 
 	/**
@@ -340,22 +342,22 @@ export class LinkContract {
 			linkType,
 		}: {
 			/** The character ID of the character you want to get the linked characters from. */
-			fromCharacterId: Numberish
+			fromCharacterId: Numberish;
 			/** The type of link you want to get. */
-			linkType: string
+			linkType: string;
 		},
-		overrides: ReadOverrides<Periphery, 'getLinkingCharacterIds'> = {},
+		overrides: ReadOverrides<Periphery, "getLinkingCharacterIds"> = {},
 	): Promise<Result<Character[]>> {
 		const ids = await this.base.peripheryContract.read.getLinkingCharacterIds(
 			[BigInt(fromCharacterId), stringToHex(linkType, { size: 32 })],
 			overrides,
-		)
+		);
 		const characters = await Promise.all(
 			ids.map((ids) => this.base.character.get({ characterId: ids })),
-		)
+		);
 		return {
 			data: characters.map((character) => character.data),
-		}
+		};
 	}
 
 	/** link address */
@@ -374,15 +376,15 @@ export class LinkContract {
 			data = NIL_ADDRESS,
 		}: {
 			/** The character ID of the character that is linking to the address. */
-			fromCharacterId: Numberish
+			fromCharacterId: Numberish;
 			/** The address of the character you want to link to. */
-			toAddress: Address
+			toAddress: Address;
 			/** The type of link. */
-			linkType: string
+			linkType: string;
 			/** The data to be passed to the link module if the address has one. */
-			data: Address
+			data: Address;
 		},
-		overrides: WriteOverrides<Entry, 'linkAddress'> = {},
+		overrides: WriteOverrides<Entry, "linkAddress"> = {},
 	): Promise<Result<bigint, true>> {
 		const hash = await this.base.contract.write.linkAddress(
 			[
@@ -394,19 +396,19 @@ export class LinkContract {
 				},
 			],
 			overrides,
-		)
+		);
 
 		const receipt = await waitForTransactionReceiptWithRetry(
 			this.base.publicClient,
 			hash,
-		)
+		);
 
-		const parser = parseLog(receipt.logs, 'LinkAddress')
+		const parser = parseLog(receipt.logs, "LinkAddress");
 
 		return {
 			data: parser.args.linklistId,
 			transactionHash: receipt.transactionHash,
-		}
+		};
 	}
 
 	/**
@@ -422,13 +424,13 @@ export class LinkContract {
 			linkType,
 		}: {
 			/** The character ID of the character that is linking to another character. */
-			fromCharacterId: Numberish
+			fromCharacterId: Numberish;
 			/** The address you want to unlink from. */
-			toAddress: Address
+			toAddress: Address;
 			/** The type of link. */
-			linkType: string
+			linkType: string;
 		},
-		overrides: WriteOverrides<Entry, 'unlinkAddress'> = {},
+		overrides: WriteOverrides<Entry, "unlinkAddress"> = {},
 	): Promise<Result<undefined, true>> {
 		const hash = await this.base.contract.write.unlinkAddress(
 			[
@@ -439,15 +441,15 @@ export class LinkContract {
 				},
 			],
 			overrides,
-		)
+		);
 		const receipt = await waitForTransactionReceiptWithRetry(
 			this.base.publicClient,
 			hash,
-		)
+		);
 		return {
 			data: undefined,
 			transactionHash: receipt.transactionHash,
-		}
+		};
 	}
 
 	/** link any */
@@ -466,15 +468,15 @@ export class LinkContract {
 			data = NIL_ADDRESS,
 		}: {
 			/** The character ID of the character that is linking to the address. */
-			fromCharacterId: Numberish
+			fromCharacterId: Numberish;
 			/** The uri of the character you want to link to. */
-			toUri: string
+			toUri: string;
 			/** The type of link. */
-			linkType: string
+			linkType: string;
 			/** The data to be passed to the link module if the address has one. */
-			data: Address
+			data: Address;
 		},
-		overrides: WriteOverrides<Entry, 'linkAnyUri'> = {},
+		overrides: WriteOverrides<Entry, "linkAnyUri"> = {},
 	): Promise<Result<bigint, true>> {
 		const hash = await this.base.contract.write.linkAnyUri(
 			[
@@ -486,19 +488,19 @@ export class LinkContract {
 				},
 			],
 			overrides,
-		)
+		);
 
 		const receipt = await waitForTransactionReceiptWithRetry(
 			this.base.publicClient,
 			hash,
-		)
+		);
 
-		const parser = parseLog(receipt.logs, 'LinkAnyUri')
+		const parser = parseLog(receipt.logs, "LinkAnyUri");
 
 		return {
 			data: parser.args.linklistId,
 			transactionHash: receipt.transactionHash,
-		}
+		};
 	}
 
 	/**
@@ -514,13 +516,13 @@ export class LinkContract {
 			linkType,
 		}: {
 			/** The character ID of the character that is linking to another character. */
-			fromCharacterId: Numberish
+			fromCharacterId: Numberish;
 			/** The uri you want to unlink from. */
-			toUri: string
+			toUri: string;
 			/** The type of link. */
-			linkType: string
+			linkType: string;
 		},
-		overrides: WriteOverrides<Entry, 'unlinkAnyUri'> = {},
+		overrides: WriteOverrides<Entry, "unlinkAnyUri"> = {},
 	): Promise<Result<undefined, true>> {
 		const hash = await this.base.contract.write.unlinkAnyUri(
 			[
@@ -531,15 +533,15 @@ export class LinkContract {
 				},
 			],
 			overrides,
-		)
+		);
 		const receipt = await waitForTransactionReceiptWithRetry(
 			this.base.publicClient,
 			hash,
-		)
+		);
 		return {
 			data: undefined,
 			transactionHash: receipt.transactionHash,
-		}
+		};
 	}
 
 	/** link ERC721 token */
@@ -559,17 +561,17 @@ export class LinkContract {
 			data = NIL_ADDRESS,
 		}: {
 			/** The character ID of the character that is linking to the address. */
-			fromCharacterId: Numberish
+			fromCharacterId: Numberish;
 			/** The address of the ERC721 contract. */
-			toContractAddress: Address
+			toContractAddress: Address;
 			/** The token id of the ERC721 token. */
-			toTokenId: Numberish
+			toTokenId: Numberish;
 			/** The type of link. */
-			linkType: string
+			linkType: string;
 			/** The data to be passed to the link module if the address has one. */
-			data: Address
+			data: Address;
 		},
-		overrides: WriteOverrides<Entry, 'linkERC721'> = {},
+		overrides: WriteOverrides<Entry, "linkERC721"> = {},
 	): Promise<Result<bigint, true>> {
 		const hash = await this.base.contract.write.linkERC721(
 			[
@@ -582,19 +584,19 @@ export class LinkContract {
 				},
 			],
 			overrides,
-		)
+		);
 
 		const receipt = await waitForTransactionReceiptWithRetry(
 			this.base.publicClient,
 			hash,
-		)
+		);
 
-		const parser = parseLog(receipt.logs, 'LinkAnyUri')
+		const parser = parseLog(receipt.logs, "LinkAnyUri");
 
 		return {
 			data: parser.args.linklistId,
 			transactionHash: receipt.transactionHash,
-		}
+		};
 	}
 
 	/**
@@ -611,15 +613,15 @@ export class LinkContract {
 			linkType,
 		}: {
 			/** The character ID of the character that is linking to another character. */
-			fromCharacterId: Numberish
+			fromCharacterId: Numberish;
 			/** The address of the ERC721 contract. */
-			toContractAddress: Address
+			toContractAddress: Address;
 			/** The token id of the ERC721 token. */
-			toTokenId: Numberish
+			toTokenId: Numberish;
 			/** The type of link. */
-			linkType: string
+			linkType: string;
 		},
-		overrides: WriteOverrides<Entry, 'unlinkERC721'> = {},
+		overrides: WriteOverrides<Entry, "unlinkERC721"> = {},
 	): Promise<Result<undefined, true>> {
 		const hash = await this.base.contract.write.unlinkERC721(
 			[
@@ -631,15 +633,15 @@ export class LinkContract {
 				},
 			],
 			overrides,
-		)
+		);
 		const receipt = await waitForTransactionReceiptWithRetry(
 			this.base.publicClient,
 			hash,
-		)
+		);
 		return {
 			data: undefined,
 			transactionHash: receipt.transactionHash,
-		}
+		};
 	}
 
 	/** link note */
@@ -659,17 +661,17 @@ export class LinkContract {
 			data,
 		}: {
 			/** The character ID of the character that is linking to another note. Must be your own character, otherwise it will be rejected. */
-			fromCharacterId: Numberish
+			fromCharacterId: Numberish;
 			/** The character ID of the character you want to link to. */
-			toCharacterId: Numberish
+			toCharacterId: Numberish;
 			/** The note ID of the note you want to link to. */
-			toNoteId: Numberish
+			toNoteId: Numberish;
 			/** The type of link. */
-			linkType: string
+			linkType: string;
 			/** The data to be passed to the link module if the character has one. */
-			data?: Address
+			data?: Address;
 		},
-		overrides: WriteOverrides<Entry, 'linkNote'> = {},
+		overrides: WriteOverrides<Entry, "linkNote"> = {},
 	): Promise<Result<bigint, true>> {
 		const hash = await this.base.contract.write.linkNote(
 			[
@@ -682,19 +684,19 @@ export class LinkContract {
 				},
 			],
 			overrides,
-		)
+		);
 
 		const receipt = await waitForTransactionReceiptWithRetry(
 			this.base.publicClient,
 			hash,
-		)
+		);
 
-		const parser = parseLog(receipt.logs, 'LinkNote')
+		const parser = parseLog(receipt.logs, "LinkNote");
 
 		return {
 			data: parser.args.linklistId,
 			transactionHash: receipt.transactionHash,
-		}
+		};
 	}
 
 	/**
@@ -711,15 +713,15 @@ export class LinkContract {
 			linkType,
 		}: {
 			/** The character ID of the character that is linking to another note. */
-			fromCharacterId: Numberish
+			fromCharacterId: Numberish;
 			/** The character you want to unlink to. */
-			toCharacterId: Numberish
+			toCharacterId: Numberish;
 			/** The note ID of the note you want to unlink to. */
-			toNoteId: Numberish
+			toNoteId: Numberish;
 			/** The type of link. */
-			linkType: string
+			linkType: string;
 		},
-		overrides: WriteOverrides<Entry, 'unlinkNote'> = {},
+		overrides: WriteOverrides<Entry, "unlinkNote"> = {},
 	): Promise<Result<undefined, true>> {
 		const hash = await this.base.contract.write.unlinkNote(
 			[
@@ -731,17 +733,17 @@ export class LinkContract {
 				},
 			],
 			overrides,
-		)
+		);
 
 		const receipt = await waitForTransactionReceiptWithRetry(
 			this.base.publicClient,
 			hash,
-		)
+		);
 
 		return {
 			data: undefined,
 			transactionHash: receipt.transactionHash,
-		}
+		};
 	}
 
 	/** link linklist */
@@ -760,15 +762,15 @@ export class LinkContract {
 			data = NIL_ADDRESS,
 		}: {
 			/** The character ID of the character that is linking to another note. Must be your own character, otherwise it will be rejected. */
-			fromCharacterId: Numberish
+			fromCharacterId: Numberish;
 			/** The linklist ID of the linklist you want to link to. */
-			toLinkListId: Numberish
+			toLinkListId: Numberish;
 			/** The type of link. */
-			linkType: string
+			linkType: string;
 			/** The data to be passed to the link module if the character has one. */
-			data: Address
+			data: Address;
 		},
-		overrides: WriteOverrides<Entry, 'linkLinklist'> = {},
+		overrides: WriteOverrides<Entry, "linkLinklist"> = {},
 	): Promise<Result<bigint, true>> {
 		const hash = await this.base.contract.write.linkLinklist(
 			[
@@ -780,19 +782,19 @@ export class LinkContract {
 				},
 			],
 			overrides,
-		)
+		);
 
 		const receipt = await waitForTransactionReceiptWithRetry(
 			this.base.publicClient,
 			hash,
-		)
+		);
 
-		const parser = parseLog(receipt.logs, 'LinkNote')
+		const parser = parseLog(receipt.logs, "LinkNote");
 
 		return {
 			data: parser.args.linklistId,
 			transactionHash: receipt.transactionHash,
-		}
+		};
 	}
 
 	/**
@@ -808,13 +810,13 @@ export class LinkContract {
 			linkType,
 		}: {
 			/** The character ID of the character that is linking to another note. */
-			fromCharacterId: Numberish
+			fromCharacterId: Numberish;
 			/** The linklist ID of the linklist you want to unlink to. */
-			toLinklistId: Numberish
+			toLinklistId: Numberish;
 			/** The type of link. */
-			linkType: string
+			linkType: string;
 		},
-		overrides: WriteOverrides<Entry, 'unlinkLinklist'> = {},
+		overrides: WriteOverrides<Entry, "unlinkLinklist"> = {},
 	): Promise<Result<undefined, true>> {
 		const hash = await this.base.contract.write.unlinkLinklist(
 			[
@@ -825,17 +827,17 @@ export class LinkContract {
 				},
 			],
 			overrides,
-		)
+		);
 
 		const receipt = await waitForTransactionReceiptWithRetry(
 			this.base.publicClient,
 			hash,
-		)
+		);
 
 		return {
 			data: undefined,
 			transactionHash: receipt.transactionHash,
-		}
+		};
 	}
 
 	/**
@@ -844,20 +846,20 @@ export class LinkContract {
 	 */
 	async setLinklistUri(
 		{ linklistId, uri }: { linklistId: Numberish; uri: string },
-		overrides: WriteOverrides<Entry, 'setLinklistUri'> = {},
+		overrides: WriteOverrides<Entry, "setLinklistUri"> = {},
 	): Promise<Result<undefined, true>> {
 		const hash = await this.base.contract.write.setLinklistUri(
 			[BigInt(linklistId), uri],
 			overrides,
-		)
+		);
 		const receipt = await waitForTransactionReceiptWithRetry(
 			this.base.publicClient,
 			hash,
-		)
+		);
 		return {
 			data: undefined,
 			transactionHash: receipt.transactionHash,
-		}
+		};
 	}
 
 	/**
@@ -866,15 +868,15 @@ export class LinkContract {
 	 */
 	async getLinklistUri(
 		{ linklistId }: { linklistId: string },
-		overrides: ReadOverrides<Entry, 'getLinklistUri'> = {},
+		overrides: ReadOverrides<Entry, "getLinklistUri"> = {},
 	): Promise<Result<string>> {
 		const uri = await this.base.contract.read.getLinklistUri(
 			[BigInt(linklistId)],
 			overrides,
-		)
+		);
 		return {
 			data: uri,
-		}
+		};
 	}
 
 	/**
@@ -883,20 +885,20 @@ export class LinkContract {
 	 */
 	async setLinklistType(
 		{ linklistId, linkType }: { linklistId: Numberish; linkType: string },
-		overrides: WriteOverrides<Entry, 'setLinklistType'> = {},
+		overrides: WriteOverrides<Entry, "setLinklistType"> = {},
 	) {
 		const hash = await this.base.contract.write.setLinklistType(
 			[BigInt(linklistId), stringToHex(linkType, { size: 32 })],
 			overrides,
-		)
+		);
 		const receipt = await waitForTransactionReceiptWithRetry(
 			this.base.publicClient,
 			hash,
-		)
+		);
 		return {
 			data: undefined,
 			transactionHash: receipt.transactionHash,
-		}
+		};
 	}
 
 	/**
@@ -909,21 +911,21 @@ export class LinkContract {
 			linklistId,
 		}: {
 			/** The linklist ID of the linklist to burn. */
-			linklistId: Numberish
+			linklistId: Numberish;
 		},
-		overrides: WriteOverrides<Entry, 'burnLinklist'> = {},
+		overrides: WriteOverrides<Entry, "burnLinklist"> = {},
 	): Promise<Result<undefined, true>> {
 		const hash = await this.base.contract.write.burnLinklist(
 			[BigInt(linklistId)],
 			overrides,
-		)
+		);
 		const receipt = await waitForTransactionReceiptWithRetry(
 			this.base.publicClient,
 			hash,
-		)
+		);
 		return {
 			data: undefined,
 			transactionHash: receipt.transactionHash,
-		}
+		};
 	}
 }

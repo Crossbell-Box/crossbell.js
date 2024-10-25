@@ -1,10 +1,10 @@
-import { type Address } from 'viem'
-import {
-	type CharacterOperatorEntity,
-	type ListResponse,
-	type Numberish,
-} from '../../types'
-import { type BaseIndexer } from './base'
+import type { Address } from "viem";
+import type {
+	CharacterOperatorEntity,
+	ListResponse,
+	Numberish,
+} from "../../types";
+import type { BaseIndexer } from "./base";
 
 export class OperatorIndexer {
 	constructor(private base: BaseIndexer) {}
@@ -23,15 +23,15 @@ export class OperatorIndexer {
 			cursor,
 		}: {
 			/** Limit the count of items returned. */
-			limit?: Numberish
+			limit?: Numberish;
 			/** Used for pagination. */
-			cursor?: string
+			cursor?: string;
 		} = {},
 	) {
-		const url = `/characters/${characterId}/operators`
+		const url = `/characters/${characterId}/operators`;
 		return this.base.fetch<ListResponse<CharacterOperatorEntity>>(url, {
 			params: { limit, cursor },
-		})
+		});
 	}
 
 	/**
@@ -42,7 +42,7 @@ export class OperatorIndexer {
 	 * @returns The primary character.
 	 */
 	getForCharacter(characterId: Numberish, address: Address) {
-		const url = `/characters/${characterId}/operators/${address}`
-		return this.base.fetch<CharacterOperatorEntity | null>(url)
+		const url = `/characters/${characterId}/operators/${address}`;
+		return this.base.fetch<CharacterOperatorEntity | null>(url);
 	}
 }

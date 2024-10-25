@@ -1,4 +1,4 @@
-import type { EIP1193Provider } from 'eip1193-types'
+import type { EIP1193Provider } from "eip1193-types";
 import {
 	type Account,
 	type Address,
@@ -10,31 +10,31 @@ import {
 	type WalletClient,
 	erc20Abi,
 	getContract,
-} from 'viem'
-import { privateKeyToAccount } from 'viem/accounts'
-import { CONTRACT_ADDRESS, crossbell, crossbellTestnet } from '../../network'
-import type { Overwrite } from '../../types'
-import { nonceManager } from '../../utils/nonce-manager'
+} from "viem";
+import { privateKeyToAccount } from "viem/accounts";
+import { CONTRACT_ADDRESS, crossbell, crossbellTestnet } from "../../network";
+import type { Overwrite } from "../../types";
+import { nonceManager } from "../../utils/nonce-manager";
 import {
 	addressToAccount,
 	createPublicClientFromChain,
 	createWalletClientFromPrivateKeyAccount,
 	createWalletClientFromProvider,
 	getProviderAccount,
-} from '../../utils/viem'
-import * as Abi from '../abi'
+} from "../../utils/viem";
+import * as Abi from "../abi";
 
 export interface AddressOptions {
-	entry: Address
-	periphery: Address
-	cbt: Address
-	newbieVilla: Address
-	tips: Address
-	tipsWithConfig: Address
-	tipsWithFee: Address
-	mira: Address
-	linklist: Address
-	gcsb: Address
+	entry: Address;
+	periphery: Address;
+	cbt: Address;
+	newbieVilla: Address;
+	tips: Address;
+	tipsWithConfig: Address;
+	tipsWithFee: Address;
+	mira: Address;
+	linklist: Address;
+	gcsb: Address;
 }
 
 export interface ContractOptions {
@@ -46,7 +46,7 @@ export interface ContractOptions {
 	 * - If the `providerOrPrivateKey` is a provider, the account is the first account in the provider.
 	 *   **The change of this option will only affect in this case**.
 	 */
-	account?: Account | Address
+	account?: Account | Address;
 
 	/**
 	 * The contract addresses.
@@ -67,7 +67,7 @@ export interface ContractOptions {
 	 *  gcsb: '0x4200000000000000000000000000000000000301',
 	 *}
 	 */
-	contractAddresses?: Partial<AddressOptions>
+	contractAddresses?: Partial<AddressOptions>;
 
 	/**
 	 * Gas price for transaction costs.
@@ -84,7 +84,7 @@ export interface ContractOptions {
 	 * @default 10n ** 9n
 	 *
 	 */
-	gasPrice?: 'estimate' | bigint
+	gasPrice?: "estimate" | bigint;
 
 	/**
 	 * Whether to use $gCSB as gas.
@@ -102,7 +102,7 @@ export interface ContractOptions {
 	 *
 	 * @default 'asDefault'
 	 */
-	gCsbAsGas?: boolean | 'asDefault'
+	gCsbAsGas?: boolean | "asDefault";
 
 	/**
 	 * The chain to connect to.
@@ -114,7 +114,7 @@ export interface ContractOptions {
 	 *
 	 * @default 'mainnet'
 	 */
-	chain?: 'mainnet' | 'testnet' | Chain
+	chain?: "mainnet" | "testnet" | Chain;
 
 	/**
 	 * The RPC URL to connect to.
@@ -123,92 +123,92 @@ export interface ContractOptions {
 	 *
 	 * @default chain.rpcUrls.default.http[0]
 	 */
-	rpcUrl?: string
+	rpcUrl?: string;
 }
 
 export type ResolvedContractOptions = Overwrite<
 	Required<ContractOptions>,
 	{ contractAddresses: AddressOptions; chain: Chain }
->
+>;
 
 export class BaseContract {
-	publicClient!: PublicClient<Transport, Chain>
-	walletClient!: WalletClient<Transport, Chain, Account>
-	#account: Account | undefined
+	publicClient!: PublicClient<Transport, Chain>;
+	walletClient!: WalletClient<Transport, Chain, Account>;
+	#account: Account | undefined;
 
 	get account(): Account {
-		return this.#account as Account
+		return this.#account as Account;
 	}
 	set account(value: Address | Account) {
-		this.#account = typeof value === 'string' ? addressToAccount(value) : value
-		if (this.walletClient) this.walletClient.account = this.#account
+		this.#account = typeof value === "string" ? addressToAccount(value) : value;
+		if (this.walletClient) this.walletClient.account = this.#account;
 	}
 
-	options: ResolvedContractOptions
+	options: ResolvedContractOptions;
 
 	contract!: GetContractReturnType<
 		Abi.Entry,
 		{
-			public: typeof BaseContract.prototype.publicClient
-			wallet: typeof BaseContract.prototype.walletClient
+			public: typeof BaseContract.prototype.publicClient;
+			wallet: typeof BaseContract.prototype.walletClient;
 		}
-	>
+	>;
 	linklistContract!: GetContractReturnType<
 		Abi.Linklist,
 		{
-			public: typeof BaseContract.prototype.publicClient
-			wallet: typeof BaseContract.prototype.walletClient
+			public: typeof BaseContract.prototype.publicClient;
+			wallet: typeof BaseContract.prototype.walletClient;
 		}
-	>
+	>;
 	newbieVillaContract!: GetContractReturnType<
 		Abi.NewbieVilla,
 		{
-			public: typeof BaseContract.prototype.publicClient
-			wallet: typeof BaseContract.prototype.walletClient
+			public: typeof BaseContract.prototype.publicClient;
+			wallet: typeof BaseContract.prototype.walletClient;
 		}
-	>
+	>;
 	peripheryContract!: GetContractReturnType<
 		Abi.Periphery,
 		{
-			public: typeof BaseContract.prototype.publicClient
-			wallet: typeof BaseContract.prototype.walletClient
+			public: typeof BaseContract.prototype.publicClient;
+			wallet: typeof BaseContract.prototype.walletClient;
 		}
-	>
+	>;
 	cbtContract!: GetContractReturnType<
 		Abi.Cbt,
 		{
-			public: typeof BaseContract.prototype.publicClient
-			wallet: typeof BaseContract.prototype.walletClient
+			public: typeof BaseContract.prototype.publicClient;
+			wallet: typeof BaseContract.prototype.walletClient;
 		}
-	>
+	>;
 	miraContract!: GetContractReturnType<
 		Abi.Mira,
 		{
-			public: typeof BaseContract.prototype.publicClient
-			wallet: typeof BaseContract.prototype.walletClient
+			public: typeof BaseContract.prototype.publicClient;
+			wallet: typeof BaseContract.prototype.walletClient;
 		}
-	>
+	>;
 	tipsContract!: GetContractReturnType<
 		Abi.Tips,
 		{
-			public: typeof BaseContract.prototype.publicClient
-			wallet: typeof BaseContract.prototype.walletClient
+			public: typeof BaseContract.prototype.publicClient;
+			wallet: typeof BaseContract.prototype.walletClient;
 		}
-	>
+	>;
 	tipsWithConfigContract!: GetContractReturnType<
 		Abi.TipsWithConfig,
 		{
-			public: typeof BaseContract.prototype.publicClient
-			wallet: typeof BaseContract.prototype.walletClient
+			public: typeof BaseContract.prototype.publicClient;
+			wallet: typeof BaseContract.prototype.walletClient;
 		}
-	>
+	>;
 	tipsWithFeeContract!: GetContractReturnType<
 		Abi.TipsWithFee,
 		{
-			public: typeof BaseContract.prototype.publicClient
-			wallet: typeof BaseContract.prototype.walletClient
+			public: typeof BaseContract.prototype.publicClient;
+			wallet: typeof BaseContract.prototype.walletClient;
 		}
-	>
+	>;
 
 	/**
 	 * This creates a new Contract instance to interact with.
@@ -239,25 +239,25 @@ export class BaseContract {
 		providerOrPrivateKey: Hex | EIP1193Provider | undefined,
 		options?: Partial<ContractOptions>,
 	) {
-		this.options = this.#resolveOptions(options)
+		this.options = this.#resolveOptions(options);
 
-		this.#initPublicClient()
-		this.#initWalletClient(providerOrPrivateKey)
+		this.#initPublicClient();
+		this.#initWalletClient(providerOrPrivateKey);
 
-		this.#initContract()
+		this.#initContract();
 	}
 
 	#resolveOptions(options?: ContractOptions): ResolvedContractOptions {
 		const chain =
-			options?.chain === 'mainnet'
+			options?.chain === "mainnet"
 				? crossbell
-				: options?.chain === 'testnet'
+				: options?.chain === "testnet"
 					? crossbellTestnet
-					: options?.chain ?? crossbell
+					: (options?.chain ?? crossbell);
 		return {
 			account: this.account,
 			gasPrice: options?.gasPrice ?? 10n ** 9n,
-			gCsbAsGas: options?.gCsbAsGas ?? 'asDefault',
+			gCsbAsGas: options?.gCsbAsGas ?? "asDefault",
 			contractAddresses: {
 				entry: CONTRACT_ADDRESS.ENTRY,
 				periphery: CONTRACT_ADDRESS.PERIPHERY,
@@ -273,47 +273,47 @@ export class BaseContract {
 			},
 			chain,
 			rpcUrl: options?.rpcUrl ?? chain.rpcUrls.default.http[0],
-		}
+		};
 	}
 
 	#initPublicClient() {
 		this.publicClient = createPublicClientFromChain(
 			this.options.chain,
 			this.options.rpcUrl,
-		)
+		);
 	}
 
 	#initWalletClient(providerOrPrivateKey: Hex | EIP1193Provider | undefined) {
-		if (typeof providerOrPrivateKey === 'string') {
+		if (typeof providerOrPrivateKey === "string") {
 			// private key
 			const privateKeyAccount = privateKeyToAccount(providerOrPrivateKey, {
 				nonceManager: nonceManager,
-			})
-			this.#account = privateKeyAccount
+			});
+			this.#account = privateKeyAccount;
 			this.walletClient = createWalletClientFromPrivateKeyAccount(
 				privateKeyAccount,
 				this.options.chain,
 				this.options.rpcUrl,
-			)
+			);
 		} else if (
 			providerOrPrivateKey &&
-			typeof providerOrPrivateKey === 'object'
+			typeof providerOrPrivateKey === "object"
 		) {
 			// provider
-			const provider = providerOrPrivateKey
+			const provider = providerOrPrivateKey;
 			this.#account = this.options.account
 				? addressToAccount(this.options.account)
-				: getProviderAccount(provider)
+				: getProviderAccount(provider);
 			if (!this.options?.account) {
-				provider.on('accountsChanged', (accounts) => {
-					this.account = accounts[0]
-				})
+				provider.on("accountsChanged", (accounts) => {
+					this.account = accounts[0];
+				});
 			}
 			this.walletClient = createWalletClientFromProvider(
 				provider,
 				this.account,
 				this.options.chain,
-			)
+			);
 		}
 	}
 
@@ -327,7 +327,7 @@ export class BaseContract {
 					wallet: this.walletClient,
 				},
 			}),
-		)
+		);
 		this.linklistContract = this.#proxyContract(
 			getContract({
 				address: this.options.contractAddresses.linklist,
@@ -337,7 +337,7 @@ export class BaseContract {
 					wallet: this.walletClient,
 				},
 			}),
-		)
+		);
 		this.newbieVillaContract = this.#proxyContract(
 			getContract({
 				address: this.options.contractAddresses.newbieVilla,
@@ -347,7 +347,7 @@ export class BaseContract {
 					wallet: this.walletClient,
 				},
 			}),
-		)
+		);
 		this.peripheryContract = this.#proxyContract(
 			getContract({
 				address: this.options.contractAddresses.periphery,
@@ -357,7 +357,7 @@ export class BaseContract {
 					wallet: this.walletClient,
 				},
 			}),
-		)
+		);
 		this.cbtContract = this.#proxyContract(
 			getContract({
 				address: this.options.contractAddresses.cbt,
@@ -367,7 +367,7 @@ export class BaseContract {
 					wallet: this.walletClient,
 				},
 			}),
-		)
+		);
 		this.miraContract = this.#proxyContract(
 			getContract({
 				address: this.options.contractAddresses.mira,
@@ -377,7 +377,7 @@ export class BaseContract {
 					wallet: this.walletClient,
 				},
 			}),
-		)
+		);
 		this.tipsContract = this.#proxyContract(
 			getContract({
 				address: this.options.contractAddresses.tips,
@@ -387,7 +387,7 @@ export class BaseContract {
 					wallet: this.walletClient,
 				},
 			}),
-		)
+		);
 		this.tipsWithConfigContract = this.#proxyContract(
 			getContract({
 				address: this.options.contractAddresses.tipsWithConfig,
@@ -397,7 +397,7 @@ export class BaseContract {
 					wallet: this.walletClient,
 				},
 			}),
-		)
+		);
 		this.tipsWithFeeContract = this.#proxyContract(
 			getContract({
 				address: this.options.contractAddresses.tipsWithFee,
@@ -407,18 +407,18 @@ export class BaseContract {
 					wallet: this.walletClient,
 				},
 			}),
-		)
+		);
 	}
 
 	async #hasEnoughGCsb() {
 		const balance = await this.publicClient.readContract({
 			abi: erc20Abi,
-			functionName: 'balanceOf',
+			functionName: "balanceOf",
 			args: [this.account.address],
 			address: this.options.contractAddresses.gcsb,
-		})
+		});
 
-		return balance >= 10n ** 18n
+		return balance >= 10n ** 18n;
 	}
 
 	#proxyContract<T extends GetContractReturnType>(contract: T): T {
@@ -427,42 +427,42 @@ export class BaseContract {
 				get: (...args) => {
 					return new Proxy(Reflect.get(...args), {
 						apply: async (target, thisArg, argArray) => {
-							const hasArgs = argArray.length > 0 && Array.isArray(argArray[0])
+							const hasArgs = argArray.length > 0 && Array.isArray(argArray[0]);
 							const options = {
 								...((hasArgs ? argArray[1] : argArray[0]) ?? {}),
-							}
+							};
 
 							if (this.options.chain.id === crossbellTestnet.id) {
 								// calculate L2 gas price
 								if (!options.gasPrice) {
-									if (typeof this.options.gasPrice === 'bigint') {
-										options.gasPrice = this.options.gasPrice
+									if (typeof this.options.gasPrice === "bigint") {
+										options.gasPrice = this.options.gasPrice;
 									}
 									if (this.options.gCsbAsGas === true) {
-										options.gasPrice = 0n
+										options.gasPrice = 0n;
 									} else if (this.options.gCsbAsGas === false) {
 										// do nothing
-									} else if (this.options.gCsbAsGas === 'asDefault') {
+									} else if (this.options.gCsbAsGas === "asDefault") {
 										if (await this.#hasEnoughGCsb()) {
-											options.gasPrice = 0n
+											options.gasPrice = 0n;
 										}
 									}
 								}
 							} else {
 								// mainnet
 								// TODO: remove this once our mainnet is on L2
-								if (typeof this.options.gasPrice === 'bigint') {
-									options.gasPrice = this.options.gasPrice
+								if (typeof this.options.gasPrice === "bigint") {
+									options.gasPrice = this.options.gasPrice;
 								}
 							}
 
-							argArray[hasArgs ? 1 : 0] = options
+							argArray[hasArgs ? 1 : 0] = options;
 
-							return Reflect.apply(target, thisArg, argArray)
+							return Reflect.apply(target, thisArg, argArray);
 						},
-					})
+					});
 				},
-			})
-		return contract
+			});
+		return contract;
 	}
 }

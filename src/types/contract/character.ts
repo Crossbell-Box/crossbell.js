@@ -1,16 +1,16 @@
-import { type CharacterMetadata } from '../metadata'
+import type { CharacterMetadata } from "../metadata";
 
 export interface Character {
 	/** The id of this character. */
-	characterId: bigint
+	characterId: bigint;
 	/** The handle of this character. */
-	handle: string
+	handle: string;
 	/** The metadata URI of this character. */
-	uri: string
+	uri: string;
 	/** The metadata of this character. */
-	metadata?: CharacterMetadata
+	metadata?: CharacterMetadata;
 	/** The social token of this character. */
-	socialToken: string
+	socialToken: string;
 	/** The count of notes this character posted. */
-	noteCount: bigint
+	noteCount: bigint;
 }

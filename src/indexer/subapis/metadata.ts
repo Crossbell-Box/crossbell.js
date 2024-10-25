@@ -1,9 +1,5 @@
-import {
-	type CharacterMetadata,
-	type NoteMetadata,
-	type Numberish,
-} from '../../types'
-import { type BaseIndexer } from './base'
+import type { CharacterMetadata, NoteMetadata, Numberish } from "../../types";
+import type { BaseIndexer } from "./base";
 
 export class MetadataIndexer {
 	constructor(private base: BaseIndexer) {}
@@ -14,8 +10,8 @@ export class MetadataIndexer {
 	 * @param characterId - the character id
 	 */
 	syncForCharacter(characterId: Numberish) {
-		const url = `/characters/${characterId}/metadata/sync`
-		return this.base.fetch<CharacterMetadata>(url)
+		const url = `/characters/${characterId}/metadata/sync`;
+		return this.base.fetch<CharacterMetadata>(url);
 	}
 
 	/**
@@ -25,7 +21,7 @@ export class MetadataIndexer {
 	 * @param noteId - the note id
 	 */
 	syncForNote(characterId: Numberish, noteId: Numberish) {
-		const url = `/notes/${characterId}/${noteId}/metadata/sync`
-		return this.base.fetch<NoteMetadata>(url)
+		const url = `/notes/${characterId}/${noteId}/metadata/sync`;
+		return this.base.fetch<NoteMetadata>(url);
 	}
 }

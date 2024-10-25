@@ -1,11 +1,11 @@
-import { type Hash } from 'viem'
-import {
-	type ListResponse,
-	type NotificationEntity,
-	type NotificationTypeKey,
-	type Numberish,
-} from '../../types'
-import { type BaseIndexer } from './base'
+import type { Hash } from "viem";
+import type {
+	ListResponse,
+	NotificationEntity,
+	NotificationTypeKey,
+	Numberish,
+} from "../../types";
+import type { BaseIndexer } from "./base";
 
 export class NotificationIndexer {
 	constructor(private base: BaseIndexer) {}
@@ -30,22 +30,22 @@ export class NotificationIndexer {
 			cursor,
 		}: {
 			/** The type of notification */
-			type?: NotificationTypeKey | NotificationTypeKey[]
+			type?: NotificationTypeKey | NotificationTypeKey[];
 			/** Whether to include metadata of the character */
-			includeCharacterMetadata?: boolean
+			includeCharacterMetadata?: boolean;
 			/** Whether to include actions invoked by the character itself */
-			includeSelfInvoked?: boolean
+			includeSelfInvoked?: boolean;
 			/** Whether to include `isRead` attribute to indicate whether the notification is read */
-			includeIsRead?: boolean
+			includeIsRead?: boolean;
 			/** @deprecated Whether to read notifications. Please use */
-			read?: boolean
+			read?: boolean;
 			/** Limit the count of items returned. */
-			limit?: Numberish
+			limit?: Numberish;
 			/** Used for pagination. */
-			cursor?: string
+			cursor?: string;
 		} = {},
 	) {
-		const url = `/characters/${characterId}/notifications`
+		const url = `/characters/${characterId}/notifications`;
 		return this.base.fetch<ListResponse<NotificationEntity>>(url, {
 			params: {
 				type,
@@ -56,7 +56,7 @@ export class NotificationIndexer {
 				limit,
 				cursor,
 			},
-		})
+		});
 	}
 
 	/**
@@ -67,10 +67,10 @@ export class NotificationIndexer {
 	 * @returns The latest notification date string.
 	 */
 	markAllAsRead(characterId: Numberish) {
-		const url = `/characters/${characterId}/notifications/read`
+		const url = `/characters/${characterId}/notifications/read`;
 		return this.base.fetch<{ data: string }>(url, {
-			method: 'POST',
-		})
+			method: "POST",
+		});
 	}
 
 	/**
@@ -90,15 +90,15 @@ export class NotificationIndexer {
 			includeCharacterMetadata,
 		}: {
 			/** Whether to include metadata of the character */
-			includeCharacterMetadata?: boolean
+			includeCharacterMetadata?: boolean;
 		} = {},
 	) {
-		const url = `/characters/${characterId}/notifications/${transactionHash}/${logIndex}`
+		const url = `/characters/${characterId}/notifications/${transactionHash}/${logIndex}`;
 		return this.base.fetch<NotificationEntity | null>(url, {
 			params: {
 				includeCharacterMetadata,
 			},
-		})
+		});
 	}
 
 	/**
@@ -107,7 +107,7 @@ export class NotificationIndexer {
 	 * @param characterId - The characterId of the notification owner.
 	 */
 	getUnreadCount(characterId: Numberish) {
-		const url = `/characters/${characterId}/notifications/unread/count`
-		return this.base.fetch<{ count: number }>(url)
+		const url = `/characters/${characterId}/notifications/unread/count`;
+		return this.base.fetch<{ count: number }>(url);
 	}
 }

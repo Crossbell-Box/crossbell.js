@@ -1,14 +1,14 @@
-import { type Address, encodeAbiParameters } from 'viem'
-import {
-	type Numberish,
-	type ReadOverrides,
-	type Result,
-	type WriteOverrides,
-} from '../../types'
-import { type Mira } from '../abi'
-import { type TipsWithFee } from '../abi/tips-with-fee'
-import { autoSwitchMainnet } from '../decorators'
-import { type BaseContract } from './base'
+import { type Address, encodeAbiParameters } from "viem";
+import type {
+	Numberish,
+	ReadOverrides,
+	Result,
+	WriteOverrides,
+} from "../../types";
+import type { Mira } from "../abi";
+import type { TipsWithFee } from "../abi/tips-with-fee";
+import { autoSwitchMainnet } from "../decorators";
+import type { BaseContract } from "./base";
 
 export class TipsWithFeeContract {
 	constructor(private base: BaseContract) {}
@@ -28,34 +28,34 @@ export class TipsWithFeeContract {
 			feeReceiver,
 		}: {
 			/** The character ID of the character that is tipping. */
-			fromCharacterId: Numberish
+			fromCharacterId: Numberish;
 			/** The character ID of the character that is being tipped. */
-			toCharacterId: Numberish
+			toCharacterId: Numberish;
 			/** The amount of $MIRA token to tip. Unit: wei. */
-			amount: Numberish
+			amount: Numberish;
 			/** Fee receiver address. */
-			feeReceiver: Address
+			feeReceiver: Address;
 		},
-		overrides: WriteOverrides<Mira, 'send'> = {},
+		overrides: WriteOverrides<Mira, "send"> = {},
 	): Promise<Result<undefined, true>> {
 		const data = encodeAbiParameters(
-			[{ type: 'uint256' }, { type: 'uint256' }, { type: 'address' }],
+			[{ type: "uint256" }, { type: "uint256" }, { type: "address" }],
 			[BigInt(fromCharacterId), BigInt(toCharacterId), feeReceiver],
-		)
+		);
 
 		const hash = await this.base.miraContract.write.send(
 			[this.base.options.contractAddresses.tipsWithFee, BigInt(amount), data],
 			overrides,
-		)
+		);
 
 		const receipt = await this.base.publicClient.waitForTransactionReceipt({
 			hash,
-		})
+		});
 
 		return {
 			data: undefined,
 			transactionHash: receipt.transactionHash,
-		}
+		};
 	}
 
 	/**
@@ -74,24 +74,24 @@ export class TipsWithFeeContract {
 			feeReceiver,
 		}: {
 			/** The character ID of the character that is tipping. */
-			fromCharacterId: Numberish
+			fromCharacterId: Numberish;
 			/** The character ID of the character that is being tipped. */
-			toCharacterId: Numberish
+			toCharacterId: Numberish;
 			/** The note ID of the note that is being tipped. */
-			toNoteId: Numberish
+			toNoteId: Numberish;
 			/** The amount of $MIRA token to tip. Unit: wei. */
-			amount: Numberish
+			amount: Numberish;
 			/** Fee receiver address. */
-			feeReceiver: Address
+			feeReceiver: Address;
 		},
-		overrides: WriteOverrides<Mira, 'send'> = {},
+		overrides: WriteOverrides<Mira, "send"> = {},
 	): Promise<Result<undefined, true>> {
 		const data = encodeAbiParameters(
 			[
-				{ type: 'uint256' },
-				{ type: 'uint256' },
-				{ type: 'uint256' },
-				{ type: 'address' },
+				{ type: "uint256" },
+				{ type: "uint256" },
+				{ type: "uint256" },
+				{ type: "address" },
 			],
 			[
 				BigInt(fromCharacterId),
@@ -99,21 +99,21 @@ export class TipsWithFeeContract {
 				BigInt(toNoteId),
 				feeReceiver,
 			],
-		)
+		);
 
 		const hash = await this.base.miraContract.write.send(
 			[this.base.options.contractAddresses.tipsWithFee, BigInt(amount), data],
 			overrides,
-		)
+		);
 
 		const receipt = await this.base.publicClient.waitForTransactionReceipt({
 			hash,
-		})
+		});
 
 		return {
 			data: undefined,
 			transactionHash: receipt.transactionHash,
-		}
+		};
 	}
 
 	/**
@@ -126,16 +126,16 @@ export class TipsWithFeeContract {
 		feeReceiver: Address,
 		characterId: Numberish,
 		noteId: Numberish,
-		overrides: ReadOverrides<TipsWithFee, 'getFeeFraction'> = {},
+		overrides: ReadOverrides<TipsWithFee, "getFeeFraction"> = {},
 	): Promise<Result<bigint>> {
 		const res = await this.base.tipsWithFeeContract.read.getFeeFraction(
 			[feeReceiver, BigInt(characterId), BigInt(noteId)],
 			overrides,
-		)
+		);
 
 		return {
 			data: res,
-		}
+		};
 	}
 
 	/**
@@ -149,15 +149,15 @@ export class TipsWithFeeContract {
 		characterId: Numberish,
 		noteId: Numberish,
 		tipAmount: Numberish,
-		overrides: ReadOverrides<TipsWithFee, 'getFeeAmount'> = {},
+		overrides: ReadOverrides<TipsWithFee, "getFeeAmount"> = {},
 	): Promise<Result<bigint>> {
 		const res = await this.base.tipsWithFeeContract.read.getFeeAmount(
 			[feeReceiver, BigInt(characterId), BigInt(noteId), BigInt(tipAmount)],
 			overrides,
-		)
+		);
 
 		return {
 			data: res,
-		}
+		};
 	}
 }

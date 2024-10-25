@@ -1,14 +1,14 @@
-import {
-	type MintOrLinkModuleConfig,
-	type Numberish,
-	type Result,
-	type WriteOverrides,
-} from '../../types'
-import { getModuleConfig } from '../../utils/module'
-import { waitForTransactionReceiptWithRetry } from '../../utils/viem'
-import { type Entry } from '../abi'
-import { autoSwitchMainnet } from '../decorators'
-import { type BaseContract } from './base'
+import type {
+	MintOrLinkModuleConfig,
+	Numberish,
+	Result,
+	WriteOverrides,
+} from "../../types";
+import { getModuleConfig } from "../../utils/module";
+import { waitForTransactionReceiptWithRetry } from "../../utils/viem";
+import type { Entry } from "../abi";
+import { autoSwitchMainnet } from "../decorators";
+import type { BaseContract } from "./base";
 
 export class LinkModuleContract {
 	constructor(private base: BaseContract) {}
@@ -25,13 +25,13 @@ export class LinkModuleContract {
 			linkModule,
 		}: {
 			/** The character ID to set the link module for. */
-			characterId: Numberish
+			characterId: Numberish;
 			/** The link module to set. */
-			linkModule: MintOrLinkModuleConfig
+			linkModule: MintOrLinkModuleConfig;
 		},
-		overrides: WriteOverrides<Entry, 'setLinkModule4Character'> = {},
+		overrides: WriteOverrides<Entry, "setLinkModule4Character"> = {},
 	): Promise<Result<undefined, true>> {
-		const moduleConfig = await getModuleConfig(linkModule)
+		const moduleConfig = await getModuleConfig(linkModule);
 
 		const hash = await this.base.contract.write.setLinkModule4Character(
 			[
@@ -42,17 +42,17 @@ export class LinkModuleContract {
 				},
 			],
 			overrides,
-		)
+		);
 
 		const receipt = await waitForTransactionReceiptWithRetry(
 			this.base.publicClient,
 			hash,
-		)
+		);
 
 		return {
 			data: undefined,
 			transactionHash: receipt.transactionHash,
-		}
+		};
 	}
 
 	/**
@@ -68,15 +68,15 @@ export class LinkModuleContract {
 			linkModule,
 		}: {
 			/** The character ID to set the link module for. */
-			characterId: Numberish
+			characterId: Numberish;
 			/** The note ID to set the link module for. */
-			noteId: Numberish
+			noteId: Numberish;
 			/** The link module to set. */
-			linkModule: MintOrLinkModuleConfig
+			linkModule: MintOrLinkModuleConfig;
 		},
-		overrides: WriteOverrides<Entry, 'setLinkModule4Character'> = {},
+		overrides: WriteOverrides<Entry, "setLinkModule4Character"> = {},
 	): Promise<Result<undefined, true>> {
-		const moduleConfig = await getModuleConfig(linkModule)
+		const moduleConfig = await getModuleConfig(linkModule);
 
 		const hash = await this.base.contract.write.setLinkModule4Note(
 			[
@@ -88,17 +88,17 @@ export class LinkModuleContract {
 				},
 			],
 			overrides,
-		)
+		);
 
 		const receipt = await waitForTransactionReceiptWithRetry(
 			this.base.publicClient,
 			hash,
-		)
+		);
 
 		return {
 			data: undefined,
 			transactionHash: receipt.transactionHash,
-		}
+		};
 	}
 
 	/**

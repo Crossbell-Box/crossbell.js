@@ -1,6 +1,6 @@
-import { type Address, type Hash } from 'viem'
-import { type ListResponse, type Numberish, type TipEntity } from '../../types'
-import { type BaseIndexer } from './base'
+import type { Address, Hash } from "viem";
+import type { ListResponse, Numberish, TipEntity } from "../../types";
+import type { BaseIndexer } from "./base";
 
 export class TipIndexer {
 	constructor(private base: BaseIndexer) {}
@@ -24,23 +24,23 @@ export class TipIndexer {
 		cursor,
 	}: {
 		/** The characterId of the tip sender. */
-		characterId?: Numberish
+		characterId?: Numberish;
 		/** The characterId of the tip receiver. */
-		toCharacterId?: Numberish
+		toCharacterId?: Numberish;
 		/** The noteId of the tip receiver. */
-		toNoteId?: Numberish
+		toNoteId?: Numberish;
 		/** The token address of the token sent in tip. */
-		tokenAddress?: Address
+		tokenAddress?: Address;
 		/** Whether to include tips with zero amount. */
-		includeZeroAmount?: boolean
+		includeZeroAmount?: boolean;
 		/** Whether to include character and note metadata */
-		includeMetadata?: boolean
+		includeMetadata?: boolean;
 		/** Limit the count of items returned. */
-		limit?: Numberish
+		limit?: Numberish;
 		/** Used for pagination. */
-		cursor?: string
+		cursor?: string;
 	} = {}) {
-		const url = '/tips'
+		const url = "/tips";
 
 		return this.base.fetch<ListResponse<TipEntity>>(url, {
 			params: {
@@ -53,7 +53,7 @@ export class TipIndexer {
 				limit,
 				cursor,
 			},
-		})
+		});
 	}
 
 	/**
@@ -65,7 +65,7 @@ export class TipIndexer {
 	 * @returns The tip.
 	 */
 	get(transactionHash: Hash, logIndex: Numberish) {
-		const url = `/tips/${transactionHash}/${logIndex}`
-		return this.base.fetch<TipEntity | null>(url)
+		const url = `/tips/${transactionHash}/${logIndex}`;
+		return this.base.fetch<TipEntity | null>(url);
 	}
 }

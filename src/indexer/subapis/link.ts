@@ -1,40 +1,40 @@
-import { type Address } from 'viem'
-import {
-	type LinkEntity,
-	type LinkItemType,
-	type ListResponse,
-	type Numberish,
-} from '../../types'
-import { type BaseIndexer } from './base'
+import type { Address } from "viem";
+import type {
+	LinkEntity,
+	LinkItemType,
+	ListResponse,
+	Numberish,
+} from "../../types";
+import type { BaseIndexer } from "./base";
 
 type LinksQuery = {
 	/** Limit the count of items returned. */
-	limit?: Numberish
+	limit?: Numberish;
 	/** Used for pagination. */
-	cursor?: string
+	cursor?: string;
 	/** The link type to filter by. e.g. 'follow' */
-	linkType?: string
+	linkType?: string;
 	/** The link item type to filter by. e.g. 'Character' */
-	linkItemType?: LinkItemType
+	linkItemType?: LinkItemType;
 	/** The fromCharacterId to filter by. */
-	fromCharacterId?: Numberish
+	fromCharacterId?: Numberish;
 	/** The toCharacterId to filter by. */
-	toCharacterId?: Numberish
+	toCharacterId?: Numberish;
 	/** The toAddress to filter by. */
-	toAddress?: Address
+	toAddress?: Address;
 	/** The toNoteId to filter by. */
-	toNoteId?: Numberish
+	toNoteId?: Numberish;
 	/** The toContractAddress to filter by. */
-	toContractAddress?: Address
+	toContractAddress?: Address;
 	/** The toTokenId to filter by. */
-	toTokenId?: Numberish
+	toTokenId?: Numberish;
 	/** The toLinklistId to filter by. */
-	toLinklistId?: Numberish
+	toLinklistId?: Numberish;
 	/** The toUri to filter by. */
-	toUri?: string
+	toUri?: string;
 	/** The order to sort by. */
-	order?: 'asc' | 'desc'
-}
+	order?: "asc" | "desc";
+};
 
 export class LinkIndexer {
 	constructor(private base: BaseIndexer) {}
@@ -50,10 +50,10 @@ export class LinkIndexer {
 	 * @returns The list of links.
 	 */
 	getMany(characterId: Numberish, options: LinksQuery = {}) {
-		const url = `/characters/${characterId}/links`
+		const url = `/characters/${characterId}/links`;
 		return this.base.fetch<ListResponse<LinkEntity>>(url, {
 			params: options,
-		})
+		});
 	}
 
 	/**
@@ -67,10 +67,10 @@ export class LinkIndexer {
 	 * @returns The list of links.
 	 */
 	getManyByLinklistId(linklistId: Numberish, options: LinksQuery = {}) {
-		const url = `/linklists/${linklistId}/links`
+		const url = `/linklists/${linklistId}/links`;
 		return this.base.fetch<ListResponse<LinkEntity>>(url, {
 			params: options,
-		})
+		});
 	}
 
 	/**
@@ -90,19 +90,19 @@ export class LinkIndexer {
 			order,
 		}: {
 			/** Limit the count of items returned. */
-			limit?: Numberish
+			limit?: Numberish;
 			/** Used for pagination. */
-			cursor?: string
+			cursor?: string;
 			/** The link type to filter by. e.g. 'follow' */
-			linkType?: string
+			linkType?: string;
 			/** The order to sort by. */
-			order?: 'asc' | 'desc'
+			order?: "asc" | "desc";
 		} = {},
 	) {
-		const url = `/characters/${characterId}/backlinks`
+		const url = `/characters/${characterId}/backlinks`;
 		return this.base.fetch<ListResponse<LinkEntity>>(url, {
 			params: { limit, cursor, linkType, order },
-		})
+		});
 	}
 
 	/**
@@ -122,16 +122,16 @@ export class LinkIndexer {
 			order,
 		}: {
 			/** Limit the count of items returned. */
-			limit?: Numberish
+			limit?: Numberish;
 			/** Used for pagination. */
-			cursor?: string
+			cursor?: string;
 			/** The link type to filter by. e.g. 'follow' */
-			linkType?: string
+			linkType?: string;
 			/** The order to sort by. */
-			order?: 'asc' | 'desc'
+			order?: "asc" | "desc";
 		} = {},
 	) {
-		const url = `/addresses/${address}/backlinks`
+		const url = `/addresses/${address}/backlinks`;
 		return this.base.fetch<ListResponse<LinkEntity>>(url, {
 			params: {
 				limit,
@@ -139,7 +139,7 @@ export class LinkIndexer {
 				linkType,
 				order,
 			},
-		})
+		});
 	}
 
 	/**
@@ -161,19 +161,19 @@ export class LinkIndexer {
 			order,
 		}: {
 			/** Limit the count of items returned. */
-			limit?: Numberish
+			limit?: Numberish;
 			/** Used for pagination. */
-			cursor?: string
+			cursor?: string;
 			/** The link type to filter by. e.g. 'follow' */
-			linkType?: string
+			linkType?: string;
 			/** The order to sort by. */
-			order?: 'asc' | 'desc'
+			order?: "asc" | "desc";
 		} = {},
 	) {
-		const url = `/notes/${characterId}/${noteId}/backlinks`
+		const url = `/notes/${characterId}/${noteId}/backlinks`;
 		return this.base.fetch<ListResponse<LinkEntity>>(url, {
 			params: { limit, cursor, linkType, order },
-		})
+		});
 	}
 
 	/**
@@ -195,19 +195,19 @@ export class LinkIndexer {
 			order,
 		}: {
 			/** Limit the count of items returned. */
-			limit?: Numberish
+			limit?: Numberish;
 			/** Used for pagination. */
-			cursor?: string
+			cursor?: string;
 			/** The link type to filter by. e.g. 'follow' */
-			linkType?: string
+			linkType?: string;
 			/** The order to sort by. */
-			order?: 'asc' | 'desc'
+			order?: "asc" | "desc";
 		} = {},
 	) {
-		const url = `/erc721s/${contractAddress}/${tokenId}/backlinks`
+		const url = `/erc721s/${contractAddress}/${tokenId}/backlinks`;
 		return this.base.fetch<ListResponse<LinkEntity>>(url, {
 			params: { limit, cursor, linkType, order },
-		})
+		});
 	}
 
 	/**
@@ -227,16 +227,16 @@ export class LinkIndexer {
 			order,
 		}: {
 			/** Limit the count of items returned. */
-			limit?: Numberish
+			limit?: Numberish;
 			/** Used for pagination. */
-			cursor?: string
+			cursor?: string;
 			/** The link type to filter by. e.g. 'follow' */
-			linkType?: string
+			linkType?: string;
 			/** The order to sort by. */
-			order?: 'asc' | 'desc'
+			order?: "asc" | "desc";
 		} = {},
 	) {
-		const url = `/linklists/${linklistId}/backlinks`
+		const url = `/linklists/${linklistId}/backlinks`;
 		return this.base.fetch<ListResponse<LinkEntity>>(url, {
 			params: {
 				limit,
@@ -244,7 +244,7 @@ export class LinkIndexer {
 				linkType,
 				order,
 			},
-		})
+		});
 	}
 
 	/**
@@ -264,16 +264,16 @@ export class LinkIndexer {
 			order,
 		}: {
 			/** Limit the count of items returned. */
-			limit?: Numberish
+			limit?: Numberish;
 			/** Used for pagination. */
-			cursor?: string
+			cursor?: string;
 			/** The link type to filter by. e.g. 'follow' */
-			linkType?: string
+			linkType?: string;
 			/** The order to sort by. */
-			order?: 'asc' | 'desc'
+			order?: "asc" | "desc";
 		} = {},
 	) {
-		const url = `/anyuris/${uri}/backlinks`
+		const url = `/anyuris/${uri}/backlinks`;
 		return this.base.fetch<ListResponse<LinkEntity>>(url, {
 			params: {
 				limit,
@@ -281,6 +281,6 @@ export class LinkIndexer {
 				linkType,
 				order,
 			},
-		})
+		});
 	}
 }

@@ -1,11 +1,11 @@
-import {
-	type Abi as _Abi,
-	type AbiType,
-	type AbiTypeToPrimitiveType,
-	type ExtractAbiEvent,
-} from 'abitype'
-import { type EIP1193Provider } from 'eip1193-types'
-import { backOff } from 'exponential-backoff'
+import type {
+	AbiType,
+	AbiTypeToPrimitiveType,
+	ExtractAbiEvent,
+	Abi as _Abi,
+} from "abitype";
+import type { EIP1193Provider } from "eip1193-types";
+import { backOff } from "exponential-backoff";
 import {
 	http,
 	type Account,
@@ -14,7 +14,7 @@ import {
 	type ContractEventName,
 	type DecodeEventLogReturnType,
 	type Log,
-	ParseAccount,
+	type ParseAccount,
 	type PrivateKeyAccount,
 	type PublicClient,
 	type TransactionReceipt,
@@ -25,44 +25,41 @@ import {
 	custom,
 	decodeEventLog,
 	webSocket,
-} from 'viem'
-import * as Abi from '../contract/abi'
-import { getJsonRpcAddress } from '../network'
-import { log } from './logger'
+} from "viem";
+import * as Abi from "../contract/abi";
+import { getJsonRpcAddress } from "../network";
+import { log } from "./logger";
 
 export function createTransport(url: string): Transport {
-	const url_ = getJsonRpcAddress() ?? url
+	const url_ = getJsonRpcAddress() ?? url;
 
-	if (url_.startsWith('ws')) {
+	if (url_.startsWith("ws")) {
 		return webSocket(url_, {
 			timeout: 30_000,
-			key: 'crossbell',
-			name: 'crossbell',
+			key: "crossbell",
+			name: "crossbell",
 			retryCount: 5,
 			retryDelay: 5000,
-		})
+		});
 	}
 
 	return http(url_, {
 		timeout: 30_000,
-		key: 'crossbell',
-		name: 'crossbell',
-	})
+		key: "crossbell",
+		name: "crossbell",
+	});
 }
 
 export function createPublicClientFromChain<TChain extends Chain>(
 	chain: TChain,
 	rpcUrl?: string,
 ): PublicClient<Transport, TChain> {
-	const transport = createTransport(rpcUrl ?? chain.rpcUrls.default.http[0])
+	const transport = createTransport(rpcUrl ?? chain.rpcUrls.default.http[0]);
 	return createPublicClient({
 		transport,
 		chain,
 		pollingInterval: 100,
-		batch: {
-			multicall: true,
-		},
-	})
+	});
 }
 
 export function createWalletClientFromPrivateKeyAccount<
@@ -73,25 +70,25 @@ export function createWalletClientFromPrivateKeyAccount<
 	chain: TChain,
 	rpcUrl?: string,
 ): WalletClient<Transport, TChain, ParseAccount<TAccount>> {
-	const transport = createTransport(rpcUrl ?? chain.rpcUrls.default.http[0])
+	const transport = createTransport(rpcUrl ?? chain.rpcUrls.default.http[0]);
 	return createWalletClient({
 		transport,
 		chain,
 		account,
 		pollingInterval: 100,
-	})
+	});
 }
 
 export function getProviderAccount(
 	provider: EIP1193Provider,
 ): Account | undefined {
-	if ('selectedAddress' in provider && provider.selectedAddress) {
-		return addressToAccount(provider.selectedAddress as Address)
+	if ("selectedAddress" in provider && provider.selectedAddress) {
+		return addressToAccount(provider.selectedAddress as Address);
 	}
-	if ('send' in provider && typeof provider.send === 'function') {
-		const result: any = provider.send({ method: 'eth_accounts' })
+	if ("send" in provider && typeof provider.send === "function") {
+		const result: any = provider.send({ method: "eth_accounts" });
 		if (result?.result?.[0]) {
-			return addressToAccount(result.result[0])
+			return addressToAccount(result.result[0]);
 		}
 	}
 }
@@ -109,13 +106,13 @@ export function createWalletClientFromProvider<
 		chain,
 		account,
 		pollingInterval: 100,
-	})
+	});
 }
 
 type EventInputs<
 	TAbi extends _Abi,
 	TName extends ContractEventName<TAbi>,
-> = ExtractAbiEvent<TAbi, TName>['inputs']
+> = ExtractAbiEvent<TAbi, TName>["inputs"];
 
 type GetAbiType<
 	TAbi extends _Abi,
@@ -124,24 +121,24 @@ type GetAbiType<
 > = Extract<
 	NonNullable<EventInputs<TAbi, TName>[number]>,
 	{ name: Key }
->['type']
+>["type"];
 
 type GetEventArgs<TAbi extends _Abi, TName extends ContractEventName<TAbi>> = {
 	[K in NonNullable<
-		EventInputs<TAbi, TName>[number]['name']
+		EventInputs<TAbi, TName>[number]["name"]
 	>]: AbiTypeToPrimitiveType<
 		GetAbiType<TAbi, TName, K> extends AbiType
 			? GetAbiType<TAbi, TName, K>
 			: never
-	>
-}
+	>;
+};
 
 export type FixedEventReturn<
 	TAbi extends _Abi,
 	TName extends ContractEventName<TAbi>,
-> = Omit<DecodeEventLogReturnType<TAbi, TName>, 'args'> & {
-	args: GetEventArgs<TAbi, TName>
-}
+> = Omit<DecodeEventLogReturnType<TAbi, TName>, "args"> & {
+	args: GetEventArgs<TAbi, TName>;
+};
 
 export function parseLog<
 	TAbi extends _Abi = Abi.Entry,
@@ -150,11 +147,11 @@ export function parseLog<
 	logs: Log[],
 	filterTopic: TName,
 	options: {
-		throwOnMultipleLogsFound?: boolean
-		returnMultipleLogs: true
-		abi?: TAbi
+		throwOnMultipleLogsFound?: boolean;
+		returnMultipleLogs: true;
+		abi?: TAbi;
 	},
-): FixedEventReturn<TAbi, TName>[]
+): FixedEventReturn<TAbi, TName>[];
 export function parseLog<
 	TAbi extends _Abi = Abi.Entry,
 	TName extends ContractEventName<TAbi> = ContractEventName<TAbi>,
@@ -162,11 +159,11 @@ export function parseLog<
 	logs: Log[],
 	filterTopic: TName,
 	options?: {
-		throwOnMultipleLogsFound?: boolean
-		returnMultipleLogs?: boolean
-		abi?: TAbi
+		throwOnMultipleLogsFound?: boolean;
+		returnMultipleLogs?: boolean;
+		abi?: TAbi;
 	},
-): FixedEventReturn<TAbi, TName>
+): FixedEventReturn<TAbi, TName>;
 export function parseLog<
 	TAbi extends _Abi = Abi.Entry,
 	TName extends ContractEventName<TAbi> = ContractEventName<TAbi>,
@@ -177,8 +174,8 @@ export function parseLog<
 		throwOnMultipleLogsFound,
 		returnMultipleLogs,
 	}: {
-		throwOnMultipleLogsFound?: boolean
-		returnMultipleLogs?: boolean
+		throwOnMultipleLogsFound?: boolean;
+		returnMultipleLogs?: boolean;
 	} = {},
 ): any {
 	const parsedLogs = logs
@@ -187,33 +184,33 @@ export function parseLog<
 				return decodeEventLog({
 					abi: [...Abi.entry, ...Abi.linklist],
 					...log,
-				})
+				});
 			} catch {
-				return undefined
+				return undefined;
 			}
 		})
-		.filter((log) => log?.eventName === targetTopic)
+		.filter((log) => log?.eventName === targetTopic);
 
 	if (parsedLogs.length === 0) {
-		throw new Error(`Log with topic ${targetTopic} not found`)
+		throw new Error(`Log with topic ${targetTopic} not found`);
 	}
 
 	if (throwOnMultipleLogsFound && parsedLogs.length > 1) {
-		throw new Error(`More than one log with topic ${parsedLogs} found`)
+		throw new Error(`More than one log with topic ${parsedLogs} found`);
 	}
 
-	if (returnMultipleLogs) return parsedLogs
+	if (returnMultipleLogs) return parsedLogs;
 
-	return parsedLogs[0]
+	return parsedLogs[0];
 }
 
 export function addressToAccount(address: Address | Account): Account {
-	if (typeof address === 'string')
+	if (typeof address === "string")
 		return {
-			type: 'json-rpc',
+			type: "json-rpc",
 			address,
-		}
-	return address
+		};
+	return address;
 }
 
 /**
@@ -232,11 +229,11 @@ export async function waitForTransactionReceiptWithRetry(
 ): Promise<TransactionReceipt> {
 	return backOff(() => client.waitForTransactionReceipt({ hash }), {
 		retry: (e, i) => {
-			log('retrying waitForTransactionReceipt', { hash, i, e })
-			return true
+			log("retrying waitForTransactionReceipt", { hash, i, e });
+			return true;
 		},
 		numOfAttempts: 6,
 		timeMultiple: 2,
 		startingDelay: 100,
-	})
+	});
 }

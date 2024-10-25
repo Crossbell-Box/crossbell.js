@@ -1,87 +1,87 @@
-import {
-	type CharacterMetadata,
-	type LinkItemNote,
-	type LinkItemType,
-	type NoteEntity,
-	type NoteMetadata,
-} from '../../types'
-import { type BaseIndexer } from './base'
+import type {
+	CharacterMetadata,
+	LinkItemNote,
+	LinkItemType,
+	NoteEntity,
+	NoteMetadata,
+} from "../../types";
+import type { BaseIndexer } from "./base";
 
 export type BaseSigner = {
-	signMessage: (msg: string) => Promise<string>
-	getAddress: () => Promise<string | null>
-}
+	signMessage: (msg: string) => Promise<string>;
+	getAddress: () => Promise<string | null>;
+};
 
 export class SiweIndexer {
 	constructor(private base: BaseIndexer) {}
 
-	token: string | undefined
+	token: string | undefined;
 
 	async signIn(signer: BaseSigner): Promise<{ token: string }> {
-		const address = await signer.getAddress()
+		const address = await signer.getAddress();
 
-		if (!address) throw new Error(`SignInError: invalid address ${address}`)
+		if (!address) throw new Error(`SignInError: invalid address ${address}`);
 
 		const { message } = await this.base.fetch<{ message: string }>(
-			'/siwe/challenge',
+			"/siwe/challenge",
 			{
-				method: 'POST',
+				method: "POST",
 				data: {
 					address,
 					domain:
-						(typeof window !== 'undefined' && window.location.host) ||
-						'crossbell.io',
+						(typeof window !== "undefined" && window.location.host) ||
+						"crossbell.io",
 					uri:
-						(typeof window !== 'undefined' && window.location.origin) ||
-						'https://crossbell.io',
-					statement: 'Sign in with Crossbell to the app.',
+						(typeof window !== "undefined" && window.location.origin) ||
+						"https://crossbell.io",
+					statement: "Sign in with Crossbell to the app.",
 				},
 			},
-		)
+		);
 
-		const { token } = await this.base.fetch<{ token: string }>('/siwe/login', {
-			method: 'POST',
+		const { token } = await this.base.fetch<{ token: string }>("/siwe/login", {
+			method: "POST",
 			data: {
 				address,
 				signature: await signer.signMessage(message),
 			},
-		})
+		});
 
-		this.token = token
-		return { token }
+		this.token = token;
+		return { token };
 	}
 
 	getAccount() {
-		return this.base.fetch<{ address: string }>('/siwe/account', {
-			method: 'GET',
+		return this.base.fetch<{ address: string }>("/siwe/account", {
+			method: "GET",
 			token: this.token,
-		})
+		});
 	}
 
 	getBalance() {
-		return this.base.fetch<{ balance: string }>('/siwe/account/balance', {
-			method: 'GET',
+		return this.base.fetch<{ balance: string }>("/siwe/account/balance", {
+			method: "GET",
 			token: this.token,
-		})
+		});
 	}
 
 	updateMetadata({
-		mode = 'merge',
+		mode = "merge",
 		characterId,
 		metadata,
 	}: {
-		characterId: number
-		mode?: 'merge' | 'replace'
-		metadata: CharacterMetadata
+		characterId: number;
+		mode?: "merge" | "replace";
+		metadata: CharacterMetadata;
 	}) {
 		return this.base.fetch<{ transactionHash: string; data: string }>(
 			`/siwe/contract/characters/${characterId}/metadata`,
 			{
-				method: 'POST',
+				method: "POST",
 				token: this.token,
 				data: { metadata, mode },
 			},
-		)
+		);
 	}
 
 	linkNote({
@@ -91,16 +91,16 @@ export class SiweIndexer {
 		linkType,
 		data,
 	}: {
-		fromCharacterId: number
-		characterId: number
-		noteId: number
-		linkType: string
-		data?: string
+		fromCharacterId: number;
+		characterId: number;
+		noteId: number;
+		linkType: string;
+		data?: string;
 	}) {
 		return this.base.fetch<{ transactionHash: string; data: string }>(
 			`/siwe/contract/characters/${fromCharacterId}/links/notes/${characterId}/${noteId}/${linkType}`,
-			{ method: 'PUT', token: this.token, data: { data } },
-		)
+			{ method: "PUT", token: this.token, data: { data } },
+		);
 	}
 
 	unlinkNote({
@@ -109,15 +109,15 @@ export class SiweIndexer {
 		characterId,
 		linkType,
 	}: {
-		fromCharacterId: number
-		characterId: number
-		noteId: number
-		linkType: string
+		fromCharacterId: number;
+		characterId: number;
+		noteId: number;
+		linkType: string;
 	}) {
 		return this.base.fetch<{ transactionHash: string; data: string }>(
 			`/siwe/contract/characters/${fromCharacterId}/links/notes/${characterId}/${noteId}/${linkType}`,
-			{ method: 'DELETE', token: this.token },
-		)
+			{ method: "DELETE", token: this.token },
+		);
 	}
 
 	linkCharacter({
@@ -126,15 +126,15 @@ export class SiweIndexer {
 		linkType,
 		data,
 	}: {
-		characterId: number
-		toCharacterId: number
-		linkType: string
-		data?: string
+		characterId: number;
+		toCharacterId: number;
+		linkType: string;
+		data?: string;
 	}) {
 		return this.base.fetch<{ transactionHash: string; data: string }>(
 			`/siwe/contract/characters/${characterId}/links/characters/${toCharacterId}/${linkType}`,
-			{ method: 'PUT', token: this.token, data: { data } },
-		)
+			{ method: "PUT", token: this.token, data: { data } },
+		);
 	}
 
 	linkCharacters({
@@ -144,20 +144,20 @@ export class SiweIndexer {
 		linkType,
 		data,
 	}: {
-		characterId: number
-		toCharacterIds: number[]
-		toAddresses: string[]
-		linkType: string
-		data?: string
+		characterId: number;
+		toCharacterIds: number[];
+		toAddresses: string[];
+		linkType: string;
+		data?: string;
 	}) {
 		return this.base.fetch<{ transactionHash: string; data: string }>(
 			`/siwe/contract/characters/${characterId}/links/characters`,
 			{
-				method: 'PUT',
+				method: "PUT",
 				token: this.token,
 				data: { data, linkType, toCharacterIds, toAddresses },
 			},
-		)
+		);
 	}
 
 	unlinkCharacter({
@@ -165,34 +165,34 @@ export class SiweIndexer {
 		toCharacterId,
 		linkType,
 	}: {
-		characterId: number
-		toCharacterId: number
-		linkType: string
+		characterId: number;
+		toCharacterId: number;
+		linkType: string;
 	}) {
 		return this.base.fetch<{ transactionHash: string; data: string }>(
 			`/siwe/contract/characters/${characterId}/links/characters/${toCharacterId}/${linkType}`,
-			{ method: 'DELETE', token: this.token },
-		)
+			{ method: "DELETE", token: this.token },
+		);
 	}
 
 	putNote({
 		characterId,
 		...body
 	}: {
-		characterId: number
-		metadata: NoteMetadata
-		linkItemType?: LinkItemType
-		linkItem?: LinkItemNote
-		locked?: boolean
+		characterId: number;
+		metadata: NoteMetadata;
+		linkItemType?: LinkItemType;
+		linkItem?: LinkItemNote;
+		locked?: boolean;
 	}) {
 		return this.base.fetch<{ transactionHash: string; data: string }>(
 			`/siwe/contract/characters/${characterId}/notes`,
 			{
-				method: 'PUT',
+				method: "PUT",
 				token: this.token,
 				data: body,
 			},
-		)
+		);
 	}
 
 	updateNote({
@@ -200,44 +200,44 @@ export class SiweIndexer {
 		noteId,
 		metadata,
 	}: {
-		characterId: NoteEntity['characterId']
-		noteId: NoteEntity['noteId']
-		metadata: NoteMetadata
+		characterId: NoteEntity["characterId"];
+		noteId: NoteEntity["noteId"];
+		metadata: NoteMetadata;
 	}) {
 		return this.base.fetch<{ transactionHash: string; data: string }>(
 			`/siwe/contract/characters/${characterId}/notes/${noteId}/metadata`,
 			{
-				method: 'POST',
+				method: "POST",
 				token: this.token,
 				data: { metadata },
 			},
-		)
+		);
 	}
 
 	deleteNote({
 		characterId,
 		noteId,
 	}: {
-		characterId: number
-		noteId: NoteEntity['noteId']
+		characterId: number;
+		noteId: NoteEntity["noteId"];
 	}) {
 		return this.base.fetch<{ transactionHash: string; data: string }>(
 			`/siwe/contract/characters/${characterId}/notes/${noteId}`,
 			{
-				method: 'DELETE',
+				method: "DELETE",
 				token: this.token,
 			},
-		)
+		);
 	}
 
 	mintNote({ characterId, noteId }: { characterId: number; noteId: number }) {
 		return this.base.fetch<{
-			transactionHash: string
-			data: { contractAddress: string; tokenId: number }
+			transactionHash: string;
+			data: { contractAddress: string; tokenId: number };
 		}>(`/siwe/contract/characters/${characterId}/notes/${noteId}/minted`, {
-			method: 'PUT',
+			method: "PUT",
 			token: this.token,
 			data: {},
-		})
+		});
 	}
 }

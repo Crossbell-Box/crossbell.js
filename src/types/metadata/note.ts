@@ -1,48 +1,48 @@
-import { type AttributesMetadata, type BaseMetadata } from './base'
+import type { AttributesMetadata, BaseMetadata } from "./base";
 
 export interface NoteMetadataAttachmentBase<
-	ContentType extends 'address' | 'content',
+	ContentType extends "address" | "content",
 > {
 	/**
 	 * The name of this attachment.
 	 */
-	name?: string
+	name?: string;
 
 	/**
 	 * The address (url) of this attachment.
 	 */
-	address?: ContentType extends 'address' ? string : never
+	address?: ContentType extends "address" ? string : never;
 
 	/**
 	 * The plain content of this attachment.
 	 */
-	content?: ContentType extends 'content' ? string : never
+	content?: ContentType extends "content" ? string : never;
 
 	/**
 	 * The mime type of the `content`.
 	 */
-	mime_type?: string
+	mime_type?: string;
 
 	/**
 	 * The size of the `content` in bytes.
 	 */
-	size_in_bytes?: number
+	size_in_bytes?: number;
 
 	/**
 	 * The alternate text (description) of this attachment.
 	 * This is used for accessibility or is displayed when the source is not available.
 	 */
-	alt?: string
+	alt?: string;
 
 	/**
 	 * The width of this attachment, in pixels.
 	 */
-	width?: number
+	width?: number;
 
 	/**
 	 * The height of this attachment, in pixels.
 	 */
-	height?: number
+	height?: number;
 }
 
 export interface NoteMetadata extends BaseMetadata, AttributesMetadata {
@@ -52,12 +52,12 @@ export interface NoteMetadata extends BaseMetadata, AttributesMetadata {
 	 * @example
 	 * ['article', 'dairy']
 	 */
-	tags?: string[]
+	tags?: string[];
 
 	/**
 	 * The title of this note.
 	 */
-	title?: string
+	title?: string;
 
 	/**
 	 * The (markdown) content of this note.
@@ -65,15 +65,15 @@ export interface NoteMetadata extends BaseMetadata, AttributesMetadata {
 	 * @example
 	 * '# Hello World\n\nThis is a markdown note.'
 	 */
-	content?: string
+	content?: string;
 
 	/**
 	 * The attachments of this note.
 	 */
 	attachments?: (
-		| NoteMetadataAttachmentBase<'address'>
-		| NoteMetadataAttachmentBase<'content'>
-	)[]
+		| NoteMetadataAttachmentBase<"address">
+		| NoteMetadataAttachmentBase<"content">
+	)[];
 
 	/**
 	 * The source of this note. I.e. where it was originally created.
@@ -82,7 +82,7 @@ export interface NoteMetadata extends BaseMetadata, AttributesMetadata {
 	 * @example
 	 * ['xlog']
 	 */
-	sources?: string[]
+	sources?: string[];
 
 	/**
 	 * Where this note was created. User can view this note on this location.
@@ -90,7 +90,7 @@ export interface NoteMetadata extends BaseMetadata, AttributesMetadata {
 	 * @example
 	 * ['https://twitter.com/_Crossbell/status/1555900801058488322']
 	 */
-	external_urls?: string[]
+	external_urls?: string[];
 
 	/**
 	 * The date this content was published, following the ISO 8601 format.
@@ -104,7 +104,7 @@ export interface NoteMetadata extends BaseMetadata, AttributesMetadata {
 	 * @example
 	 * '2022-01-01T00:00:00Z'
 	 */
-	date_published?: string
+	date_published?: string;
 
 	/**
 	 * A content warning for this note. On the client side, this will be displayed as a warning.
@@ -112,7 +112,7 @@ export interface NoteMetadata extends BaseMetadata, AttributesMetadata {
 	 * @example
 	 * 'nsfw'
 	 */
-	content_warning?: 'nsfw' | 'sensitive' | 'spoiler'
+	content_warning?: "nsfw" | "sensitive" | "spoiler";
 
 	/**
 	 * The variant of this note.
@@ -123,5 +123,5 @@ export interface NoteMetadata extends BaseMetadata, AttributesMetadata {
 	 * @example
 	 * 'achievement'
 	 */
-	variant?: 'achievement'
+	variant?: "achievement";
 }

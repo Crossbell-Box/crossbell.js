@@ -1,72 +1,72 @@
-import { type Address } from 'viem'
-import {
-	type LinkItemType,
-	type ListResponse,
-	type NoteEntity,
-	type NoteMetadata,
-	type Numberish,
-} from '../../types'
-import { type BaseIndexer } from './base'
+import type { Address } from "viem";
+import type {
+	LinkItemType,
+	ListResponse,
+	NoteEntity,
+	NoteMetadata,
+	Numberish,
+} from "../../types";
+import type { BaseIndexer } from "./base";
 
 export type NoteQueryOptions = {
 	/** The owner(s) of notes */
-	characterId?: Numberish | Numberish[]
+	characterId?: Numberish | Numberish[];
 	/** Excluded owner(s) of notes. This has higher priority than `characterId` */
-	excludeCharacterId?: Numberish | Numberish[]
+	excludeCharacterId?: Numberish | Numberish[];
 	/** The link item type to filter by. e.g. 'Character' */
-	linkItemType?: LinkItemType
+	linkItemType?: LinkItemType;
 	/** The toCharacterId to filter by. */
-	toCharacterId?: Numberish
+	toCharacterId?: Numberish;
 	/** The toAddress to filter by. */
-	toAddress?: Address
+	toAddress?: Address;
 	/** The toNoteId to filter by. */
-	toNoteId?: Numberish
+	toNoteId?: Numberish;
 	/** The toContractAddress to filter by. */
-	toContractAddress?: Address
+	toContractAddress?: Address;
 	/** The toTokenId to filter by. */
-	toTokenId?: Numberish
+	toTokenId?: Numberish;
 	/** The toLinklistId to filter by. */
-	toLinklistId?: Numberish
+	toLinklistId?: Numberish;
 	/** The toUri to filter by. */
-	toUri?: string
+	toUri?: string;
 	/** Only returns locked notes or not */
-	locked?: boolean
+	locked?: boolean;
 	/** Also returns deleted notes or not */
-	includeDeleted?: boolean
+	includeDeleted?: boolean;
 	/** The `metadata.content.tags` to filter by. */
-	tags?: string | string[]
+	tags?: string | string[];
 	/** The `metadata.content.sources` to filter by. */
-	sources?: string | string[]
+	sources?: string | string[];
 	/** The `metadata.content.external_urls` to filter by. */
-	externalUrls?: string | string[]
+	externalUrls?: string | string[];
 	/** The `metadata.content.variant` to filter by. */
-	variant?: NoteMetadata['variant']
+	variant?: NoteMetadata["variant"];
 	/** Limit the count of items returned. */
-	limit?: Numberish
+	limit?: Numberish;
 	/** Used for pagination. */
-	cursor?: string
+	cursor?: string;
 	/** Whether to include notes whose metadata content are empty even though the `tags`, `sources` or `external_urls` fields are specified. */
-	includeEmptyMetadata?: boolean
+	includeEmptyMetadata?: boolean;
 	/** Whether to include the character data in the response. */
-	includeCharacter?: boolean
+	includeCharacter?: boolean;
 	/** Whether to include the head character data in the response. */
-	includeHeadCharacter?: boolean
+	includeHeadCharacter?: boolean;
 	/** Whether to include the head note data in the response. */
-	includeHeadNote?: boolean
+	includeHeadNote?: boolean;
 	/** Whether to include nested notes */
-	includeNestedNotes?: boolean
+	includeNestedNotes?: boolean;
 	/** How many levels of nested notes to include */
-	nestedNotesDepth?: 1 | 2 | 3
+	nestedNotesDepth?: 1 | 2 | 3;
 	/** How many nested notes to include per note */
-	nestedNotesLimit?: Numberish
+	nestedNotesLimit?: Numberish;
 	/** The orderBy of the returned list. */
-	orderBy?: 'createdAt' | 'updatedAt' | 'publishedAt' | 'viewCount'
+	orderBy?: "createdAt" | "updatedAt" | "publishedAt" | "viewCount";
 	/**
 	 * The order of the returned list.
 	 * @default 'desc'
 	 **/
-	order?: 'asc' | 'desc'
-}
+	order?: "asc" | "desc";
+};
 
 export class NoteIndexer {
 	constructor(private base: BaseIndexer) {}
@@ -79,10 +79,10 @@ export class NoteIndexer {
 	 * @returns The list of notes.
 	 */
 	getMany(params: NoteQueryOptions = {}) {
-		const url = '/notes'
+		const url = "/notes";
 		return this.base.fetch<
 			ListResponse<NoteEntity & { fromNotes: ListResponse<NoteEntity> }>
-		>(url, { params })
+		>(url, { params });
 	}
 
 	/**
@@ -95,12 +95,12 @@ export class NoteIndexer {
 	 */
 	getManyOfCharacterFollowing(
 		characterId: Numberish,
-		params: Omit<NoteQueryOptions, 'characterId'> = {},
+		params: Omit<NoteQueryOptions, "characterId"> = {},
 	) {
-		const url = `/characters/${characterId}/notes/following`
+		const url = `/characters/${characterId}/notes/following`;
 		return this.base.fetch<
 			ListResponse<NoteEntity & { fromNotes: ListResponse<NoteEntity> }>
-		>(url, { params })
+		>(url, { params });
 	}
 
 	/**
@@ -112,8 +112,8 @@ export class NoteIndexer {
 	 * @returns The note.
 	 */
 	get(characterId: Numberish, noteId: Numberish) {
-		const url = `/characters/${characterId}/notes/${noteId}`
-		return this.base.fetch<NoteEntity | null>(url)
+		const url = `/characters/${characterId}/notes/${noteId}`;
+		return this.base.fetch<NoteEntity | null>(url);
 	}
 
 	/**
@@ -130,15 +130,15 @@ export class NoteIndexer {
 			sources,
 		}: {
 			/** The `metadata.content.sources` to filter by. */
-			sources?: string | string[]
+			sources?: string | string[];
 		} = {},
 	) {
-		const url = `/characters/${characterId}/notes/tags`
+		const url = `/characters/${characterId}/notes/tags`;
 		return this.base.fetch<ListResponse<string>>(url, {
 			params: {
 				sources,
 			},
-		})
+		});
 	}
 
 	/**
@@ -155,14 +155,14 @@ export class NoteIndexer {
 			tags,
 		}: {
 			/** The `metadata.content.tags` to filter by. */
-			tags?: string | string[]
+			tags?: string | string[];
 		} = {},
 	) {
-		const url = `/characters/${characterId}/notes/sources`
+		const url = `/characters/${characterId}/notes/sources`;
 		return this.base.fetch<ListResponse<string>>(url, {
 			params: {
 				tags,
 			},
-		})
+		});
 	}
 }

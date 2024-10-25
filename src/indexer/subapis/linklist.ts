@@ -1,9 +1,5 @@
-import {
-	type LinklistEntity,
-	type ListResponse,
-	type Numberish,
-} from '../../types'
-import { type BaseIndexer } from './base'
+import type { LinklistEntity, ListResponse, Numberish } from "../../types";
+import type { BaseIndexer } from "./base";
 
 export class LinklistIndexer {
 	constructor(private base: BaseIndexer) {}
@@ -23,21 +19,21 @@ export class LinklistIndexer {
 			cursor,
 		}: {
 			/** The link type to filter by. */
-			linkType?: string
+			linkType?: string;
 			/** Limit the count of items returned. */
-			limit?: Numberish
+			limit?: Numberish;
 			/** Used for pagination. */
-			cursor?: string
+			cursor?: string;
 		} = {},
 	) {
-		const url = `/characters/${characterId}/linklists`
+		const url = `/characters/${characterId}/linklists`;
 		return this.base.fetch<ListResponse<LinklistEntity>>(url, {
 			params: {
 				linkType,
 				limit,
 				cursor,
 			},
-		})
+		});
 	}
 
 	/**
@@ -47,7 +43,7 @@ export class LinklistIndexer {
 	 * @returns The character.
 	 */
 	get(linklistId: Numberish) {
-		const url = `/linklists/${linklistId}`
-		return this.base.fetch<LinklistEntity | null>(url)
+		const url = `/linklists/${linklistId}`;
+		return this.base.fetch<LinklistEntity | null>(url);
 	}
 }

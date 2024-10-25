@@ -1,15 +1,15 @@
-import { type CharacterMetadata, type NoteMetadata } from './../metadata'
+import type { CharacterMetadata, NoteMetadata } from "./../metadata";
 
-export type MetadataType = 'CHARACTER' | 'NOTE' | 'LINKLIST'
+export type MetadataType = "CHARACTER" | "NOTE" | "LINKLIST";
 
 export interface MetadataEntity<T extends MetadataType> {
-	uri?: string
-	type?: MetadataType | null
+	uri?: string;
+	type?: MetadataType | null;
 	content?:
-		| (T extends 'CHARACTER'
+		| (T extends "CHARACTER"
 				? CharacterMetadata
-				: T extends 'NOTE'
-				  ? NoteMetadata
-				  : object)
-		| null
+				: T extends "NOTE"
+					? NoteMetadata
+					: object)
+		| null;
 }

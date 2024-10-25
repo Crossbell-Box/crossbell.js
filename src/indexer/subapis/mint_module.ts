@@ -1,10 +1,10 @@
-import {
-	type ListResponse,
-	type MintModuleEntity,
-	type MintModuleTargetItemType,
-	type Numberish,
-} from '../../types'
-import { type BaseIndexer } from './base'
+import type {
+	ListResponse,
+	MintModuleEntity,
+	MintModuleTargetItemType,
+	Numberish,
+} from "../../types";
+import type { BaseIndexer } from "./base";
 
 export class MintModuleIndexer {
 	constructor(private base: BaseIndexer) {}
@@ -24,17 +24,17 @@ export class MintModuleIndexer {
 		cursor,
 	}: {
 		/** The target item type of the mint module. */
-		targetItemType?: MintModuleTargetItemType
+		targetItemType?: MintModuleTargetItemType;
 		/** The character ID of the target item. */
-		toCharacterId?: Numberish
+		toCharacterId?: Numberish;
 		/** The note ID of the target item. */
-		toNoteId?: Numberish
+		toNoteId?: Numberish;
 		/** The limit of the number of items to return. */
-		limit?: Numberish
+		limit?: Numberish;
 		/** Used for pagination. */
-		cursor?: string
+		cursor?: string;
 	} = {}) {
-		const url = '/mint-modules'
+		const url = "/mint-modules";
 		return this.base.fetch<ListResponse<MintModuleEntity>>(url, {
 			params: {
 				targetItemType,
@@ -43,7 +43,7 @@ export class MintModuleIndexer {
 				limit,
 				cursor,
 			},
-		})
+		});
 	}
 
 	/**
@@ -55,7 +55,7 @@ export class MintModuleIndexer {
 	 * @returns The mint module.
 	 */
 	get(targetItemType: MintModuleTargetItemType, linkValue: Numberish) {
-		const url = `/mint-modules/${targetItemType}/${linkValue}`
-		return this.base.fetch<MintModuleEntity>(url)
+		const url = `/mint-modules/${targetItemType}/${linkValue}`;
+		return this.base.fetch<MintModuleEntity>(url);
 	}
 }

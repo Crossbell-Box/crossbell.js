@@ -1,9 +1,9 @@
-import { type Address, type Hex } from 'viem'
-import { type Numberish, type Result } from '../../types'
-import { validateAddress } from '../../utils/address'
-import { waitForTransactionReceiptWithRetry } from '../../utils/viem'
-import { autoSwitchMainnet } from '../decorators'
-import { type BaseContract } from './base'
+import type { Address, Hex } from "viem";
+import type { Numberish, Result } from "../../types";
+import { validateAddress } from "../../utils/address";
+import { waitForTransactionReceiptWithRetry } from "../../utils/viem";
+import { autoSwitchMainnet } from "../decorators";
+import type { BaseContract } from "./base";
 
 export class CsbContract {
 	constructor(private base: BaseContract) {}
@@ -17,15 +17,15 @@ export class CsbContract {
 		owner,
 	}: {
 		/** The address of the account to get the $CSB balance of. */
-		owner: Address
+		owner: Address;
 	}): Promise<Result<bigint>> {
-		validateAddress(owner)
+		validateAddress(owner);
 		const balance = await this.base.publicClient.getBalance({
 			address: owner,
-		})
+		});
 		return {
 			data: balance,
-		}
+		};
 	}
 
 	/**
@@ -39,31 +39,31 @@ export class CsbContract {
 		amount,
 	}: {
 		/** The address to send $CSB to. */
-		toAddress: Hex
+		toAddress: Hex;
 		/** The amount of $CSB to send. (in wei) */
-		amount: Numberish
+		amount: Numberish;
 	}): Promise<Result<Record<string, never>, true>> {
-		validateAddress(toAddress)
+		validateAddress(toAddress);
 
 		if (!this.base.walletClient) {
 			throw new Error(
-				'No walletClient found. You must be connected to a wallet to transfer $CSB. Currently You might be using a read-only provider.',
-			)
+				"No walletClient found. You must be connected to a wallet to transfer $CSB. Currently You might be using a read-only provider.",
+			);
 		}
 
 		const hash = await this.base.walletClient.sendTransaction({
 			account: this.base.account,
 			to: toAddress,
 			value: BigInt(amount),
-		})
+		});
 		const receipt = await waitForTransactionReceiptWithRetry(
 			this.base.publicClient,
 			hash,
-		)
+		);
 
 		return {
 			data: {},
 			transactionHash: receipt.transactionHash,
-		}
+		};
 	}
 }

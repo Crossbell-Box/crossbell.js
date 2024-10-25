@@ -1,29 +1,29 @@
-import pLimit from 'p-limit'
+import pLimit from "p-limit";
 import {
 	type Address,
 	encodeFunctionData,
 	encodePacked,
 	hexToString,
 	keccak256,
-} from 'viem'
-import { ipfsParseMetadataOrUri, ipfsUriToMetadata } from '../../ipfs'
-import {
-	type LinkItemMap,
-	type LinkItemType,
-	type Note,
-	type NoteMetadata,
-	type Numberish,
-	type PostNoteOptions,
-	type ReadOverrides,
-	type Result,
-	type WriteOverrides,
-} from '../../types'
-import { NIL_ADDRESS, validateAddress } from '../../utils/address'
-import { getModuleConfig } from '../../utils/module'
-import { parseLog, waitForTransactionReceiptWithRetry } from '../../utils/viem'
-import { type Entry, entry } from '../abi'
-import { autoSwitchMainnet } from '../decorators'
-import { type BaseContract } from './base'
+} from "viem";
+import { ipfsParseMetadataOrUri, ipfsUriToMetadata } from "../../ipfs";
+import type {
+	LinkItemMap,
+	LinkItemType,
+	Note,
+	NoteMetadata,
+	Numberish,
+	PostNoteOptions,
+	ReadOverrides,
+	Result,
+	WriteOverrides,
+} from "../../types";
+import { NIL_ADDRESS, validateAddress } from "../../utils/address";
+import { getModuleConfig } from "../../utils/module";
+import { parseLog, waitForTransactionReceiptWithRetry } from "../../utils/viem";
+import { type Entry, entry } from "../abi";
+import { autoSwitchMainnet } from "../decorators";
+import type { BaseContract } from "./base";
 
 async function buildPostNoteData({
 	linkModule,
@@ -32,9 +32,9 @@ async function buildPostNoteData({
 	metadataOrUri,
 	locked = false,
 }: PostNoteOptions) {
-	const { uri } = await ipfsParseMetadataOrUri('note', metadataOrUri)
-	const linkModuleConfig = await getModuleConfig(linkModule)
-	const mintModuleConfig = await getModuleConfig(mintModule)
+	const { uri } = await ipfsParseMetadataOrUri("note", metadataOrUri);
+	const linkModuleConfig = await getModuleConfig(linkModule);
+	const mintModuleConfig = await getModuleConfig(mintModule);
 
 	return {
 		characterId: BigInt(characterId),
@@ -44,7 +44,7 @@ async function buildPostNoteData({
 		mintModule: mintModuleConfig.address,
 		mintModuleInitData: mintModuleConfig.initData,
 		locked,
-	}
+	};
 }
 
 export class NoteContract {
@@ -58,24 +58,24 @@ export class NoteContract {
 	@autoSwitchMainnet()
 	async post(
 		options: PostNoteOptions,
-		overrides: WriteOverrides<Entry, 'postNote'> = {},
+		overrides: WriteOverrides<Entry, "postNote"> = {},
 	): Promise<Result<{ noteId: bigint }, true>> {
-		const data = await buildPostNoteData(options)
-		const hash = await this.base.contract.write.postNote([data], overrides)
+		const data = await buildPostNoteData(options);
+		const hash = await this.base.contract.write.postNote([data], overrides);
 
 		const receipt = await waitForTransactionReceiptWithRetry(
 			this.base.publicClient,
 			hash,
-		)
+		);
 
-		const log = parseLog(receipt.logs, 'PostNote')
+		const log = parseLog(receipt.logs, "PostNote");
 
 		return {
 			data: {
 				noteId: log.args.noteId,
 			},
 			transactionHash: receipt.transactionHash,
-		}
+		};
 	}
 
 	/**
@@ -91,15 +91,15 @@ export class NoteContract {
 			notes: {
 				// TODO: move to options
 				/** The character ID of the owner who post this note. Must be your own character, otherwise it will be rejected. */
-				characterId: Numberish
+				characterId: Numberish;
 				/** The metadata or URI of the content you want to post. */
-				metadataOrUri: NoteMetadata | string
-				options?: PostNoteOptions
-			}[]
+				metadataOrUri: NoteMetadata | string;
+				options?: PostNoteOptions;
+			}[];
 		},
-		overrides: WriteOverrides<Entry, 'multicall'> = {},
+		overrides: WriteOverrides<Entry, "multicall"> = {},
 	): Promise<Result<{ noteIds: bigint[] }, true>> {
-		const limitedPromise = pLimit(10)
+		const limitedPromise = pLimit(10);
 		const encodedDataArr = await Promise.all(
 			notes.map(({ options, characterId, metadataOrUri }) => {
 				return limitedPromise(async () => {
@@ -107,40 +107,40 @@ export class NoteContract {
 						...options,
 						characterId,
 						metadataOrUri,
-					})
+					});
 
 					return encodeFunctionData({
 						abi: entry,
-						functionName: 'postNote',
+						functionName: "postNote",
 						args: [data],
-					})
-				})
+					});
+				});
 			}),
-		)
+		);
 
 		const hash = await this.base.contract.write.multicall(
 			[encodedDataArr],
 			overrides,
-		)
+		);
 
 		const receipt = await waitForTransactionReceiptWithRetry(
 			this.base.publicClient,
 			hash,
-		)
+		);
 
-		const logs = parseLog(receipt.logs, 'PostNote', {
+		const logs = parseLog(receipt.logs, "PostNote", {
 			throwOnMultipleLogsFound: false,
 			returnMultipleLogs: true,
-		})
+		});
 
-		const noteIds = logs.map((log) => log.args.noteId)
+		const noteIds = logs.map((log) => log.args.noteId);
 
 		return {
 			data: {
 				noteIds,
 			},
 			transactionHash: receipt.transactionHash,
-		}
+		};
 	}
 
 	/**
@@ -155,30 +155,30 @@ export class NoteContract {
 			...options
 		}: PostNoteOptions & {
 			/** The target uri of the note. */
-			targetUri: string
+			targetUri: string;
 		},
-		overrides: WriteOverrides<Entry, 'postNote4AnyUri'> = {},
+		overrides: WriteOverrides<Entry, "postNote4AnyUri"> = {},
 	): Promise<Result<{ noteId: bigint }, true>> {
-		const data = await buildPostNoteData(options)
+		const data = await buildPostNoteData(options);
 
 		const hash = await this.base.contract.write.postNote4AnyUri(
 			[data, targetUri],
 			overrides,
-		)
+		);
 
 		const receipt = await waitForTransactionReceiptWithRetry(
 			this.base.publicClient,
 			hash,
-		)
+		);
 
-		const log = parseLog(receipt.logs, 'PostNote')
+		const log = parseLog(receipt.logs, "PostNote");
 
 		return {
 			data: {
 				noteId: log.args.noteId,
 			},
 			transactionHash: receipt.transactionHash,
-		}
+		};
 	}
 
 	/**
@@ -194,12 +194,12 @@ export class NoteContract {
 			...options
 		}: PostNoteOptions & {
 			/** The target uri of the note. */
-			targetCharacterId: Numberish
-			targetNoteId: Numberish
+			targetCharacterId: Numberish;
+			targetNoteId: Numberish;
 		},
-		overrides: WriteOverrides<Entry, 'postNote4Note'> = {},
+		overrides: WriteOverrides<Entry, "postNote4Note"> = {},
 	): Promise<Result<{ noteId: bigint }, true>> {
-		const data = await buildPostNoteData(options)
+		const data = await buildPostNoteData(options);
 		const hash = await this.base.contract.write.postNote4Note(
 			[
 				data,
@@ -209,21 +209,21 @@ export class NoteContract {
 				},
 			],
 			overrides,
-		)
+		);
 
 		const receipt = await waitForTransactionReceiptWithRetry(
 			this.base.publicClient,
 			hash,
-		)
+		);
 
-		const log = parseLog(receipt.logs, 'PostNote')
+		const log = parseLog(receipt.logs, "PostNote");
 
 		return {
 			data: {
 				noteId: log.args.noteId,
 			},
 			transactionHash: receipt.transactionHash,
-		}
+		};
 	}
 
 	/**
@@ -238,29 +238,29 @@ export class NoteContract {
 			...options
 		}: PostNoteOptions & {
 			/** The target characterId. */
-			toCharacterId: Numberish
+			toCharacterId: Numberish;
 		},
-		overrides: WriteOverrides<Entry, 'postNote4Character'> = {},
+		overrides: WriteOverrides<Entry, "postNote4Character"> = {},
 	): Promise<Result<{ noteId: bigint }, true>> {
-		const data = await buildPostNoteData(options)
+		const data = await buildPostNoteData(options);
 		const hash = await this.base.contract.write.postNote4Character(
 			[data, BigInt(toCharacterId)],
 			overrides,
-		)
+		);
 
 		const receipt = await waitForTransactionReceiptWithRetry(
 			this.base.publicClient,
 			hash,
-		)
+		);
 
-		const log = parseLog(receipt.logs, 'PostNote')
+		const log = parseLog(receipt.logs, "PostNote");
 
 		return {
 			data: {
 				noteId: log.args.noteId,
 			},
 			transactionHash: receipt.transactionHash,
-		}
+		};
 	}
 
 	/**
@@ -275,29 +275,29 @@ export class NoteContract {
 			...options
 		}: PostNoteOptions & {
 			/** The target linklistId. */
-			toLinklistId: Numberish
+			toLinklistId: Numberish;
 		},
-		overrides: WriteOverrides<Entry, 'postNote4Linklist'> = {},
+		overrides: WriteOverrides<Entry, "postNote4Linklist"> = {},
 	): Promise<Result<{ noteId: bigint }, true>> {
-		const data = await buildPostNoteData(options)
+		const data = await buildPostNoteData(options);
 		const hash = await this.base.contract.write.postNote4Linklist(
 			[data, BigInt(toLinklistId)],
 			overrides,
-		)
+		);
 
 		const receipt = await waitForTransactionReceiptWithRetry(
 			this.base.publicClient,
 			hash,
-		)
+		);
 
-		const log = parseLog(receipt.logs, 'PostNote')
+		const log = parseLog(receipt.logs, "PostNote");
 
 		return {
 			data: {
 				noteId: log.args.noteId,
 			},
 			transactionHash: receipt.transactionHash,
-		}
+		};
 	}
 
 	/**
@@ -312,30 +312,30 @@ export class NoteContract {
 			...options
 		}: PostNoteOptions & {
 			/** The target address. */
-			toAddress: Address
+			toAddress: Address;
 		},
-		overrides: WriteOverrides<Entry, 'postNote4Address'> = {},
+		overrides: WriteOverrides<Entry, "postNote4Address"> = {},
 	): Promise<Result<{ noteId: bigint }, true>> {
-		const data = await buildPostNoteData(options)
+		const data = await buildPostNoteData(options);
 
 		const hash = await this.base.contract.write.postNote4Address(
 			[data, toAddress],
 			overrides,
-		)
+		);
 
 		const receipt = await waitForTransactionReceiptWithRetry(
 			this.base.publicClient,
 			hash,
-		)
+		);
 
-		const log = parseLog(receipt.logs, 'PostNote')
+		const log = parseLog(receipt.logs, "PostNote");
 
 		return {
 			data: {
 				noteId: log.args.noteId,
 			},
 			transactionHash: receipt.transactionHash,
-		}
+		};
 	}
 
 	/**
@@ -350,31 +350,31 @@ export class NoteContract {
 			tokenId,
 			...options
 		}: PostNoteOptions & {
-			tokenAddress: Address
-			tokenId: Numberish
+			tokenAddress: Address;
+			tokenId: Numberish;
 		},
-		overrides: WriteOverrides<Entry, 'postNote4ERC721'> = {},
+		overrides: WriteOverrides<Entry, "postNote4ERC721"> = {},
 	): Promise<Result<{ noteId: bigint }, true>> {
-		const data = await buildPostNoteData(options)
+		const data = await buildPostNoteData(options);
 
 		const hash = await this.base.contract.write.postNote4ERC721(
 			[data, { tokenAddress, erc721TokenId: BigInt(tokenId) }],
 			overrides,
-		)
+		);
 
 		const receipt = await waitForTransactionReceiptWithRetry(
 			this.base.publicClient,
 			hash,
-		)
+		);
 
-		const log = parseLog(receipt.logs, 'PostNote')
+		const log = parseLog(receipt.logs, "PostNote");
 
 		return {
 			data: {
 				noteId: log.args.noteId,
 			},
 			transactionHash: receipt.transactionHash,
-		}
+		};
 	}
 
 	/**
@@ -390,29 +390,29 @@ export class NoteContract {
 			metadataOrUri,
 		}: {
 			/** The character ID of the owner who post this note. Must be your own character, otherwise it will be rejected. */
-			characterId: Numberish
+			characterId: Numberish;
 			/** The id of the note you want to set the metadata. */
-			noteId: Numberish
+			noteId: Numberish;
 			/** The metadata or URI of the content you want to post. */
-			metadataOrUri: NoteMetadata | string
+			metadataOrUri: NoteMetadata | string;
 		},
-		overrides: WriteOverrides<Entry, 'setNoteUri'> = {},
+		overrides: WriteOverrides<Entry, "setNoteUri"> = {},
 	): Promise<Result<{ uri: string; metadata: NoteMetadata }, true>> {
 		const { uri, metadata } = await ipfsParseMetadataOrUri(
-			'note',
+			"note",
 			metadataOrUri,
 			true,
-		)
+		);
 
 		const hash = await this.base.contract.write.setNoteUri(
 			[BigInt(characterId), BigInt(noteId), uri],
 			overrides,
-		)
+		);
 
 		const receipt = await waitForTransactionReceiptWithRetry(
 			this.base.publicClient,
 			hash,
-		)
+		);
 
 		return {
 			data: {
@@ -420,7 +420,7 @@ export class NoteContract {
 				metadata,
 			},
 			transactionHash: receipt.transactionHash,
-		}
+		};
 	}
 
 	/**
@@ -465,28 +465,28 @@ export class NoteContract {
 			modifier,
 		}: {
 			/** The character ID of the user you want to set the URI for. */
-			characterId: Numberish
+			characterId: Numberish;
 			/** The id of the note you want to set the URI for. */
-			noteId: Numberish
+			noteId: Numberish;
 			/** The callback function that modifies the metadata. */
-			modifier: (metadata?: NoteMetadata) => NoteMetadata
+			modifier: (metadata?: NoteMetadata) => NoteMetadata;
 		},
-		overrides: WriteOverrides<Entry, 'setNoteUri'> = {},
+		overrides: WriteOverrides<Entry, "setNoteUri"> = {},
 	) {
-		const note = await this.get({ characterId, noteId })
+		const note = await this.get({ characterId, noteId });
 
-		const metadata = modifier(note.data.metadata)
-		if (typeof metadata === 'undefined') {
+		const metadata = modifier(note.data.metadata);
+		if (typeof metadata === "undefined") {
 			throw new TypeError(
-				'The modified metadata is undefined. Did you return it?',
-			)
+				"The modified metadata is undefined. Did you return it?",
+			);
 		}
 
 		if (!metadata.type) {
-			metadata.type = 'note'
+			metadata.type = "note";
 		}
 
-		return this.setMetadata({ characterId, noteId, metadata }, overrides)
+		return this.setMetadata({ characterId, noteId, metadata }, overrides);
 	}
 
 	/**
@@ -499,16 +499,16 @@ export class NoteContract {
 			noteId,
 			metadata,
 		}: {
-			characterId: Numberish
-			noteId: Numberish
-			metadata: NoteMetadata
+			characterId: Numberish;
+			noteId: Numberish;
+			metadata: NoteMetadata;
 		},
-		overrides: WriteOverrides<Entry, 'setNoteUri'> = {},
+		overrides: WriteOverrides<Entry, "setNoteUri"> = {},
 	) {
 		return this.setUri(
 			{ characterId, noteId, metadataOrUri: metadata },
 			overrides,
-		)
+		);
 	}
 
 	/**
@@ -523,59 +523,59 @@ export class NoteContract {
 			linkItemType,
 		}: {
 			/** The character ID of the address who owns the note. */
-			characterId: Numberish
+			characterId: Numberish;
 			/** The id of the note you want to get the info for. */
-			noteId: Numberish
-			linkItemType?: T
+			noteId: Numberish;
+			linkItemType?: T;
 		},
-		overrides: ReadOverrides<Entry, 'getNote'> = {},
+		overrides: ReadOverrides<Entry, "getNote"> = {},
 	): Promise<Result<Note<LinkItemMap[T]>>> {
 		const data = await this.base.contract.read.getNote(
 			[BigInt(characterId), BigInt(noteId)],
 			overrides,
-		)
+		);
 
 		const linkItemTypeString: LinkItemType | undefined =
 			(hexToString(data.linkItemType, { size: 32 }) as LinkItemType) ||
-			undefined
+			undefined;
 		const metadata = data.contentUri
 			? await ipfsUriToMetadata<NoteMetadata>(data.contentUri)
-			: undefined
+			: undefined;
 
-		let linkItem: LinkItemMap[T]
-		const pc = this.base.peripheryContract.read
-		if (linkItemType === 'AnyUri') {
-			const uri = await pc.getLinkingAnyUri([data.linkKey])
-			linkItem = { uri } satisfies LinkItemMap['AnyUri'] as LinkItemMap[T]
-		} else if (linkItemType === 'ERC721') {
-			const erc721 = await pc.getLinkingERC721([data.linkKey])
+		let linkItem: LinkItemMap[T];
+		const pc = this.base.peripheryContract.read;
+		if (linkItemType === "AnyUri") {
+			const uri = await pc.getLinkingAnyUri([data.linkKey]);
+			linkItem = { uri } satisfies LinkItemMap["AnyUri"] as LinkItemMap[T];
+		} else if (linkItemType === "ERC721") {
+			const erc721 = await pc.getLinkingERC721([data.linkKey]);
 			linkItem = {
 				contractAddress: erc721.tokenAddress,
 				tokenId: erc721.erc721TokenId.toString(),
-			} satisfies LinkItemMap['ERC721'] as LinkItemMap[T]
-		} else if (linkItemType === 'Address') {
-			const address = await pc.getLinkingAddress([data.linkKey])
+			} satisfies LinkItemMap["ERC721"] as LinkItemMap[T];
+		} else if (linkItemType === "Address") {
+			const address = await pc.getLinkingAddress([data.linkKey]);
 			linkItem = {
 				address,
-			} satisfies LinkItemMap['Address'] as LinkItemMap[T]
-		} else if (linkItemType === 'Character') {
-			const characterId = await pc.getLinkingCharacterId([data.linkKey])
+			} satisfies LinkItemMap["Address"] as LinkItemMap[T];
+		} else if (linkItemType === "Character") {
+			const characterId = await pc.getLinkingCharacterId([data.linkKey]);
 			linkItem = {
 				characterId,
-			} satisfies LinkItemMap['Character'] as LinkItemMap[T]
-		} else if (linkItemType === 'Note') {
-			const ret = await pc.getLinkingNote([data.linkKey])
+			} satisfies LinkItemMap["Character"] as LinkItemMap[T];
+		} else if (linkItemType === "Note") {
+			const ret = await pc.getLinkingNote([data.linkKey]);
 			linkItem = {
 				characterId: ret.characterId,
 				noteId: ret.noteId,
-			} satisfies LinkItemMap['Note'] as LinkItemMap[T]
-		} else if (linkItemType === 'Linklist') {
-			const linklistId = await pc.getLinkingLinklistId([data.linkKey])
+			} satisfies LinkItemMap["Note"] as LinkItemMap[T];
+		} else if (linkItemType === "Linklist") {
+			const linklistId = await pc.getLinkingLinklistId([data.linkKey]);
 			linkItem = {
 				linklistId,
-			} satisfies LinkItemMap['Linklist'] as LinkItemMap[T]
+			} satisfies LinkItemMap["Linklist"] as LinkItemMap[T];
 		} else {
-			linkItem = undefined as unknown as LinkItemMap[T]
+			linkItem = undefined as unknown as LinkItemMap[T];
 		}
 
 		return {
@@ -594,7 +594,7 @@ export class NoteContract {
 				deleted: data.deleted,
 				locked: data.locked,
 			},
-		}
+		};
 	}
 
 	/**
@@ -612,26 +612,26 @@ export class NoteContract {
 			noteId,
 		}: {
 			/** The character ID of the owner who post this note. Must be your own character, otherwise it will be rejected. */
-			characterId: Numberish
+			characterId: Numberish;
 			/** The id of the note you want to delete. */
-			noteId: Numberish
+			noteId: Numberish;
 		},
-		overrides: WriteOverrides<Entry, 'deleteNote'> = {},
+		overrides: WriteOverrides<Entry, "deleteNote"> = {},
 	): Promise<Result<undefined, true>> {
 		const hash = await this.base.contract.write.deleteNote(
 			[BigInt(characterId), BigInt(noteId)],
 			overrides,
-		)
+		);
 
 		const receipt = await waitForTransactionReceiptWithRetry(
 			this.base.publicClient,
 			hash,
-		)
+		);
 
 		return {
 			data: undefined,
 			transactionHash: receipt.transactionHash,
-		}
+		};
 	}
 
 	/**
@@ -652,26 +652,26 @@ export class NoteContract {
 			noteId,
 		}: {
 			/** The character ID of the owner who post this note. Must be your own character, otherwise it will be rejected. */
-			characterId: Numberish
+			characterId: Numberish;
 			/** The id of the note you want to lock. */
-			noteId: Numberish
+			noteId: Numberish;
 		},
-		overrides: WriteOverrides<Entry, 'lockNote'> = {},
+		overrides: WriteOverrides<Entry, "lockNote"> = {},
 	): Promise<Result<undefined, true>> {
 		const hash = await this.base.contract.write.lockNote(
 			[BigInt(characterId), BigInt(noteId)],
 			overrides,
-		)
+		);
 
 		const receipt = await waitForTransactionReceiptWithRetry(
 			this.base.publicClient,
 			hash,
-		)
+		);
 
 		return {
 			data: undefined,
 			transactionHash: receipt.transactionHash,
-		}
+		};
 	}
 
 	/**
@@ -687,15 +687,15 @@ export class NoteContract {
 			toAddress,
 		}: {
 			/** The character ID of the address who owns the note. */
-			characterId: Numberish
+			characterId: Numberish;
 			/** The id of the note you want to get the info for. */
-			noteId: Numberish
+			noteId: Numberish;
 			/** The address you want to mint the note to. */
-			toAddress: Address
+			toAddress: Address;
 		},
-		overrides: WriteOverrides<Entry, 'mintNote'> = {},
+		overrides: WriteOverrides<Entry, "mintNote"> = {},
 	): Promise<Result<{ contractAddress: Address; tokenId: bigint }, true>> {
-		validateAddress(toAddress)
+		validateAddress(toAddress);
 
 		const hash = await this.base.contract.write.mintNote(
 			[
@@ -707,14 +707,14 @@ export class NoteContract {
 				},
 			],
 			overrides,
-		)
+		);
 
 		const receipt = await waitForTransactionReceiptWithRetry(
 			this.base.publicClient,
 			hash,
-		)
+		);
 
-		const log = parseLog(receipt.logs, 'MintNote')
+		const log = parseLog(receipt.logs, "MintNote");
 
 		return {
 			data: {
@@ -722,7 +722,7 @@ export class NoteContract {
 				tokenId: log.args.tokenId,
 			},
 			transactionHash: receipt.transactionHash,
-		}
+		};
 	}
 
 	/**
@@ -734,11 +734,11 @@ export class NoteContract {
 		toCharacterId,
 	}: {
 		/** The character ID of the character you want to get the linkKey of. */
-		toCharacterId: Numberish
+		toCharacterId: Numberish;
 	}): string {
 		return keccak256(
-			encodePacked(['string', 'uint'], ['Character', BigInt(toCharacterId)]),
-		)
+			encodePacked(["string", "uint"], ["Character", BigInt(toCharacterId)]),
+		);
 	}
 
 	/**
@@ -750,13 +750,13 @@ export class NoteContract {
 		toAddress,
 	}: {
 		/** The address you want to get the linkKey of. */
-		toAddress: Address
+		toAddress: Address;
 	}): string {
-		validateAddress(toAddress)
+		validateAddress(toAddress);
 
 		return keccak256(
-			encodePacked(['string', 'address'], ['Address', toAddress]),
-		)
+			encodePacked(["string", "address"], ["Address", toAddress]),
+		);
 	}
 
 	/**
@@ -769,16 +769,16 @@ export class NoteContract {
 		toNoteId,
 	}: {
 		/** The character ID of the character you want to get the linkKey of. */
-		toCharacterId: Numberish
+		toCharacterId: Numberish;
 		/** The id of the note you want to get the linkKey of. */
-		toNoteId: Numberish
+		toNoteId: Numberish;
 	}): string {
 		return keccak256(
 			encodePacked(
-				['string', 'uint', 'uint'],
-				['Note', BigInt(toCharacterId), BigInt(toNoteId)],
+				["string", "uint", "uint"],
+				["Note", BigInt(toCharacterId), BigInt(toNoteId)],
 			),
-		)
+		);
 	}
 
 	/**
@@ -791,16 +791,16 @@ export class NoteContract {
 		toTokenId,
 	}: {
 		/** The address of the ERC721 token you want to get the linkKey of. */
-		toContractAddress: Address
+		toContractAddress: Address;
 		/** The id of the ERC721 token you want to get the linkKey of. */
-		toTokenId: Numberish
+		toTokenId: Numberish;
 	}): string {
 		return keccak256(
 			encodePacked(
-				['string', 'address', 'uint'],
-				['ERC721', toContractAddress, BigInt(toTokenId)],
+				["string", "address", "uint"],
+				["ERC721", toContractAddress, BigInt(toTokenId)],
 			),
-		)
+		);
 	}
 
 	/**
@@ -812,11 +812,11 @@ export class NoteContract {
 		toLinkListId,
 	}: {
 		/** The id of the linklist you want to get the linkKey of. */
-		toLinkListId: Numberish
+		toLinkListId: Numberish;
 	}): string {
 		return keccak256(
-			encodePacked(['string', 'uint'], ['Linklist', BigInt(toLinkListId)]),
-		)
+			encodePacked(["string", "uint"], ["Linklist", BigInt(toLinkListId)]),
+		);
 	}
 
 	/**
@@ -828,8 +828,8 @@ export class NoteContract {
 		toUri,
 	}: {
 		/** The uri you want to get the linkKey of. */
-		toUri: string
+		toUri: string;
 	}): string {
-		return keccak256(encodePacked(['string', 'string'], ['AnyUri', toUri]))
+		return keccak256(encodePacked(["string", "string"], ["AnyUri", toUri]));
 	}
 }

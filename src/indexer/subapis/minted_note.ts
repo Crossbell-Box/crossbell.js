@@ -1,11 +1,11 @@
-import { type Address } from 'viem'
-import {
-	type ListResponse,
-	type MintedNoteEntity,
-	type NoteMetadata,
-	type Numberish,
-} from '../../types'
-import { type BaseIndexer } from './base'
+import type { Address } from "viem";
+import type {
+	ListResponse,
+	MintedNoteEntity,
+	NoteMetadata,
+	Numberish,
+} from "../../types";
+import type { BaseIndexer } from "./base";
 
 export class MintedNoteIndexer {
 	constructor(private base: BaseIndexer) {}
@@ -29,20 +29,20 @@ export class MintedNoteIndexer {
 			order,
 		}: {
 			/** The character ID of the note */
-			noteCharacterId?: Numberish
+			noteCharacterId?: Numberish;
 			/** THe note id */
-			noteId?: Numberish
+			noteId?: Numberish;
 			/** The `metadata.content.variant` to filter by. */
-			variant?: NoteMetadata['variant']
+			variant?: NoteMetadata["variant"];
 			/** Limit the count of items returned. */
-			limit?: Numberish
+			limit?: Numberish;
 			/** Used for pagination. */
-			cursor?: string
+			cursor?: string;
 			/** The order to sort by. */
-			order?: 'asc' | 'desc'
+			order?: "asc" | "desc";
 		} = {},
 	) {
-		const url = `/addresses/${address}/minted/notes`
+		const url = `/addresses/${address}/minted/notes`;
 		return this.base.fetch<ListResponse<MintedNoteEntity>>(url, {
 			params: {
 				noteCharacterId,
@@ -52,7 +52,7 @@ export class MintedNoteIndexer {
 				cursor,
 				order,
 			},
-		})
+		});
 	}
 
 	/**
@@ -74,16 +74,16 @@ export class MintedNoteIndexer {
 			order,
 		}: {
 			/** The address of the owner */
-			owner?: Address
+			owner?: Address;
 			/** Limit the count of items returned. */
-			limit?: Numberish
+			limit?: Numberish;
 			/** Used for pagination. */
-			cursor?: string
+			cursor?: string;
 			/** The order to sort by. */
-			order?: 'asc' | 'desc'
+			order?: "asc" | "desc";
 		} = {},
 	) {
-		const url = `/notes/${characterId}/${noteId}/minted`
+		const url = `/notes/${characterId}/${noteId}/minted`;
 		return this.base.fetch<ListResponse<MintedNoteEntity>>(url, {
 			params: {
 				owner,
@@ -91,7 +91,7 @@ export class MintedNoteIndexer {
 				cursor,
 				order,
 			},
-		})
+		});
 	}
 
 	/**
@@ -103,7 +103,7 @@ export class MintedNoteIndexer {
 	 * @returns The minted note.
 	 */
 	get(contractAddress: Address, tokenId: Numberish) {
-		const url = `/minted/notes/${contractAddress}/${tokenId}`
-		return this.base.fetch<MintedNoteEntity | null>(url)
+		const url = `/minted/notes/${contractAddress}/${tokenId}`;
+		return this.base.fetch<MintedNoteEntity | null>(url);
 	}
 }

@@ -1,10 +1,6 @@
-import { type Address } from 'viem'
-import {
-	type CharacterEntity,
-	type ListResponse,
-	type Numberish,
-} from '../../types'
-import { type BaseIndexer } from './base'
+import type { Address } from "viem";
+import type { CharacterEntity, ListResponse, Numberish } from "../../types";
+import type { BaseIndexer } from "./base";
 
 export class CharacterIndexer {
 	constructor(private base: BaseIndexer) {}
@@ -24,17 +20,17 @@ export class CharacterIndexer {
 			cursor,
 		}: {
 			/** If true, return only the primary character. */
-			primary?: boolean
+			primary?: boolean;
 			/** Limit the count of items returned. */
-			limit?: Numberish
+			limit?: Numberish;
 			/** Used for pagination. */
-			cursor?: string
+			cursor?: string;
 		} = {},
 	) {
-		const url = `/addresses/${address}/characters`
+		const url = `/addresses/${address}/characters`;
 		return this.base.fetch<ListResponse<CharacterEntity>>(url, {
 			params: { primary, limit, cursor },
-		})
+		});
 	}
 
 	/**
@@ -45,8 +41,8 @@ export class CharacterIndexer {
 	 * @returns The primary character.
 	 */
 	async getPrimary(address: Address): Promise<CharacterEntity | null> {
-		const res = await this.getMany(address, { limit: 1, primary: true })
-		return res.list?.[0] ?? null
+		const res = await this.getMany(address, { limit: 1, primary: true });
+		return res.list?.[0] ?? null;
 	}
 
 	/**
@@ -56,8 +52,8 @@ export class CharacterIndexer {
 	 * @returns The character.
 	 */
 	get(characterId: Numberish) {
-		const url = `/characters/${characterId}`
-		return this.base.fetch<CharacterEntity | null>(url)
+		const url = `/characters/${characterId}`;
+		return this.base.fetch<CharacterEntity | null>(url);
 	}
 
 	/**
@@ -67,8 +63,8 @@ export class CharacterIndexer {
 	 * @returns The character.
 	 */
 	getByHandle(handle: string) {
-		const url = `/handles/${handle}/character`
-		return this.base.fetch<CharacterEntity | null>(url)
+		const url = `/handles/${handle}/character`;
+		return this.base.fetch<CharacterEntity | null>(url);
 	}
 
 	/**
@@ -79,7 +75,7 @@ export class CharacterIndexer {
 	 * @returns Whether the handle exists.
 	 */
 	async checkIfHandleExists(handle: string): Promise<boolean> {
-		const res = await this.getByHandle(handle)
-		return res !== null
+		const res = await this.getByHandle(handle);
+		return res !== null;
 	}
 }

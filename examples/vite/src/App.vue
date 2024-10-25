@@ -1,107 +1,107 @@
 <script setup lang="ts">
-import { createContract, createIndexer } from 'crossbell'
-import { onErrorCaptured, ref } from 'vue'
-import { useDark, useEventListener, useLocalStorage } from '@vueuse/core'
-import { type Address } from 'abitype'
+import { useDark, useEventListener, useLocalStorage } from "@vueuse/core";
+import type { Address } from "abitype";
+import { createContract, createIndexer } from "crossbell";
+import { onErrorCaptured, ref } from "vue";
 
-useDark()
-useEventListener(window, 'error', (event) => showResult(event))
-useEventListener(window, 'unhandledrejection', (event) =>
-  showResult(event.reason.toString()),
-)
+useDark();
+useEventListener(window, "error", (event) => showResult(event));
+useEventListener(window, "unhandledrejection", (event) =>
+	showResult(event.reason.toString()),
+);
 onErrorCaptured((err) => {
-  showResult(err)
-})
+	showResult(err);
+});
 
-const metamask = window.ethereum
-const contract = createContract(metamask)
+const metamask = window.ethereum;
+const contract = createContract(metamask);
 
-const indexer = createIndexer()
+const indexer = createIndexer();
 
-const address = useLocalStorage<Address>('address', '0x')
-const characterId = useLocalStorage('characterId', '')
-const handle = useLocalStorage('handle', '')
-const result = ref('')
-const loading = ref(false)
+const address = useLocalStorage<Address>("address", "0x");
+const characterId = useLocalStorage("characterId", "");
+const handle = useLocalStorage("handle", "");
+const result = ref("");
+const loading = ref(false);
 
 async function connect() {
-  await showResult(contract.walletClient.requestAddresses())
+	await showResult(contract.walletClient.requestAddresses());
 }
 
 async function showResult(p: any) {
-  loading.value = true
-  try {
-    result.value = JSON.stringify(
-      await p,
-      (key: string, value: any) =>
-        typeof value === 'bigint' ? value.toString() : value,
-      2,
-    )
-  } catch (err: any) {
-    result.value = err
-  } finally {
-    loading.value = false
-  }
+	loading.value = true;
+	try {
+		result.value = JSON.stringify(
+			await p,
+			(key: string, value: any) =>
+				typeof value === "bigint" ? value.toString() : value,
+			2,
+		);
+	} catch (err: any) {
+		result.value = err;
+	} finally {
+		loading.value = false;
+	}
 }
 
 function balance() {
-  showResult(
-    contract.csb.getBalance({
-      owner: address.value,
-    }),
-  )
+	showResult(
+		contract.csb.getBalance({
+			owner: address.value,
+		}),
+	);
 }
 
 function transfer() {
-  showResult(
-    contract.csb.transfer({
-      toAddress: address.value,
-      amount: 0,
-    }),
-  )
+	showResult(
+		contract.csb.transfer({
+			toAddress: address.value,
+			amount: 0,
+		}),
+	);
 }
 
 function getPrimaryHandle() {
-  showResult(
-    contract.character.getPrimaryId({
-      address: address.value,
-    }),
-  )
+	showResult(
+		contract.character.getPrimaryId({
+			address: address.value,
+		}),
+	);
 }
 
 function getCharacterByHandle() {
-  showResult(
-    contract.character.getByHandle({
-      handle: handle.value,
-    }),
-  )
+	showResult(
+		contract.character.getByHandle({
+			handle: handle.value,
+		}),
+	);
 }
 
 function getCharacter() {
-  showResult(
-    contract.character.get({
-      characterId: characterId.value,
-    }),
-  )
+	showResult(
+		contract.character.get({
+			characterId: characterId.value,
+		}),
+	);
 }
 
 function setPrimaryCharacterId() {
-  showResult(
-    contract.character.setPrimaryId({
-      characterId: +characterId.value,
-    }),
-  )
+	showResult(
+		contract.character.setPrimaryId({
+			characterId: +characterId.value,
+		}),
+	);
 }
 
 function getCharacters() {
-  showResult(indexer.character.getMany(address.value))
+	showResult(indexer.character.getMany(address.value));
 }
 
 function getNotes() {
-  showResult(indexer.note.getMany({ characterId: characterId.value }))
+	showResult(indexer.note.getMany({ characterId: characterId.value }));
 }
 function getFeeds() {
-  showResult(indexer.feed.getManyByCharacter(characterId.value))
+	showResult(indexer.feed.getManyByCharacter(characterId.value));
 }
 </script>
 

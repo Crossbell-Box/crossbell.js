@@ -1,2 +1,2 @@
-export * from './indexer'
-export { withHeaders } from './utils'
+export * from "./indexer";
+export { withHeaders } from "./utils";

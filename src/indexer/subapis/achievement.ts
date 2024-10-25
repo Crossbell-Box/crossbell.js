@@ -1,11 +1,11 @@
-import {
-	type AchievementItem,
-	type AchievementSection,
-	type AchievementStatusKey,
-	type ListResponse,
-	type Numberish,
-} from '../../types'
-import { type BaseIndexer } from './base'
+import type {
+	AchievementItem,
+	AchievementSection,
+	AchievementStatusKey,
+	ListResponse,
+	Numberish,
+} from "../../types";
+import type { BaseIndexer } from "./base";
 
 export class AchievementIndexer {
 	constructor(private base: BaseIndexer) {}
@@ -21,10 +21,10 @@ export class AchievementIndexer {
 		characterId: Numberish,
 		{ status }: { status?: AchievementStatusKey[] } = {},
 	) {
-		const url = `/characters/${characterId}/achievements`
+		const url = `/characters/${characterId}/achievements`;
 		return this.base.fetch<ListResponse<AchievementSection> | null>(url, {
 			params: { status },
-		})
+		});
 	}
 
 	/**
@@ -35,7 +35,7 @@ export class AchievementIndexer {
 	 * @returns The achievement minted.
 	 */
 	mint(characterId: Numberish, achievementId: Numberish) {
-		const url = `/characters/${characterId}/achievements/${achievementId}`
-		return this.base.fetch<AchievementItem>(url, { method: 'POST' })
+		const url = `/characters/${characterId}/achievements/${achievementId}`;
+		return this.base.fetch<AchievementItem>(url, { method: "POST" });
 	}
 }

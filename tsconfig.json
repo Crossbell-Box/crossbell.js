@@ -1,18 +1,18 @@
 {
-  "compilerOptions": {
-    "target": "esnext",
-    "module": "esnext",
-    "lib": ["es2022", "dom", "DOM.Iterable"],
-    "strict": true,
-    "esModuleInterop": true,
-    "moduleResolution": "bundler",
-    "skipLibCheck": true,
-    "noUnusedLocals": true,
-    "noImplicitAny": true,
-    "resolveJsonModule": true,
-    "experimentalDecorators": true,
-    "types": []
-  },
-  "include": ["src", "test"],
-  "references": [{ "path": "./tsconfig.node.json" }]
+	"compilerOptions": {
+		"target": "esnext",
+		"module": "esnext",
+		"lib": ["es2022", "dom", "DOM.Iterable"],
+		"strict": true,
+		"esModuleInterop": true,
+		"moduleResolution": "bundler",
+		"skipLibCheck": true,
+		"noUnusedLocals": true,
+		"noImplicitAny": true,
+		"resolveJsonModule": true,
+		"experimentalDecorators": true,
+		"types": []
+	},
+	"include": ["src", "test"],
+	"references": [{ "path": "./tsconfig.node.json" }]
 }

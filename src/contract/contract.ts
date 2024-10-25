@@ -1,5 +1,5 @@
-import { type EIP1193Provider } from 'eip1193-types'
-import { type Hex } from 'viem'
+import type { EIP1193Provider } from "eip1193-types";
+import type { Hex } from "viem";
 import {
 	BaseContract,
 	CbtContract,
@@ -13,8 +13,8 @@ import {
 	OperatorContract,
 	RevisionContract,
 	TipsContract,
-} from './subcontracts'
-import { TipsWithFeeContract } from './subcontracts/tips_with_fee'
+} from "./subcontracts";
+import { TipsWithFeeContract } from "./subcontracts/tips_with_fee";
 
 /**
  * This class is used to interact with the contract.
@@ -42,17 +42,17 @@ import { TipsWithFeeContract } from './subcontracts/tips_with_fee'
  * ```
  */
 export class Contract extends BaseContract {
-	csb = new CsbContract(this)
-	character = new CharacterContract(this)
-	link = new LinkContract(this)
-	cbt = new CbtContract(this)
-	note = new NoteContract(this)
-	operator = new OperatorContract(this)
-	tips = new TipsContract(this)
-	tipsWithFee = new TipsWithFeeContract(this)
-	revision = new RevisionContract(this)
-	linkModule = new LinkModuleContract(this)
-	mintModule = new MintModuleContract(this)
+	csb = new CsbContract(this);
+	character = new CharacterContract(this);
+	link = new LinkContract(this);
+	cbt = new CbtContract(this);
+	note = new NoteContract(this);
+	operator = new OperatorContract(this);
+	tips = new TipsContract(this);
+	tipsWithFee = new TipsWithFeeContract(this);
+	revision = new RevisionContract(this);
+	linkModule = new LinkModuleContract(this);
+	mintModule = new MintModuleContract(this);
 }
 
 /**
@@ -84,5 +84,5 @@ export function createContract(
 	providerOrPrivateKey?: Hex | EIP1193Provider,
 	options?: Partial<ContractOptions>,
 ) {
-	return new Contract(providerOrPrivateKey, options)
+	return new Contract(providerOrPrivateKey, options);
 }

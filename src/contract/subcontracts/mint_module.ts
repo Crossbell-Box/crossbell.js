@@ -1,14 +1,14 @@
-import {
-	type MintOrLinkModuleConfig,
-	type Numberish,
-	type Result,
-	type WriteOverrides,
-} from '../../types'
-import { getModuleConfig } from '../../utils/module'
-import { waitForTransactionReceiptWithRetry } from '../../utils/viem'
-import { type Entry } from '../abi'
-import { autoSwitchMainnet } from '../decorators'
-import { type BaseContract } from './base'
+import type {
+	MintOrLinkModuleConfig,
+	Numberish,
+	Result,
+	WriteOverrides,
+} from "../../types";
+import { getModuleConfig } from "../../utils/module";
+import { waitForTransactionReceiptWithRetry } from "../../utils/viem";
+import type { Entry } from "../abi";
+import { autoSwitchMainnet } from "../decorators";
+import type { BaseContract } from "./base";
 
 export class MintModuleContract {
 	constructor(private base: BaseContract) {}
@@ -28,13 +28,13 @@ export class MintModuleContract {
 			noteId,
 			mintModule,
 		}: {
-			characterId: Numberish
-			noteId: Numberish
-			mintModule: MintOrLinkModuleConfig
+			characterId: Numberish;
+			noteId: Numberish;
+			mintModule: MintOrLinkModuleConfig;
 		},
-		overrides: WriteOverrides<Entry, 'setMintModule4Note'> = {},
+		overrides: WriteOverrides<Entry, "setMintModule4Note"> = {},
 	): Promise<Result<undefined, true>> {
-		const moduleConfig = await getModuleConfig(mintModule)
+		const moduleConfig = await getModuleConfig(mintModule);
 
 		const hash = await this.base.contract.write.setMintModule4Note(
 			[
@@ -46,16 +46,16 @@ export class MintModuleContract {
 				},
 			],
 			overrides,
-		)
+		);
 
 		const receipt = await waitForTransactionReceiptWithRetry(
 			this.base.publicClient,
 			hash,
-		)
+		);
 
 		return {
 			data: undefined,
 			transactionHash: receipt.transactionHash,
-		}
+		};
 	}
 }

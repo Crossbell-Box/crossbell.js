@@ -1,17 +1,17 @@
-import { type Address } from 'viem'
-import {
-	type CharacterPermissionKey,
-	type Numberish,
-	type ReadOverrides,
-	type Result,
-	type WriteOverrides,
-} from '../../types'
-import { validateAddress } from '../../utils/address'
-import { warn } from '../../utils/logger'
-import { parseLog, waitForTransactionReceiptWithRetry } from '../../utils/viem'
-import { type Entry } from '../abi'
-import { autoSwitchMainnet } from '../decorators'
-import { type BaseContract } from './base'
+import type { Address } from "viem";
+import type {
+	CharacterPermissionKey,
+	Numberish,
+	ReadOverrides,
+	Result,
+	WriteOverrides,
+} from "../../types";
+import { validateAddress } from "../../utils/address";
+import { warn } from "../../utils/logger";
+import { parseLog, waitForTransactionReceiptWithRetry } from "../../utils/viem";
+import type { Entry } from "../abi";
+import { autoSwitchMainnet } from "../decorators";
+import type { BaseContract } from "./base";
 
 // https://github.com/Crossbell-Box/CIPs/blob/main/CIPs/CIP-7.md
 
@@ -40,37 +40,37 @@ export class OperatorContract {
 			permissions,
 		}: {
 			/** The id of the character. */
-			characterId: Numberish
+			characterId: Numberish;
 			/** The address of the operator. */
-			operator: Address
+			operator: Address;
 			/** The permissions of the operator. */
-			permissions: CharacterPermissionKey[]
+			permissions: CharacterPermissionKey[];
 		},
-		overrides: WriteOverrides<Entry, 'grantOperatorPermissions'> = {},
+		overrides: WriteOverrides<Entry, "grantOperatorPermissions"> = {},
 	): Promise<Result<{ bitmapUint256: bigint }, true>> {
-		validateAddress(operator)
+		validateAddress(operator);
 
 		const permissionUint256 =
-			this.convertPermissionsToUint256ForCharacter(permissions)
+			this.convertPermissionsToUint256ForCharacter(permissions);
 
 		const hash = await this.base.contract.write.grantOperatorPermissions(
 			[BigInt(characterId), operator, permissionUint256],
 			overrides,
-		)
+		);
 
 		const receipt = await waitForTransactionReceiptWithRetry(
 			this.base.publicClient,
 			hash,
-		)
+		);
 
-		const log = parseLog(receipt.logs, 'GrantOperatorPermissions')
+		const log = parseLog(receipt.logs, "GrantOperatorPermissions");
 
 		return {
 			data: {
 				bitmapUint256: log.args.permissionBitMap,
 			},
 			transactionHash: receipt.transactionHash,
-		}
+		};
 	}
 
 	/**
@@ -96,38 +96,38 @@ export class OperatorContract {
 			blocklist = [],
 		}: {
 			/** The id of the character. */
-			characterId: Numberish
+			characterId: Numberish;
 			/** The id of the note. */
-			noteId: Numberish
+			noteId: Numberish;
 			/** Operators that are allowed to operate the note. */
-			allowlist: Address[]
+			allowlist: Address[];
 			/**
 			 * Operators that are not allowed to operate the note.
 			 * (Used to override the character permission and allowlist.)
 			 */
-			blocklist: Address[]
+			blocklist: Address[];
 		},
-		overrides: WriteOverrides<Entry, 'grantOperators4Note'> = {},
+		overrides: WriteOverrides<Entry, "grantOperators4Note"> = {},
 	): Promise<Result<Record<string, never>, true>> {
-		validateAddress(allowlist)
-		validateAddress(blocklist)
+		validateAddress(allowlist);
+		validateAddress(blocklist);
 
 		const hash = await this.base.contract.write.grantOperators4Note(
 			[BigInt(characterId), BigInt(noteId), blocklist, allowlist],
 			overrides,
-		)
+		);
 
 		const receipt = await waitForTransactionReceiptWithRetry(
 			this.base.publicClient,
 			hash,
-		)
+		);
 
 		// const log = parseLog(receipt.logs, 'grantOperators4Note')
 
 		return {
 			data: {},
 			transactionHash: receipt.transactionHash,
-		}
+		};
 	}
 
 	/**
@@ -141,17 +141,17 @@ export class OperatorContract {
 			characterId,
 		}: {
 			/** The id of the character. */
-			characterId: Numberish
+			characterId: Numberish;
 		},
-		overrides: ReadOverrides<Entry, 'getOperators'> = {},
+		overrides: ReadOverrides<Entry, "getOperators"> = {},
 	): Promise<Result<readonly Address[], false>> {
 		const operators = await this.base.contract.read.getOperators(
 			[BigInt(characterId)],
 			overrides,
-		)
+		);
 		return {
 			data: operators,
-		}
+		};
 	}
 
 	/**
@@ -165,11 +165,11 @@ export class OperatorContract {
 			noteId,
 		}: {
 			/** The id of the character. */
-			characterId: Numberish
+			characterId: Numberish;
 			/** The id of the note. */
-			noteId: Numberish
+			noteId: Numberish;
 		},
-		overrides: ReadOverrides<Entry, 'getOperators4Note'> = {},
+		overrides: ReadOverrides<Entry, "getOperators4Note"> = {},
 	): Promise<
 		Result<
 			{ allowlist: readonly Address[]; blocklist: readonly Address[] },
@@ -180,13 +180,13 @@ export class OperatorContract {
 			await this.base.contract.read.getOperators4Note(
 				[BigInt(characterId), BigInt(noteId)],
 				overrides,
-			)
+			);
 		return {
 			data: {
 				allowlist,
 				blocklist,
 			},
-		}
+		};
 	}
 
 	/**
@@ -202,21 +202,21 @@ export class OperatorContract {
 			operator,
 		}: {
 			/** The id of the character. */
-			characterId: Numberish
+			characterId: Numberish;
 			/** The id of the note. */
-			noteId: Numberish
+			noteId: Numberish;
 			/** The address of the operator. */
-			operator: Address
+			operator: Address;
 		},
-		overrides: ReadOverrides<Entry, 'isOperatorAllowedForNote'> = {},
+		overrides: ReadOverrides<Entry, "isOperatorAllowedForNote"> = {},
 	): Promise<Result<boolean, false>> {
 		const isAllowed = await this.base.contract.read.isOperatorAllowedForNote(
 			[BigInt(characterId), BigInt(noteId), operator],
 			overrides,
-		)
+		);
 		return {
 			data: isAllowed,
-		}
+		};
 	}
 
 	/**
@@ -231,24 +231,24 @@ export class OperatorContract {
 			operator,
 		}: {
 			/** The id of the character. */
-			characterId: Numberish
+			characterId: Numberish;
 			/** The address of the operator. */
-			operator: Address
+			operator: Address;
 		},
-		overrides: ReadOverrides<Entry, 'getOperatorPermissions'> = {},
+		overrides: ReadOverrides<Entry, "getOperatorPermissions"> = {},
 	): Promise<Result<CharacterPermissionKey[], false>> {
 		const permissionUint256 =
 			await this.base.contract.read.getOperatorPermissions(
 				[BigInt(characterId), operator],
 				overrides,
-			)
+			);
 
 		const permissions =
-			this.convertUint256ToPermissionsForCharacter(permissionUint256)
+			this.convertUint256ToPermissionsForCharacter(permissionUint256);
 
 		return {
 			data: permissions,
-		}
+		};
 	}
 
 	/**
@@ -263,24 +263,24 @@ export class OperatorContract {
 		const bits = permissions.map((permission) => {
 			const bit = Object.entries(CHARACTER_PERMISSION_BITMAP).find(
 				([, value]) => value === permission,
-			)?.[0]
+			)?.[0];
 			if (!bit) {
-				throw new Error(`Found invalid permission: ${permission}.`)
+				throw new Error(`Found invalid permission: ${permission}.`);
 			}
-			return Number.parseInt(bit)
-		})
+			return Number.parseInt(bit);
+		});
 
-		const uint256Array = Array.from<number>({ length: 256 }).fill(0)
+		const uint256Array = Array.from<number>({ length: 256 }).fill(0);
 
 		for (const bit of bits) {
-			uint256Array[bit] = 1
+			uint256Array[bit] = 1;
 		}
 
-		uint256Array.reverse()
+		uint256Array.reverse();
 
-		const uint256Decimal = this.#convertBinaryBitsToUint256(uint256Array)
+		const uint256Decimal = this.#convertBinaryBitsToUint256(uint256Array);
 
-		return uint256Decimal
+		return uint256Decimal;
 	}
 
 	/**
@@ -293,22 +293,22 @@ export class OperatorContract {
 	convertUint256ToPermissionsForCharacter(
 		permissionUint256: bigint,
 	): CharacterPermissionKey[] {
-		const binaryBits = this.#convertUint256ToBinaryBits(permissionUint256)
+		const binaryBits = this.#convertUint256ToBinaryBits(permissionUint256);
 
 		const permissions = binaryBits
 			.reverse()
 			.map((bit, index) => {
 				if (bit === 1) {
 					if (this.#isPermissionBitForCharacter(index)) {
-						return CHARACTER_PERMISSION_BITMAP[index]
+						return CHARACTER_PERMISSION_BITMAP[index];
 					}
-					warn('Found invalid permission bit.', index)
+					warn("Found invalid permission bit.", index);
 				}
-				return undefined
+				return undefined;
 			})
-			.filter(Boolean) as CharacterPermissionKey[]
+			.filter(Boolean) as CharacterPermissionKey[];
 
-		return permissions
+		return permissions;
 	}
 
 	/**
@@ -320,18 +320,18 @@ export class OperatorContract {
 	 */
 	#convertBinaryBitsToUint256(bits: number[]): bigint {
 		const n = bits
-			.join('')
-			.replace(/^0+/, '')
-			.split('')
+			.join("")
+			.replace(/^0+/, "")
+			.split("")
 			.reverse()
 			.reduce((acc, bit, index) => {
-				if (bit === '1') {
-					return acc + 2n ** BigInt(index)
+				if (bit === "1") {
+					return acc + 2n ** BigInt(index);
 				}
-				return acc
-			}, 0n)
+				return acc;
+			}, 0n);
 
-		return n
+		return n;
 	}
 
 	/**
@@ -344,9 +344,9 @@ export class OperatorContract {
 	#convertUint256ToBinaryBits(uint256: bigint) {
 		return uint256
 			.toString(2)
-			.padStart(256, '0')
-			.split('')
-			.map((bit) => Number.parseInt(bit) as 0 | 1)
+			.padStart(256, "0")
+			.split("")
+			.map((bit) => Number.parseInt(bit) as 0 | 1);
 	}
 
 	/**
@@ -359,42 +359,42 @@ export class OperatorContract {
 	#isPermissionBitForCharacter(
 		bit: number,
 	): bit is keyof typeof CHARACTER_PERMISSION_BITMAP {
-		return Object.keys(CHARACTER_PERMISSION_BITMAP).includes(bit.toString())
+		return Object.keys(CHARACTER_PERMISSION_BITMAP).includes(bit.toString());
 	}
 }
 
 const CHARACTER_PERMISSION_BITMAP = {
-	0: 'SET_HANDLE',
-	1: 'SET_SOCIAL_TOKEN',
-	2: 'GRANT_OPERATOR_PERMISSIONS',
-	3: 'GRANT_OPERATORS_FOR_NOTE',
-	176: 'SET_CHARACTER_URI',
-	177: 'SET_LINKLIST_URI',
-	178: 'LINK_CHARACTER',
-	179: 'UNLINK_CHARACTER',
-	180: 'CREATE_THEN_LINK_CHARACTER',
-	181: 'LINK_NOTE',
-	182: 'UNLINK_NOTE',
-	183: 'LINK_ERC721',
-	184: 'UNLINK_ERC721',
-	185: 'LINK_ADDRESS',
-	186: 'UNLINK_ADDRESS',
-	187: 'LINK_ANY_URI',
-	188: 'UNLINK_ANY_URI',
-	189: 'LINK_LINKLIST',
-	190: 'UNLINK_LINKLIST',
-	191: 'SET_LINK_MODULE_FOR_CHARACTER',
-	192: 'SET_LINK_MODULE_FOR_NOTE',
-	193: 'SET_LINK_MODULE_FOR_LINKLIST',
-	194: 'SET_MINT_MODULE_FOR_NOTE',
-	195: 'SET_NOTE_URI',
-	196: 'LOCK_NOTE',
-	197: 'DELETE_NOTE',
-	198: 'POST_NOTE_FOR_CHARACTER',
-	199: 'POST_NOTE_FOR_ADDRESS',
-	200: 'POST_NOTE_FOR_LINKLIST',
-	201: 'POST_NOTE_FOR_NOTE',
-	202: 'POST_NOTE_FOR_ERC721',
-	203: 'POST_NOTE_FOR_ANY_URI',
-	236: 'POST_NOTE',
-} as const
+	0: "SET_HANDLE",
+	1: "SET_SOCIAL_TOKEN",
+	2: "GRANT_OPERATOR_PERMISSIONS",
+	3: "GRANT_OPERATORS_FOR_NOTE",
+	176: "SET_CHARACTER_URI",
+	177: "SET_LINKLIST_URI",
+	178: "LINK_CHARACTER",
+	179: "UNLINK_CHARACTER",
+	180: "CREATE_THEN_LINK_CHARACTER",
+	181: "LINK_NOTE",
+	182: "UNLINK_NOTE",
+	183: "LINK_ERC721",
+	184: "UNLINK_ERC721",
+	185: "LINK_ADDRESS",
+	186: "UNLINK_ADDRESS",
+	187: "LINK_ANY_URI",
+	188: "UNLINK_ANY_URI",
+	189: "LINK_LINKLIST",
+	190: "UNLINK_LINKLIST",
+	191: "SET_LINK_MODULE_FOR_CHARACTER",
+	192: "SET_LINK_MODULE_FOR_NOTE",
+	193: "SET_LINK_MODULE_FOR_LINKLIST",
+	194: "SET_MINT_MODULE_FOR_NOTE",
+	195: "SET_NOTE_URI",
+	196: "LOCK_NOTE",
+	197: "DELETE_NOTE",
+	198: "POST_NOTE_FOR_CHARACTER",
+	199: "POST_NOTE_FOR_ADDRESS",
+	200: "POST_NOTE_FOR_LINKLIST",
+	201: "POST_NOTE_FOR_NOTE",
+	202: "POST_NOTE_FOR_ERC721",
+	203: "POST_NOTE_FOR_ANY_URI",
+	236: "POST_NOTE",
+} as const;

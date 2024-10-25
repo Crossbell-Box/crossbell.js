@@ -1,9 +1,9 @@
-import {
-	type CharacterStatEntity,
-	type NoteStatEntity,
-	type Numberish,
-} from '../../types'
-import { type BaseIndexer } from './base'
+import type {
+	CharacterStatEntity,
+	NoteStatEntity,
+	Numberish,
+} from "../../types";
+import type { BaseIndexer } from "./base";
 
 export class StatIndexer {
 	constructor(private base: BaseIndexer) {}
@@ -15,8 +15,8 @@ export class StatIndexer {
 	 * @returns The stat of the character.
 	 */
 	getForCharacter(characterId: Numberish) {
-		const url = `/stat/characters/${characterId}`
-		return this.base.fetch<CharacterStatEntity>(url)
+		const url = `/stat/characters/${characterId}`;
+		return this.base.fetch<CharacterStatEntity>(url);
 	}
 
 	/**
@@ -27,7 +27,7 @@ export class StatIndexer {
 	 * @returns The stat of the note.
 	 */
 	getForNote(characterId: Numberish, noteId: Numberish) {
-		const url = `/stat/notes/${characterId}/${noteId}`
-		return this.base.fetch<NoteStatEntity>(url)
+		const url = `/stat/notes/${characterId}/${noteId}`;
+		return this.base.fetch<NoteStatEntity>(url);
 	}
 }

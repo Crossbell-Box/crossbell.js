@@ -1,8 +1,8 @@
-import { MaybeArray, Numberish } from '../types/utils'
+import type { MaybeArray, Numberish } from "../types/utils";
 
-let headersScope: HeadersInit | undefined
+let headersScope: HeadersInit | undefined;
 export function getHeadersScope() {
-	return headersScope
+	return headersScope;
 }
 
 /**
@@ -29,13 +29,13 @@ export function withHeaders<T>(
 	headers: HeadersInit,
 ): T {
 	const ensure = () => {
-		headersScope = headers
-	}
+		headersScope = headers;
+	};
 
-	ensure()
-	const ret = fn(ensure)
-	headersScope = undefined
-	return ret
+	ensure();
+	const ret = fn(ensure);
+	headersScope = undefined;
+	return ret;
 }
 
 export function createSearchParamsString(
@@ -53,5 +53,5 @@ export function createSearchParamsString(
 					? values.map((value) => [key, value.toString()])
 					: [[key, values.toString()]],
 			),
-	).toString()
+	).toString();
 }

@@ -1,15 +1,16 @@
-import { type Address } from 'viem'
-import { type MaybeArray } from '../types/utils'
-import { validateIsInSdn } from './sdn'
+import type { Address } from "viem";
+import type { MaybeArray } from "../types/utils";
+import { validateIsInSdn } from "./sdn";
 
-export const NIL_ADDRESS: Address = '0x0000000000000000000000000000000000000000'
+export const NIL_ADDRESS: Address =
+	"0x0000000000000000000000000000000000000000";
 
 export function validateAddress(address: MaybeArray<Address>) {
 	if (Array.isArray(address)) {
 		for (const addr of address) {
-			validateAddress(addr)
+			validateAddress(addr);
 		}
 	} else {
-		validateIsInSdn(address)
+		validateIsInSdn(address);
 	}
 }

@@ -1,11 +1,11 @@
-import {
-	type CharacterEntity,
-	type LinkItemType,
-	type ListResponse,
-	type NoteEntity,
-	type Numberish,
-} from '../../types'
-import { type BaseIndexer } from './base'
+import type {
+	CharacterEntity,
+	LinkItemType,
+	ListResponse,
+	NoteEntity,
+	Numberish,
+} from "../../types";
+import type { BaseIndexer } from "./base";
 
 export class SearchIndexer {
 	constructor(private base: BaseIndexer) {}
@@ -22,15 +22,15 @@ export class SearchIndexer {
 		query: string,
 		options: {
 			/** Limit the count of items returned. */
-			limit?: Numberish
+			limit?: Numberish;
 			/** Used for pagination. */
-			cursor?: string
+			cursor?: string;
 		},
 	) {
-		const url = '/characters/search'
+		const url = "/characters/search";
 		return this.base.fetch<ListResponse<CharacterEntity>>(url, {
 			params: { q: query, ...options },
-		})
+		});
 	}
 
 	/**
@@ -45,29 +45,29 @@ export class SearchIndexer {
 		query: string,
 		options: {
 			/** Notes with the given tags. */
-			tags?: string[]
+			tags?: string[];
 			/** Notes with the given sources. */
-			sources?: string[]
+			sources?: string[];
 			/** The link item type to filter by. e.g. 'Character' */
-			linkItemType?: LinkItemType
+			linkItemType?: LinkItemType;
 			/** Note with the given characterId owner */
-			characterId?: Numberish
+			characterId?: Numberish;
 			/** Limit the count of items returned. */
-			limit?: Numberish
+			limit?: Numberish;
 			/** Used for pagination. */
-			cursor?: string
+			cursor?: string;
 			/** Whether to include character metadata */
-			includeCharacterMetadata?: boolean
+			includeCharacterMetadata?: boolean;
 			/** The order of the returned list. */
-			orderBy?: 'createdAt' | 'updatedAt' | 'publishedAt' | 'viewCount'
+			orderBy?: "createdAt" | "updatedAt" | "publishedAt" | "viewCount";
 		},
 	) {
-		const url = '/notes/search'
+		const url = "/notes/search";
 		return this.base.fetch<ListResponse<NoteEntity>>(url, {
 			params: {
 				q: query,
 				...options,
 			},
-		})
+		});
 	}
 }

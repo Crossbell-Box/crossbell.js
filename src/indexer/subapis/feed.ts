@@ -1,11 +1,11 @@
-import { type Hash } from 'viem'
-import {
-	type FeedEntity,
-	type FeedTypeKey,
-	type ListResponse,
-	type Numberish,
-} from '../../types'
-import { type BaseIndexer } from './base'
+import type { Hash } from "viem";
+import type {
+	FeedEntity,
+	FeedTypeKey,
+	ListResponse,
+	Numberish,
+} from "../../types";
+import type { BaseIndexer } from "./base";
 
 export class FeedIndexer {
 	constructor(private base: BaseIndexer) {}
@@ -26,21 +26,21 @@ export class FeedIndexer {
 			cursor,
 		}: {
 			/** The type of feed */
-			type?: FeedTypeKey | FeedTypeKey[]
+			type?: FeedTypeKey | FeedTypeKey[];
 			/** Limit the count of items returned. */
-			limit?: Numberish
+			limit?: Numberish;
 			/** Used for pagination. */
-			cursor?: string
+			cursor?: string;
 		} = {},
 	) {
-		const url = `/characters/${characterId}/feed`
+		const url = `/characters/${characterId}/feed`;
 		return this.base.fetch<ListResponse<FeedEntity>>(url, {
 			params: {
 				type,
 				limit,
 				cursor,
 			},
-		})
+		});
 	}
 
 	/**
@@ -59,21 +59,21 @@ export class FeedIndexer {
 			cursor,
 		}: {
 			/** The type of feed */
-			type?: FeedTypeKey | FeedTypeKey[]
+			type?: FeedTypeKey | FeedTypeKey[];
 			/** Limit the count of items returned. */
-			limit?: Numberish
+			limit?: Numberish;
 			/** Used for pagination. */
-			cursor?: string
+			cursor?: string;
 		} = {},
 	) {
-		const url = `/characters/${characterId}/feed/follow`
+		const url = `/characters/${characterId}/feed/follow`;
 		return this.base.fetch<ListResponse<FeedEntity>>(url, {
 			params: {
 				type,
 				limit,
 				cursor,
 			},
-		})
+		});
 	}
 
 	/**
@@ -85,7 +85,7 @@ export class FeedIndexer {
 	 * @returns The feed.
 	 */
 	get(transactionHash: Hash, logIndex: Numberish) {
-		const url = `/feed/${transactionHash}/${logIndex}`
-		return this.base.fetch<FeedEntity | null>(url)
+		const url = `/feed/${transactionHash}/${logIndex}`;
+		return this.base.fetch<FeedEntity | null>(url);
 	}
 }
