@@ -86,7 +86,7 @@
 	"devDependencies": {
 		"@biomejs/biome": "^1.9.4",
 		"@types/async-retry": "^1.4.9",
-		"@types/node": "^20.17.0",
+		"@types/node": "^22.10.5",
 		"abitype": "^1.0.6",
 		"bumpp": "^9.7.1",
 		"change-case": "^5.4.4",
