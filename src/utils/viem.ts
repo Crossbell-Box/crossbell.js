@@ -227,7 +227,7 @@ export async function waitForTransactionReceiptWithRetry(
 	client: PublicClient,
 	hash: Address,
 ): Promise<TransactionReceipt> {
-	return backOff(() => client.waitForTransactionReceipt({ hash }), {
+	return backOff(() => client.waitForTransactionReceipt({ hash, retryDelay: 100 }), {
 		retry: (e, i) => {
 			log("retrying waitForTransactionReceipt", { hash, i, e });
 			return true;
