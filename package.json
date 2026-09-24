@@ -115,7 +115,7 @@
 	"peerDependencies": {
 		"viem": ">=2"
 	},
-	"packageManager": "pnpm@10.8.0",
+	"packageManager": "pnpm@12.6.0",
 	"engines": {
 		"node": ">=16.14.0"
 	},
